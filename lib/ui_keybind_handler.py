@@ -28,7 +28,7 @@ import tornado.web
 from collections import OrderedDict
 
 from lib.zynthian_config_handler import ZynthianBasicHandler
-from zyngui.zynthian_gui_keybinding import zynthian_gui_keybinding
+from zynqtgui.zynthian_gui_keybinding import zynthian_gui_keybinding
 
 #------------------------------------------------------------------------------
 # UI Configuration

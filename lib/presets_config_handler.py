@@ -38,7 +38,7 @@ import tornado.web
 from collections import OrderedDict
 
 from lib.zynthian_config_handler import ZynthianBasicHandler
-from zyngui.zynthian_gui_engine import *
+from zynqtgui.zynthian_gui_engine import *
 
 #------------------------------------------------------------------------------
 # Soundfont Configuration
