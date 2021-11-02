@@ -134,7 +134,7 @@ soundcard_presets = OrderedDict([
 	}],
 	['Behringer UMC22', {
 		'SOUNDCARD_CONFIG': '',
-		'JACKD_OPTIONS': '-R -P 90 -d alsa -C hw:CODEC -P hw:CODEC -r 48000 -p 1024 -n 3 -X raw',
+		'JACKD_OPTIONS': '-R -P 90 -d alsa -C hw:CODEC -P hw:CODEC -r 48000 -p 1024 -n 3 -s -X raw',
 		'SOUNDCARD_MIXER': 'CODEC,Mic'
 	}],
 	['Behringer UMC404HD', {
