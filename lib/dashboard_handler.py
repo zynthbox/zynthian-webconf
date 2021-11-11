@@ -270,17 +270,23 @@ class DashboardHandler(ZynthianBasicHandler):
 			except:
 				logging.error(f"Apt package {apt_package_name} not found")
 
-		if apt_package is not None:
-			branch = "deb"
-			gitid = apt_package.installed
-			update = None
-		else:
-			branch = check_output("cd %s; git branch | grep '*'" % path, shell=True).decode()[2:-1]
-			gitid = check_output("cd %s; git rev-parse HEAD" % path, shell=True).decode()[:-1]
-			if check_updates:
-				update = check_output("cd %s; git remote update; git status --porcelain -bs | grep behind | wc -l" % path, shell=True).decode()
-			else:
+		try:
+			if apt_package is not None:
+				branch = "deb"
+				gitid = apt_package.installed
 				update = None
+			else:
+				branch = check_output("cd %s; git branch | grep '*'" % path, shell=True).decode()[2:-1]
+				gitid = check_output("cd %s; git rev-parse HEAD" % path, shell=True).decode()[:-1]
+				if check_updates:
+					update = check_output("cd %s; git remote update; git status --porcelain -bs | grep behind | wc -l" % path, shell=True).decode()
+				else:
+					update = None
+		except:
+			# Handle any error caused while fetching information
+			branch = "unknown"
+			gitid = ""
+			update = None
 		return { "branch": branch, "gitid": gitid, "update": update }
 
 
