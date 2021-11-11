@@ -27,9 +27,11 @@ import re
 import sys
 import logging
 import tornado.web
+import apt
 from subprocess import check_output, DEVNULL
 from distutils import util
 from collections import OrderedDict
+
 from lib.zynthian_config_handler import ZynthianBasicHandler
 
 sys.path.append(os.environ.get('ZYNTHIAN_UI_DIR'))
@@ -45,10 +47,11 @@ class DashboardHandler(ZynthianBasicHandler):
 	def get(self):
 		# Get git info
 		git_info_zyncoder=self.get_git_info("/zynthian/zyncoder")
-		git_info_ui=self.get_git_info("/zynthian/zynthian-ui")
+		git_info_ui=self.get_git_info("/zynthian/zynthian-ui", apt_package_name="zynthian-qml")
 		git_info_sys=self.get_git_info("/zynthian/zynthian-sys")
 		git_info_webconf=self.get_git_info("/zynthian/zynthian-webconf")
 		git_info_data=self.get_git_info("/zynthian/zynthian-data")
+		git_info_quick_components=self.get_git_info("", apt_package_name="zynthian-quick-components")
 
 		# Get Memory & SD Card info
 		ram_info=self.get_ram_info()
@@ -149,8 +152,13 @@ class DashboardHandler(ZynthianBasicHandler):
 					}],
 					['UI', {
 						'title': 'zynthian-ui',
-						'value': "{} ({})".format(git_info_ui['branch'], git_info_ui['gitid'][0:7], 'Update available' if git_info_ui['update'] == '1' else ''),
-						'url': "https://github.com/zynthian/zynthian-ui/commit/{}".format(git_info_ui['gitid'])
+						'value': "{} ({})".format(git_info_ui['branch'], git_info_ui['gitid'] if git_info_ui['branch'] == 'deb' else git_info_ui['gitid'][0:7], 'Update available' if git_info_ui['update'] == '1' else ''),
+						'url': '' if git_info_ui['branch'] == 'deb' else "https://github.com/zynthian/zynthian-ui/commit/{}".format(git_info_ui['gitid'])
+					}],
+					['QUICK COMPONENTS', {
+						'title': 'zynthian-quick-components',
+						'value': "{} ({})".format(git_info_quick_components['branch'], git_info_quick_components['gitid'], ''),
+						'url': ''
 					}],
 					['SYS', {
 						'title': 'zynthian-sys',
@@ -249,13 +257,30 @@ class DashboardHandler(ZynthianBasicHandler):
 		super().get("dashboard_block.html", "Dashboard", config, None)
 
 
-	def get_git_info(self, path, check_updates=False):
-		branch = check_output("cd %s; git branch | grep '*'" % path, shell=True).decode()[2:-1]
-		gitid = check_output("cd %s; git rev-parse HEAD" % path, shell=True).decode()[:-1]
-		if check_updates:
-			update = check_output("cd %s; git remote update; git status --porcelain -bs | grep behind | wc -l" % path, shell=True).decode()
-		else:
+	def get_git_info(self, path, check_updates=False, apt_package_name=None):
+		apt_package = None
+
+		if apt_package_name is not None:
+			cache = apt.cache.Cache()
+			cache.open()
+
+			try:
+				if cache[apt_package_name].is_installed:
+					apt_package = cache[apt_package_name]
+			except:
+				logging.error(f"Apt package {apt_package_name} not found")
+
+		if apt_package is not None:
+			branch = "deb"
+			gitid = apt_package.installed
 			update = None
+		else:
+			branch = check_output("cd %s; git branch | grep '*'" % path, shell=True).decode()[2:-1]
+			gitid = check_output("cd %s; git rev-parse HEAD" % path, shell=True).decode()[:-1]
+			if check_updates:
+				update = check_output("cd %s; git remote update; git status --porcelain -bs | grep behind | wc -l" % path, shell=True).decode()
+			else:
+				update = None
 		return { "branch": branch, "gitid": gitid, "update": update }
 
 
