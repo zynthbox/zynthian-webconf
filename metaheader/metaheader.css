@@ -1,0 +1,10 @@
+.navbar-fixed-top {
+  top: 30px !important;
+  border-width: 0 0 1px;
+}
+nav#metaheader-container {
+  position: absolute;
+  top: 0;
+  z-index: 10000;
+  background: white;
+}

@@ -14,10 +14,10 @@ function MetaHeader(){
     }
 
     return (
-        <nav id="webconf-metaheader">
+        <div id="metaheader">
             <a onClick={() => setShowFileBrowser(showFileBrowser === true ? false : true)}>file browser</a>
             {fileBrowserDisplay}
-        </nav>
+        </div>
     )
 }
 
