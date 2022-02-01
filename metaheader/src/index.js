@@ -5,6 +5,7 @@ function MetaHeader(){
     return (
         <nav id="webconf-metaheader">
             HELLO IM METAHEADER
+            <FileBrowser/>
         </nav>
     )
 }
