@@ -1,0 +1,26 @@
+{
+  "name": "zynthbox-webconf-metaheader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "David Nelvand",
+  "license": "ISC",
+  "scripts": {
+    "build": "webpack --mode production",
+    "watch": "webpack --mode development --watch",
+    "build-watch": "webpack --mode production --watch"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/polyfill": "^7.10.4",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.2.3",
+    "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "webpack": "^4.46.0"
+  }
+}
