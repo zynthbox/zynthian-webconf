@@ -10,4 +10,4 @@ function MetaHeader(){
     )
 }
 
-ReactDOM.render(<MetaHeader />, document.getElementById('webconf-metaheader-container'));
+ReactDOM.render(<MetaHeader />, document.getElementById('metaheader-container'));
