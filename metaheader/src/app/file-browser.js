@@ -1,5 +1,6 @@
+import React, { Component} from 'react';
 import { FullFileBrowser } from 'chonky';
-export const FileBrowser = () => {
+export const MyFileBrowser = () => {
     const files = [
         { id: 'lht', name: 'Projects', isDir: true },
         {
@@ -15,3 +16,5 @@ export const FileBrowser = () => {
         </div>
     );
 };
+
+export default MyFileBrowser

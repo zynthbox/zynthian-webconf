@@ -4,3 +4,4 @@ __pycache__
 zynthian_envars.sh
 /.idea/
 node_modules/
+react-dev-test.html
