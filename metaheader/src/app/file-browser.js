@@ -1,5 +1,5 @@
-import React, { Component} from 'react';
 import { FullFileBrowser } from 'chonky';
+
 export const MyFileBrowser = () => {
     const files = [
         { id: 'lht', name: 'Projects', isDir: true },
