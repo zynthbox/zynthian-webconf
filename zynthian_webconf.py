@@ -135,6 +135,7 @@ def make_app():
 		(r'/js/(.*)$', tornado.web.StaticFileHandler, {'path': 'js'}),
 		(r'/captures/(.*)$', tornado.web.StaticFileHandler, {'path': 'captures'}),
 		(r'/bower_components/(.*)$', tornado.web.StaticFileHandler, {'path': 'bower_components'}),
+		(r'/metaheader/(.*)$', tornado.web.StaticFileHandler, {'path': 'metaheader'}),
 		(r"/login", LoginHandler),
 		(r"/logout", LogoutHandler),
 		(r"/lib-snapshot$", SnapshotConfigHandler),
@@ -173,6 +174,7 @@ def make_app():
 		(r"/zynterm", ZyntermHandler),
 		(r"/zynterm_ws", TermSocket, {'term_manager': term_manager}),
 		(r"/xstatic/(.*)", tornado_xstatic.XStaticFileHandler, {'allowed_modules': ['termjs']})
+		
 	], **settings)
 
 
