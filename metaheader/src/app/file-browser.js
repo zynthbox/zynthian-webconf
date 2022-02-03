@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { FullFileBrowser, ChonkyActions } from 'chonky';
 const MyFileBrowser = () => {
 
-  console.log(window.location)
+  // console.log(window.location)
 
   const rootFolder = "zynthian-my-data"
 
   const [ files, setFiles ] = useState([])
-  console.log(files,"files")
+  // console.log(files,"files")
   const [ displayedFiles, setDisplayedFiles ] = useState([])
-  console.log(displayedFiles,"displayed files")
+  // console.log(displayedFiles,"displayed files")
   const [ folderChain, setFolderChain ] = useState([{ id: 'xcv', name: rootFolder, isDir: true }])
   const [ selectedFolder, setSelectedFolder ] = useState("")
 
@@ -37,7 +37,7 @@ const MyFileBrowser = () => {
   function getDisplayFiles(list){
     let displayedFilesList = [];
     list.forEach(function(item,index){
-      console.log(selectedFolder)
+      // console.log(selectedFolder)
       if (item.name.indexOf(selectedFolder + "/")){
         const fileName = item.name.split(selectedFolder+"/")[1];
         if (fileName && fileName.indexOf('/') === -1){
@@ -47,7 +47,7 @@ const MyFileBrowser = () => {
             isDir:fileName.indexOf('.') > -1 ? false : true,
             name:fileName
           }
-          console.log(file);
+          // console.log(file);
           displayedFilesList.push(file);
         }
       }
@@ -74,7 +74,7 @@ const MyFileBrowser = () => {
       let newSelectedFolder,
           newFoldersChain;
 
-      console.log('dir is in chain', dirIsInChain)
+      // console.log('dir is in chain', dirIsInChain)
 
       if (!dirIsInChain){
         newSelectedFolder = selectedFolder + "/" + obj.payload.files[0].name;
@@ -85,7 +85,7 @@ const MyFileBrowser = () => {
         newFoldersChain = [...folderChain.slice(0,folderIndexInChain + 1)]
       }
 
-      console.log(newFoldersChain,"new folder chain")
+      // console.log(newFoldersChain,"new folder chain")
 
       setFolderChain(newFoldersChain)
       setSelectedFolder(newSelectedFolder)
