@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { FullFileBrowser, ChonkyActions } from 'chonky';
 const MyFileBrowser = () => {
 
+  console.log(window.location)
+
   const rootFolder = "zynthian-my-data"
 
   const [ files, setFiles ] = useState([])
@@ -18,7 +20,7 @@ const MyFileBrowser = () => {
   },[selectedFolder])
 
   async function getFiles(){
-    const response = await fetch(`http://localhost:3000/playgrids`, {
+    const response = await fetch(`http://${window.location.hostname}:3000/playgrids`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
