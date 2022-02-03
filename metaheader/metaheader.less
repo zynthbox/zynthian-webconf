@@ -7,8 +7,22 @@ nav#metaheader-container  {
     position: absolute;
     top: 0;
     z-index: 10000;
-    background: white;
-    width: 96vw;
-    left: 2vw;
-    height: 96vh;
+
+    #file-browser-container {
+        background: white;
+        width: 96vw;
+        left: 2vw;
+        height: 96vh;
+    
+        .close-file-browser {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-weight: bold;
+            background: #ececec;
+            padding: 7px;
+            height: 25px;
+            line-height: 12px;
+        }
+    }
 }

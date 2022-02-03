@@ -12,7 +12,7 @@ function MetaHeader(){
     if (showFileBrowser === true){
         fileBrowserDisplay = (
             <div id="file-browser-container">
-                <a onClick={() => setShowFileBrowser(false)}>X</a>
+                <a className="close-file-browser" onClick={() => setShowFileBrowser(false)}>X</a>
                 <MyFileBrowser/>
             </div>
         )
