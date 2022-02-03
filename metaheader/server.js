@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-  app.get('/playgrids',(req,res) => {
+  app.get('/mydata',(req,res) => {
     const dirList = getAllFiles('/home/pi/zynthian-my-data',[])
     console.log(dirList)
     res.json(dirList)

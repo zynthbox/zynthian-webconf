@@ -20,7 +20,7 @@ const MyFileBrowser = () => {
   },[selectedFolder])
 
   async function getFiles(){
-    const response = await fetch(`http://${window.location.hostname}:3000/playgrids`, {
+    const response = await fetch(`http://${window.location.hostname}:3000/mydata`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
