@@ -4,7 +4,10 @@ const fs = require('fs');
 const glob = require("glob");
 const app = express()
 const port = 3000
+var cors = require('cors');
 
+// cors
+app.use(cors());
 
 const getAllFiles = function(dirPath, arrayOfFiles) {
   files = fs.readdirSync(dirPath)
@@ -12,10 +15,22 @@ const getAllFiles = function(dirPath, arrayOfFiles) {
   arrayOfFiles = arrayOfFiles || []
 
   files.forEach(function(file) {
-    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-      arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
-    } else {
-      arrayOfFiles.push(path.join(__dirname, dirPath, "/", file))
+    if (file !== "node_modules"){
+      let fileData = {
+        name:path.join(__dirname, dirPath, "/", file)
+      }
+      if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+        arrayOfFiles.push(fileData)
+        arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
+      } else {
+        var stats = fs.statSync(dirPath + "/" + file)
+        fileData = {
+          size:stats.size,
+          modDate:stats.ctimeMs,
+          name:path.join(__dirname, dirPath, "/", file),
+        }
+        arrayOfFiles.push(fileData)
+      }
     }
   })
 
@@ -26,10 +41,10 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.get('/playgrids',(req,res) => {
-    const dirList = getAllFiles('/root/.local/share/zynthian/playgrids/',[])
+  app.get('/playgrids',(req,res) => {
+    const dirList = getAllFiles('/home/pi/zynthian-my-data',[])
     console.log(dirList)
-    res.send(dirList)
+    res.json(dirList)
   })
 
 app.listen(port, () => {

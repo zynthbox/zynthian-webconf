@@ -5,17 +5,21 @@
   "main": "index.js",
   "author": "David Nelvand",
   "license": "ISC",
+  "proxy": "http://localhost:3000",
   "scripts": {
     "build": "webpack --mode production",
     "watch": "webpack --mode development --watch",
     "build-watch": "webpack --mode production --watch"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.1",
-    "@babel/polyfill": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
+    "babel-core": "^6.26.3",
     "babel-loader": "^8.2.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "chonky": "^2.3.2",
     "chonky-icon-fontawesome": "^2.3.2",
     "express": "^4.17.2",
@@ -26,6 +30,7 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "react": "17.0.2",
     "react-device-detect": "^2.1.2",
     "react-dom": "17.0.2",

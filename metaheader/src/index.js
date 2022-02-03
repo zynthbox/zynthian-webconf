@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import MetaheaderFileBrowser from './app/file-browser';
+import MyFileBrowser from './app/file-browser';
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 
@@ -11,7 +11,7 @@ function MetaHeader(){
     let iFrameDisplay;
     if (showIFrame === true){
         iFrameDisplay = (
-            <iframe src="https://share.zynthbox.io/browse/"></iframe>
+            <MyFileBrowser/>
         )
     }
 
