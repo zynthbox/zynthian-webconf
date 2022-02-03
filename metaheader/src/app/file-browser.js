@@ -34,15 +34,15 @@ const MyFileBrowser = () => {
     getDisplayFiles(res);
   }
 
-  function getDisplayFiles(list){
+  function getDisplayFiles(fileList){
     let displayedFilesList = [];
-    list.forEach(function(item,index){
+    fileList.forEach(function(f,index){
       // console.log(selectedFolder)
-      if (item.name.indexOf(selectedFolder + "/")){
-        const fileName = item.name.split(selectedFolder+"/")[1];
+      if (f.path.indexOf(selectedFolder + "/")){
+        const fileName = f.path.split(selectedFolder+"/")[1];
         if (fileName && fileName.indexOf('/') === -1){
           let file = {
-            ...item,
+            ...f,
             id:index,
             isDir:fileName.indexOf('.') > -1 ? false : true,
             name:fileName

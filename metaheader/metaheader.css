@@ -5,7 +5,7 @@
 nav#metaheader-container {
   position: absolute;
   top: 0;
-  z-index: 10000;
+  z-index: 1040;
   left: 2vw;
 }
 nav#metaheader-container #file-browser-container {

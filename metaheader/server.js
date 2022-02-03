@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require("path")
 const fs = require('fs');
-const glob = require("glob");
 const app = express()
 const port = 3000
 var cors = require('cors');
@@ -11,9 +10,7 @@ app.use(cors());
 
 const getAllFiles = function(dirPath, arrayOfFiles) {
   files = fs.readdirSync(dirPath)
-
   arrayOfFiles = arrayOfFiles || []
-
   files.forEach(function(file) {
     if (file !== "node_modules"){
       let fileData = {
@@ -27,7 +24,7 @@ const getAllFiles = function(dirPath, arrayOfFiles) {
         fileData = {
           size:stats.size,
           modDate:stats.ctimeMs,
-          name:path.join(__dirname, dirPath, "/", file),
+          path:path.join(__dirname, dirPath, "/", file),
         }
         arrayOfFiles.push(fileData)
       }
@@ -38,15 +35,15 @@ const getAllFiles = function(dirPath, arrayOfFiles) {
 }
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Webconf Metaheader Files App Server!')
 })
 
-  app.get('/mydata',(req,res) => {
-    const dirList = getAllFiles('/home/pi/zynthian-my-data/',[])
-    console.log(dirList)
-    res.json(dirList)
-  })
+app.get('/mydata',(req,res) => {
+  const dirList = getAllFiles('/home/pi/zynthian-my-data/',[])
+  console.log(dirList)
+  res.json(dirList)
+})
 
 app.listen(port, () => {
-  console.log(`React file browser app listening on port ${port}`)
+  console.log(`webconf metaheader file-browser app-server listening on port ${port}`)
 })
