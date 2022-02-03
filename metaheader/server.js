@@ -21,10 +21,8 @@ const getAllFiles = function(dirPath, arrayOfFiles) {
         arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
       } else {
         var stats = fs.statSync(dirPath + "/" + file)
-        fileData = {
-          size:stats.size,
-          modDate:stats.ctimeMs,
-        }
+        fileData.size = stats.size
+        fileData.modDate = stats.ctimeMs
         arrayOfFiles.push(fileData)
       }
     }
