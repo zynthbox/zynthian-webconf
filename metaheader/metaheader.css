@@ -6,11 +6,11 @@ nav#metaheader-container {
   position: absolute;
   top: 0;
   z-index: 10000;
+  left: 2vw;
 }
 nav#metaheader-container #file-browser-container {
   background: white;
   width: 96vw;
-  left: 2vw;
   height: 96vh;
 }
 nav#metaheader-container #file-browser-container .close-file-browser {
@@ -22,4 +22,7 @@ nav#metaheader-container #file-browser-container .close-file-browser {
   padding: 7px;
   height: 25px;
   line-height: 12px;
+}
+.MuiMenu-paper {
+  margin-top: 30px !important;
 }
