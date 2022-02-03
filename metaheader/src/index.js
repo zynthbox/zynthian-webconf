@@ -11,7 +11,10 @@ function MetaHeader(){
     let fileBrowserDisplay;
     if (showFileBrowser === true){
         fileBrowserDisplay = (
-            <MyFileBrowser/>
+            <div id="file-browser-container">
+                <a onClick={() => setShowFileBrowser(false)}>X</a>
+                <MyFileBrowser/>
+            </div>
         )
     }
 
