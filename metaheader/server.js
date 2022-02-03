@@ -14,7 +14,7 @@ const getAllFiles = function(dirPath, arrayOfFiles) {
   files.forEach(function(file) {
     if (file !== "node_modules"){
       let fileData = {
-        name:path.join(__dirname, dirPath, "/", file)
+        path:path.join(__dirname, dirPath, "/", file)
       }
       if (fs.statSync(dirPath + "/" + file).isDirectory()) {
         arrayOfFiles.push(fileData)
@@ -24,7 +24,6 @@ const getAllFiles = function(dirPath, arrayOfFiles) {
         fileData = {
           size:stats.size,
           modDate:stats.ctimeMs,
-          path:path.join(__dirname, dirPath, "/", file),
         }
         arrayOfFiles.push(fileData)
       }
