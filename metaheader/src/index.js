@@ -6,17 +6,19 @@ import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 
 function MetaHeader(){
 
-    const [ showFileBrowser, setShowFileBrowser ] = useState(false)
+    const [ showIFrame, setShowIFrame ] = useState(false)
 
-    let fileBrowserDisplay;
-    if (showFileBrowser === true){
-        fileBrowserDisplay = <MetaheaderFileBrowser/>
+    let iFrameDisplay;
+    if (showIFrame === true){
+        iFrameDisplay = (
+            <iframe src="https://share.zynthbox.io/browse/"></iframe>
+        )
     }
 
     return (
         <div id="metaheader">
-            <a onClick={() => setShowFileBrowser(showFileBrowser === true ? false : true)}>file browser</a>
-            {fileBrowserDisplay}
+            <a onClick={() => setShowIFrame(showIFrame === true ? false : true)}>Store</a>
+            {iFrameDisplay}
         </div>
     )
 }
