@@ -37,9 +37,9 @@ const MyFileBrowser = () => {
     list.forEach(function(item,index){
       console.log(item)
       console.log(selectedFolder)
-      if (item.name.indexOf(selectedFolder + "\\")){
-        const fileName = item.name.split(selectedFolder+"\\")[1];
-        if (fileName && fileName.indexOf('\\') === -1){
+      if (item.name.indexOf(selectedFolder + "/")){
+        const fileName = item.name.split(selectedFolder+"/")[1];
+        if (fileName && fileName.indexOf('/') === -1){
           let file = {
             ...item,
             id:index,
@@ -77,7 +77,7 @@ const MyFileBrowser = () => {
       console.log(folderChain,)
 
       if (!dirIsInChain){
-        newSelectedFolder = selectedFolder + "\\" + obj.payload.files[0].name;
+        newSelectedFolder = selectedFolder + "/" + obj.payload.files[0].name;
         newFoldersChain = [...folderChain, obj.payload.files[0]];
       } else {
         newSelectedFolder = selectedFolder.split(name)[0] + name;

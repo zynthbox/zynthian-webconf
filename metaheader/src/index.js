@@ -6,20 +6,20 @@ import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 
 function MetaHeader(){
 
-    const [ showIFrame, setShowIFrame ] = useState(false)
+    const [ showFileBrowser, setShowFileBrowser ] = useState(false)
 
-    let iFrameDisplay;
-    if (showIFrame === true){
-        iFrameDisplay = (
+    let fileBrowserDisplay;
+    if (showFileBrowser === true){
+        fileBrowserDisplay = (
             <MyFileBrowser/>
         )
     }
 
     return (
-        <div id="metaheader">
-            <a onClick={() => setShowIFrame(showIFrame === true ? false : true)}>Store</a>
-            {iFrameDisplay}
-        </div>
+        <React.Fragment>
+            <a onClick={() => setShowFileBrowser(showFileBrowser === true ? false : true)}>Files</a>
+            {fileBrowserDisplay}
+        </React.Fragment>
     )
 }
 

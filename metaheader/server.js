@@ -42,11 +42,11 @@ app.get('/', (req, res) => {
 })
 
   app.get('/mydata',(req,res) => {
-    const dirList = getAllFiles('/home/pi/zynthian-my-data',[])
+    const dirList = getAllFiles('/home/pi/zynthian-my-data/',[])
     console.log(dirList)
     res.json(dirList)
   })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`React file browser app listening on port ${port}`)
 })
