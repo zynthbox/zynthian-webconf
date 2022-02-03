@@ -7,7 +7,9 @@ const MyFileBrowser = () => {
   const rootFolder = "zynthian-my-data"
 
   const [ files, setFiles ] = useState([])
+  console.log(files,"files")
   const [ displayedFiles, setDisplayedFiles ] = useState([])
+  console.log(displayedFiles,"displayed files")
   const [ folderChain, setFolderChain ] = useState([{ id: 'xcv', name: rootFolder, isDir: true }])
   const [ selectedFolder, setSelectedFolder ] = useState("")
 
@@ -35,7 +37,6 @@ const MyFileBrowser = () => {
   function getDisplayFiles(list){
     let displayedFilesList = [];
     list.forEach(function(item,index){
-      console.log(item)
       console.log(selectedFolder)
       if (item.name.indexOf(selectedFolder + "/")){
         const fileName = item.name.split(selectedFolder+"/")[1];
@@ -46,6 +47,7 @@ const MyFileBrowser = () => {
             isDir:fileName.indexOf('.') > -1 ? false : true,
             name:fileName
           }
+          console.log(file);
           displayedFilesList.push(file);
         }
       }
@@ -73,8 +75,6 @@ const MyFileBrowser = () => {
           newFoldersChain;
 
       console.log('dir is in chain', dirIsInChain)
-
-      console.log(folderChain,)
 
       if (!dirIsInChain){
         newSelectedFolder = selectedFolder + "/" + obj.payload.files[0].name;
