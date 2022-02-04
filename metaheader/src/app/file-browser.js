@@ -112,6 +112,7 @@ const MyFileBrowser = () => {
     if (data.id === ChonkyActions.DownloadFiles.id) alert("Download Folder Action");
     if (data.id === ChonkyActions.DeleteFiles.id) alert("Delete Folder Action");
   };
+  
   const createNewFolder = defineFileAction({
     id: "create_files",
     button: {
@@ -125,7 +126,6 @@ const MyFileBrowser = () => {
     id: "edit_files",
     button: {
       name: "Edit",
-      toolbar: true,
       contextMenu: true,
       icon: ChonkyIconName.archive
     }
@@ -134,7 +134,6 @@ const MyFileBrowser = () => {
     id: "rename_files",
     button: {
       name: "Rename",
-      toolbar: true,
       contextMenu: true,
       icon: ChonkyIconName.code
     }
