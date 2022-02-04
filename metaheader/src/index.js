@@ -29,5 +29,5 @@ function MetaHeader(){
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 
 const e = React.createElement;
-const domContainer = document.querySelector('#metaheader-container');
+const domContainer = document.querySelector('#file-manager-container');
 ReactDOM.render(e(MetaHeader), domContainer);
