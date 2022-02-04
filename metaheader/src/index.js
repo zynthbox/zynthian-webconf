@@ -29,7 +29,7 @@ function MetaHeader(){
 
     return (
         <React.Fragment>
-            <a onClick={() => setShowFileBrowser(showFileBrowser === true ? false : true)}>Files</a>
+            <a className={showFileBrowser === true ? "active" : ""} onClick={() => setShowFileBrowser(showFileBrowser === true ? false : true)}>Files</a>
             {fileBrowserDisplay}
         </React.Fragment>
     )
