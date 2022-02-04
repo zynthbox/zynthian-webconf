@@ -22,6 +22,10 @@ function MetaHeader(){
         fileBrowserDisplay = (
             <div id="file-browser-container" className="container" style={{left:fileBrowserLeftCss}}>
                 <a className="close-file-browser" style={{cursor:"pointer"}} onClick={() => setShowFileBrowser(false)}>X</a>
+                <h3>
+                    <i className="glyphicon glyphicon-file"></i>
+                    FILES
+                </h3>
                 <MyFileBrowser/>
             </div>
         )
@@ -29,7 +33,7 @@ function MetaHeader(){
 
     return (
         <React.Fragment>
-            <a className={showFileBrowser === true ? "active" : ""} onClick={() => setShowFileBrowser(showFileBrowser === true ? false : true)}>Files</a>
+            <a className={showFileBrowser === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileBrowser(showFileBrowser === true ? false : true)}>Files</a>
             {fileBrowserDisplay}
         </React.Fragment>
     )
