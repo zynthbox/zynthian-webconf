@@ -19,9 +19,9 @@ const MyFileBrowser = () => {
   const rootFolder = "zynthian-my-data"
 
   const [ files, setFiles ] = useState([])
-  // console.log(files,"files")
+  console.log(files,"files")
   const [ displayedFiles, setDisplayedFiles ] = useState([])
-  // console.log(displayedFiles,"displayed files")
+  console.log(displayedFiles,"displayed files")
   const [ folderChain, setFolderChain ] = useState([{ id: 'xcv', name: rootFolder, isDir: true }])
   const [ selectedFolder, setSelectedFolder ] = useState("")
 
