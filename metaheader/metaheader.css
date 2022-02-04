@@ -1,19 +1,11 @@
-.navbar-fixed-top {
-  top: 30px !important;
-  border-width: 0 0 1px;
-}
-nav#metaheader-container {
-  position: absolute;
-  top: 0;
-  z-index: 1040;
-  left: 2vw;
-}
-nav#metaheader-container #file-browser-container {
+#file-browser-container {
   background: white;
-  width: 96vw;
-  height: 96vh;
+  height: auto;
+  padding: 0;
+  position: fixed;
+  margin-top: 50px;
 }
-nav#metaheader-container #file-browser-container .close-file-browser {
+#file-browser-container .close-file-browser {
   position: absolute;
   top: 0;
   right: 0;

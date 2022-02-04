@@ -10,8 +10,17 @@ function MetaHeader(){
 
     let fileBrowserDisplay;
     if (showFileBrowser === true){
+
+        let fileBrowserLeftCss = 0;
+        const containerElement = document.getElementsByClassName('container')[0];
+        if (containerElement !== null){
+            console.log(containerElement);
+            console.log(window.innerWidth)
+            fileBrowserLeftCss = (window.innerWidth - containerElement.width) / 2
+        }
+
         fileBrowserDisplay = (
-            <div id="file-browser-container">
+            <div id="file-browser-container" className="container" style={{left:fileBrowserLeftCss}}>
                 <a className="close-file-browser" onClick={() => setShowFileBrowser(false)}>X</a>
                 <MyFileBrowser/>
             </div>
