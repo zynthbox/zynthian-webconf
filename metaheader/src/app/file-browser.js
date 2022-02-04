@@ -93,7 +93,7 @@ const MyFileBrowser = () => {
   }
 
   return (
-      <div style={{ height: 880 }}>
+      <div style={{ height: window.innerHeight - 190 }}>
           <FullFileBrowser
             onFileAction={onFileAction}
             files={displayedFiles} 
