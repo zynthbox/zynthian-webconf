@@ -6,14 +6,14 @@
   margin-top: 50px;
 }
 #file-browser-container .close-file-browser {
-  position: absolute;
-  top: 0;
-  right: 0;
   font-weight: bold;
   background: #ececec;
   padding: 7px;
   height: 25px;
   line-height: 12px;
+  border-radius: 100%;
+  top: 5px;
+  right: 5px;
 }
 .MuiMenu-paper {
   margin-top: 30px !important;

@@ -21,7 +21,7 @@ function MetaHeader(){
 
         fileBrowserDisplay = (
             <div id="file-browser-container" className="container" style={{left:fileBrowserLeftCss}}>
-                <a className="close-file-browser" className={showFileBrowser === true ? "active" : ""} onClick={() => setShowFileBrowser(false)}>X</a>
+                <a className="close-file-browser" style={{cursor:"pointer"}} onClick={() => setShowFileBrowser(false)}>X</a>
                 <MyFileBrowser/>
             </div>
         )
