@@ -190,8 +190,8 @@ const MyFileBrowser = () => {
   return (
       <div style={{ height: window.innerHeight - 190 }}>
         <FileBrowser
-          files={tempFiles}
-          folderChain={tempFolderChain}
+          files={files}
+          folderChain={folderChain}
           fileActions={myFileActions}
           onFileAction={handleAction}
           defaultFileViewActionId={ChonkyActions.EnableListView.id}
