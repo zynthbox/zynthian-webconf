@@ -13,7 +13,7 @@ function MetaHeader(){
 
         let fileBrowserLeftCss = 0;
         const containerElement = document.getElementsByClassName('container')[0];
-        if (containerElement !== null){
+        if (containerElement && containerElement !== null){
             console.log(containerElement);
             console.log(window.innerWidth)
             fileBrowserLeftCss = (window.innerWidth - containerElement.offsetWidth) / 2
