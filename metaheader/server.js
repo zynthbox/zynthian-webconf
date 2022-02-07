@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require("path")
 const fs = require('fs');
+const { copyFile } = require('fs/promises');
 var rimraf = require("rimraf");
 var cors = require('cors');
 
@@ -96,6 +97,21 @@ app.post('/rename',(req,res) => {
     res.json({error:err})
   }
 })
+
+app.post('/copy',async (req,res) => {
+  const { sourcePath, destinationPath } = req.body;
+  try {
+    await copyFile(sourcePath, destinationPath);
+    const dirList = getAllFiles(rootFolder,[])
+    res.json(dirList)
+    console.log('source.txt was copied to destination.txt');
+  } catch(err) {
+    console.error(err)
+    res.json({error:err})
+  }
+
+})
+
 
 app.listen(port, () => {
   console.log(`webconf metaheader file-browser app-server listening on port ${port}`)
