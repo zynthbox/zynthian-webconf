@@ -15,7 +15,8 @@ import React, { useState, useEffect, useRef } from 'react'
 function WebconfFileBrowser(props){
 
     const { displayedFiles, selectedFolder, fsep, folderChain } = props;
-    const [ downloadFileLink, setDownloadFileLink] = useState('')
+    const [ downloadFileLink, setDownloadFileLink] = useState('');
+    const [ copiedFiles, setCopiedFiles ] = useState('')
 
     function checkIfDirIsInFolderChain(id){
         let idIsInChain = false;
@@ -76,6 +77,14 @@ function WebconfFileBrowser(props){
       window.open(path)
     }
 
+    function copyFilesAction(data){
+      setCopiedFiles(data.state.selectedFiles[0].path)
+    }
+
+    function pasteFilesAction(data){
+      props.copyFiles(copiedFiles,selectedFolder + copiedFiles.split(fsep)[1])
+    }
+
     const handleAction = (data) => {
       if (data.id === ChonkyActions.OpenFiles.id) openFilesAction(data)
       if (data.id === createNewFolder.id) createFolderAction()
@@ -84,8 +93,8 @@ function WebconfFileBrowser(props){
       if (data.id === ChonkyActions.UploadFiles.id) alert("Upload Folder Action");
       if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
       if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
-      if (data.id === ChonkyActions.CopyFiles.id) alert("copy files action")
-      if (data.id === pasteFiles.id) alert("paste files action")
+      if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data);
+      if (data.id === pasteFiles.id) pasteFiles(data)
     };
     
     const createNewFolder = defineFileAction({

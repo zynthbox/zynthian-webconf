@@ -103,6 +103,21 @@ const FileManager = () => {
     getDisplayFiles(res);
   }
 
+  async function deleteFiles(previousPath,destinationPath){
+    console.log({previousPath,destinationPath})
+    const response = await fetch(`http://${window.location.hostname}:3000/copy`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body:JSON.stringify({previousPath,destinationPath})
+    });
+    const res = await response.json();
+    setFiles(res);
+    getDisplayFiles(res);
+  }
+  
+
   return (
     <React.Fragment>
       <WebconfFileBrowser 
