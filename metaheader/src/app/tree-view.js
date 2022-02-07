@@ -11,7 +11,6 @@ class TreeView extends PureComponent {
     
     onToggle(node, toggled){
         const {cursor, data} = this.state;
-        console.log(node.id);
         if (cursor) {
             this.setState(() => ({cursor, active: false}));
         }
@@ -19,16 +18,19 @@ class TreeView extends PureComponent {
         if (node.children) { 
             node.toggled = toggled;
         }
+        props.onTreeFolderClick(node)
         this.setState(() => ({cursor: node, data: Object.assign({}, data)}));
     }
     
     render(){
         const {data} = this.state;
         return (
+            <div className='tree-view-container'>
                 <Treebeard
                     data={data}
                     onToggle={this.onToggle}
                 />
+            </div>
         );
     }
 }

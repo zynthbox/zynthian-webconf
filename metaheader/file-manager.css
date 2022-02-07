@@ -40,12 +40,17 @@
   position: relative;
   width: 100%;
 }
-#file-manager .file-manager-wrapper > ul {
+#file-manager .file-manager-wrapper .tree-view-container {
   position: absolute;
   left: 0;
   top: 0;
   height: 100%;
-  width: calc(20% - 47px);
+  width: 20%;
+  overflow: hidden;
+}
+#file-manager .file-manager-wrapper .tree-view-container ul {
+  width: 100%;
+  min-height: 100%;
 }
 .MuiMenu-paper {
   margin-top: 30px !important;

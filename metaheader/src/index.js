@@ -21,7 +21,9 @@ function MetaHeader(){
 
         fileManagerDisplay = (
             <div id="file-manager" className="container" style={{left:fileManagerLeftCss}}>
-                <a className="close-file-manager" style={{cursor:"pointer"}} onClick={() => setShowFileManager(false)}>X</a>
+                <a className="close-file-manager" style={{cursor:"pointer"}} onClick={() => setShowFileManager(false)}>
+                    <i className="glyphicon glyphicon-remove-circle"></i>
+                </a>
                 <h3>
                     <i className="glyphicon glyphicon-file"></i>
                     FILES

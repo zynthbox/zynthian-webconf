@@ -44,12 +44,18 @@
         position: relative;
         width: 100%;
         
-        > ul {
+        .tree-view-container {
             position: absolute;
             left: 0;
             top: 0;
             height: 100%;
-            width: calc(20% - 47px);
+            width:20%;
+            overflow: hidden;
+
+            ul {
+                width: 100%;
+                min-height: 100%;
+            }
         }
     }
 }
