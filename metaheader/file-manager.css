@@ -4,7 +4,7 @@
   position: fixed;
   margin-top: 35px;
 }
-#file-manager .close-file-browser {
+#file-manager .close-file-manager {
   font-weight: bold;
   background: white!important;
   padding: 7px !important;
