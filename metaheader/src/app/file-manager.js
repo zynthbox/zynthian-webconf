@@ -39,6 +39,7 @@ const FileManager = () => {
   }
 
   function getDisplayFiles(fileList){
+      console.log('get displayed files')
     let displayedFilesList = [];
     fileList.forEach(function(f,index){
       // console.log(selectedFolder)
@@ -69,6 +70,7 @@ const FileManager = () => {
       body:JSON.stringify({fullPath})
     });
     const res = await response.json();
+    console.log(res,"res after create folder");
     if (typeof res === Array){
       setFiles(res);
       getDisplayFiles(res);

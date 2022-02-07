@@ -9,6 +9,7 @@ const port = 3000
 
 // const rootFolder = "./"
 const rootFolder = "/home/pi/zynthian-my-data/"
+const parentFolder = "/home/pi"
 
 // cors
 app.use(cors());
@@ -53,8 +54,8 @@ app.get('/mydata',(req,res) => {
 app.post('/createfolder',(req,res) => {
   const { fullPath } = req.body;
   try {
-    if (!fs.existsSync(rootFolder + fullPath)) {
-      fs.mkdirSync(fullPath)
+    if (!fs.existsSync(parentFolder + fullPath)) {
+      fs.mkdirSync(parentFolder + fullPath)
       const dirList = getAllFiles(rootFolder,[])
       res.json(dirList)
     } else {
