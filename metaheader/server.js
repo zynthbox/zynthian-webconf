@@ -97,10 +97,10 @@ app.post('/rename',(req,res) => {
   }
 })
 
-app.post('/paste',async (req,res) => {
-  const { sourcePath, destinationPath } = req.body;
+app.post('/paste',(req,res) => {
+  const { previousPath, destinationPath } = req.body;
   try {
-    fs.copyFileSync(sourcePath,destinationPath)
+    fs.copyFileSync(previousPath, parentFolder + destinationPath)
     const dirList = getAllFiles(rootFolder,[])
     res.json(dirList)
   } catch(err) {
