@@ -82,7 +82,7 @@ function WebconfFileBrowser(props){
     }
 
     function pasteFilesAction(data){
-      props.copyFiles(copiedFiles,selectedFolder + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1])
+      props.pasteFiles(copiedFiles,selectedFolder + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1])
     }
 
     const handleAction = (data) => {
