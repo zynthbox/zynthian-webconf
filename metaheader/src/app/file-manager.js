@@ -103,7 +103,7 @@ const FileManager = () => {
     getDisplayFiles(res);
   }
 
-  async function deleteFiles(previousPath,destinationPath){
+  async function pasteFiles(previousPath,destinationPath){
     console.log({previousPath,destinationPath})
     const response = await fetch(`http://${window.location.hostname}:3000/copy`, {
       method: 'POST',
@@ -130,6 +130,7 @@ const FileManager = () => {
          createFolder={createFolder}
          deleteFiles={deleteFiles}
          renameFile={renameFile}
+         pasteFiles={pasteFiles}
       />
     </React.Fragment>
   );

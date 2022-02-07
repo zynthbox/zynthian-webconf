@@ -82,7 +82,7 @@ function WebconfFileBrowser(props){
     }
 
     function pasteFilesAction(data){
-      props.copyFiles(copiedFiles,selectedFolder + copiedFiles.split(fsep)[1])
+      props.copyFiles(copiedFiles,selectedFolder + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1])
     }
 
     const handleAction = (data) => {
@@ -94,7 +94,7 @@ function WebconfFileBrowser(props){
       if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
       if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
       if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data);
-      if (data.id === pasteFiles.id) pasteFiles(data)
+      if (data.id === pasteFiles.id) pasteFilesAction(data)
     };
     
     const createNewFolder = defineFileAction({
