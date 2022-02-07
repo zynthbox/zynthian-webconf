@@ -35,6 +35,18 @@
   margin-top: 0px !important;
   background: white !important;
 }
+#file-manager .file-manager-wrapper {
+  padding-left: 20%;
+  position: relative;
+  width: 100%;
+}
+#file-manager .file-manager-wrapper > ul {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: calc(20% - 47px);
+}
 .MuiMenu-paper {
   margin-top: 30px !important;
 }
