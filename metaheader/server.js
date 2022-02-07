@@ -31,6 +31,7 @@ const getAllFiles = function(dirPath, arrayOfFiles) {
       let fileData = {
         path:path.join(__dirname, dirPath, "/", file)
       }
+      fileData.path = rootFolder + fileData.path.split(rootFolder)[1]
       if (fs.statSync(dirPath + "/" + file).isDirectory()) {
         arrayOfFiles.push(fileData)
         arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
@@ -69,12 +70,11 @@ app.post('/createfolder',(req,res) => {
 
 app.post('/delete',(req,res) => {
   const { fullPath } = req.body;
-  console.log(fullPath)
   try {
     if (fs.statSync(fullPath).isDirectory()) {
       rimraf.sync(fullPath);
     } else {
-      fs.unlinkSync(fullPath)
+      fs.unlinkSync(adjusfullPathtedPath)
     }
     const dirList = getAllFiles(rootFolder,[])
     res.json(dirList)  

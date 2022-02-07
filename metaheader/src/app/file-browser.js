@@ -84,6 +84,8 @@ function WebconfFileBrowser(props){
       if (data.id === ChonkyActions.UploadFiles.id) alert("Upload Folder Action");
       if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
       if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
+      if (data.id === ChonkyActions.CopyFiles.id) alert("copy files action")
+      if (data.id === pasteFiles.id) alert("paste files action")
     };
     
     const createNewFolder = defineFileAction({
@@ -113,6 +115,15 @@ function WebconfFileBrowser(props){
         icon: ChonkyIconName.code
       }
     });
+
+    const pasteFiles = defineFileAction({
+      id: "paste_files",
+      button:{
+        name:"Paste",
+        contextMenu: true,
+        icon: ChonkyIconName.paste
+      }
+    })
     
     const myFileActions = [
       createNewFolder,
@@ -120,24 +131,25 @@ function WebconfFileBrowser(props){
       renameFiles,
       ChonkyActions.UploadFiles,
       ChonkyActions.DownloadFiles,
-      ChonkyActions.DeleteFiles
+      ChonkyActions.DeleteFiles,
+      ChonkyActions.CopyFiles,
+      pasteFiles
     ];
 
     return (
         <div style={{ height: window.innerHeight - 190 }}>
             <FileBrowser
-            files={displayedFiles}
-            folderChain={folderChain}
-            fileActions={myFileActions}
-            onFileAction={handleAction}
-            defaultFileViewActionId={ChonkyActions.EnableListView.id}
-            clearSelectionOnOutsideClick={true}
-            disableDragAndDropProvider={true}
+              files={displayedFiles}
+              folderChain={folderChain}
+              fileActions={myFileActions}
+              onFileAction={handleAction}
+              defaultFileViewActionId={ChonkyActions.EnableListView.id}
+              clearSelectionOnOutsideClick={true}
             >
-            <FileNavbar />
-            <FileToolbar />
-            <FileList />
-            <FileContextMenu />
+              <FileNavbar />
+              <FileToolbar />
+              <FileList />
+              <FileContextMenu />
             </FileBrowser>
         </div>
     )
