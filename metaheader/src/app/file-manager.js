@@ -105,7 +105,7 @@ const FileManager = () => {
 
   async function pasteFiles(previousPath,destinationPath){
     console.log({previousPath,destinationPath})
-    const response = await fetch(`http://${window.location.hostname}:3000/copy`, {
+    const response = await fetch(`http://${window.location.hostname}:3000/paste`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

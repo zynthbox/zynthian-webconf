@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require("path")
 const fs = require('fs');
-const { copyFile } = require('fs/promises');
 var rimraf = require("rimraf");
 var cors = require('cors');
 
@@ -98,13 +97,12 @@ app.post('/rename',(req,res) => {
   }
 })
 
-app.post('/copy',async (req,res) => {
+app.post('/paste',async (req,res) => {
   const { sourcePath, destinationPath } = req.body;
   try {
-    await copyFile(sourcePath, destinationPath);
+    fs.copyFileSync(sourcePath,destinationPath)
     const dirList = getAllFiles(rootFolder,[])
     res.json(dirList)
-    console.log('source.txt was copied to destination.txt');
   } catch(err) {
     console.error(err)
     res.json({error:err})
