@@ -17,7 +17,7 @@ class TreeView extends PureComponent {
         if (node.children) { 
             node.toggled = toggled;
         }
-        this.props.onTreeFolderClick(node)
+        this.props.openFiles(node)
         this.setState(() => ({cursor: node, data: Object.assign({}, data)}));
     }
     

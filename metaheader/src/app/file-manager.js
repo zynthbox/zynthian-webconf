@@ -138,65 +138,42 @@ const FileManager = () => {
         console.log(node)
     }
     
-    async function createFolder(fullPath){
-        console.log({fullPath})
-        const response = await fetch(`http://${window.location.hostname}:3000/createfolder`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({fullPath})
+    function checkIfDirIsInFolderChain(id){
+        let idIsInChain = false;
+        folderChain.forEach(function(folder,index){
+          if (folder.id === id){
+            idIsInChain = true
+          }
         });
-        const res = await response.json();
-        console.log(res,"res after create folder");
-        setFiles(res);
-        getDisplayFiles(res);
+        return idIsInChain;
     }
 
-    async function renameFile(previousPath,fullPath){
-        console.log({fullPath})
-        const response = await fetch(`http://${window.location.hostname}:3000/rename`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({fullPath,previousPath})
-        });
-        const res = await response.json();
-        setFiles(res);
-        getDisplayFiles(res);
+    function openFiles(data){
+
+        const dirIsInChain = checkIfDirIsInFolderChain(data.payload.files[0].id);
+        const name = data.payload.files[0].name;
+  
+        let newSelectedFolder,
+            newFoldersChain;
+  
+        // console.log('dir is in chain', dirIsInChain)
+  
+        if (!dirIsInChain){
+          newSelectedFolder = selectedFolder + fsep + data.payload.files[0].name;
+          newFoldersChain = [...folderChain, data.payload.files[0]];
+        } else {
+          newSelectedFolder = selectedFolder.split(name)[0] + name;
+          const folderIndexInChain = folderChain.findIndex(item => item.id === data.payload.files[0].id);
+          newFoldersChain = [...folderChain.slice(0,folderIndexInChain + 1)]
+        }
+  
+        // console.log(newFoldersChain,"new folder chain")
+  
+        setFolderChain(newFoldersChain)
+        setSelectedFolder(newSelectedFolder)
+      
     }
 
-    async function deleteFiles(paths){
-        paths.forEach(async function(fullPath,index){
-        console.log({fullPath})
-        const response = await fetch(`http://${window.location.hostname}:3000/delete`, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body:JSON.stringify({fullPath})
-        });
-        const res = await response.json();
-        setFiles(res);
-        getDisplayFiles(res);
-        })
-    }
-
-    async function pasteFiles(previousPath,destinationPath){
-        console.log({previousPath,destinationPath})
-        const response = await fetch(`http://${window.location.hostname}:3000/paste`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({previousPath,destinationPath})
-        });
-        const res = await response.json();
-        setFiles(res);
-        getDisplayFiles(res);
-    }
-    
     let treeViewDisplay;
     if (treeData !== null){
         // console.log(treeData)
@@ -206,6 +183,11 @@ const FileManager = () => {
                 onTreeFolderClick={onTreeFolderClick}
             />
         )
+    }
+
+    function refreshFileManager(newFiles){
+        setFiles(newFiles);
+        getDisplayFiles(newFiles);
     }
 
     return (
@@ -218,10 +200,8 @@ const FileManager = () => {
                 folderChain={folderChain}
                 setFolderChain={setFolderChain}
                 setSelectedFolder={setSelectedFolder}
-                createFolder={createFolder}
-                deleteFiles={deleteFiles}
-                renameFile={renameFile}
-                pasteFiles={pasteFiles}
+                openFiles={openFiles}
+                refreshFileManager={refreshFileManager}
             />
         </div>
     );

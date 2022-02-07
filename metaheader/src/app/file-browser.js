@@ -15,54 +15,62 @@ function WebconfFileBrowser(props){
     const { displayedFiles, selectedFolder, fsep, folderChain } = props;
     const [ copiedFiles, setCopiedFiles ] = useState('')
 
-    function checkIfDirIsInFolderChain(id){
-        let idIsInChain = false;
-        folderChain.forEach(function(folder,index){
-          if (folder.id === id){
-            idIsInChain = true
-          }
-        });
-        return idIsInChain;
-    }
+    const handleAction = (data) => {
+      if (data.id === ChonkyActions.OpenFiles.id) openFilesAction(data)
+      if (data.id === createNewFolder.id) createFolderAction()
+      if (data.id === editFiles.id) alert("Edit Folder Action");
+      if (data.id === renameFiles.id) renameFileAction(data)
+      if (data.id === ChonkyActions.UploadFiles.id) alert("Upload Folder Action");
+      if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
+      if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
+      if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data);
+      if (data.id === pasteFiles.id) pasteFilesAction(data)
+    };
 
     function openFilesAction(data){
-
-        const dirIsInChain = checkIfDirIsInFolderChain(data.payload.files[0].id);
-        const name = data.payload.files[0].name;
-  
-        let newSelectedFolder,
-            newFoldersChain;
-  
-        // console.log('dir is in chain', dirIsInChain)
-  
-        if (!dirIsInChain){
-          newSelectedFolder = selectedFolder + fsep + data.payload.files[0].name;
-          newFoldersChain = [...folderChain, data.payload.files[0]];
-        } else {
-          newSelectedFolder = selectedFolder.split(name)[0] + name;
-          const folderIndexInChain = folderChain.findIndex(item => item.id === data.payload.files[0].id);
-          newFoldersChain = [...folderChain.slice(0,folderIndexInChain + 1)]
-        }
-  
-        // console.log(newFoldersChain,"new folder chain")
-  
-        props.setFolderChain(newFoldersChain)
-        props.setSelectedFolder(newSelectedFolder)
-      
+      props.openFiles(data)
     }
-  
+
     function createFolderAction(){
       const folderName = window.prompt('Enter new Folder Name:');
       const fullPath = selectedFolder + fsep + folderName;
-      props.createFolder(fullPath)
+      createFolder(fullPath)
     }
-  
+
+    async function createFolder(fullPath){
+      console.log({fullPath})
+      const response = await fetch(`http://${window.location.hostname}:3000/createfolder`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body:JSON.stringify({fullPath})
+      });
+      const res = await response.json();
+      console.log(res,"res after create folder");
+      props.refreshFileManager(res);
+  }
+
     function renameFileAction(data){
       const previousPath = data.state.selectedFiles[0].path;
       console.log(previousPath);
       const folderName = window.prompt('Enter new Folder Name:');
       const fullPath = previousPath.split(selectedFolder)[0] + selectedFolder + fsep + folderName;
-      props.renameFile(previousPath,fullPath)
+      renameFile(previousPath,fullPath)
+    }
+
+    async function renameFile(previousPath,fullPath){
+      console.log({fullPath})
+      const response = await fetch(`http://${window.location.hostname}:3000/rename`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body:JSON.stringify({fullPath,previousPath})
+      });
+      const res = await response.json();
+      console.log(res,"res after rename");
+      props.refreshFileManager(res);
     }
 
     function deleteFilesAction(data){
@@ -70,7 +78,23 @@ function WebconfFileBrowser(props){
         data.state.selectedFilesForAction.forEach(function(path,index){
           paths.push(path);
         })
-        props.deleteFiles(paths)
+        deleteFiles(paths)
+    }
+
+    async function deleteFiles(paths){
+      paths.forEach(async function(fullPath,index){
+        console.log({fullPath})
+        const response = await fetch(`http://${window.location.hostname}:3000/delete`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({fullPath})
+        });
+        const res = await response.json();
+        console.log(res,"res after delete");
+        props.refreshFileManager(res);
+      })
     }
 
     function downloadFilesAction(data){
@@ -83,22 +107,23 @@ function WebconfFileBrowser(props){
     }
 
     function pasteFilesAction(data){
-      console.log(selectedFolder);
-      props.pasteFiles(copiedFiles,selectedFolder + fsep + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1])
+      copyPasteFiles(copiedFiles,selectedFolder + fsep + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1])
     }
 
-    const handleAction = (data) => {
-      if (data.id === ChonkyActions.OpenFiles.id) openFilesAction(data)
-      if (data.id === createNewFolder.id) createFolderAction()
-      if (data.id === editFiles.id) alert("Edit Folder Action");
-      if (data.id === renameFiles.id) renameFileAction(data)
-      if (data.id === ChonkyActions.UploadFiles.id) alert("Upload Folder Action");
-      if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
-      if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
-      if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data);
-      if (data.id === pasteFiles.id) pasteFilesAction(data)
-    };
-    
+    async function copyPasteFiles(previousPath,destinationPath){
+      console.log({previousPath,destinationPath})
+      const response = await fetch(`http://${window.location.hostname}:3000/paste`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({previousPath,destinationPath})
+      });
+      const res = await response.json();
+      console.log(res,"res after copy & paste");
+      props.refreshFileManager(res);
+    }
+
     const createNewFolder = defineFileAction({
       id: "create_files",
       button: {
