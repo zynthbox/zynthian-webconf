@@ -1,40 +1,40 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import MyFileBrowser from './app/file-browser';
+import FileManager from './app/file-manager';
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 
 function MetaHeader(){
 
-    const [ showFileBrowser, setShowFileBrowser ] = useState(false)
+    const [ showFileManager, setShowFileManager ] = useState(false)
 
-    let fileBrowserDisplay;
-    if (showFileBrowser === true){
+    let fileManagerDisplay;
+    if (showFileManager === true){
 
-        let fileBrowserLeftCss = 0;
+        let fileManagerLeftCss = 0;
         const containerElement = document.getElementsByClassName('container')[0];
         if (containerElement && containerElement !== null){
             console.log(containerElement);
             console.log(window.innerWidth)
-            fileBrowserLeftCss = (window.innerWidth - containerElement.offsetWidth) / 2
+            fileManagerLeftCss = (window.innerWidth - containerElement.offsetWidth) / 2
         }
 
-        fileBrowserDisplay = (
-            <div id="file-browser-container" className="container" style={{left:fileBrowserLeftCss}}>
-                <a className="close-file-browser" style={{cursor:"pointer"}} onClick={() => setShowFileBrowser(false)}>X</a>
+        fileManagerDisplay = (
+            <div id="file-manager" className="container" style={{left:fileManagerLeftCss}}>
+                <a className="close-file-manager" style={{cursor:"pointer"}} onClick={() => setShowFileManager(false)}>X</a>
                 <h3>
                     <i className="glyphicon glyphicon-file"></i>
                     FILES
                 </h3>
-                <MyFileBrowser/>
+                <FileManager/>
             </div>
         )
     }
 
     return (
         <React.Fragment>
-            <a className={showFileBrowser === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileBrowser(showFileBrowser === true ? false : true)}>Files</a>
-            {fileBrowserDisplay}
+            <a className={showFileManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileManager(showFileManager === true ? false : true)}>Files</a>
+            {fileManagerDisplay}
         </React.Fragment>
     )
 }

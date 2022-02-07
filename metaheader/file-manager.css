@@ -1,10 +1,10 @@
-#file-browser-container {
+#file-manager {
   background: white;
   height: auto;
   position: fixed;
   margin-top: 35px;
 }
-#file-browser-container .close-file-browser {
+#file-manager .close-file-browser {
   font-weight: bold;
   background: white!important;
   padding: 7px !important;
@@ -15,7 +15,7 @@
   right: 20px;
   position: absolute;
 }
-#file-browser-container > h3 {
+#file-manager > h3 {
   margin: 0;
   top: 0;
   left: 0;
@@ -26,11 +26,11 @@
   padding-left: 15px;
   border-radius: 0 5px 0 5px;
 }
-#file-browser-container .chonky-chonkyRoot {
+#file-manager .chonky-chonkyRoot {
   border-radius: 0 0 5px 5px !important;
   background-color: rgba(221, 221, 221, 0.3) !important;
 }
-#file-browser-container .chonky-chonkyRoot .chonky-searchFieldInput {
+#file-manager .chonky-chonkyRoot .chonky-searchFieldInput {
   height: 30px !important;
   margin-top: 0px !important;
   background: white !important;

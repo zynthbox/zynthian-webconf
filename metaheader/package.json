@@ -9,7 +9,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "watch": "webpack --mode development --watch",
-    "build-watch": "webpack --mode production --watch"
+    "build-watch": "webpack --mode production --watch",
+    "server": "nodemon server.js"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.17.0",
@@ -26,7 +27,9 @@
     "fast-glob": "^3.2.11",
     "file-system": "^2.2.2",
     "glob": "^7.2.0",
+    "nodemon": "^2.0.15",
     "react-keyed-file-browser": "^1.14.0",
+    "rimraf": "^3.0.2",
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {

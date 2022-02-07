@@ -1,12 +1,26 @@
 const express = require('express')
 const path = require("path")
 const fs = require('fs');
+var rimraf = require("rimraf");
+var cors = require('cors');
+
 const app = express()
 const port = 3000
-var cors = require('cors');
+
+const rootFolder = "./"
+// const rootFolder = "/home/pi/zynthian-my-data/"
 
 // cors
 app.use(cors());
+
+// Body Parser
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.get('/', (req, res) => {
+  res.send('Webconf Metaheader Files App Server!')
+})
 
 const getAllFiles = function(dirPath, arrayOfFiles) {
   files = fs.readdirSync(dirPath)
@@ -31,14 +45,55 @@ const getAllFiles = function(dirPath, arrayOfFiles) {
   return arrayOfFiles
 }
 
-app.get('/', (req, res) => {
-  res.send('Webconf Metaheader Files App Server!')
+app.get('/mydata',(req,res) => {
+  const dirList = getAllFiles(rootFolder,[])
+  res.json(dirList)
 })
 
-app.get('/mydata',(req,res) => {
-  const dirList = getAllFiles('/home/pi/zynthian-my-data/',[])
-  console.log(dirList)
-  res.json(dirList)
+app.post('/createfolder',(req,res) => {
+  const { fullPath } = req.body;
+  try {
+    if (!fs.existsSync(rootFolder + fullPath)) {
+      fs.mkdirSync(fullPath)
+      const dirList = getAllFiles(rootFolder,[])
+      res.json(dirList)
+    } else {
+      res.json({message:'Folder already exists!'})
+    }
+  } catch (err) {
+    console.error(err)
+    res.json({error:err})
+  }
+})
+
+app.post('/delete',(req,res) => {
+  const { fullPath } = req.body;
+  console.log(fullPath)
+  try {
+    if (fs.statSync(fullPath).isDirectory()) {
+      rimraf.sync(fullPath);
+    } else {
+      fs.unlinkSync(fullPath)
+    }
+    const dirList = getAllFiles(rootFolder,[])
+    res.json(dirList)  
+    //file removed
+  } catch(err) {
+    console.error(err)
+    res.json({error:err})
+  }
+})
+
+app.post('/rename',(req,res) => {
+  const { previousPath, fullPath } = req.body;
+  try {
+    fs.renameSync(previousPath,fullPath)
+    const dirList = getAllFiles(rootFolder,[])
+    res.json(dirList)
+  } catch(err) {
+    console.error(err)
+    res.json({error:err})
+  }
 })
 
 app.listen(port, () => {
