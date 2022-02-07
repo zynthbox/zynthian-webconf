@@ -71,10 +71,8 @@ const FileManager = () => {
     });
     const res = await response.json();
     console.log(res,"res after create folder");
-    if (typeof res === Array){
-      setFiles(res);
-      getDisplayFiles(res);
-    }
+    setFiles(res);
+    getDisplayFiles(res);
   }
 
   async function renameFile(previousPath,fullPath){
@@ -87,10 +85,8 @@ const FileManager = () => {
       body:JSON.stringify({fullPath,previousPath})
     });
     const res = await response.json();
-    if (typeof res === Array){
-      setFiles(res);
-      getDisplayFiles(res);
-    }
+    setFiles(res);
+    getDisplayFiles(res);
   }
 
   async function deleteFiles(fullPath){
@@ -103,10 +99,8 @@ const FileManager = () => {
       body:JSON.stringify({fullPath})
     });
     const res = await response.json();
-    if (typeof res === Array){
-      setFiles(res);
-      getDisplayFiles(res);
-    }
+    setFiles(res);
+    getDisplayFiles(res);
   }
 
   return (
