@@ -3,7 +3,6 @@ import {Treebeard} from 'react-treebeard';
 
 class TreeView extends PureComponent {
     constructor(props){
-        console.log(props)
         super(props);
         this.state = {data:props.data};
         this.onToggle = this.onToggle.bind(this);
@@ -18,7 +17,7 @@ class TreeView extends PureComponent {
         if (node.children) { 
             node.toggled = toggled;
         }
-        props.onTreeFolderClick(node)
+        this.props.onTreeFolderClick(node)
         this.setState(() => ({cursor: node, data: Object.assign({}, data)}));
     }
     

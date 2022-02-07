@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-  import { ChonkyIconFA } from "chonky-icon-fontawesome";
+  import React, { useState } from 'react'
   import {
-    FullFileBrowser,
     FileBrowser,
     FileNavbar,
     FileToolbar,
@@ -15,7 +13,6 @@ import React, { useState, useEffect, useRef } from 'react'
 function WebconfFileBrowser(props){
 
     const { displayedFiles, selectedFolder, fsep, folderChain } = props;
-    const [ downloadFileLink, setDownloadFileLink] = useState('');
     const [ copiedFiles, setCopiedFiles ] = useState('')
 
     function checkIfDirIsInFolderChain(id){
