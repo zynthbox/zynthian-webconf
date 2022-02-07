@@ -89,18 +89,20 @@ const FileManager = () => {
     getDisplayFiles(res);
   }
 
-  async function deleteFiles(fullPath){
-    console.log({fullPath})
-    const response = await fetch(`http://${window.location.hostname}:3000/delete`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body:JSON.stringify({fullPath})
-    });
-    const res = await response.json();
-    setFiles(res);
-    getDisplayFiles(res);
+  async function deleteFiles(paths){
+    paths.forEach(async function(fullPath,index){
+      console.log({fullPath})
+      const response = await fetch(`http://${window.location.hostname}:3000/delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({fullPath})
+      });
+      const res = await response.json();
+      setFiles(res);
+      getDisplayFiles(res);
+    })
   }
 
   async function pasteFiles(previousPath,destinationPath){

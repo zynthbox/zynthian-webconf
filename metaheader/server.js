@@ -100,7 +100,11 @@ app.post('/rename',(req,res) => {
 app.post('/paste',(req,res) => {
   const { previousPath, destinationPath } = req.body;
   try {
-    fs.copyFileSync(previousPath, parentFolder + destinationPath)
+    if (fs.statSync(previousPath).isDirectory()) {
+      rimraf.sync(previousPath);
+    } else {
+      fs.copyFileSync(previousPath, parentFolder + destinationPath)
+    }
     const dirList = getAllFiles(rootFolder,[])
     res.json(dirList)
   } catch(err) {

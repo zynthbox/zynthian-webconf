@@ -69,7 +69,11 @@ function WebconfFileBrowser(props){
     }
 
     function deleteFilesAction(data){
-        props.deleteFiles(data.state.selectedFilesForAction[0].path)
+        const paths = []
+        data.state.selectedFilesForAction.forEach(function(path,index){
+          paths.push(path);
+        })
+        props.deleteFiles(paths)
     }
 
     function downloadFilesAction(data){
