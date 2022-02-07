@@ -4,68 +4,71 @@ import TreeView from './tree-view';
 
 const FileManager = () => {
 
-  // console.log(window.location)
-  // const rootFolder = "metaheader"
+    // console.log(window.location)
+    // const rootFolder = "metaheader"
 
-  const rootFolder = "/zynthian-my-data"
-  const fsep = "/";
+    const rootFolder = "/zynthian-my-data"
+    const fsep = "/";
 
-  const [ files, setFiles ] = useState([])
-  // console.log(files,"files")
-  const [ displayedFiles, setDisplayedFiles ] = useState([])
-  // console.log(displayedFiles,"displayed files")
-  const [ folderChain, setFolderChain ] = useState([{ id: 'xcv', name: rootFolder, isDir: true }])
-  const [ selectedFolder, setSelectedFolder ] = useState(rootFolder)
+    const [ files, setFiles ] = useState([])
+    // console.log(files,"files")
+    const [ displayedFiles, setDisplayedFiles ] = useState([])
+    // console.log(displayedFiles,"displayed files")
+    const [ folderChain, setFolderChain ] = useState([{ id: 'xcv', name: rootFolder, isDir: true }])
+    const [ selectedFolder, setSelectedFolder ] = useState(rootFolder)
 
-  const [ treeData, setTreeData ] = useState(null);
+    const [ treeData, setTreeData ] = useState(null);
   
-  useEffect(() => {
-    getFiles()
-  }, []);
+    useEffect(() => {
+        getFiles()
+    }, []);
 
-  useEffect(() => {
-    generateTreeViewData()
-    getDisplayFiles(files)
-  },[selectedFolder])
+    useEffect(() => {
+        getDisplayFiles(files)
+    },[selectedFolder])
 
-  // useEffect(() => {
+    useEffect(() => {
+        if (files.length > 0) generateTreeViewData()
+    },[files])
 
-  // },[folderChain])
+    // useEffect(() => {
 
-  async function getFiles(){
-    const response = await fetch(`http://${window.location.hostname}:3000/mydata`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const res = await response.json();
-    setFiles(res);
-    setSelectedFolder(rootFolder)
-    getDisplayFiles(res);
-  }
+    // },[folderChain])
 
-  function getDisplayFiles(fileList){
-    console.log('get displayed files')
-    let displayedFilesList = [];
-    fileList.forEach(function(f,index){
-      // console.log(selectedFolder)
-      if (f.path.indexOf(selectedFolder + fsep)){
-        const fileName = f.path.split(selectedFolder+fsep)[1];
-        if (fileName && fileName.indexOf(fsep) === -1){
-          let file = {
-            ...f,
-            id:index+1,
-            isDir:fileName.indexOf('.') > -1 ? false : true,
-            name:fileName
-          }
-          // console.log(file);
-          displayedFilesList.push(file);
+    async function getFiles(){
+        const response = await fetch(`http://${window.location.hostname}:3000/mydata`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        });
+        const res = await response.json();
+        setFiles(res);
+        setSelectedFolder(rootFolder)
+        getDisplayFiles(res);
+    }
+
+    function getDisplayFiles(fileList){
+        console.log('get displayed files')
+        let displayedFilesList = [];
+        fileList.forEach(function(f,index){
+        // console.log(selectedFolder)
+        if (f.path.indexOf(selectedFolder + fsep)){
+            const fileName = f.path.split(selectedFolder+fsep)[1];
+            if (fileName && fileName.indexOf(fsep) === -1){
+            let file = {
+                ...f,
+                id:index+1,
+                isDir:fileName.indexOf('.') > -1 ? false : true,
+                name:fileName
+            }
+            // console.log(file);
+            displayedFilesList.push(file);
+            }
         }
-      }
-    });
-    setDisplayedFiles(displayedFilesList)
-  }
+        });
+        setDisplayedFiles(displayedFilesList)
+    }
 
 //   function getChildrenRecursive(parent,foldersArray){
 //     parent.children.forEach(function(child,index){
@@ -109,13 +112,13 @@ const FileManager = () => {
         files.forEach(function(file,index){
             const name = file.path.split(selectedFolder+"/")[1];
             if (name.indexOf('.') === -1 || name.split('.')[name.split('.').length - 1] === "lv2"){
-            foldersArray.push({
-                id:index + 1,
-                name:name.indexOf('/') > -1 ? name.split('/')[name.split('/').length - 1] : name,
-                level: 1 + ( file.path.indexOf('/') > -1 ? name.split('/').length - 1 : 0 ),
-                path:file.path
-            })
-        }
+                foldersArray.push({
+                    id:index + 1,
+                    name:name.indexOf('/') > -1 ? name.split('/')[name.split('/').length - 1] : name,
+                    level: 1 + ( file.path.indexOf('/') > -1 ? name.split('/').length - 1 : 0 ),
+                    path:file.path
+                })
+            }
         })
 
         console.log(foldersArray);
@@ -207,19 +210,19 @@ const FileManager = () => {
 
     return (
         <div className='file-manager-wrapper'>
-        {treeViewDisplay}
-        <WebconfFileBrowser 
-            displayedFiles={displayedFiles}
-            selectedFolder={selectedFolder}
-            fsep={fsep}
-            folderChain={folderChain}
-            setFolderChain={setFolderChain}
-            setSelectedFolder={setSelectedFolder}
-            createFolder={createFolder}
-            deleteFiles={deleteFiles}
-            renameFile={renameFile}
-            pasteFiles={pasteFiles}
-        />
+            {treeViewDisplay}
+            <WebconfFileBrowser 
+                displayedFiles={displayedFiles}
+                selectedFolder={selectedFolder}
+                fsep={fsep}
+                folderChain={folderChain}
+                setFolderChain={setFolderChain}
+                setSelectedFolder={setSelectedFolder}
+                createFolder={createFolder}
+                deleteFiles={deleteFiles}
+                renameFile={renameFile}
+                pasteFiles={pasteFiles}
+            />
         </div>
     );
 };
