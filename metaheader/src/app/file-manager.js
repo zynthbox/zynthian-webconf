@@ -174,6 +174,11 @@ const FileManager = () => {
       
     }
 
+    function refreshFileManager(newFiles){
+        setFiles(newFiles);
+        getDisplayFiles(newFiles);
+    }
+
     let treeViewDisplay;
     if (treeData !== null){
         // console.log(treeData)
@@ -181,13 +186,9 @@ const FileManager = () => {
             <TreeView 
                 data={treeData} 
                 onTreeFolderClick={onTreeFolderClick}
+                openFiles={openFiles}
             />
         )
-    }
-
-    function refreshFileManager(newFiles){
-        setFiles(newFiles);
-        getDisplayFiles(newFiles);
     }
 
     return (
