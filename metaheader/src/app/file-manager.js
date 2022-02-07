@@ -5,8 +5,9 @@ const FileManager = () => {
 
   // console.log(window.location)
 
-  const rootFolder = "metaheader"
-  const fsep = "\\";
+  // const rootFolder = "metaheader"
+  const rootFolder = "/zynthian-my-data/"
+  const fsep = "/";
 
   const [ files, setFiles ] = useState([])
   // console.log(files,"files")

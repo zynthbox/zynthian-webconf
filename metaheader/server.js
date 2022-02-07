@@ -7,8 +7,8 @@ var cors = require('cors');
 const app = express()
 const port = 3000
 
-const rootFolder = "./"
-// const rootFolder = "/home/pi/zynthian-my-data/"
+// const rootFolder = "./"
+const rootFolder = "/home/pi/zynthian-my-data/"
 
 // cors
 app.use(cors());
