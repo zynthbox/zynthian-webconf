@@ -30,7 +30,7 @@ const FileManager = () => {
     },[selectedFolder])
 
     useEffect(() => {
-        if (files.length > 0) generateTreeViewData()
+        if (files.length > 0 && treeData === null) generateTreeViewData()
     },[files])
 
     // useEffect(() => {
@@ -93,6 +93,7 @@ const FileManager = () => {
         files.forEach(function(file,index){
             const name = file.path.split(selectedFolder+"/")[1];
             if (name){
+              console.log(name,"name")
               if (name.indexOf('.') === -1 || name.split('.')[name.split('.').length - 1] === "lv2"){
                 foldersArray.push({
                     id:index + 1,
@@ -178,14 +179,16 @@ const FileManager = () => {
       const pathArray = path.split(rootFolder)[1].split(fsep);
       console.log(pathArray,parentIds)
       let newFoldersChain = [rootFolderChainObject]
-      parentIds.forEach(function(pid,index){        
-        newFoldersChain.push({
-          id:pid,
-          path:path,
-          name:pathArray[index + 1],
-          isDir:true
-        })
-      });
+      if (parentIds){
+        parentIds.forEach(function(pid,index){        
+          newFoldersChain.push({
+            id:pid,
+            path:path,
+            name:pathArray[index + 1],
+            isDir:true
+          })
+        });
+      }
       setFolderChain(newFoldersChain)
       setSelectedFolder(path)
     }
