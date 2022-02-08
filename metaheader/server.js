@@ -70,7 +70,6 @@ app.post('/createfolder',(req,res) => {
 
 app.post('/delete',(req,res) => {
   const { fullPath } = req.body;
-  cons
   try {
     if (fs.statSync(fullPath).isDirectory()) {
       rimraf.sync(fullPath);
