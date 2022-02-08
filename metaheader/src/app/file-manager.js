@@ -70,7 +70,7 @@ const FileManager = () => {
         setDisplayedFiles(displayedFilesList)
     }
 
-    function getTree(array,id) {
+    function getTree(array,id) { 
         var levels = [{}];
         array.forEach(function (a) {
             levels.length = a.level;
