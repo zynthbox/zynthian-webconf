@@ -10,4 +10,3 @@ install-zynthian-webconf:
 		-exec cp -pr $(shell realpath {}) $(BASEINSTALLDIR)/ \;
 
 install: install-zynthian-webconf
-	rm -rf $(BASEINSTALLDIR)/metaheader/node_modules
