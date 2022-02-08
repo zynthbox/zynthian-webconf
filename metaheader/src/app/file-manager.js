@@ -26,12 +26,10 @@ const FileManager = () => {
     }, []);
 
     useEffect(() => {
-        console.log('on get displayed files use effect')
       getDisplayFiles(files)
     },[selectedFolder])
 
     useEffect(() => {
-        console.log('on files change use effect')
         if (files.length > 0) generateTreeViewData()
     },[files])
 
@@ -72,7 +70,7 @@ const FileManager = () => {
         setDisplayedFiles(displayedFilesList)
     }
 
-    function getTree(array,id) { 
+    function getTree(array,id) {
         var levels = [{}];
         array.forEach(function (a) {
             levels.length = a.level;
@@ -94,16 +92,13 @@ const FileManager = () => {
         
         files.forEach(function(file,index){
             const name = file.path.split(selectedFolder+"/")[1];
-            if (name){
-              console.log(name,"name")
-              if (name.indexOf('.') === -1 || name.split('.')[name.split('.').length - 1] === "lv2"){
+            if (name.indexOf('.') === -1 || name.split('.')[name.split('.').length - 1] === "lv2"){
                 foldersArray.push({
                     id:index + 1,
                     name:name.indexOf('/') > -1 ? name.split('/')[name.split('/').length - 1] : name,
                     level: 1 + ( file.path.indexOf('/') > -1 ? name.split('/').length - 1 : 0 ),
                     path:file.path
                 })
-            }
             }
         })
 
@@ -181,16 +176,14 @@ const FileManager = () => {
       const pathArray = path.split(rootFolder)[1].split(fsep);
       console.log(pathArray,parentIds)
       let newFoldersChain = [rootFolderChainObject]
-      if (parentIds){
-        parentIds.forEach(function(pid,index){        
-          newFoldersChain.push({
-            id:pid,
-            path:path,
-            name:pathArray[index + 1],
-            isDir:true
-          })
-        });
-      }
+      parentIds.forEach(function(pid,index){        
+        newFoldersChain.push({
+          id:pid,
+          path:path,
+          name:pathArray[index + 1],
+          isDir:true
+        })
+      });
       setFolderChain(newFoldersChain)
       setSelectedFolder(path)
     }
