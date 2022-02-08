@@ -24,7 +24,7 @@
   border-radius: 0 5px 0 5px;
 }
 #file-manager .chonky-chonkyRoot {
-  border-radius: 0 0 5px 5px !important;
+  border-radius: 0 0 5px 0 !important;
   background-color: rgba(221, 221, 221, 0.3) !important;
 }
 #file-manager .chonky-chonkyRoot .chonky-searchFieldInput {
@@ -44,9 +44,23 @@
   height: 100%;
   width: 20%;
   overflow: hidden;
+  padding: 5px;
+  border-radius: 5px 5px 0px 5px;
+  border: 1px solid #cccc;
+  border-right: 0;
 }
 #file-manager .file-manager-wrapper .tree-view-container ul {
+  padding: 0 0 0 5px;
   width: 100%;
+  list-style-type: none;
+}
+#file-manager .file-manager-wrapper .tree-view-container ul li {
+  padding-left: 5px;
+}
+#file-manager .file-manager-wrapper .tree-view-container ul li a {
+  cursor: pointer;
+}
+#file-manager .file-manager-wrapper .tree-view-container > ul {
   min-height: 100%;
 }
 .MuiMenu-paper {

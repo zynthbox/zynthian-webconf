@@ -26,7 +26,7 @@
     }
 
     .chonky-chonkyRoot {
-        border-radius: 0 0 5px 5px !important;
+        border-radius: 0 0 5px 0 !important;
         background-color: rgba(221, 221, 221, 0.3) !important;
 
         .chonky-searchFieldInput {
@@ -48,9 +48,26 @@
             height: 100%;
             width:20%;
             overflow: hidden;
+            padding: 5px;
+            border-radius: 5px 5px 0px 5px;
+            border: 1px solid #cccc;
+            border-right: 0;
+        
 
             ul {
+                padding: 0 0 0 5px;
                 width: 100%;
+                list-style-type: none;
+
+                li {
+                    padding-left: 5px;
+
+                    a {
+                        cursor: pointer;
+                    }
+                }
+            }
+            > ul {
                 min-height: 100%;
             }
         }

@@ -33,10 +33,13 @@ function TreeViewItem(props){
     // console.log(item,"id")
     let itemChildrenDisplay, toggleButton;
     if (item.children){
-        toggleButton = <span className='toggle-sub-menu'>+</span>
-        // const children = item.children.map((child,index) => (
-        //     <TreeViewItem {...props} />
-        // ))
+        
+        toggleButton = (
+            <span className='toggle-sub-menu'>
+                <i className={item.toggled === true ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'}></i>
+            </span>
+        )
+        
         itemChildrenDisplay = (
             <div style={{height:item.toggled === true ? "auto" : "0px",overflow:"hidden"}}>
                 <TreeViewSubMenu {...props} items={item.children} parentIds={parentIds} />
