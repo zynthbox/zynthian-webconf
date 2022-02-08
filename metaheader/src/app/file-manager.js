@@ -151,7 +151,6 @@ const FileManager = () => {
     function openFiles(id,name){
 
         const dirIsInChain = checkIfDirIsInFolderChain(id);
-        const name = name;
   
         let newSelectedFolder,
             newFoldersChain;
