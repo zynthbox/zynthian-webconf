@@ -108,7 +108,7 @@ function WebconfFileBrowser(props){
       paths.push(file.path)
     })
 
-    setCopiedFiles(data.state.selectedFiles[0].path)
+    setCopiedFiles(paths)
   }
 
   function pasteFilesAction(data){
@@ -118,21 +118,24 @@ function WebconfFileBrowser(props){
       destinationPaths.push(selectedFolder + fsep + cf.split(fsep)[cf.split(fsep).length - 1])
     })
 
-    copyPasteFiles(copiedFiles,selectedFolder + fsep + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1])
+    copyPasteFiles(copiedFiles,destinationPaths)
   }
 
-  async function copyPasteFiles(previousPath,destinationPath){
-    console.log({previousPath,destinationPath})
-    const response = await fetch(`http://${window.location.hostname}:3000/paste`, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body:JSON.stringify({previousPath,destinationPath})
-    });
-    const res = await response.json();
-    console.log(res,"res after copy & paste");
-    props.refreshFileManager(res);
+  async function copyPasteFiles(previousPaths,destinationPaths){
+    destinationPaths.forEach(async function(destinaionPath,index){
+      const previousPath = previousPaths[index];
+      console.log({previousPath,destinationPath})
+      const response = await fetch(`http://${window.location.hostname}:3000/paste`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({previousPath,destinationPath})
+      });
+      const res = await response.json();
+      console.log(res,"res after copy & paste");
+      props.refreshFileManager(res);
+    })
   }
 
   const createNewFolder = defineFileAction({
