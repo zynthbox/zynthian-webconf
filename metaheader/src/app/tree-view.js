@@ -50,7 +50,7 @@ function TreeViewItem(props){
     return (
         <li>
             {toggleButton}
-            <a className={item.active === true ? "active" : ""} onClick={() => props.onClick(item,parentIds)}>{item.name} </a>
+            <a style={{paddingLeft:20 + (item.level * 10)}} className={item.active === true ? "active" : ""} onClick={() => props.onClick(item,parentIds)}>{item.name} </a>
             {itemChildrenDisplay}
         </li>
     )
