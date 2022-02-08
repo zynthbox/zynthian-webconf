@@ -28,7 +28,7 @@ function WebconfFileBrowser(props){
     };
 
     function openFilesAction(data){
-      props.openFiles(data.payload.files[0].id, data.payload.files[0].name)
+      props.openFiles(data.payload.files[0])
     }
 
     function createFolderAction(){
