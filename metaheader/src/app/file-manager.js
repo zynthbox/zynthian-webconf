@@ -26,9 +26,7 @@ const FileManager = () => {
     }, []);
 
     useEffect(() => {
-        if (files && files.length > 0){
-            getDisplayFiles(files)
-        }
+      getDisplayFiles(files)
     },[selectedFolder])
 
     useEffect(() => {
@@ -59,7 +57,6 @@ const FileManager = () => {
             if (f.path.indexOf(selectedFolder + fsep) > -1){
                     const fileName = f.path.split(selectedFolder+fsep)[1];
                     if (fileName && fileName.indexOf(fsep) === -1){
-                        console.log('what the fuck')
                         let file = {
                         ...f,
                         id:index+1,
@@ -190,6 +187,7 @@ const FileManager = () => {
       });
       console.log(newFoldersChain)
       setFolderChain(newFoldersChain)
+      setSelectedFolder(path)
     }
 
     function refreshFileManager(newFiles){
