@@ -47,6 +47,7 @@
   border-radius: 0px 5px 0px 5px;
   border: 1px solid #cccc;
   border-right: 0;
+  background: #efefef;
 }
 #file-manager .file-manager-wrapper .tree-view-container ul {
   padding: 0;
