@@ -101,6 +101,7 @@ const FileManager = () => {
             levels[a.level - 1].children.push(a);
             levels[a.level] = a;
             levels[a.level].toggled = false;
+            levels[a.level].active = false;
         });
         return levels[0].children;
     }
@@ -132,10 +133,6 @@ const FileManager = () => {
         // console.log(newTreeData)
 
         setTreeData(newTreeData)
-    }
-
-    function onTreeFolderClick(node){
-        console.log(node)
     }
     
     function checkIfDirIsInFolderChain(id){
@@ -173,14 +170,8 @@ const FileManager = () => {
       
     }
 
-    function onTreeViewClick(node){
-
-    }
-
     function refreshFileManager(newFiles){
-
         console.log(newFiles)
-
         setFiles(newFiles);
         getDisplayFiles(newFiles);
     }
@@ -191,7 +182,6 @@ const FileManager = () => {
         treeViewDisplay = (
             <TreeView 
                 data={treeData} 
-                onTreeFolderClick={onTreeFolderClick}
                 openFiles={openFiles}
             />
         )
