@@ -92,7 +92,7 @@ const FileManager = () => {
         
         files.forEach(function(file,index){
             const name = file.path.split(selectedFolder+"/")[1];
-            if (name.indexOf('.') === -1 || name.split('.')[name.split('.').length - 1] === "lv2"){
+            if (name && name.indexOf('.') === -1 || name.split('.')[name.split('.').length - 1] === "lv2"){
                 foldersArray.push({
                     id:index + 1,
                     name:name.indexOf('/') > -1 ? name.split('/')[name.split('/').length - 1] : name,
