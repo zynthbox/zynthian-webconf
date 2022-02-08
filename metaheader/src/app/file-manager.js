@@ -148,10 +148,10 @@ const FileManager = () => {
         return idIsInChain;
     }
 
-    function openFiles(data){
+    function openFiles(id,name){
 
-        const dirIsInChain = checkIfDirIsInFolderChain(data.payload.files[0].id);
-        const name = data.payload.files[0].name;
+        const dirIsInChain = checkIfDirIsInFolderChain(id);
+        const name = name;
   
         let newSelectedFolder,
             newFoldersChain;
@@ -159,11 +159,11 @@ const FileManager = () => {
         // console.log('dir is in chain', dirIsInChain)
   
         if (!dirIsInChain){
-          newSelectedFolder = selectedFolder + fsep + data.payload.files[0].name;
+          newSelectedFolder = selectedFolder + fsep + name;
           newFoldersChain = [...folderChain, data.payload.files[0]];
         } else {
           newSelectedFolder = selectedFolder.split(name)[0] + name;
-          const folderIndexInChain = folderChain.findIndex(item => item.id === data.payload.files[0].id);
+          const folderIndexInChain = folderChain.findIndex(item => item.id === id);
           newFoldersChain = [...folderChain.slice(0,folderIndexInChain + 1)]
         }
   
@@ -174,7 +174,14 @@ const FileManager = () => {
       
     }
 
+    function onTreeViewClick(node){
+
+    }
+
     function refreshFileManager(newFiles){
+
+        console.log(newFiles)
+
         setFiles(newFiles);
         getDisplayFiles(newFiles);
     }
@@ -186,7 +193,7 @@ const FileManager = () => {
             <TreeView 
                 data={treeData} 
                 onTreeFolderClick={onTreeFolderClick}
-                openFiles={openFiles}
+                onTreeViewClick={onTreeViewClick}
             />
         )
     }
