@@ -26,11 +26,13 @@ const FileManager = () => {
     }, []);
 
     useEffect(() => {
+        console.log('on get displayed files use effect')
       getDisplayFiles(files)
     },[selectedFolder])
 
     useEffect(() => {
-        if (files.length > 0 && treeData === null) generateTreeViewData()
+        console.log('on files change use effect')
+        if (files.length > 0) generateTreeViewData()
     },[files])
 
     // useEffect(() => {
