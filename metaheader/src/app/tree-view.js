@@ -35,13 +35,13 @@ function TreeViewItem(props){
     if (item.children){
         
         toggleButton = (
-            <span className='toggle-sub-menu'>
+            <span className='toggle-sub-menu' style={{ left:3 + (item.level * 10)}}>
                 <i className={item.toggled === true ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'}></i>
             </span>
         )
         
         itemChildrenDisplay = (
-            <div style={{height:item.toggled === true ? "auto" : "0px",overflow:"hidden", left:3 + (item.level * 10)}}>
+            <div style={{height:item.toggled === true ? "auto" : "0px",overflow:"hidden"}}>
                 <TreeViewSubMenu {...props} items={item.children} parentIds={parentIds} />
             </div>
         )

@@ -21,7 +21,7 @@
   color: white;
   padding: 5px;
   padding-left: 15px;
-  border-radius: 0 5px 0 5px;
+  border-radius: 5px 5px 0 0;
 }
 #file-manager .chonky-chonkyRoot {
   border-radius: 0 0 5px 0 !important;
@@ -44,7 +44,7 @@
   height: 100%;
   width: 20%;
   overflow: auto;
-  border-radius: 5px 5px 0px 5px;
+  border-radius: 0px 5px 0px 5px;
   border: 1px solid #cccc;
   border-right: 0;
 }
@@ -58,7 +58,7 @@
 }
 #file-manager .file-manager-wrapper .tree-view-container ul li .toggle-sub-menu {
   position: absolute;
-  left: 0;
+  left: 3px;
   top: 6px;
 }
 #file-manager .file-manager-wrapper .tree-view-container ul li a {

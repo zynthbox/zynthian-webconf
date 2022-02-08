@@ -180,7 +180,7 @@ const FileManager = () => {
         newFoldersChain.push({
           id:pid,
           path:path,
-          name:pathArray[index] + 1,
+          name:pathArray[index + 1],
           isDir:true
         })
       });

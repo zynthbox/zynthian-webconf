@@ -122,7 +122,7 @@ function WebconfFileBrowser(props){
   }
 
   async function copyPasteFiles(previousPaths,destinationPaths){
-    destinationPaths.forEach(async function(destinaionPath,index){
+    destinationPaths.forEach(async function(destinationPath,index){
       const previousPath = previousPaths[index];
       console.log({previousPath,destinationPath})
       const response = await fetch(`http://${window.location.hostname}:3000/paste`, {
