@@ -103,10 +103,21 @@ function WebconfFileBrowser(props){
   }
 
   function copyFilesAction(data){
+    const paths = []
+    data.state.selectedFiles.forEach(function(file,index){
+      paths.push(file.path)
+    })
+
     setCopiedFiles(data.state.selectedFiles[0].path)
   }
 
   function pasteFilesAction(data){
+
+    const destinationPaths = [];
+    copiedFiles.forEach(function(cf,index){
+      destinationPaths.push(selectedFolder + fsep + cf.split(fsep)[cf.split(fsep).length - 1])
+    })
+
     copyPasteFiles(copiedFiles,selectedFolder + fsep + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1])
   }
 

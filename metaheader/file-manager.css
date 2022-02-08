@@ -43,22 +43,30 @@
   top: 0;
   height: 100%;
   width: 20%;
-  overflow: hidden;
+  overflow: auto;
   padding: 5px;
   border-radius: 5px 5px 0px 5px;
   border: 1px solid #cccc;
   border-right: 0;
 }
 #file-manager .file-manager-wrapper .tree-view-container ul {
-  padding: 0 0 0 5px;
+  padding: 0;
   width: 100%;
   list-style-type: none;
 }
 #file-manager .file-manager-wrapper .tree-view-container ul li {
   padding-left: 5px;
 }
+#file-manager .file-manager-wrapper .tree-view-container ul li .toggle-sub-menu {
+  position: absolute;
+  left: 0;
+  top: 3px;
+}
 #file-manager .file-manager-wrapper .tree-view-container ul li a {
   cursor: pointer;
+  height: 20px;
+  display: block;
+  width: 100%;
 }
 #file-manager .file-manager-wrapper .tree-view-container > ul {
   min-height: 100%;
