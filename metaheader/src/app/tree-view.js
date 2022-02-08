@@ -41,7 +41,7 @@ function TreeViewItem(props){
         )
         
         itemChildrenDisplay = (
-            <div style={{height:item.toggled === true ? "auto" : "0px",overflow:"hidden"}}>
+            <div style={{height:item.toggled === true ? "auto" : "0px",overflow:"hidden", left:3 + (item.level * 10)}}>
                 <TreeViewSubMenu {...props} items={item.children} parentIds={parentIds} />
             </div>
         )

@@ -53,6 +53,9 @@
   width: 100%;
   list-style-type: none;
 }
+#file-manager .file-manager-wrapper .tree-view-container ul li {
+  position: relative;
+}
 #file-manager .file-manager-wrapper .tree-view-container ul li .toggle-sub-menu {
   position: absolute;
   left: 0;
@@ -70,8 +73,6 @@
 }
 #file-manager .file-manager-wrapper .tree-view-container ul li a.active {
   font-weight: bold;
-  background-color: dodgerblue;
-  color: white;
 }
 #file-manager .file-manager-wrapper .tree-view-container ul li a:hover {
   background-color: white;

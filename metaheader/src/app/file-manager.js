@@ -105,7 +105,6 @@ const FileManager = () => {
         let newTreeData = {
             name:'zynthian-my-data',
             toggled:true,
-            active:true,
             children:getTree(foldersArray)
         };
 
@@ -181,11 +180,10 @@ const FileManager = () => {
         newFoldersChain.push({
           id:pid,
           path:path,
-          name:path.split(fsep)[path.split(fsep).length - 1],
+          name:pathArray[index] + 1,
           isDir:true
         })
       });
-      console.log(newFoldersChain)
       setFolderChain(newFoldersChain)
       setSelectedFolder(path)
     }
@@ -220,6 +218,7 @@ const FileManager = () => {
                 openFiles={openFiles}
                 refreshFileManager={refreshFileManager}
             />
+            <div id="file-manager-overlay"></div>
         </div>
     );
 };
