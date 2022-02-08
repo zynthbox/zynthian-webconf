@@ -103,39 +103,27 @@ function WebconfFileBrowser(props){
   }
 
   function copyFilesAction(data){
-    const paths = []
-    data.state.selectedFiles.forEach(function(file,index){
-      paths.push(file.path)
-    })
+    
 
-    setCopiedFiles(paths)
+    setCopiedFiles(data.state.selectedFiles[0].path)
   }
 
   function pasteFilesAction(data){
-
-    const destinationPaths = [];
-    copiedFiles.forEach(function(cf,index){
-      destinationPaths.push(selectedFolder + fsep + cf.split(fsep)[cf.split(fsep).length - 1])
-    })
-
-    copyPasteFiles(copiedFiles,destinationPaths)
+    copyPasteFiles(copiedFiles,selectedFolder + fsep + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1])
   }
 
-  async function copyPasteFiles(previousPaths,destinationPaths){
-    destinationPaths.forEach(async function(destinationPath,index){
-      const previousPath = previousPaths[index];
-      console.log({previousPath,destinationPath})
-      const response = await fetch(`http://${window.location.hostname}:3000/paste`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({previousPath,destinationPath})
-      });
-      const res = await response.json();
-      console.log(res,"res after copy & paste");
-      props.refreshFileManager(res);
-    })
+  async function copyPasteFiles(previousPath,destinationPath){
+    console.log({previousPath,destinationPath})
+    const response = await fetch(`http://${window.location.hostname}:3000/paste`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body:JSON.stringify({previousPath,destinationPath})
+    });
+    const res = await response.json();
+    console.log(res,"res after copy & paste");
+    props.refreshFileManager(res);
   }
 
   const createNewFolder = defineFileAction({
@@ -179,6 +167,8 @@ function WebconfFileBrowser(props){
     createNewFolder,
     editFiles,
     renameFiles,
+    ChonkyActions.UploadFiles,
+    ChonkyActions.DownloadFiles,
     ChonkyActions.DeleteFiles,
     ChonkyActions.CopyFiles,
     pasteFiles
