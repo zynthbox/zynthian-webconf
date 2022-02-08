@@ -4,11 +4,12 @@ import {Treebeard} from 'react-treebeard';
 
 function TreeView(props){
 
-    function onTreeItemClick(item){
+    function onTreeItemClick(item,parentIds){
+        console.log(parentIds)
         item.toggled = item.toggled === true ? false : true;
         item.active = true;
         console.log(item);
-        props.onTreeItemClick(item)
+        props.onTreeItemClick(item,parentIds)
     }
 
     return (
@@ -16,7 +17,7 @@ function TreeView(props){
             <ul>
                 <TreeViewItem 
                     onClick={onTreeItemClick}
-                    item={props.data} 
+                    item={props.data}
                 />
             </ul>
         </div>
@@ -25,7 +26,11 @@ function TreeView(props){
 
 function TreeViewItem(props){
     const { item } = props;
-
+    let parentIds = [];
+    if (item.id){
+        parentIds = [...props.parentIds,item.id]
+    }
+    // console.log(item,"id")
     let itemChildrenDisplay, toggleButton;
     if (item.children){
         toggleButton = <span className='toggle-sub-menu'>+</span>
@@ -34,7 +39,7 @@ function TreeViewItem(props){
         // ))
         itemChildrenDisplay = (
             <div style={{height:item.toggled === true ? "auto" : "0px",overflow:"hidden"}}>
-                <TreeViewSubMenu {...props} items={item.children} />
+                <TreeViewSubMenu {...props} items={item.children} parentIds={parentIds} />
             </div>
         )
     }
@@ -42,7 +47,7 @@ function TreeViewItem(props){
     return (
         <li>
             {toggleButton}
-            <a className={item.active === true ? "active" : ""} onClick={() => props.onClick(item)}>{item.name} </a>
+            <a className={item.active === true ? "active" : ""} onClick={() => props.onClick(item,parentIds)}>{item.name} </a>
             {itemChildrenDisplay}
         </li>
     )
