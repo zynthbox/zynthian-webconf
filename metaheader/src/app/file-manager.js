@@ -109,6 +109,7 @@ const FileManager = () => {
         let newTreeData = {
             name:'zynthian-my-data',
             toggled:true,
+            path:'/home/pi/zynthian-my-data',
             children:getTree(foldersArray)
         };
 
