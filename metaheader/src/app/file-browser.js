@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   FileBrowser,
   FileNavbar,
@@ -15,20 +15,12 @@ function WebconfFileBrowser(props){
   const { displayedFiles, selectedFolder, fsep, folderChain } = props;
   const [ copiedFiles, setCopiedFiles ] = useState('')
   const [ draggedFiles, setDraggedFiles ] = useState('')
+  const fileBrowserRef = useRef(null);
 
-  const handleAction = (data) => {
-    if (data.id === ChonkyActions.OpenFiles.id) openFilesAction(data)
-    if (data.id === createNewFolder.id) createFolderAction()
-    if (data.id === editFiles.id) alert("Edit Folder Action");
-    if (data.id === renameFiles.id) renameFileAction(data)
-    // if (data.id === ChonkyActions.UploadFiles.id) alert("Upload Folder Action");
-    // if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
-    if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
-    if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data);
-    if (data.id === pasteFiles.id) pasteFilesAction(data)
-    if (data.id === ChonkyActions.StartDragNDrop.id) startDragNDropAction(data)
-    if (data.id === ChonkyActions.EndDragNDrop.id) endDragNDropAction(data)
-  };
+  function clearSelection(){
+    if (!fileBrowserRef.current) return
+    fileBrowserRef.current.requestFileAction(ChonkyActions.ClearSelection)
+  }
 
   function openFilesAction(data){
     props.openFiles(data.payload.files[0])
@@ -52,7 +44,7 @@ function WebconfFileBrowser(props){
     const res = await response.json();
     console.log(res,"res after create folder");
     props.refreshFileManager(res);
-}
+  }
 
   function renameFileAction(data){
     const previousPath = data.state.selectedFiles[0].path;
@@ -102,6 +94,7 @@ function WebconfFileBrowser(props){
       const res = await response.json();
       console.log(res,"res after delete");
       if (index === paths.length - 1){
+        clearSelection();
         props.refreshFileManager(res);
       }
     })
@@ -171,12 +164,26 @@ function WebconfFileBrowser(props){
         body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
       });
       const res = await response.json();
-      console.log(res,"res after copy & paste");
       if (index === previousPaths.length - 1){
+        clearSelection();
         props.refreshFileManager(res);
       }
     })
   }
+
+  const handleAction = (data) => {
+    if (data.id === ChonkyActions.OpenFiles.id) openFilesAction(data)
+    if (data.id === createNewFolder.id) createFolderAction()
+    if (data.id === editFiles.id) alert("Edit Folder Action");
+    if (data.id === renameFiles.id) renameFileAction(data)
+    // if (data.id === ChonkyActions.UploadFiles.id) alert("Upload Folder Action");
+    // if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
+    if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
+    if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data);
+    if (data.id === pasteFiles.id) pasteFilesAction(data)
+    if (data.id === ChonkyActions.StartDragNDrop.id) startDragNDropAction(data)
+    if (data.id === ChonkyActions.EndDragNDrop.id) endDragNDropAction(data)
+  };
 
   const createNewFolder = defineFileAction({
     id: "create_files",
@@ -237,6 +244,7 @@ function WebconfFileBrowser(props){
             onFileAction={handleAction}
             defaultFileViewActionId={ChonkyActions.EnableListView.id}
             clearSelectionOnOutsideClick={true}
+            ref={fileBrowserRef}
           >
             <FileNavbar />
             <FileToolbar />
