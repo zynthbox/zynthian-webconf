@@ -103,13 +103,11 @@ function WebconfFileBrowser(props){
   }
 
   function copyFilesAction(data){
-    
-
     setCopiedFiles(data.state.selectedFiles[0].path)
   }
 
   function pasteFilesAction(data){
-    copyPasteFiles(copiedFiles,selectedFolder + fsep + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1])
+    copyPasteFiles(copiedFiles,selectedFolder + fsep)
   }
 
   async function copyPasteFiles(previousPath,destinationPath){

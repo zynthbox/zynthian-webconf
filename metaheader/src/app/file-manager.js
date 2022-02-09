@@ -26,10 +26,12 @@ const FileManager = () => {
     }, []);
 
     useEffect(() => {
+        console.log('use effect on set selected folder')
       getDisplayFiles(files)
     },[selectedFolder])
 
     useEffect(() => {
+        console.log('use effect on set files')
         if (files.length > 0) generateTreeViewData()
     },[files])
 
@@ -91,14 +93,16 @@ const FileManager = () => {
         let foldersArray = [];
         
         files.forEach(function(file,index){
-            const name = file.path.split(selectedFolder+"/")[1];
-            if (name.indexOf('.') === -1 || name.split('.')[name.split('.').length - 1] === "lv2"){
-                foldersArray.push({
-                    id:index + 1,
-                    name:name.indexOf('/') > -1 ? name.split('/')[name.split('/').length - 1] : name,
-                    level: 1 + ( file.path.indexOf('/') > -1 ? name.split('/').length - 1 : 0 ),
-                    path:file.path
-                })
+            const name = file.path.split(rootFolder+"/")[1];
+            if (name){
+                if (name.indexOf('.') === -1 || name.split('.')[name.split('.').length - 1] === "lv2"){
+                    foldersArray.push({
+                        id:index + 1,
+                        name:name.indexOf('/') > -1 ? name.split('/')[name.split('/').length - 1] : name,
+                        level: 1 + ( file.path.indexOf('/') > -1 ? name.split('/').length - 1 : 0 ),
+                        path:file.path
+                    })
+                }
             }
         })
 
@@ -163,12 +167,13 @@ const FileManager = () => {
         })
     }
 
-    function onTreeItemClick(data,parentIds){
+    function onTreeItemClick(data,parentIds,a){
         let newTreeData = Object.assign({},treeData);
         treeDataRecursiveRender(newTreeData,data)
         setTreeData(newTreeData)
-        // const newSelectedFolder = rootFolder + ;
-        generateFolderChain(data,parentIds)
+        if (parentIds){
+            generateFolderChain(data,parentIds)
+        }
     }
 
     function generateFolderChain(data,parentIds){

@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require("path")
 const fs = require('fs');
+const fse = require('fs-extra');
 var rimraf = require("rimraf");
 var cors = require('cors');
 
@@ -100,11 +101,50 @@ app.post('/rename',(req,res) => {
   }
 })
 
+
+function copyFileSync( source, target ) {
+
+  var targetFile = target;
+
+  // If target is a directory, a new file with the same name will be created
+  if ( fs.existsSync( target ) ) {
+      if ( fs.lstatSync( target ).isDirectory() ) {
+          targetFile = path.join( target, path.basename( source ) );
+      }
+  }
+
+  fs.writeFileSync(targetFile, fs.readFileSync(source));
+}
+
+function copyFolderRecursiveSync( source, target ) {
+  var files = [];
+
+  // Check if folder needs to be created or integrated
+  var targetFolder = path.join( target, path.basename( source ) );
+  if ( !fs.existsSync( targetFolder ) ) {
+      fs.mkdirSync( targetFolder );
+  }
+
+  // Copy
+  if ( fs.lstatSync( source ).isDirectory() ) {
+      files = fs.readdirSync( source );
+      files.forEach( function ( file ) {
+          var curSource = path.join( source, file );
+          if ( fs.lstatSync( curSource ).isDirectory() ) {
+              copyFolderRecursiveSync( curSource, targetFolder );
+          } else {
+              copyFileSync( curSource, targetFolder );
+          }
+      } );
+  }
+}
+ 
 app.post('/paste',(req,res) => {
   const { previousPath, destinationPath } = req.body;
   try {
     if (fs.statSync(previousPath).isDirectory()) {
-      rimraf.sync(previousPath);
+      console.log(previousPath, parentFolder + destinationPath)
+      copyFolderRecursiveSync(previousPath, parentFolder + destinationPath)
     } else {
       fs.copyFileSync(previousPath, parentFolder + destinationPath)
     }
