@@ -1,6 +1,4 @@
-import React, {PureComponent} from 'react';
-import {Treebeard} from 'react-treebeard';
-
+import React from 'react';
 
 function TreeView(props){
 
@@ -35,7 +33,7 @@ function TreeViewItem(props){
     if (item.children){
         
         toggleButton = (
-            <span className='toggle-sub-menu' style={{ left:3 + (item.level * 10)}}>
+            <span className='toggle-sub-menu' style={{ left:8 + (item.level * 10)}}>
                 <i className={item.toggled === true ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'}></i>
             </span>
         )
@@ -50,7 +48,7 @@ function TreeViewItem(props){
     return (
         <li>
             {toggleButton}
-            <a style={{paddingLeft:20 + (item.level * 10)}} className={item.active === true ? "active" : ""} onClick={() => props.onClick(item,parentIds)}>{item.name} </a>
+            <a style={{paddingLeft:25 + (item.level * 10)}} className={item.active === true ? "active" : ""} onClick={() => props.onClick(item,parentIds)}>{item.name} </a>
             {itemChildrenDisplay}
         </li>
     )
@@ -65,74 +63,5 @@ function TreeViewSubMenu(props){
         <ul>{itemsDisplay}</ul>
     )
 }
-
-// const data = {
-//     name: 'root',
-//     toggled: true,
-//     children: [
-//         {
-//             name: 'parent',
-//             children: [
-//                 { name: 'child1' },
-//                 { name: 'child2',
-//                 children: [
-//                     { name: 'child1' },
-//                     { name: 'child2' }
-//                 ] }
-//             ]
-//         },
-//         {
-//             name: 'loading parent',
-//             loading: true,
-//             children: []
-//         },
-//         {
-//             name: 'parent',
-//             children: [
-//                 {
-//                     name: 'nested parent',
-//                     children: [
-//                         { name: 'nested child 1' },
-//                         { name: 'nested child 2' }
-//                     ]
-//                 }
-//             ]
-//         }
-//     ]
-// };
-
-// class TreeView extends PureComponent {
-//     constructor(props){
-//         super(props);
-//         this.state = {data:data};
-//         this.onToggle = this.onToggle.bind(this);
-//     }
-    
-//     onToggle(node, toggled){
-//         console.log(node);
-//         const {cursor, data} = this.state;
-//         if (cursor) {
-//             this.setState(() => ({cursor, active: false}));
-//         }
-//         node.active = true;
-//         if (node.children) { 
-//             node.toggled = toggled;
-//         }
-//         this.props.openFiles(node)
-//         this.setState(() => ({cursor: node, data: Object.assign({}, data)}));
-//     }
-    
-//     render(){
-//         const {data} = this.state;
-//         return (
-//             <div className='tree-view-container'>
-//                 <Treebeard
-//                     data={data}
-//                     onToggle={this.onToggle}
-//                 />
-//             </div>
-//         );
-//     }
-// }
 
 export default TreeView

@@ -20,16 +20,19 @@ function MetaHeader(){
         }
 
         fileManagerDisplay = (
-            <div id="file-manager" className="container" style={{left:fileManagerLeftCss}}>
-                <a className="close-file-manager" style={{cursor:"pointer"}} onClick={() => setShowFileManager(false)}>
-                    <i className="glyphicon glyphicon-remove-circle"></i>
-                </a>
-                <h3>
-                    <i className="glyphicon glyphicon-file"></i>
-                    FILES
-                </h3>
-                <FileManager/>
-            </div>
+            <React.Fragment>
+                <div id="file-manager" className="container" style={{left:fileManagerLeftCss}}>
+                    <a className="close-file-manager" style={{cursor:"pointer"}} onClick={() => setShowFileManager(false)}>
+                        <i className="glyphicon glyphicon-remove-circle"></i>
+                    </a>
+                    <h3>
+                        <i className="glyphicon glyphicon-file"></i>
+                        FILES
+                    </h3>
+                    <FileManager/>
+                </div>
+                <div id="file-manager-overlay"></div>
+            </React.Fragment>
         )
     }
 

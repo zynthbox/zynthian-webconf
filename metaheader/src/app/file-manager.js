@@ -16,7 +16,7 @@ const FileManager = () => {
     const [ displayedFiles, setDisplayedFiles ] = useState([])
     // console.log(displayedFiles,"displayed files")
     const [ folderChain, setFolderChain ] = useState([rootFolderChainObject])
-    console.log(folderChain)
+    // console.log(folderChain)
     const [ selectedFolder, setSelectedFolder ] = useState(rootFolder)
     // console.log(selectedFolder)
     const [ treeData, setTreeData ] = useState(null);
@@ -179,7 +179,7 @@ const FileManager = () => {
     function generateFolderChain(data,parentIds){
       const path = rootFolder + data.path.split(rootFolder)[1]
       const pathArray = path.split(rootFolder)[1].split(fsep);
-      console.log(pathArray,parentIds)
+    //   console.log(pathArray,parentIds)
       let newFoldersChain = [rootFolderChainObject]
       parentIds.forEach(function(pid,index){        
         newFoldersChain.push({
@@ -223,7 +223,6 @@ const FileManager = () => {
                 openFiles={openFiles}
                 refreshFileManager={refreshFileManager}
             />
-            <div id="file-manager-overlay"></div>
         </div>
     );
 };

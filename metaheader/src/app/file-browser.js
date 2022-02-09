@@ -14,6 +14,7 @@ function WebconfFileBrowser(props){
 
   const { displayedFiles, selectedFolder, fsep, folderChain } = props;
   const [ copiedFiles, setCopiedFiles ] = useState('')
+  const [ draggedFiles, setDraggedFiles ] = useState('')
 
   const handleAction = (data) => {
     if (data.id === ChonkyActions.OpenFiles.id) openFilesAction(data)
@@ -25,6 +26,8 @@ function WebconfFileBrowser(props){
     if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
     if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data);
     if (data.id === pasteFiles.id) pasteFilesAction(data)
+    if (data.id === ChonkyActions.StartDragNDrop.id) startDragNDropAction(data)
+    if (data.id === ChonkyActions.EndDragNDrop.id) endDragNDropAction(data)
   };
 
   function openFilesAction(data){
@@ -38,7 +41,7 @@ function WebconfFileBrowser(props){
   }
 
   async function createFolder(fullPath){
-    console.log({fullPath})
+    // console.log({fullPath})
     const response = await fetch(`http://${window.location.hostname}:3000/createfolder`, {
     method: 'POST',
     headers: {
@@ -53,14 +56,14 @@ function WebconfFileBrowser(props){
 
   function renameFileAction(data){
     const previousPath = data.state.selectedFiles[0].path;
-    console.log(previousPath);
+    // console.log(previousPath);
     const folderName = window.prompt('Enter new Folder Name:');
     const fullPath = previousPath.split(selectedFolder)[0] + selectedFolder + fsep + folderName;
     renameFile(previousPath,fullPath)
   }
 
   async function renameFile(previousPath,fullPath){
-    console.log({fullPath})
+    // console.log({fullPath})
     const response = await fetch(`http://${window.location.hostname}:3000/rename`, {
     method: 'POST',
     headers: {
@@ -74,16 +77,21 @@ function WebconfFileBrowser(props){
   }
 
   function deleteFilesAction(data){
+      let message = `are you sure you want to delete following files? \n`
       const paths = []
       data.state.selectedFilesForAction.forEach(function(files,index){
         paths.push(files.path);
+        message += files.path + "\n"
       })
-      deleteFiles(paths)
+      
+      if ( window.confirm(message)){
+        deleteFiles(paths)
+      }
   }
 
   async function deleteFiles(paths){
     paths.forEach(async function(fullPath,index){
-      console.log(fullPath)
+      // console.log(fullPath)
       const response = await fetch(`http://${window.location.hostname}:3000/delete`, {
           method: 'POST',
           headers: {
@@ -93,7 +101,9 @@ function WebconfFileBrowser(props){
       });
       const res = await response.json();
       console.log(res,"res after delete");
-      props.refreshFileManager(res);
+      if (index === paths.length - 1){
+        props.refreshFileManager(res);
+      }
     })
   }
 
@@ -103,25 +113,69 @@ function WebconfFileBrowser(props){
   }
 
   function copyFilesAction(data){
-    setCopiedFiles(data.state.selectedFiles[0].path)
+    let paths = [];
+    data.state.selectedFiles.forEach(function(sf,index){
+      paths.push(sf.path)
+    })
+    setCopiedFiles(paths)
   }
 
   function pasteFilesAction(data){
-    copyPasteFiles(copiedFiles,selectedFolder + fsep)
+    // let destination = selectedFolder + fsep;
+    // if (copiedFiles.indexOf('.') > -1){
+    //   destination = selectedFolder + fsep + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1];
+    // }
+    let destinationPaths = [];
+    copiedFiles.forEach(function(cf,index){
+      let destination = selectedFolder + fsep;
+      if (cf.indexOf('.') > -1){
+        destination = selectedFolder + fsep + cf.split(fsep)[cf.split(fsep).length - 1];
+      }
+      destinationPaths.push(destination)
+    })
+
+    copyPasteFiles(copiedFiles,destinationPaths)
   }
 
-  async function copyPasteFiles(previousPath,destinationPath){
-    console.log({previousPath,destinationPath})
-    const response = await fetch(`http://${window.location.hostname}:3000/paste`, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body:JSON.stringify({previousPath,destinationPath})
-    });
-    const res = await response.json();
-    console.log(res,"res after copy & paste");
-    props.refreshFileManager(res);
+  function startDragNDropAction(data){
+
+    let paths = [];
+    data.state.selectedFiles.forEach(function(sf,index){
+      paths.push(sf.path)
+    })
+
+    setDraggedFiles(paths)
+  }
+
+  function endDragNDropAction(data){
+    let destinationPaths = [];
+    draggedFiles.forEach(function(df,index){
+      let destination = selectedFolder + data.payload.destination.path.split(selectedFolder)[1];
+      if (df.indexOf('.') > -1){
+        destination += fsep + df.split(fsep)[df.split(fsep).length - 1]
+      }
+      destinationPaths.push(destination)
+    })
+    copyPasteFiles(draggedFiles,destinationPaths,true)
+  }
+
+  async function copyPasteFiles(previousPaths,destinationPaths,deleteOrigin){
+    // console.log({previousPaths,destinationPaths})
+    previousPaths.forEach(async function(previousPath,index){
+      const destinationPath = destinationPaths[index];
+      const response = await fetch(`http://${window.location.hostname}:3000/copypaste`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
+      });
+      const res = await response.json();
+      console.log(res,"res after copy & paste");
+      if (index === previousPaths.length - 1){
+        props.refreshFileManager(res);
+      }
+    })
   }
 
   const createNewFolder = defineFileAction({
@@ -169,6 +223,8 @@ function WebconfFileBrowser(props){
     ChonkyActions.DownloadFiles,
     ChonkyActions.DeleteFiles,
     ChonkyActions.CopyFiles,
+    ChonkyActions.StartDragNDrop,
+    ChonkyActions.EndDragNDrop,
     pasteFiles
   ];
 

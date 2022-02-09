@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  res.send('Webconf Metaheader Files App Server!')
+  res.send('Webconf Files Manager App Server.')
 })
 
 const getAllFiles = function(dirPath, arrayOfFiles,index) {
@@ -78,7 +78,7 @@ app.post('/delete',(req,res) => {
     if (fs.statSync(fullPath).isDirectory()) {
       rimraf.sync(fullPath);
     } else {
-      fs.unlinkSync(adjusfullPathtedPath)
+      fs.unlinkSync(fullPath)
     }
     const dirList = getAllFiles(rootFolder,[])
     res.json(dirList)  
@@ -100,7 +100,6 @@ app.post('/rename',(req,res) => {
     res.json({error:err})
   }
 })
-
 
 function copyFileSync( source, target ) {
 
@@ -139,24 +138,44 @@ function copyFolderRecursiveSync( source, target ) {
   }
 }
  
-app.post('/paste',(req,res) => {
-  const { previousPath, destinationPath } = req.body;
+app.post('/copypaste',(req,res) => {
+
+  const { previousPath, destinationPath,deleteOrigin } = req.body;
+  // console.log( previousPath, destinationPath,deleteOrigin )
   try {
+
     if (fs.statSync(previousPath).isDirectory()) {
-      console.log(previousPath, parentFolder + destinationPath)
       copyFolderRecursiveSync(previousPath, parentFolder + destinationPath)
     } else {
       fs.copyFileSync(previousPath, parentFolder + destinationPath)
     }
-    const dirList = getAllFiles(rootFolder,[])
-    res.json(dirList)
+
+    if (deleteOrigin === true){
+
+      try {
+        if (fs.statSync(previousPath).isDirectory()) {
+          rimraf.sync(previousPath);
+        } else {
+          fs.unlinkSync(previousPath)
+        }
+        const dirList = getAllFiles(rootFolder,[])
+        res.json(dirList)  
+        //file removed
+      } catch(err) {
+        console.error(err)
+        res.json({error:err})
+      }
+
+    } else {
+      const dirList = getAllFiles(rootFolder,[])
+      res.json(dirList)
+    }
   } catch(err) {
     console.error(err)
     res.json({error:err})
   }
 
 })
-
 
 app.listen(port, () => {
   console.log(`webconf metaheader file-browser app-server listening on port ${port}`)
