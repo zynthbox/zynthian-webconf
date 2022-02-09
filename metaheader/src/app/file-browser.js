@@ -21,8 +21,8 @@ function WebconfFileBrowser(props){
     if (data.id === createNewFolder.id) createFolderAction()
     if (data.id === editFiles.id) alert("Edit Folder Action");
     if (data.id === renameFiles.id) renameFileAction(data)
-    if (data.id === ChonkyActions.UploadFiles.id) alert("Upload Folder Action");
-    if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
+    // if (data.id === ChonkyActions.UploadFiles.id) alert("Upload Folder Action");
+    // if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
     if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
     if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data);
     if (data.id === pasteFiles.id) pasteFilesAction(data)
@@ -219,8 +219,8 @@ function WebconfFileBrowser(props){
     createNewFolder,
     editFiles,
     renameFiles,
-    ChonkyActions.UploadFiles,
-    ChonkyActions.DownloadFiles,
+    // ChonkyActions.UploadFiles,
+    // ChonkyActions.DownloadFiles,
     ChonkyActions.DeleteFiles,
     ChonkyActions.CopyFiles,
     ChonkyActions.StartDragNDrop,
