@@ -3,6 +3,9 @@ import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 
 function FileUploader(props) {
+
+  const { selectedFolder, fsep } = props
+
   const reader = new FileReader();
 
   const onDrop = useCallback(acceptedFiles => {
@@ -32,42 +35,22 @@ function FileUploader(props) {
   const uploadFile = async () => {
     const formData = new FormData();
     formData.append('file', file); // appending file
-
-    // const response = await fetch(`http://${window.location.hostname}:3000/upload`, {
-    //   method: 'POST',
-    //   headers: {
-    //       'Content-Type': 'application/json',
-    //   },
-    //   body:JSON.stringify({formData})
-    // });
-    // const res = await response.json();
-    // console.log(res,"res after upload file");
-
-    axios.post(`http://${window.location.hostname}:3000/upload`, formData);
-    
-    //   {
-    //     onUploadProgress: ProgressEvent => {
-    //       let progress = Math.round(
-    //         (ProgressEvent.loaded / ProgressEvent.total) * 100
-    //       );
-    //       setProgress(progress);
-    //     },
-    //   })
-    //   .then(res => {
-    //     props.onFinishUpload(res.data);
-    //     setUploadSuccess(true);
-    //   })
-    //   .catch(err => console.log(err)
-    };
+    axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split(fsep).join('+++')}`, formData ).then(res => { // then print response status
+      console.log(res.data)
+      setFile(null)
+      setFileData(null)
+      props.setShowFileUploader(false)
+      props.refreshFileManager(res.data)
+    });
+  };
 
   let uploadButtonDisplay;
   if (file) {
     if (uploadSuccess === false) {
       uploadButtonDisplay = (
-        <a className="ui green button labeled icon" onClick={uploadFile}>
-          <i className="upload icon"></i>
+        <button className="ui green button labeled icon" onClick={uploadFile}>
           Upload Files
-        </a>
+        </button>
       );
     } else {
       uploadButtonDisplay = <i className="check icon"></i>;
@@ -83,13 +66,15 @@ function FileUploader(props) {
     textDisplay = '';
   }
 
-  let fileListDisplay;
+  let fileListDisplay, dropZoneDisplay;
   if (file){
-    fileListDisplay = <span>{file.name}</span>
-  }
-
-  return (
-    <div id="file-uploader">
+    fileListDisplay = (
+      <p>
+        <span>{file.name}</span>
+      </p>
+    )
+  } else {
+    dropZoneDisplay = (
       <div
         className={'dropzone-container' + (showImg === true ? ' with-img' : '')}
         {...getRootProps()}
@@ -97,9 +82,17 @@ function FileUploader(props) {
         <input {...getInputProps()} />
         {isDragActive ? <p>Drop the files here ...</p> : textDisplay}
       </div>
+    )
+  }
+
+  return (
+    <React.Fragment>
+    <div id="file-uploader">
+      {dropZoneDisplay}
       {fileListDisplay}
       {uploadButtonDisplay}
     </div>
+    </React.Fragment>
   );
 }
 

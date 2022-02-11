@@ -220,7 +220,12 @@ const FileManager = () => {
     if (showFileUploader === true){
         fileUploaderDisplay = (
             <React.Fragment>
-                <FileUploader/>
+                <FileUploader 
+                    selectedFolder={selectedFolder} 
+                    fsep={fsep} 
+                    refreshFileManager={refreshFileManager} 
+                    setShowFileUploader={setShowFileUploader}
+                />
                 <div id="file-uploader-overlay" onClick={() => setShowFileUploader(false)}></div>
             </React.Fragment>
         )

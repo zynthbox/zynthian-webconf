@@ -39,6 +39,7 @@
     "cors": "^2.8.5",
     "fs-extra": "^10.0.0",
     "mmmagic": "^0.5.3",
+    "multer": "^1.4.4",
     "ncp": "^2.0.0",
     "react": "17.0.2",
     "react-device-detect": "^2.1.2",

@@ -245,7 +245,7 @@ function WebconfFileBrowser(props){
     createNewFolder,
     editFiles,
     renameFiles,
-    // ChonkyActions.UploadFiles,
+    ChonkyActions.UploadFiles,
     ChonkyActions.DownloadFiles,
     ChonkyActions.DeleteFiles,
     ChonkyActions.CopyFiles,

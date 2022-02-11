@@ -3,6 +3,7 @@ const path = require("path")
 const fs = require('fs');
 var rimraf = require("rimraf");
 var cors = require('cors');
+var multer = require('multer')
 
 const app = express()
 const port = 3000
@@ -22,6 +23,8 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
   res.send('Webconf Files Manager App Server.')
 })
+
+/* GET FILES */
 
 const getAllFiles = function(dirPath, arrayOfFiles,index) {
   files = fs.readdirSync(dirPath)
@@ -55,6 +58,27 @@ app.get('/mydata',(req,res) => {
   res.json(dirList)
 })
 
+/* /GET FILES */
+
+/* RENAME FILE / FOLDER */
+
+app.post('/rename',(req,res) => {
+  const { previousPath, fullPath } = req.body;
+  try {
+    fs.renameSync(previousPath,fullPath)
+    const dirList = getAllFiles(rootFolder,[])
+    res.json(dirList)
+  } catch(err) {
+    console.error(err)
+    res.json({error:err})
+  }
+})
+
+
+/* /RENAME FILE / FOLDER */
+
+/* CREATE FOLDER */
+
 app.post('/createfolder',(req,res) => {
   const { fullPath } = req.body;
   try {
@@ -70,6 +94,10 @@ app.post('/createfolder',(req,res) => {
     res.json({error:err})
   }
 })
+
+/* CREATE FOLDER */
+
+/* DELETE FILES / FOLDERS */
 
 app.post('/delete',(req,res) => {
   const { fullPath } = req.body;
@@ -88,17 +116,9 @@ app.post('/delete',(req,res) => {
   }
 })
 
-app.post('/rename',(req,res) => {
-  const { previousPath, fullPath } = req.body;
-  try {
-    fs.renameSync(previousPath,fullPath)
-    const dirList = getAllFiles(rootFolder,[])
-    res.json(dirList)
-  } catch(err) {
-    console.error(err)
-    res.json({error:err})
-  }
-})
+/* /DELETE FILES / FOLDERS */
+
+/* COPY FILES / FOLDERS */
 
 function copyFileSync( source, target ) {
 
@@ -176,29 +196,42 @@ app.post('/copypaste',(req,res) => {
 
 })
 
-app.post('/upload', (req, res) => {
-  console.log(req.files);
-  if (!req.files) return res.status(500).send({ msg: 'file is not found' });
-  // // accessing the file
-  // const myFile = req.files.file;
-  // const fileName = myFile.name.split('.')[myFile.name.split('.').length - 2] + '_' + Date.now();
-  // const fileExtension = myFile.name.split('.')[myFile.name.split('.').length - 1];
-  // const newFileName = fileName + '.' + fileExtension;
+/* /COPY FILES / FOLDERS */
 
-  // //  mv() method places the file inside public directory
-  // myFile.mv(`${__dirname}/uploads/${subdir}/${newFileName}`, async function (err) {
-  //     if (err) return res.status(500).send({ msg: 'Error occured' });
-  //     return res.send({
-  //       name: myFile.name,
-  //       path: `${subdir}/${newFileName}`,
-  //       thumbnail: null,
-  //       type: 'video',
-  //     });
-  //   }
-  // );
+/* UPLOAD FILES */
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+  cb(null, parentFolder)
+},
+filename: function (req, file, cb) {
+  const selectedFolder = req.params.folder.split('+++').join('/');
+  cb(null, selectedFolder + "/" + file.originalname )
+}
+})
+
+var upload = multer({ storage: storage }).single('file')
+
+app.post('/upload/:folder', (req, res) => {
+
+  upload(req, res, function (err) {
+    console.log(err);
+    if (err instanceof multer.MulterError) {
+        return res.status(500).json(err)
+    } else if (err) {
+        return res.status(500).json(err)
+    }
+    const dirList = getAllFiles(rootFolder,[])
+    
+    return res.status(200).json(dirList)
+
+  })
 });
 
+/* UPLOAD FILES */
+
 app.post('/download',(req,res) => {
+
   const { filePath } = req.body;
   var file = fs.readFileSync(filePath, 'binary');
   var stats = fs.statSync(filePath)
@@ -207,6 +240,7 @@ app.post('/download',(req,res) => {
   res.setHeader('Content-Disposition', 'attachment; filename='+filePath.split("/")[filePath.split("/").length - 1]);
   res.write(file, 'binary');
   res.end();
+
 })
 
 app.listen(port, () => {
