@@ -16,6 +16,7 @@ function WebconfFileBrowser(props){
   const [ copiedFiles, setCopiedFiles ] = useState('')
   const [ draggedFiles, setDraggedFiles ] = useState('')
   const fileBrowserRef = useRef(null);
+  
 
   function clearSelection(){
     if (!fileBrowserRef.current) return
@@ -100,9 +101,27 @@ function WebconfFileBrowser(props){
     })
   }
 
-  function downloadFilesAction(data){
-    let path = data.state.selectedFiles[0].path;
-    window.open(path)
+  async function downloadFilesAction(data){
+
+    let filePath = data.state.selectedFiles[0].path;
+
+    const response = await fetch(`http://${window.location.hostname}:3000/download`, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({filePath})
+    });
+    const res = await response.blob();
+
+    var url = window.URL.createObjectURL(res);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filePath.split(fsep)[filePath.split(fsep).length - 1];
+    document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+    a.click();    
+    a.remove(); 
+
   }
 
   function copyFilesAction(data){
@@ -176,8 +195,8 @@ function WebconfFileBrowser(props){
     if (data.id === createNewFolder.id) createFolderAction()
     if (data.id === editFiles.id) alert("Edit Folder Action");
     if (data.id === renameFiles.id) renameFileAction(data)
-    // if (data.id === ChonkyActions.UploadFiles.id) alert("Upload Folder Action");
-    // if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
+    if (data.id === ChonkyActions.UploadFiles.id) props.setShowFileUploader(true)
+    if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
     if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
     if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data);
     if (data.id === pasteFiles.id) pasteFilesAction(data)
@@ -227,7 +246,7 @@ function WebconfFileBrowser(props){
     editFiles,
     renameFiles,
     // ChonkyActions.UploadFiles,
-    // ChonkyActions.DownloadFiles,
+    ChonkyActions.DownloadFiles,
     ChonkyActions.DeleteFiles,
     ChonkyActions.CopyFiles,
     ChonkyActions.StartDragNDrop,

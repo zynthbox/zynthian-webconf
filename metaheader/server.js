@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require("path")
 const fs = require('fs');
-const fse = require('fs-extra');
 var rimraf = require("rimraf");
 var cors = require('cors');
 
@@ -175,6 +174,39 @@ app.post('/copypaste',(req,res) => {
     res.json({error:err})
   }
 
+})
+
+app.post('/upload', (req, res) => {
+  console.log(req.files);
+  if (!req.files) return res.status(500).send({ msg: 'file is not found' });
+  // // accessing the file
+  // const myFile = req.files.file;
+  // const fileName = myFile.name.split('.')[myFile.name.split('.').length - 2] + '_' + Date.now();
+  // const fileExtension = myFile.name.split('.')[myFile.name.split('.').length - 1];
+  // const newFileName = fileName + '.' + fileExtension;
+
+  // //  mv() method places the file inside public directory
+  // myFile.mv(`${__dirname}/uploads/${subdir}/${newFileName}`, async function (err) {
+  //     if (err) return res.status(500).send({ msg: 'Error occured' });
+  //     return res.send({
+  //       name: myFile.name,
+  //       path: `${subdir}/${newFileName}`,
+  //       thumbnail: null,
+  //       type: 'video',
+  //     });
+  //   }
+  // );
+});
+
+app.post('/download',(req,res) => {
+  const { filePath } = req.body;
+  var file = fs.readFileSync(filePath, 'binary');
+  var stats = fs.statSync(filePath)
+  res.setHeader('Content-Length', stats.size);
+  // res.setHeader('Content-Type', 'audio/mpeg');
+  res.setHeader('Content-Disposition', 'attachment; filename='+filePath.split("/")[filePath.split("/").length - 1]);
+  res.write(file, 'binary');
+  res.end();
 })
 
 app.listen(port, () => {

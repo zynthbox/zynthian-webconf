@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import WebconfFileBrowser from './file-browser';
 import TreeView from './tree-view';
+import FileUploader from './file-uploader';
 
 const FileManager = () => {
 
@@ -21,6 +22,9 @@ const FileManager = () => {
     // console.log(selectedFolder)
     const [ treeData, setTreeData ] = useState(null);
   
+    const [ showFileUploader, setShowFileUploader ] = useState(false)
+
+
     useEffect(() => {
         getFiles()
     }, []);
@@ -211,6 +215,17 @@ const FileManager = () => {
         )
     }
 
+
+    let fileUploaderDisplay;
+    if (showFileUploader === true){
+        fileUploaderDisplay = (
+            <React.Fragment>
+                <FileUploader/>
+                <div id="file-uploader-overlay" onClick={() => setShowFileUploader(false)}></div>
+            </React.Fragment>
+        )
+    }
+
     return (
         <div className='file-manager-wrapper'>
             {treeViewDisplay}
@@ -223,7 +238,9 @@ const FileManager = () => {
                 setSelectedFolder={setSelectedFolder}
                 openFiles={openFiles}
                 refreshFileManager={refreshFileManager}
+                setShowFileUploader={setShowFileUploader}
             />
+            {fileUploaderDisplay}
         </div>
     );
 };
