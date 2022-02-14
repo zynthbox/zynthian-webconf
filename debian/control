@@ -8,6 +8,6 @@ Homepage: https://github.com/zynthbox/zynthian-webconf
 
 Package: zynthian-webconf
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, python3
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3, npm
 Description: Zynthbox QML frontend
  Zynthian Web Configuration Tool
