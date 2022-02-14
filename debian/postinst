@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /zynthian/zynthian-webconf/metaheader
+npm install
