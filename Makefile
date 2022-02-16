@@ -7,6 +7,7 @@ install-zynthian-webconf:
 		-maxdepth 1 \
 		-not -name . \
 		-not -name 'debian' \
+		-not -name '*.deb' \
 		-exec cp -pr $(shell realpath {}) $(BASEINSTALLDIR)/ \;
 
 install: install-zynthian-webconf
