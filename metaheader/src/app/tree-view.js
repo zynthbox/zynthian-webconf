@@ -3,10 +3,8 @@ import React from 'react';
 function TreeView(props){
 
     function onTreeItemClick(item,parentIds){
-        console.log(parentIds)
         item.toggled = item.toggled === true ? false : true;
         item.active = true;
-        console.log(item);
         props.onTreeItemClick(item,parentIds)
     }
 
