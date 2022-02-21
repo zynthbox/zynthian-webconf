@@ -208,16 +208,16 @@ app.get('/', (req, res) => {
 /* UPLOAD FILES */
 
   var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-    cb(null, parentFolder)
-  },
-  filename: function (req, file, cb) {
-    const selectedFolder = req.params.folder.split('+++').join('/');
-    cb(null, selectedFolder + "/" + file.originalname )
-  }
+      destination: function (req, file, cb) {
+      cb(null, parentFolder)
+    },
+    filename: function (req, file, cb) {
+      const selectedFolder = req.params.folder.split('+++').join('/');
+      cb(null, selectedFolder + "/" + file.originalname )
+    }
   })
 
-  var upload = multer({ storage: storage }).single('file')
+  var upload = multer({ storage: storage }).fields([{name:'file',maxCount:100}])
 
   app.post('/upload/:folder', (req, res) => {
 

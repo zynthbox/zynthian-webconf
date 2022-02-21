@@ -10,13 +10,14 @@ function FileUploader(props) {
 
   const onDrop = useCallback(acceptedFiles => {
     // Do something with the files
+    setFiles(acceptedFiles)
     setFile(acceptedFiles[0]);
     reader.readAsDataURL(acceptedFiles[0]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   const [file, setFile] = useState();
-  console.log(file);
+  const [files, setFiles] = useState();
   const [fileData, setFileData] = useState();
   const [progress, setProgress] = useState(0);
   const [showImg, setShowImg] = useState(false);
@@ -33,8 +34,15 @@ function FileUploader(props) {
   );
 
   const uploadFile = async () => {
+    
     const formData = new FormData();
-    formData.append('file', file); // appending file
+    for (var i = 0; i < files.length; ++i){
+      console.log(files[i])
+      formData.append('file', files[i]); // appending file
+    }
+
+    console.log(formData,"formData")
+
     axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split(fsep).join('+++')}`, formData ).then(res => { // then print response status
       console.log(res.data)
       setFile(null)
@@ -42,6 +50,7 @@ function FileUploader(props) {
       props.setShowFileUploader(false)
       props.refreshFileManager(res.data)
     });
+  
   };
 
   let uploadButtonDisplay;
@@ -67,22 +76,25 @@ function FileUploader(props) {
   }
 
   let fileListDisplay, dropZoneDisplay;
-  if (file){
-    fileListDisplay = (
-      <p>
-        <span>{file.name}</span>
-      </p>
-    )
+  if (files){
+    
+    const filesList = files.map((f,index) => (
+      <p key={index}>{f.name}</p>
+    ))
+    fileListDisplay = <div>{filesList}</div>
+
   } else {
+
     dropZoneDisplay = (
       <div
         className={'dropzone-container' + (showImg === true ? ' with-img' : '')}
         {...getRootProps()}
       >
-        <input {...getInputProps()} />
+        <input {...getInputProps()} name="file" />
         {isDragActive ? <p>Drop the files here ...</p> : textDisplay}
       </div>
     )
+
   }
 
   return (

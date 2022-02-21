@@ -103,24 +103,32 @@ function WebconfFileBrowser(props){
 
   async function downloadFilesAction(data){
 
-    let filePath = data.state.selectedFiles[0].path;
+    let paths = [];
 
-    const response = await fetch(`http://${window.location.hostname}:3000/download`, {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({filePath})
+    data.state.selectedFiles.forEach(function(sf,index){
+      paths.push(sf.path)
     });
-    const res = await response.blob();
 
-    var url = window.URL.createObjectURL(res);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = filePath.split(fsep)[filePath.split(fsep).length - 1];
-    document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-    a.click();    
-    a.remove(); 
+    paths.forEach(async function(filePath,index){
+
+      const response = await fetch(`http://${window.location.hostname}:3000/download`, {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json',
+          },
+          body:JSON.stringify({filePath})
+      });
+      const res = await response.blob();
+
+      var url = window.URL.createObjectURL(res);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = filePath.split(fsep)[filePath.split(fsep).length - 1];
+      document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+      a.click();
+      a.remove();
+
+    });
 
   }
 
