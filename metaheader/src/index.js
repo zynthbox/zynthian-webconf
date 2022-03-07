@@ -58,9 +58,12 @@ function MetaHeader(){
 
     return (
         <React.Fragment>
-            <a className={showFileManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileManager(showFileManager === true ? false : true)}>Files</a>
-            <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Sample Editor</a>
-            {fileManagerDisplay}
+            <li>
+                <a className={showFileManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileManager(showFileManager === true ? false : true)}>Files</a>
+            </li>
+            <li>
+                <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Sample Editor</a>
+            </li>  {fileManagerDisplay}
             {sampleEditorDisplay}
         </React.Fragment>
     )

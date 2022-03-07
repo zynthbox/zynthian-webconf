@@ -1,10 +1,41 @@
-#sample-editor {
-  padding: 0;
-  border-radius: 5px;
-  height: auto;
-  float: left;
+#sample-editor-overlay {
+  width: 100%;
+  height: 100%;
+  background: white;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  z-index: 1;
 }
-#sample-editor .sample-set {
+#sample-editor-container {
+  background: white;
+  height: auto;
+  position: fixed;
+  margin-top: 35px;
+  margin-left: -8px;
+  padding: 0;
+  z-index: 2;
+}
+#sample-editor-container .close-sample-editor {
+  top: 5px;
+  right: 20px;
+  position: absolute;
+  color: white;
+  padding: 0 !important;
+  font-size: 24px !important;
+}
+#sample-editor-container h3 {
+  margin: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: black;
+  color: white;
+  padding: 5px;
+  padding-left: 15px;
+  border-radius: 5px 5px 0 0;
+}
+#sample-editor-container .sample-set {
   width: 20%;
   height: auto;
   float: left;
@@ -14,35 +45,35 @@
   border: 1px solid #cecece;
   position: relative;
 }
-#sample-editor .sample-set .color-picker-container {
+#sample-editor-container .sample-set .color-picker-container {
   position: absolute;
   top: 35px;
   right: 0;
   z-index: 100;
 }
-#sample-editor .sample-set ul {
+#sample-editor-container .sample-set ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
-#sample-editor .sample-set ul.edit-menu {
+#sample-editor-container .sample-set ul.edit-menu {
   position: absolute;
   top: 15px;
   right: 10px;
 }
-#sample-editor .sample-set ul.edit-menu li {
+#sample-editor-container .sample-set ul.edit-menu li {
   float: left;
 }
-#sample-editor .sample-set ul.edit-menu li + li {
+#sample-editor-container .sample-set ul.edit-menu li + li {
   margin-left: 5px;
 }
-#sample-editor .sample-set h2 {
+#sample-editor-container .sample-set h2 {
   margin-top: 5px;
 }
-#sample-editor .sample-set ul.sample-list {
+#sample-editor-container .sample-set ul.sample-list {
   width: 100%;
 }
-#sample-editor .sample-set ul.sample-list > li {
+#sample-editor-container .sample-set ul.sample-list > li {
   height: 40px;
   overflow: hidden;
   width: 100%;
@@ -52,37 +83,37 @@
   position: relative;
   box-sizing: border-box;
 }
-#sample-editor .sample-set ul.sample-list > li h4 {
+#sample-editor-container .sample-set ul.sample-list > li h4 {
   margin: 10px 0;
 }
-#sample-editor .sample-set ul.sample-list > li i {
+#sample-editor-container .sample-set ul.sample-list > li i {
   position: absolute;
   left: 0;
   top: 0;
 }
-#sample-editor .sample-set ul.sample-list li + li {
+#sample-editor-container .sample-set ul.sample-list li + li {
   border-top: 0;
 }
-#sample-editor .sample-set:first-of-type {
+#sample-editor-container .sample-set:first-of-type {
   border-top-left-radius: 10px;
 }
-#sample-editor .sample-set + .sample-set {
+#sample-editor-container .sample-set + .sample-set {
   border-left-width: 0px;
 }
-#sample-editor .sample-set:nth-child(5) {
+#sample-editor-container .sample-set:nth-child(5) {
   border-top-right-radius: 10px;
 }
-#sample-editor .sample-set:nth-child(6),
-#sample-editor .sample-set:nth-child(7),
-#sample-editor .sample-set:nth-child(8),
-#sample-editor .sample-set:nth-child(9),
-#sample-editor .sample-set:nth-child(10) {
+#sample-editor-container .sample-set:nth-child(6),
+#sample-editor-container .sample-set:nth-child(7),
+#sample-editor-container .sample-set:nth-child(8),
+#sample-editor-container .sample-set:nth-child(9),
+#sample-editor-container .sample-set:nth-child(10) {
   border-top-width: 0px;
 }
-#sample-editor .sample-set:nth-child(6) {
+#sample-editor-container .sample-set:nth-child(6) {
   border-left-width: 1px;
   border-bottom-left-radius: 10px;
 }
-#sample-editor .sample-set:nth-child(10) {
+#sample-editor-container .sample-set:nth-child(10) {
   border-bottom-right-radius: 10px;
 }
