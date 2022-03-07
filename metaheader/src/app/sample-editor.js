@@ -87,6 +87,7 @@ const SampleSet = (props) => {
                         <i className="glyphicon glyphicon-pencil"></i>
                     </a>
                 </li>
+                <li>|</li>
                 <li>
                     <a className="color-picker" onClick={() => setShowColorPicker(showColorPicker == true ? false : true)}>
                         Color
