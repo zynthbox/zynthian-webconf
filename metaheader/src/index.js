@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import FileManager from './app/file-manager';
+import SampleEditor from './app/sample-editor'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 
 function MetaHeader(){
 
     const [ showFileManager, setShowFileManager ] = useState(false)
+    const [ showSampleEditor, setShowSampleEditor ] = useState(false);
 
     let fileManagerDisplay;
     if (showFileManager === true){
@@ -36,10 +38,30 @@ function MetaHeader(){
         )
     }
 
+    let sampleEditorDisplay;
+    if (showSampleEditor === true){
+        sampleEditorDisplay = (
+            <React.Fragment>
+                <div id="sample-editor-container" className="container">
+                    <a className="close-sample-editor" style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(false)}>
+                        <i className="glyphicon glyphicon-remove-circle"></i>
+                    </a>
+                    <h3>
+                        SAMPLE EDITOR
+                    </h3>
+                    <SampleEditor/>
+                </div>
+                <div id="sample-editor-overlay"></div>
+            </React.Fragment>
+        )
+    }
+
     return (
         <React.Fragment>
             <a className={showFileManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileManager(showFileManager === true ? false : true)}>Files</a>
+            <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Sample Editor</a>
             {fileManagerDisplay}
+            {sampleEditorDisplay}
         </React.Fragment>
     )
 }
@@ -47,5 +69,5 @@ function MetaHeader(){
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 
 const e = React.createElement;
-const domContainer = document.querySelector('#file-manager-container');
+const domContainer = document.querySelector('#metaheader-container');
 ReactDOM.render(e(MetaHeader), domContainer);

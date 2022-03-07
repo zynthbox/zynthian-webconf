@@ -1,0 +1,88 @@
+#sample-editor {
+  padding: 0;
+  border-radius: 5px;
+  height: auto;
+  float: left;
+}
+#sample-editor .sample-set {
+  width: 20%;
+  height: auto;
+  float: left;
+  margin: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #cecece;
+  position: relative;
+}
+#sample-editor .sample-set .color-picker-container {
+  position: absolute;
+  top: 35px;
+  right: 0;
+  z-index: 100;
+}
+#sample-editor .sample-set ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+#sample-editor .sample-set ul.edit-menu {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+}
+#sample-editor .sample-set ul.edit-menu li {
+  float: left;
+}
+#sample-editor .sample-set ul.edit-menu li + li {
+  margin-left: 5px;
+}
+#sample-editor .sample-set h2 {
+  margin-top: 5px;
+}
+#sample-editor .sample-set ul.sample-list {
+  width: 100%;
+}
+#sample-editor .sample-set ul.sample-list > li {
+  height: 40px;
+  overflow: hidden;
+  width: 100%;
+  background-color: #efefef;
+  border: 1px solid #cecece;
+  padding-left: 40px;
+  position: relative;
+  box-sizing: border-box;
+}
+#sample-editor .sample-set ul.sample-list > li h4 {
+  margin: 10px 0;
+}
+#sample-editor .sample-set ul.sample-list > li i {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+#sample-editor .sample-set ul.sample-list li + li {
+  border-top: 0;
+}
+#sample-editor .sample-set:first-of-type {
+  border-top-left-radius: 10px;
+}
+#sample-editor .sample-set + .sample-set {
+  border-left-width: 0px;
+}
+#sample-editor .sample-set:nth-child(5) {
+  border-top-right-radius: 10px;
+}
+#sample-editor .sample-set:nth-child(6),
+#sample-editor .sample-set:nth-child(7),
+#sample-editor .sample-set:nth-child(8),
+#sample-editor .sample-set:nth-child(9),
+#sample-editor .sample-set:nth-child(10) {
+  border-top-width: 0px;
+}
+#sample-editor .sample-set:nth-child(6) {
+  border-left-width: 1px;
+  border-bottom-left-radius: 10px;
+}
+#sample-editor .sample-set:nth-child(10) {
+  border-bottom-right-radius: 10px;
+}
