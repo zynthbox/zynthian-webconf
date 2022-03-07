@@ -11,15 +11,15 @@ function MetaHeader(){
     const [ showSampleEditor, setShowSampleEditor ] = useState(false);
 
     let fileManagerDisplay;
-    if (showFileManager === true){
+    let fileManagerLeftCss = 0;
+    const containerElement = document.getElementsByClassName('container')[0];
+    if (containerElement && containerElement !== null){
+        console.log(containerElement);
+        console.log(window.innerWidth)
+        fileManagerLeftCss = (window.innerWidth - containerElement.offsetWidth) / 2
+    }
 
-        let fileManagerLeftCss = 0;
-        const containerElement = document.getElementsByClassName('container')[0];
-        if (containerElement && containerElement !== null){
-            console.log(containerElement);
-            console.log(window.innerWidth)
-            fileManagerLeftCss = (window.innerWidth - containerElement.offsetWidth) / 2
-        }
+    if (showFileManager === true){
 
         fileManagerDisplay = (
             <React.Fragment>
@@ -42,7 +42,7 @@ function MetaHeader(){
     if (showSampleEditor === true){
         sampleEditorDisplay = (
             <React.Fragment>
-                <div id="sample-editor-container" className="container">
+                <div id="sample-editor-container" className="container" style={{left:fileManagerLeftCss}}>
                     <a className="close-sample-editor" style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(false)}>
                         <i className="glyphicon glyphicon-remove-circle"></i>
                     </a>
@@ -58,12 +58,16 @@ function MetaHeader(){
 
     return (
         <React.Fragment>
-            <li>
-                <a className={showFileManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileManager(showFileManager === true ? false : true)}>Files</a>
-            </li>
-            <li>
-                <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Sample Editor</a>
-            </li>  {fileManagerDisplay}
+            <a href="#m" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More <span className="caret"></span></a>
+            <ul className="dropdown-menu">
+                <li>
+                    <a className={showFileManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileManager(showFileManager === true ? false : true)}>Files</a>
+                </li>
+                <li>
+                    <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Sample Editor</a>
+                </li>
+            </ul>
+            {fileManagerDisplay}
             {sampleEditorDisplay}
         </React.Fragment>
     )
