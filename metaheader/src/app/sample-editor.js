@@ -82,8 +82,16 @@ const SampleSet = (props) => {
             {colorPickerDisplay}
             <h2>{titleDisplay}</h2>
             <ul className="edit-menu">
-                <li><a className="edit-button" onClick={() => setShowEditMode(showEditMode == true ? false : true)}>Edit</a></li>
-                <li><a className="color-picker" onClick={() => setShowColorPicker(showColorPicker == true ? false : true)}>Color</a></li>
+                <li>
+                    <a className="edit-button" onClick={() => setShowEditMode(showEditMode == true ? false : true)}>
+                        <i className="glyphicon glyphicon-pencil"></i>
+                    </a>
+                </li>
+                <li>
+                    <a className="color-picker" onClick={() => setShowColorPicker(showColorPicker == true ? false : true)}>
+                        Color
+                    </a>
+                </li>
             </ul>
             <ul className="sample-list">
                 {samplesDisplay}
@@ -98,7 +106,7 @@ const Sample = (props) => {
 
     return (
         <li id={`sample-${sampleSetIndex + 1}-${index + 1}`}>
-            <i>PLAY ICON</i>
+            <i className='glyphicon glyphicon-play-circle'></i>
             <h4>{sample.title}</h4>
         </li>
     )

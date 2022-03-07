@@ -88,8 +88,10 @@
 }
 #sample-editor-container .sample-set ul.sample-list > li i {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 5px;
+  top: 5px;
+  font-size: 30px;
+  color: black;
 }
 #sample-editor-container .sample-set ul.sample-list li + li {
   border-top: 0;
