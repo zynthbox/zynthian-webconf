@@ -26,6 +26,8 @@ app.get('/', (req, res) => {
   res.send('Webconf Files Manager App Server.')
 })
 
+// **** FILE SERVER **** //
+
 /* GET FILES */
 
   const getAllFiles = function(dirPath, arrayOfFiles,index) {
@@ -289,6 +291,17 @@ app.get('/', (req, res) => {
 
 /* /DOWNLOAD FILES */
 
+// **** FILE SERVER **** //
+
+// **** SAMPLE EDITOR SERVER **** //
+
+  app.get('/tracks/:id',(req,res) => {
+    var file = fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${req.params.id}/sampleset.json`);
+    var json = JSON.parse(file);
+    console.log('file:')
+    console.log(json);
+    res.json(json)
+  })
 
 
 app.listen(port, () => {
