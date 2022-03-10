@@ -292,8 +292,10 @@ app.get('/', (req, res) => {
 
 // **** SAMPLE EDITOR SERVER **** //
 
+  const sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset`
+
   app.get('/track/:id',(req,res) => {
-    var file = fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${req.params.id}/sampleset.json`);
+    var file = fs.readFileSync(`${sampleSetFolder}sketches/my-sketches/temp/wav/samples/sampleset.${req.params.id}/sampleset.json`);
     var json = JSON.parse(file);
     res.json(json)
   })
@@ -302,7 +304,6 @@ app.get('/', (req, res) => {
 
     const trackId = req.params.id;
 
-    const sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/samples/sampleset`
 
     let sampleSetJson;
     if (!fs.existsSync(`${sampleSetFolder}.${trackId}/`)){
@@ -340,7 +341,7 @@ app.get('/', (req, res) => {
   app.get('/sample/:id',(req,res) => {
     const trackId = req.params.id.split('+++')[0];
     const samplePath = req.params.id.split('+++')[1].split('++').join('.');
-    var file = fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${trackId}/${samplePath}`, 'binary');
+    var file = fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset.${trackId}/${samplePath}`, 'binary');
     res.setHeader('Content-Disposition', 'attachment; filename='+samplePath);
     res.write(file, 'binary');
     res.end();
@@ -349,7 +350,7 @@ app.get('/', (req, res) => {
   app.post('/sample/:id',(req,res) => {
     const { trackIndex, sPath, sIndex } = req.body;
 
-    let rawdata = fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${trackIndex}/sampleset.json`);
+    let rawdata = fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset.${trackIndex}/sampleset.json`);
     let currentSampleSetJson = JSON.parse(rawdata);
 
     let sampleSetJson = [];
@@ -361,9 +362,9 @@ app.get('/', (req, res) => {
       }
     }
 
-    fs.writeFileSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${trackIndex}/sampleset.json`, JSON.stringify(sampleSetJson));
-    fs.unlinkSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${trackIndex}/${sPath}`)
-    var json = JSON.parse( fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${trackIndex}/sampleset.json`));
+    fs.writeFileSync(`${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset.${trackIndex}/sampleset.json`, JSON.stringify(sampleSetJson));
+    fs.unlinkSync(`${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset.${trackIndex}/${sPath}`)
+    var json = JSON.parse( fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset.${trackIndex}/sampleset.json`));
     res.json(json)
   })
 

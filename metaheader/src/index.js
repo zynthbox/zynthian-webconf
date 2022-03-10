@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import FileManager from './app/file-manager';
 import SampleEditor from './app/sample-editor'
@@ -9,6 +9,18 @@ function MetaHeader(){
 
     const [ showFileManager, setShowFileManager ] = useState(false)
     const [ showSampleEditor, setShowSampleEditor ] = useState(false);
+
+    useEffect(() => {
+        if (showFileManager === true){
+            setShowSampleEditor(false)
+        }
+    },[showFileManager])
+
+    useEffect(() => {
+        if (showSampleEditor === true){
+            setShowFileManager(false)
+        }
+    },[showSampleEditor])
 
     let fileManagerDisplay;
     let fileManagerLeftCss = 0;
