@@ -222,7 +222,6 @@ app.get('/', (req, res) => {
   var upload = multer({ storage: storage }).fields([{name:'file',maxCount:100}])
 
   app.post('/upload/:folder', (req, res) => {
-
     upload(req, res, function (err) {
       console.log(err);
       if (err instanceof multer.MulterError) {
@@ -231,9 +230,7 @@ app.get('/', (req, res) => {
           return res.status(500).json(err)
       }
       const dirList = getAllFiles(rootFolder,[])
-      
       return res.status(200).json(dirList)
-
     })
   });
 
@@ -295,15 +292,83 @@ app.get('/', (req, res) => {
 
 // **** SAMPLE EDITOR SERVER **** //
 
-  app.get('/tracks/:id',(req,res) => {
+  app.get('/track/:id',(req,res) => {
     var file = fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${req.params.id}/sampleset.json`);
     var json = JSON.parse(file);
-    console.log('file:')
-    console.log(json);
     res.json(json)
   })
 
+  app.post('/track/:id',(req,res) => {
 
-app.listen(port, () => {
-  console.log(`webconf metaheader file-browser app-server listening on port ${port}`)
-})
+    const trackId = req.params.id;
+
+    const sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/samples/sampleset`
+
+    let sampleSetJson;
+    if (!fs.existsSync(`${sampleSetFolder}.${trackId}/`)){
+      fs.mkdirSync(`${sampleSetFolder}.${trackId}/`)
+      sampleSetJson = []
+      for (var i = 0; i < 5; ++i){
+        if (i === req.body.sIndex){
+          sampleSetJson[i] = {
+            path:req.body.sPath
+          }
+        } else {
+          sampleSetJson[i] = null;
+        }
+      }  
+    } else {
+      let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackId}/sampleset.json`);
+      currentSampleSetJson = JSON.parse(rawdata);
+      sampleSetJson = []
+      for (var i = 0; i < 5; ++i){
+        if (i === req.body.sIndex){
+          sampleSetJson[i] = {
+            path:req.body.sPath
+          }
+        } else {
+          sampleSetJson[i] = currentSampleSetJson[i];
+        }
+      }
+    }
+
+    fs.writeFileSync(`${sampleSetFolder}.${trackId}/sampleset.json`, JSON.stringify(sampleSetJson));
+    var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackId}/sampleset.json`));
+    res.status(200).json(json)
+  })
+
+  app.get('/sample/:id',(req,res) => {
+    const trackId = req.params.id.split('+++')[0];
+    const samplePath = req.params.id.split('+++')[1].split('++').join('.');
+    var file = fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${trackId}/${samplePath}`, 'binary');
+    res.setHeader('Content-Disposition', 'attachment; filename='+samplePath);
+    res.write(file, 'binary');
+    res.end();
+  })
+
+  app.post('/sample/:id',(req,res) => {
+    const { trackIndex, sPath, sIndex } = req.body;
+
+    let rawdata = fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${trackIndex}/sampleset.json`);
+    let currentSampleSetJson = JSON.parse(rawdata);
+
+    let sampleSetJson = [];
+    for (var i = 0; i < 5; ++i){
+      if (i === sIndex){
+        sampleSetJson[i] = null
+      } else {
+        sampleSetJson[i] = currentSampleSetJson[i];
+      }
+    }
+
+    fs.writeFileSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${trackIndex}/sampleset.json`, JSON.stringify(sampleSetJson));
+    fs.unlinkSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${trackIndex}/${sPath}`)
+    var json = JSON.parse( fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/samples/sampleset.${trackIndex}/sampleset.json`));
+    res.json(json)
+  })
+
+// ***** /SAMPLE EDITOR SERVER ****** //
+
+  app.listen(port, () => {
+    console.log(`webconf metaheader file-browser app-server listening on port ${port}`)
+  })

@@ -1,21 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Dropzone from 'react-dropzone'
 import { SketchPicker } from 'react-color';
+import axios from 'axios';
 
 const SampleEditor = () => {
-
-    const tracksArray = [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-    ]
 
     const colorsArray = [
         "#B23730",
@@ -29,8 +17,6 @@ const SampleEditor = () => {
         "#65E679",
         "#9A7136",
     ]
-
-    const [ tracks, setTracks ] = useState(tracksArray)
 
     const sampleSetsDisplay = colorsArray.map((c,index) => (
         <Track 
@@ -57,7 +43,7 @@ const Track = (props) => {
 
     const [ title, setTitle ] = useState(`Track ${index + 1}`);
     const [ color, setColor ] = useState(props.color)
-
+    const [ trackExists, setTrackExists ] = useState(false)
     const [ samples, setSamples ] = useState(samplesArray)
     const [ showEditMode, setShowEditMode ] = useState(false);
     const [ showColorPicker, setShowColorPicker ] = useState(false);
@@ -73,14 +59,18 @@ const Track = (props) => {
     },[])
 
     async function getTrackSampleSet(){
-        const response = await fetch(`http://${window.location.hostname}:3000/tracks/${index+1}`, {
+        const response = await fetch(`http://${window.location.hostname}:3000/track/${index+1}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
         const res = await response.json();
-        setSamples(res);
+        if (res){
+            console.log(res,"res")
+            setSamples(res);
+            setTrackExists(true)
+        }
     }
 
     function addSample(file){
@@ -90,13 +80,52 @@ const Track = (props) => {
         setSamples(newSamples)
     }
 
-    function removeSample(index){
-        const newSamples = [ ...samples.slice(0,index), null, ...samples.slice(index + 1, samples.length)]
-        setSamples(newSamples)
+    async function onUploadSample(sample,sIndex){
+        const sPath = sample.name;
+        const response = await fetch(`http://${window.location.hostname}:3000/track/${(index+1)}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({sIndex,sPath})
+        });
+        const res = await response.json()
+        uploadSample(sample)
+    }
+
+    const uploadSample = async (sample) => {
+        const formData = new FormData();
+        formData.append('file', sample); // appending file
+        const selectedFolder = `/zynthian-my-data/sketches/my-sketches/temp/samples/sampleset.${index+1}/`
+        console.log(selectedFolder,"selected folder")
+        axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`, formData ).then(res => { // then print response status
+          console.log(res)
+        });
+    };
+
+    async function removeSample(sample,sIndex,fetchSamples){
+
+        const trackIndex = index + 1;
+        const sPath = sample.path;
+        
+        const response = await fetch(`http://${window.location.hostname}:3000/sample/${(trackIndex)}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({trackIndex,sPath,sIndex})
+        });
+        const res = await response.json()
+        console.log(res)
+        setSamples(res);
     }
 
     function removeAllSamples(){
-        setSamples(samplesArray)
+        samples.forEach(function(sample,index){
+            let fetchSamples = false;
+            if (index === sample.length - 1) fetchSamples = true;
+            removeSample(sample,index,fetchSamples)
+        });
     }
 
     const handleColorPickerChange = (color) => {
@@ -122,7 +151,6 @@ const Track = (props) => {
             addSample(file);
             // const reader = new FileReader();
         })
-
     }
 
     function onDropSampleSet(acceptedFiles){
@@ -166,6 +194,8 @@ const Track = (props) => {
             sample={samples[i]} 
             trackIndex={index} 
             removeSample={removeSample}
+            addSample={addSample}
+            uploadSample={onUploadSample}
         />
     ))
 
@@ -173,7 +203,7 @@ const Track = (props) => {
     if (showSampleSetDropZone === true){
         sampleSetUploadDisplay = (
             <div className="sample-set-upload-container">
-                <div className={"dropzone-container " + dragZoneContainerCssClass}>
+                <div className={"dropzone-container"}>
                     <Dropzone onDrop={acceptedFiles => onDropSampleSet(acceptedFiles)}>
                         {({getRootProps, getInputProps}) => (
                             <section>
@@ -227,7 +257,7 @@ const Track = (props) => {
             </div>
             <ul className="sample-set-actions">
                 <li><a onClick={() => removeAllSamples()}><i style={{marginTop:"1px"}} className="glyphicon glyphicon-trash"></i></a></li>
-                <li><a onClick={() => setShowSampleSetDropZone(showSampleSetDropZone === true ? false : true)}><i className="glyphicon glyphicon-plus"></i> Upload Sampleset</a></li>
+                <li><a onClick={() => setShowSampleSetDropZone(showSampleSetDropZone === true ? false : true)}><i className="glyphicon glyphicon-plus"></i></a></li>
             </ul>
 
             {sampleSetUploadDisplay}
@@ -238,26 +268,47 @@ const Track = (props) => {
 
 const Sample = (props) => {
 
-    const { index, sample, trackIndex, removeSample } = props
+    const { index, sample, trackIndex, removeSample, addSample, uploadSample } = props
 
     const [ data, setData ] = useState(null);
     const [ isPlaying, setIsPlaying ] = useState(false);
 
     // if (data !== null) console.log(data,"data")
-
+    
     useEffect(() => {
-        readSampleData()
+        if (sample){
+            if (sample.name){
+                readSampleData(sample)
+                console.log('will upload sample')
+                uploadSample(sample,index)
+            } else if (sample.path){
+                getSampleFile()
+            }
+        }
     },[sample])
 
-    function readSampleData(){
-        if (sample){
-            console.log(sample,"sample")
-            const reader = new FileReader();
-            reader.addEventListener('load',function(){
-                setData(reader.result)
-            },false)
-            reader.readAsDataURL(sample)
-        }
+    function readSampleData(file){
+        // console.log(sample,"sample")
+        const reader = new FileReader();
+        reader.addEventListener('load',function(){
+            let result = reader.result;
+            if (reader.result.indexOf('data:application/octet-stream;') > -1){
+                result = reader.result.split(':application/octet-stream;').join(':audio/wav;')
+            }
+            setData(result)
+        },false)
+        reader.readAsDataURL(file)
+    }
+
+    async function getSampleFile(){
+        const response = await fetch(`http://${window.location.hostname}:3000/sample/${(trackIndex+1) + "+++" + sample.path.split('.').join('++')}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const res = await response.blob();
+        readSampleData(res);
     }
 
     function playSample(){
@@ -268,11 +319,6 @@ const Sample = (props) => {
     function pauseSample(){
         setIsPlaying(false);
         document.getElementById(`sample-${trackIndex + 1}-${index + 1}-audio-player`).pause();
-
-    }
-
-    function onAddSampleClick(){
-        console.log('add sample')
     }
     
     let sampleControlDisplay, sampleActionsDisplay;
@@ -280,7 +326,7 @@ const Sample = (props) => {
         if (isPlaying === true){
             sampleControlDisplay = (
                 <a className='play-sample-button' onClick={pauseSample}>
-                    <i className='glyphicon glyphicon-pause-circle'></i>
+                    <i className='glyphicon glyphicon-pause'></i>
                 </a>
             )
         } else {
@@ -292,14 +338,17 @@ const Sample = (props) => {
         }
 
         sampleActionsDisplay = (
-            <a className="edit-sample-button" onClick={() => removeSample(index)}>
+            <a className="edit-sample-button" onClick={() => removeSample(sample,index,true)}>
                 <i className="glyphicon glyphicon-trash"></i> 
             </a>
         )
     
     } else {
         sampleActionsDisplay = (
-            <a className="edit-sample-button" onClick={() => onAddSampleClick()}>
+            <a className="edit-sample-button">
+                <input type="file" 
+                    onChange={(e) => addSample(e.target.files[0],index)}
+                />
                 <i className="glyphicon glyphicon-plus"></i> 
             </a>            
         )
@@ -307,9 +356,9 @@ const Sample = (props) => {
 
     let samplePath;
     if (sample){
-        samplePath = sample.path
-        if (sample.path.split('.')[0].length > 16){
-            samplePath = sample.path.substring(0,17) + '...wav'
+        samplePath = sample.path ? sample.path : sample.name
+        if (samplePath.split('.')[0].length > 16){
+            samplePath = samplePath.substring(0,17) + '...wav'
         }
     }
 
@@ -318,7 +367,6 @@ const Sample = (props) => {
 
             <audio
                 id={`sample-${trackIndex + 1}-${index + 1}-audio-player`}
-                controls
                 src={data}>
             </audio>
 
