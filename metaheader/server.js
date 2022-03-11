@@ -295,7 +295,7 @@ app.get('/', (req, res) => {
   const sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset`
 
   app.get('/track/:id',(req,res) => {
-    var file = fs.readFileSync(`${sampleSetFolder}sketches/my-sketches/temp/wav/samples/sampleset.${req.params.id}/sampleset.json`);
+    var file = fs.readFileSync(`${sampleSetFolder}.${req.params.id}/sampleset.json`);
     var json = JSON.parse(file);
     res.json(json)
   })
