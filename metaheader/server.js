@@ -295,7 +295,8 @@ app.get('/', (req, res) => {
   const sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset`
 
   app.get('/track/:id',(req,res) => {
-    var file = fs.readFileSync(`${sampleSetFolder}sketches/my-sketches/temp/wav/samples/sampleset.${req.params.id}/sampleset.json`);
+    var file = fs.readFileSync(`${sampleSetFolder}.${req.params.id}/sampleset.json`);
+    console.log(file);
     var json = JSON.parse(file);
     res.json(json)
   })
@@ -341,7 +342,7 @@ app.get('/', (req, res) => {
   app.get('/sample/:id',(req,res) => {
     const trackId = req.params.id.split('+++')[0];
     const samplePath = req.params.id.split('+++')[1].split('++').join('.');
-    var file = fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset.${trackId}/${samplePath}`, 'binary');
+    var file = fs.readFileSync(`${sampleSetFolder}.${trackId}/${samplePath}`, 'binary');
     res.setHeader('Content-Disposition', 'attachment; filename='+samplePath);
     res.write(file, 'binary');
     res.end();
