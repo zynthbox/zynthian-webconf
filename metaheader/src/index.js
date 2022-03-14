@@ -36,9 +36,6 @@ function MetaHeader(){
         fileManagerDisplay = (
             <React.Fragment>
                 <div id="file-manager" className="container" style={{left:fileManagerLeftCss}}>
-                    <a className="close-file-manager" style={{cursor:"pointer"}} onClick={() => setShowFileManager(false)}>
-                        <i className="glyphicon glyphicon-remove-circle"></i>
-                    </a>
                     <h3>
                         <i className="glyphicon glyphicon-file"></i>
                         FILES
@@ -55,9 +52,6 @@ function MetaHeader(){
         sampleEditorDisplay = (
             <React.Fragment>
                 <div id="sample-editor-container" className="container" style={{left:fileManagerLeftCss}}>
-                    <a className="close-sample-editor" style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(false)}>
-                        <i className="glyphicon glyphicon-remove-circle"></i>
-                    </a>
                     <h3>
                         SAMPLE EDITOR
                     </h3>
