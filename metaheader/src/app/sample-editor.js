@@ -5,6 +5,7 @@ import axios from 'axios';
 import { AiOutlineBgColors } from 'react-icons/ai'
 import { ImTextColor } from 'react-icons/im'
 import { MdEditNote } from 'react-icons/md'
+import { BiUndo } from 'react-icons/bi'
 
 
 const SampleEditor = () => {
@@ -60,13 +61,16 @@ const SampleEditor = () => {
         "#9A7136",
     ]
 
-    const sampleSetsDisplay = colorsArray.map((c,index) => (
-        <Track 
-            key={index} 
-            index={index} 
-            color={c}
-        />
-    ))
+    let tracksDisplay;
+    if (currentSketch !== null){
+        tracksDisplay = currentSketch.tracks.map((c,index) => (
+            <Track 
+                key={index} 
+                index={index} 
+                color={colorsArray[index]}
+            />
+        ))
+    }
 
     return (
         <React.Fragment>
@@ -79,7 +83,7 @@ const SampleEditor = () => {
                 </ul>
             </div>
             <div id="sample-editor">
-                {sampleSetsDisplay}
+                {tracksDisplay}
             </div>
         </React.Fragment>
     )
@@ -91,9 +95,9 @@ const Track = (props) => {
         null,null,null,null,null
     ]
 
-    const { index } = props;
+    const { index, track } = props;
 
-    const [ title, setTitle ] = useState(`Track ${index + 1}`);
+    const [ title, setTitle ] = useState(track && track.name !== null ? track.name : `Track ${index + 1}`);
     const [ color, setColor ] = useState(props.color)
     const [ trackExists, setTrackExists ] = useState(false)
     const [ samples, setSamples ] = useState(samplesArray)
@@ -335,23 +339,25 @@ const TrackTitle = (props) => {
         if (e.keyCode === 13){
             setPreviousTitle(title)
             setShowEditMode(false)
-        } else if (e.keyCode === 27){
-
-            evt = evt || window.event;
-            var isEscape = false;
-            if ("key" in evt) {
-                isEscape = (evt.key === "Escape" || evt.key === "Esc");
-            } else {
-                isEscape = (evt.keyCode === 27);
-            }
-            if (isEscape) {
-                alert("Escape");
-                
-                setTitle(previousTitle)
-                setShowEditMode(false)
-            }
-
         }
+
+        evt = evt || window.event;
+        var isEscape = false;
+        if ("key" in evt) {
+            isEscape = (evt.key === "Escape" || evt.key === "Esc");
+        } else {
+            isEscape = (evt.keyCode === 27);
+        }
+        if (isEscape) {
+            undoTitleChanges()
+        }
+
+    }
+
+    function undoTitleChanges(){
+        
+        setTitle(previousTitle)
+        setShowEditMode(false)
     }
 
     const ref = useRef();
@@ -362,7 +368,12 @@ const TrackTitle = (props) => {
     let titleDisplay;
     if (showEditMode === true){
         titleDisplay = (
-            <input type="text" value={title} onChange={e => setTitle(e.target.value)}/>
+            <div className='input-wrapper'>
+                <input type="text" value={title} onChange={e => setTitle(e.target.value)}/>
+                <a className='undo-title-change' onClick={undoTitleChanges}>
+                    <BiUndo/>
+                </a>
+            </div>
         )
     } else {
         titleDisplay = <h2>{title}</h2>;

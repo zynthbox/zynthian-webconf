@@ -95,6 +95,14 @@
 #sample-editor-container .sample-set .sample-set-title h2 {
   margin: 0;
 }
+#sample-editor-container .sample-set .sample-set-title .input-wrapper {
+  position: relative;
+}
+#sample-editor-container .sample-set .sample-set-title .input-wrapper a.undo-title-change {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
 #sample-editor-container .sample-set .sample-set-title input {
   margin-top: 5px;
   height: 21px;
