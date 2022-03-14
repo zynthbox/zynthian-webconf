@@ -15,6 +15,38 @@
   margin-left: -8px;
   padding: 0;
   z-index: 2;
+  user-select: none;
+}
+#sample-editor-container .sample-editor-menu {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-width: 0 1px;
+  padding: 10px 7px;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: auto;
+  float: left;
+  font-size: 13px;
+}
+#sample-editor-container .sample-editor-menu ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+#sample-editor-container .sample-editor-menu ul li {
+  float: left;
+  width: auto;
+}
+#sample-editor-container .sample-editor-menu ul li a {
+  padding: 6px;
+  cursor: pointer;
+  background-color: black !important;
+  color: white;
+  border-radius: 4px;
+  display: block;
+  padding-left: 6px !important;
+}
+#sample-editor-container .sample-editor-menu ul li + li {
+  margin-left: 10px;
 }
 #sample-editor-container #sample-editor {
   width: 100%;
@@ -57,7 +89,8 @@
 }
 #sample-editor-container .sample-set .sample-set-title {
   padding: 15px 0 25px;
-  height: 35px;
+  height: 70px;
+  box-sizing: border-box;
 }
 #sample-editor-container .sample-set .sample-set-title h2 {
   margin: 0;

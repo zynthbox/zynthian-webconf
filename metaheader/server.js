@@ -288,11 +288,25 @@ app.get('/', (req, res) => {
 
 /* /DOWNLOAD FILES */
 
-// **** FILE SERVER **** //
+// **** /FILE SERVER **** //
 
 // **** SAMPLE EDITOR SERVER **** //
 
   const sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset`
+
+  app.get('/sketchinfo/',(req,res) => {
+    var file = fs.readFileSync(`${rootFolder}sessions/.cache.json`);
+    var json = JSON.parse(file);
+    res.json(json)
+  })
+
+  app.get('/sketch/:path',(req,res) => {
+    let sketchPath = req.params.path.split('+++').join('/');
+    sketchPath = sketchPath.split('zynthian-my-data/')[1];
+    var file = fs.readFileSync(`${rootFolder}${sketchPath}`);
+    var json = JSON.parse(file);
+    res.json(json)
+  })
 
   app.get('/track/:id',(req,res) => {
     var file = fs.readFileSync(`${sampleSetFolder}.${req.params.id}/sampleset.json`);
@@ -350,7 +364,7 @@ app.get('/', (req, res) => {
   app.post('/sample/:id',(req,res) => {
     const { trackIndex, sPath, sIndex } = req.body;
 
-    let rawdata = fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset.${trackIndex}/sampleset.json`);
+    let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackIndex}/sampleset.json`);
     let currentSampleSetJson = JSON.parse(rawdata);
 
     let sampleSetJson = [];
@@ -362,9 +376,9 @@ app.get('/', (req, res) => {
       }
     }
 
-    fs.writeFileSync(`${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset.${trackIndex}/sampleset.json`, JSON.stringify(sampleSetJson));
-    fs.unlinkSync(`${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset.${trackIndex}/${sPath}`)
-    var json = JSON.parse( fs.readFileSync(`${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset.${trackIndex}/sampleset.json`));
+    fs.writeFileSync(`${sampleSetFolder}.${trackIndex}/sampleset.json`, JSON.stringify(sampleSetJson));
+    fs.unlinkSync(`${sampleSetFolder}.${trackIndex}/${sPath}`)
+    var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackIndex}/sampleset.json`));
     res.json(json)
   })
 

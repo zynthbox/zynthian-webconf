@@ -9,21 +9,42 @@ import { MdEditNote } from 'react-icons/md'
 
 const SampleEditor = () => {
 
+    const [ sketchInfo, setSketchInfo ] = useState(null)
     const [ currentSketch, setCurrentSketch ] = useState(null)
 
     useEffect(() => {
-        getCurrentSelectedSketch()
+        getSketchInfo()
     },[])
 
-    async function getCurrentSelectedSketch(){
-        const response = await fetch(`http://${window.location.hostname}:3000/sketch/`, {
+    useEffect(() => {
+        getCurrentSelectedSketch()
+    },[sketchInfo])
+
+    async function getSketchInfo(){
+        console.log('GET SKETCH INFO')
+        const response = await fetch(`http://${window.location.hostname}:3000/sketchinfo/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
         const res = await response.json();
-        console.log(res)
+        console.log(res);
+        setSketchInfo(res)
+    }
+
+    async function getCurrentSelectedSketch(){
+        console.log('GET CURRENT SELECTED SKETCH')
+        const path = sketchInfo.lastSelectedSketch
+        const response = await fetch(`http://${window.location.hostname}:3000/sketch/${path.split('/').join('+++')}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        const res = await response.json();
+        console.log(res);
+        setCurrentSketch(res)        
     }
 
     const colorsArray = [
@@ -98,7 +119,7 @@ const Track = (props) => {
         });
         const res = await response.json();
         if (res){
-            console.log(res,"res")
+            // console.log(res,"res")
             setSamples(res);
             setTrackExists(true)
         }
@@ -128,9 +149,9 @@ const Track = (props) => {
         const formData = new FormData();
         formData.append('file', sample); // appending file
         const selectedFolder = `/zynthian-my-data/sketches/my-sketches/temp/wav/samples/sampleset.${index+1}/`
-        console.log(selectedFolder,"selected folder")
+        // console.log(selectedFolder,"selected folder")
         axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`, formData ).then(res => { // then print response status
-          console.log(res)
+        //   console.log(res)
         });
     };
 
@@ -147,7 +168,7 @@ const Track = (props) => {
             body:JSON.stringify({trackIndex,sPath,sIndex})
         });
         const res = await response.json()
-        console.log(res)
+        // console.log(res)
         setSamples(res);
     }
 
@@ -299,10 +320,43 @@ const TrackTitle = (props) => {
 
     const [ previousTitle, setPreviousTitle ] = useState(title)
 
+    useEffect(() => {
+        console.log('on show edit mode change - ' + showEditMode)
+        if (showEditMode === true){
+            setPreviousTitle(title)
+            window.addEventListener('keypress',onKeyPress)
+        } else if (showEditMode === false){
+            window.removeEventListener('keypress',onKeyPress)
+        }
+    },[showEditMode])
+
+    function onKeyPress(e){
+        console.log(e.keyCode)
+        if (e.keyCode === 13){
+            setPreviousTitle(title)
+            setShowEditMode(false)
+        } else if (e.keyCode === 27){
+
+            evt = evt || window.event;
+            var isEscape = false;
+            if ("key" in evt) {
+                isEscape = (evt.key === "Escape" || evt.key === "Esc");
+            } else {
+                isEscape = (evt.keyCode === 27);
+            }
+            if (isEscape) {
+                alert("Escape");
+                
+                setTitle(previousTitle)
+                setShowEditMode(false)
+            }
+
+        }
+    }
+
     const ref = useRef();
     useOnClickOutside(ref, e => {
         if (e.target.className !== "edit-button")  setShowEditMode(false)
-
     });
 
     let titleDisplay;
@@ -336,7 +390,7 @@ const Sample = (props) => {
         if (sample){
             if (sample.name){
                 readSampleData(sample)
-                console.log('will upload sample')
+                // console.log('will upload sample')
                 uploadSample(sample,index)
             } else if (sample.path){
                 getSampleFile()

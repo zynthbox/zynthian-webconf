@@ -16,6 +16,44 @@
     margin-left: -8px;
     padding: 0;
     z-index: 2;
+    user-select: none;
+
+    .sample-editor-menu {
+        width: 100%;
+        border: 1px solid #ccc;
+        border-width: 0 1px;
+        padding: 10px 7px;
+        background-color: rgba(0, 0, 0, 0.5);
+        height: auto;
+        float: left;
+        font-size: 13px;
+
+        ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+
+            li {
+                float: left;
+                width: auto;
+
+                a {
+                    padding: 6px;
+                    cursor: pointer;
+                    background-color: black !important;
+                    color: white;
+                    border-radius: 4px;
+                    display: block;
+                    padding-left: 6px !important;
+                
+                }
+            }
+
+            li + li {
+                margin-left: 10px;
+            }
+        }
+    }
 
     #sample-editor {
         width: 100%;
@@ -61,7 +99,9 @@
 
         .sample-set-title {
             padding: 15px 0 25px;
-            height: 35px;
+            height: 70px;
+            box-sizing: border-box;
+
             h2 {
                 margin: 0;
             }
