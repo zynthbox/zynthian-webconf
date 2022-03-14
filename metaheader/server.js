@@ -292,7 +292,7 @@ app.get('/', (req, res) => {
 
 // **** SAMPLE EDITOR SERVER **** //
 
-  const sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/wav/samples/sampleset`
+  const sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/wav/sampleset/bank`
 
   app.get('/sketchinfo/',(req,res) => {
     var file = fs.readFileSync(`${rootFolder}sessions/.cache.json`);
@@ -309,7 +309,7 @@ app.get('/', (req, res) => {
   })
 
   app.get('/track/:id',(req,res) => {
-    var file = fs.readFileSync(`${sampleSetFolder}.${req.params.id}/sampleset.json`);
+    var file = fs.readFileSync(`${sampleSetFolder}.${req.params.id}/bank.json`);
     var json = JSON.parse(file);
     res.json(json)
   })
@@ -333,7 +333,7 @@ app.get('/', (req, res) => {
         }
       }  
     } else {
-      let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackId}/sampleset.json`);
+      let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackId}/bank.json`);
       currentSampleSetJson = JSON.parse(rawdata);
       sampleSetJson = []
       for (var i = 0; i < 5; ++i){
@@ -347,8 +347,10 @@ app.get('/', (req, res) => {
       }
     }
 
-    fs.writeFileSync(`${sampleSetFolder}.${trackId}/sampleset.json`, JSON.stringify(sampleSetJson));
-    var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackId}/sampleset.json`));
+    console.log(sampleSetJson)
+
+    fs.writeFileSync(`${sampleSetFolder}.${trackId}/bank.json`, JSON.stringify(sampleSetJson));
+    var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackId}/bank.json`));
     res.status(200).json(json)
   })
 
@@ -364,7 +366,7 @@ app.get('/', (req, res) => {
   app.post('/sample/:id',(req,res) => {
     const { trackIndex, sPath, sIndex } = req.body;
 
-    let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackIndex}/sampleset.json`);
+    let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackIndex}/bank.json`);
     let currentSampleSetJson = JSON.parse(rawdata);
 
     let sampleSetJson = [];
@@ -376,9 +378,9 @@ app.get('/', (req, res) => {
       }
     }
 
-    fs.writeFileSync(`${sampleSetFolder}.${trackIndex}/sampleset.json`, JSON.stringify(sampleSetJson));
+    fs.writeFileSync(`${sampleSetFolder}.${trackIndex}/bank.json`, JSON.stringify(sampleSetJson));
     fs.unlinkSync(`${sampleSetFolder}.${trackIndex}/${sPath}`)
-    var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackIndex}/sampleset.json`));
+    var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackIndex}/bank.json`));
     res.json(json)
   })
 

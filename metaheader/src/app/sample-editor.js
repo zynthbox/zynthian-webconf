@@ -115,6 +115,7 @@ const Track = (props) => {
     },[])
 
     async function getTrackSampleSet(){
+        console.log('get track smapleset')
         const response = await fetch(`http://${window.location.hostname}:3000/track/${index+1}`, {
             method: 'GET',
             headers: {
@@ -123,7 +124,7 @@ const Track = (props) => {
         });
         const res = await response.json();
         if (res){
-            // console.log(res,"res")
+            console.log(res,"res")
             setSamples(res);
             setTrackExists(true)
         }
@@ -152,7 +153,7 @@ const Track = (props) => {
     const uploadSample = async (sample) => {
         const formData = new FormData();
         formData.append('file', sample); // appending file
-        const selectedFolder = `/zynthian-my-data/sketches/my-sketches/temp/wav/samples/sampleset.${index+1}/`
+        const selectedFolder = `/zynthian-my-data/sketches/my-sketches/temp/wav/samples/sampleset/bank.${index+1}/`
         // console.log(selectedFolder,"selected folder")
         axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`, formData ).then(res => { // then print response status
         //   console.log(res)
