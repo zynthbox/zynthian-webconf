@@ -60,14 +60,15 @@
         position: relative;
 
         .sample-set-title {
-            padding: 10px 0 15px;
-            height: 60px;
+            padding: 15px 0 25px;
+            height: 35px;
             h2 {
                 margin: 0;
             }
             input {
                 margin-top: 5px;
                 height: 21px;
+                width: 100%;
             }
         }
 
@@ -101,6 +102,19 @@
                 a {
                     padding-left: 0px !important;
                     cursor: pointer;
+               
+                    &.edit-button {
+                        z-index: 99;
+                        position: relative;
+                        > span.edit-button {
+                            position: absolute;
+                            z-index: 100;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
                 }
             }
 

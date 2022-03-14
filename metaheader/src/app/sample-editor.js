@@ -2,8 +2,29 @@ import React, { useState, useEffect, useRef } from 'react'
 import Dropzone from 'react-dropzone'
 import { SketchPicker } from 'react-color';
 import axios from 'axios';
+import { AiOutlineBgColors } from 'react-icons/ai'
+import { ImTextColor } from 'react-icons/im'
+import { MdEditNote } from 'react-icons/md'
+
 
 const SampleEditor = () => {
+
+    const [ currentSketch, setCurrentSketch ] = useState(null)
+
+    useEffect(() => {
+        getCurrentSelectedSketch()
+    },[])
+
+    async function getCurrentSelectedSketch(){
+        const response = await fetch(`http://${window.location.hostname}:3000/sketch/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const res = await response.json();
+        console.log(res)
+    }
 
     const colorsArray = [
         "#B23730",
@@ -27,9 +48,19 @@ const SampleEditor = () => {
     ))
 
     return (
-        <div id="sample-editor">
-            {sampleSetsDisplay}
-        </div>
+        <React.Fragment>
+            <div className='sample-editor-menu'>
+                <ul>
+                    <li><a>New</a></li>
+                    <li><a>Load</a></li>
+                    <li><a>Save</a></li>
+                    <li><a>Save As...</a></li>
+                </ul>
+            </div>
+            <div id="sample-editor">
+                {sampleSetsDisplay}
+            </div>
+        </React.Fragment>
     )
 }
 
@@ -166,19 +197,10 @@ const Track = (props) => {
         setShowSampleSetDropZone(false)
     }
 
-    let titleDisplay;
-    if (showEditMode === true){
-        titleDisplay = (
-            <input type="text" value={title} onChange={e => setTitle(e.target.value)}/>
-        )
-    } else {
-        titleDisplay = <h2>{title}</h2>;
-    }
-
     let colorPickerDisplay;
     if (showColorPicker === true){
         colorPickerDisplay = (
-            <div ref={ref} className="color-picker-container">
+            <div className="color-picker-container">
                 <SketchPicker 
                     color={color}
                     onChange={ handleColorPickerChange }
@@ -221,23 +243,28 @@ const Track = (props) => {
 
     return (
         <div className="sample-set" style={{backgroundColor:color}}>
-            {colorPickerDisplay}
-            <div className="sample-set-title">
-                {titleDisplay}
+            <div ref={ref} className="edit-menu-container">
+                <ul className="edit-menu">
+                    <li>
+                        <a className="edit-button" onClick={() => setShowEditMode(showEditMode == true ? false : true)}>
+                            <MdEditNote />
+                            <span className="edit-button" ></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a className="color-picker" onClick={() => setShowColorPicker(showColorPicker == true ? false : true)}>
+                            <AiOutlineBgColors/>
+                        </a>
+                    </li>
+                </ul>
+                {colorPickerDisplay}
             </div>
-            <ul className="edit-menu">
-                <li>
-                    <a className="edit-button" onClick={() => setShowEditMode(showEditMode == true ? false : true)}>
-                        <i className="glyphicon glyphicon-pencil"></i>
-                    </a>
-                </li>
-                <li>|</li>
-                <li>
-                    <a className="color-picker" onClick={() => setShowColorPicker(showColorPicker == true ? false : true)}>
-                        Color
-                    </a>
-                </li>
-            </ul>
+            <TrackTitle 
+                showEditMode={showEditMode}
+                title={title}
+                setTitle={setTitle}
+                setShowEditMode={setShowEditMode}
+            />
             <div className={"sample-list-container"}  onDragOver={onSampleListDragOver} onDragLeave={onSampleListDragExit}>
                 <div className={"dropzone-container " + dragZoneContainerCssClass}>
                     <Dropzone onDrop={acceptedFiles => onDropSamples(acceptedFiles)}>
@@ -257,11 +284,41 @@ const Track = (props) => {
             </div>
             <ul className="sample-set-actions">
                 <li><a onClick={() => removeAllSamples()}><i style={{marginTop:"1px"}} className="glyphicon glyphicon-trash"></i></a></li>
-                <li><a onClick={() => setShowSampleSetDropZone(showSampleSetDropZone === true ? false : true)}><i className="glyphicon glyphicon-plus"></i></a></li>
+                <li style={{float:"right"}}><a onClick={() => setShowSampleSetDropZone(showSampleSetDropZone === true ? false : true)}><i className="glyphicon glyphicon-plus"></i></a></li>
             </ul>
 
             {sampleSetUploadDisplay}
 
+        </div>
+    )
+}
+
+const TrackTitle = (props) => {
+
+    const { showEditMode, setShowEditMode, title, setTitle } = props;
+
+    const [ previousTitle, setPreviousTitle ] = useState(title)
+
+    const ref = useRef();
+    useOnClickOutside(ref, e => {
+        if (e.target.className !== "edit-button")  setShowEditMode(false)
+
+    });
+
+    let titleDisplay;
+    if (showEditMode === true){
+        titleDisplay = (
+            <input type="text" value={title} onChange={e => setTitle(e.target.value)}/>
+        )
+    } else {
+        titleDisplay = <h2>{title}</h2>;
+    }
+
+    return (
+        <div className="sample-set-title">
+            <div ref={ref} className='title-wrapper'>
+                {titleDisplay}
+            </div>
         </div>
     )
 }

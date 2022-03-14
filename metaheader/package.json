@@ -49,6 +49,7 @@
     "react-device-detect": "^2.1.2",
     "react-dom": "17.0.2",
     "react-file-system": "^1.0.4",
+    "react-icons": "^4.3.1",
     "react-treebeard": "^3.2.4",
     "webpack": "^4.46.0",
     "zip-dir": "^2.0.0",

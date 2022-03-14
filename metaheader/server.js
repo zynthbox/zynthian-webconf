@@ -296,7 +296,6 @@ app.get('/', (req, res) => {
 
   app.get('/track/:id',(req,res) => {
     var file = fs.readFileSync(`${sampleSetFolder}.${req.params.id}/sampleset.json`);
-    console.log(file);
     var json = JSON.parse(file);
     res.json(json)
   })
