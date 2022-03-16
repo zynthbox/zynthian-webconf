@@ -9,16 +9,19 @@ function MetaHeader(){
 
     const [ showFileManager, setShowFileManager ] = useState(false)
     const [ showSampleEditor, setShowSampleEditor ] = useState(false);
+    const [ showFavorites, setShowFavorites ] = useState(false)
 
     useEffect(() => {
         if (showFileManager === true){
             setShowSampleEditor(false)
+            setShowFavorites(false)
         }
     },[showFileManager])
 
     useEffect(() => {
         if (showSampleEditor === true){
             setShowFileManager(false)
+            setShowFavorites(false)
         }
     },[showSampleEditor])
 

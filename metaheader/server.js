@@ -222,6 +222,8 @@ app.get('/', (req, res) => {
   var upload = multer({ storage: storage }).fields([{name:'file',maxCount:100}])
 
   app.post('/upload/:folder', (req, res) => {
+    console.log('hello this is upload folder')
+    console.log(req.body);
     upload(req, res, function (err) {
       console.log(err);
       if (err instanceof multer.MulterError) {
@@ -346,8 +348,6 @@ app.get('/', (req, res) => {
         }
       }
     }
-
-    console.log(sampleSetJson)
 
     fs.writeFileSync(`${sampleSetFolder}.${trackId}/bank.json`, JSON.stringify(sampleSetJson));
     var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackId}/bank.json`));
