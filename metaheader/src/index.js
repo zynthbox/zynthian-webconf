@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import FileManager from './app/file-manager';
-import SampleEditor from './app/sample-editor'
+import FileManager from './app/file-manager/file-manager';
+import SampleEditor from './app/sample-editor/sample-editor'
+import Favorites from './app/favorites/favorites';
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 
@@ -50,6 +51,19 @@ function MetaHeader(){
         )
     }
 
+    const colorsArray = [
+        "#B23730",
+        "#EE514B",
+        "#F77535",
+        "#F7D635",
+        "#FE68B1",
+        "#A438FF",
+        "#6491FF",
+        "#73F6EE",
+        "#65E679",
+        "#9A7136",
+    ]
+
     let sampleEditorDisplay;
     if (showSampleEditor === true){
         sampleEditorDisplay = (
@@ -58,9 +72,24 @@ function MetaHeader(){
                     <h3>
                         SAMPLE EDITOR
                     </h3>
-                    <SampleEditor/>
+                    <SampleEditor colorsArray={colorsArray} />
                 </div>
                 <div id="sample-editor-overlay"></div>
+            </React.Fragment>
+        )
+    }
+
+    let favoritesDisplay;
+    if (showFavorites === true){
+        favoritesDisplay = (
+            <React.Fragment>
+                <div id="favorites-container" className="container" style={{left:fileManagerLeftCss}}>
+                    <h3>
+                        Favorites
+                    </h3>
+                    <Favorites colorsArray={colorsArray} />
+                </div>
+                <div id="favorites-overlay"></div>
             </React.Fragment>
         )
     }
@@ -75,9 +104,13 @@ function MetaHeader(){
                 <li>
                     <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Sample Editor</a>
                 </li>
+                <li>
+                    <a className={showFavorites === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFavorites(showFavorites === true ? false : true)}>Favorites</a>
+                </li>
             </ul>
             {fileManagerDisplay}
             {sampleEditorDisplay}
+            {favoritesDisplay}
         </React.Fragment>
     )
 }

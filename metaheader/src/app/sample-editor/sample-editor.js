@@ -8,8 +8,9 @@ import { MdEditNote } from 'react-icons/md'
 import { BiUndo } from 'react-icons/bi'
 
 
-const SampleEditor = () => {
+const SampleEditor = (props) => {
 
+    const { colorsArray } = props;
     const [ sketchInfo, setSketchInfo ] = useState(null)
     const [ currentSketch, setCurrentSketch ] = useState(null)
 
@@ -47,19 +48,6 @@ const SampleEditor = () => {
         console.log(res);
         setCurrentSketch(res)        
     }
-
-    const colorsArray = [
-        "#B23730",
-        "#EE514B",
-        "#F77535",
-        "#F7D635",
-        "#FE68B1",
-        "#A438FF",
-        "#6491FF",
-        "#73F6EE",
-        "#65E679",
-        "#9A7136",
-    ]
 
     let tracksDisplay;
     if (currentSketch !== null){
