@@ -386,6 +386,20 @@ app.get('/', (req, res) => {
 
 // ***** /SAMPLE EDITOR SERVER ****** //
 
+// ***** FAVORITES ***** //
+
+app.get('/favorites',(req,res) => {
+  let jsonArray = []
+  fs.readdirSync(`${rootFolder}preset-favorites/`).forEach(f => {
+    var file = fs.readFileSync(`${rootFolder}preset-favorites/${f}`);
+    var json = JSON.parse(file);
+    jsonArray.push({name:f.split('.')[0],json:json})
+  });
+  res.json(jsonArray)
+})
+
+// ***** /FAVORITES ***** //
+
   app.listen(port, () => {
     console.log(`webconf metaheader file-browser app-server listening on port ${port}`)
   })

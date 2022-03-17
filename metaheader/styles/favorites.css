@@ -63,10 +63,14 @@
   border: 1px solid #ccc;
   background-color: rgba(255, 255, 255, 0.3);
   height: calc(100% - 45px);
-  overflow-x: hidden;
 }
 #favorites-container #favorites #fav-grid .fav-row .fav-column .fav-column-list .fav-column-list-wrapper {
   box-sizing: border-box;
+  height: 100%;
+}
+#favorites-container #favorites #fav-grid .fav-row .fav-column .fav-column-list .fav-column-list-wrapper .fav-list-item {
+  width: 100%;
+  position: relative;
 }
 #favorites-container #favorites #fav-grid .fav-row .fav-column .fav-column-list ul {
   list-style-type: none;
