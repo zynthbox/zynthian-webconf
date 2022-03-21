@@ -26,6 +26,13 @@ function MetaHeader(){
         }
     },[showSampleEditor])
 
+    useEffect(() => {
+        if (showFavorites === true){
+            setShowFileManager(false)
+            setShowSampleEditor(false)
+        }
+    },[showFavorites])
+
     let fileManagerDisplay;
     let fileManagerLeftCss = 0;
     const containerElement = document.getElementsByClassName('container')[0];
