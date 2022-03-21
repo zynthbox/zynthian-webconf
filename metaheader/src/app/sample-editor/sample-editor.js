@@ -13,17 +13,17 @@ const SampleEditor = (props) => {
     const { colorsArray } = props;
     const [ sketchInfo, setSketchInfo ] = useState(null)
     const [ currentSketch, setCurrentSketch ] = useState(null)
+    // console.log(sketchInfo)
 
     useEffect(() => {
         getSketchInfo()
     },[])
 
     useEffect(() => {
-        getCurrentSelectedSketch()
+        if (sketchInfo !== null) getCurrentSelectedSketch()
     },[sketchInfo])
 
     async function getSketchInfo(){
-        console.log('GET SKETCH INFO')
         const response = await fetch(`http://${window.location.hostname}:3000/sketchinfo/`, {
             method: 'GET',
             headers: {
@@ -31,12 +31,11 @@ const SampleEditor = (props) => {
             },
         });
         const res = await response.json();
-        console.log(res);
         setSketchInfo(res)
     }
 
     async function getCurrentSelectedSketch(){
-        console.log('GET CURRENT SELECTED SKETCH')
+        // console.log('GET CURRENT SELECTED SKETCH')
         const path = sketchInfo.lastSelectedSketch
         const response = await fetch(`http://${window.location.hostname}:3000/sketch/${path.split('/').join('+++')}`, {
             method: 'GET',
@@ -45,19 +44,63 @@ const SampleEditor = (props) => {
             }
         });
         const res = await response.json();
-        console.log(res);
+        // console.log(res,"current sketch res");
         setCurrentSketch(res)        
+    }
+
+    async function saveCurrentSketch(){
+        let json = JSON.stringify(currentSketch);
+        let path = sketchInfo.lastSelectedSketch.split("zynthian/")[1];
+        const fileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
+        const blob = new Blob([json], {type:"application/json"});
+        const formData = new FormData();
+        formData.append('file', blob,fileName); // appending file
+        const sketchFolderPath = path.split(fileName)[0];
+        // console.log(sketchFolderPath,"path on saving");
+        axios.post(`http://${window.location.hostname}:3000/upload/${sketchFolderPath.split('/').join('+++')}`, formData ).then(res => { // then print response status
+            console.log("Sketch Saved!")
+        });
+    }
+
+    function updateTrack(index,title,color){
+        const newTrack = {
+            ...currentSketch.tracks[index],
+            name:title,
+            color
+        }
+        console.log(newTrack,"new track on Update");
+        let newTracks = []
+        currentSketch.tracks.forEach(function(t,i){
+            if(i === index) newTracks.push(newTrack)
+            else newTracks.push(t);
+        })
+        console.log(newTracks,"new Tracks on Update")
+        const newCurrentSketch = {
+            ...currentSketch,
+            tracks:newTracks
+        }
+        console.log(newCurrentSketch, "newCurrentSketch")
+        setCurrentSketch(newCurrentSketch);
     }
 
     let tracksDisplay;
     if (currentSketch !== null){
-        tracksDisplay = currentSketch.tracks.map((c,index) => (
-            <Track 
-                key={index} 
-                index={index} 
-                color={colorsArray[index]}
-            />
-        ))
+        
+        console.log(currentSketch.tracks,"current sketch tracks");
+        const defaultColor = "#000000" 
+        tracksDisplay = currentSketch.tracks.map((track,index) => {
+            if (index < 10){
+                return (
+                    <Track 
+                        key={index} 
+                        index={index} 
+                        color={track.color !== defaultColor ? track.color : colorsArray[index]}
+                        updateTrack={updateTrack}
+                        track={track}
+                    />
+                )
+            }
+        })
     }
 
     return (
@@ -66,7 +109,7 @@ const SampleEditor = (props) => {
                 <ul>
                     <li><a>New</a></li>
                     <li><a>Load</a></li>
-                    <li><a>Save</a></li>
+                    <li><a onClick={saveCurrentSketch}>Save</a></li>
                     <li><a>Save As...</a></li>
                 </ul>
             </div>
@@ -102,8 +145,20 @@ const Track = (props) => {
         getTrackSampleSet()
     },[])
 
+    useEffect(() => {
+        if (title !==  `Track ${index + 1}`){
+            if (!track || track && track.name !== title) props.updateTrack(index,title,color)
+        }
+    },[title])
+
+    useEffect(() => {
+        if (color !== props.color){
+            if (!track || track && track.color !== color) props.updateTrack(index,title,color)
+        }
+    },[color])
+
     async function getTrackSampleSet(){
-        console.log('get track smapleset')
+        
         const response = await fetch(`http://${window.location.hostname}:3000/track/${index+1}`, {
             method: 'GET',
             headers: {
@@ -112,7 +167,7 @@ const Track = (props) => {
         });
         const res = await response.json();
         if (res){
-            console.log(res,"res")
+            // console.log(res,"res")
             setSamples(res);
             setTrackExists(true)
         }
@@ -276,8 +331,10 @@ const Track = (props) => {
             <TrackTitle 
                 showEditMode={showEditMode}
                 title={title}
+                trackIndex={index}
                 setTitle={setTitle}
                 setShowEditMode={setShowEditMode}
+                updateTrack={props.updateTrack}
             />
             <div className={"sample-list-container"}  onDragOver={onSampleListDragOver} onDragLeave={onSampleListDragExit}>
                 <div className={"dropzone-container " + dragZoneContainerCssClass}>
@@ -314,7 +371,7 @@ const TrackTitle = (props) => {
     const [ previousTitle, setPreviousTitle ] = useState(title)
 
     useEffect(() => {
-        console.log('on show edit mode change - ' + showEditMode)
+        // console.log('on show edit mode change - ' + showEditMode)
         if (showEditMode === true){
             setPreviousTitle(title)
             window.addEventListener('keypress',onKeyPress)
@@ -324,27 +381,14 @@ const TrackTitle = (props) => {
     },[showEditMode])
 
     function onKeyPress(e){
-        console.log(e.keyCode)
+        // console.log(e.keyCode)
         if (e.keyCode === 13){
             setPreviousTitle(title)
             setShowEditMode(false)
         }
-
-        evt = evt || window.event;
-        var isEscape = false;
-        if ("key" in evt) {
-            isEscape = (evt.key === "Escape" || evt.key === "Esc");
-        } else {
-            isEscape = (evt.keyCode === 27);
-        }
-        if (isEscape) {
-            undoTitleChanges()
-        }
-
     }
 
     function undoTitleChanges(){
-        
         setTitle(previousTitle)
         setShowEditMode(false)
     }

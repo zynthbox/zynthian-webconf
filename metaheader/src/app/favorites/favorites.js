@@ -213,12 +213,13 @@ const FavColumn = (props) => {
 }
 
 const FavColumnListItem = (props) => {
-    // console.log(props,"props of item");
     const { item, ind, index, state, setState} = props;
 
     const draggableId = index + "-" + ind;
 
     let itemContent = item[2]
+
+    console.log(item,itemContent);
 
     return (
         <Draggable

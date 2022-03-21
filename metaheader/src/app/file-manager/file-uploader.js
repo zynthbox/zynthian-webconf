@@ -41,10 +41,7 @@ function FileUploader(props) {
       formData.append('file', files[i]); // appending file
     }
 
-    console.log(formData,"formData")
-
     axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split(fsep).join('+++')}`, formData ).then(res => { // then print response status
-      console.log(res.data)
       setFile(null)
       setFileData(null)
       props.setShowFileUploader(false)

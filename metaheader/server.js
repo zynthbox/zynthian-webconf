@@ -219,16 +219,17 @@ app.get('/', (req, res) => {
     }
   })
 
-  var upload = multer({ storage: storage }).fields([{name:'file',maxCount:100}])
+  var upload = multer({ storage: storage,   limits: { fieldSize: 25 * 1024 * 1024 }  }).fields([{name:'file',maxCount:100}])
 
   app.post('/upload/:folder', (req, res) => {
-    console.log('hello this is upload folder')
-    console.log(req.body);
+    console.log('upload folder')
+    // console.log(req.body);
     upload(req, res, function (err) {
-      console.log(err);
       if (err instanceof multer.MulterError) {
+        console.log(err);
           return res.status(500).json(err)
       } else if (err) {
+        console.log(err);
           return res.status(500).json(err)
       }
       const dirList = getAllFiles(rootFolder,[])
@@ -317,10 +318,7 @@ app.get('/', (req, res) => {
   })
 
   app.post('/track/:id',(req,res) => {
-
     const trackId = req.params.id;
-
-
     let sampleSetJson;
     if (!fs.existsSync(`${sampleSetFolder}.${trackId}/`)){
       fs.mkdirSync(`${sampleSetFolder}.${trackId}/`)
