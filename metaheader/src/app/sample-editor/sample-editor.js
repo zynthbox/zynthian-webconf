@@ -297,7 +297,7 @@ const Track = (props) => {
     }
 
     const handleColorPickerChange = (color) => {
-        setColor(color.hex)
+        props.updateTrack(index, track.name, color.hex)
     }
 
     let hideMaskTimeout;
@@ -379,7 +379,7 @@ const Track = (props) => {
     }
 
     return (
-        <div className="sample-set" style={{backgroundColor:color}}>
+        <div className="sample-set" style={{backgroundColor:props.color}}>
             <div ref={ref} className="edit-menu-container">
                 <ul className="edit-menu">
                     <li>
