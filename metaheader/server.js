@@ -303,6 +303,11 @@ app.get('/', (req, res) => {
     res.json(json)
   })
 
+  app.get('/sketchlist/', (req,res) => {
+    const dirList = fs.readdirSync(`${rootFolder}sketches/my-sketches/temp/`)
+    res.json(dirList)
+  })
+
   app.get('/sketch/:path',(req,res) => {
     let sketchPath = req.params.path.split('+++').join('/');
     sketchPath = sketchPath.split('zynthian-my-data/')[1];

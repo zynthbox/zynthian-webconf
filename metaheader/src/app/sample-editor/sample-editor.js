@@ -3,7 +3,6 @@ import Dropzone from 'react-dropzone'
 import { SketchPicker } from 'react-color';
 import axios from 'axios';
 import { AiOutlineBgColors } from 'react-icons/ai'
-import { ImTextColor } from 'react-icons/im'
 import { MdEditNote } from 'react-icons/md'
 import { BiUndo } from 'react-icons/bi'
 
@@ -13,6 +12,9 @@ const SampleEditor = (props) => {
     const { colorsArray } = props;
     const [ sketchInfo, setSketchInfo ] = useState(null)
     const [ currentSketch, setCurrentSketch ] = useState(null)
+    const [ tracks, setTracks ] = useState(null)
+    const [ showFilePicker, setShowFilePicker ] = useState(false);
+
     // console.log(sketchInfo)
 
     useEffect(() => {
@@ -20,8 +22,17 @@ const SampleEditor = (props) => {
     },[])
 
     useEffect(() => {
-        if (sketchInfo !== null) getCurrentSelectedSketch()
+        if (sketchInfo !== null){
+            // console.log(sketchInfo)
+            getCurrentSelectedSketch()
+        }
     },[sketchInfo])
+
+    useEffect(() => {
+        if (currentSketch !== null){
+            setTracks(currentSketch.tracks)
+        }
+    },[currentSketch])
 
     async function getSketchInfo(){
         const response = await fetch(`http://${window.location.hostname}:3000/sketchinfo/`, {
@@ -35,7 +46,6 @@ const SampleEditor = (props) => {
     }
 
     async function getCurrentSelectedSketch(){
-        // console.log('GET CURRENT SELECTED SKETCH')
         const path = sketchInfo.lastSelectedSketch
         const response = await fetch(`http://${window.location.hostname}:3000/sketch/${path.split('/').join('+++')}`, {
             method: 'GET',
@@ -48,53 +58,93 @@ const SampleEditor = (props) => {
         setCurrentSketch(res)        
     }
 
-    async function saveCurrentSketch(){
+    async function saveCurrentSketch(fn){
+        
+        let savedSketch = currentSketch;
+        if (fn && typeof(fn) === "string") savedSketch.name = fn;
+
         let json = JSON.stringify(currentSketch);
         let path = sketchInfo.lastSelectedSketch.split("zynthian/")[1];
-        const fileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
+        let fileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
+
         const blob = new Blob([json], {type:"application/json"});
         const formData = new FormData();
-        formData.append('file', blob,fileName); // appending file
         const sketchFolderPath = path.split(fileName)[0];
-        // console.log(sketchFolderPath,"path on saving");
+        
+        if (fn && typeof(fn) === "string") fileName = fn;
+        
+        formData.append('file', blob,fileName); // appending file
         axios.post(`http://${window.location.hostname}:3000/upload/${sketchFolderPath.split('/').join('+++')}`, formData ).then(res => { // then print response status
-            console.log("Sketch Saved!")
+
+            if (fn && typeof(fn) === "string"){
+                updateSketchInfo(fn)
+                setCurrentSketch(savedSketch)
+            }
         });
     }
 
+    async function updateSketchInfo(fn) {
+
+        setShowFilePicker(false)
+
+        // console.log("update sketch info")
+
+        const originalFileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
+        const sketchFolderPath = sketchInfo.lastSelectedSketch.split(originalFileName)[0];
+        const newSketchInfo = {
+            ...sketchInfo,
+            lastSelectedSketch:sketchFolderPath + fn
+        }
+
+        // console.log(newSketchInfo,"newSketchInfo")
+
+        const blob = new Blob([JSON.stringify(newSketchInfo)], {type:"application/json"});
+        const formData = new FormData();
+        formData.append('file', blob,'.cache.json'); // appending file
+        axios.post(`http://${window.location.hostname}:3000/upload/zynthian-my-data+++sessions+++`, formData ).then(res => { // then print response status
+            setSketchInfo(newSketchInfo)
+        });
+    }
+
+    function saveCurrentSketchAs(){
+        const result = window.prompt("Enter FileName");
+        saveCurrentSketch(result + ".sketch.json")
+    }
+
     function updateTrack(index,title,color){
+
         const newTrack = {
             ...currentSketch.tracks[index],
             name:title,
             color
         }
-        console.log(newTrack,"new track on Update");
+
         let newTracks = []
         currentSketch.tracks.forEach(function(t,i){
             if(i === index) newTracks.push(newTrack)
             else newTracks.push(t);
         })
-        console.log(newTracks,"new Tracks on Update")
+
         const newCurrentSketch = {
             ...currentSketch,
             tracks:newTracks
         }
-        console.log(newCurrentSketch, "newCurrentSketch")
+
         setCurrentSketch(newCurrentSketch);
     }
 
     let tracksDisplay;
-    if (currentSketch !== null){
+    if (tracks !== null){
         
-        console.log(currentSketch.tracks,"current sketch tracks");
         const defaultColor = "#000000" 
-        tracksDisplay = currentSketch.tracks.map((track,index) => {
+        
+        tracksDisplay = tracks.map((track,index) => {
             if (index < 10){
                 return (
                     <Track 
                         key={index} 
                         index={index} 
-                        color={track.color !== defaultColor ? track.color : colorsArray[index]}
+                        color={track.color && track.color !== defaultColor ? track.color : colorsArray[index]}
                         updateTrack={updateTrack}
                         track={track}
                     />
@@ -103,19 +153,31 @@ const SampleEditor = (props) => {
         })
     }
 
+    let filePickerDisplay;
+    if (showFilePicker === true){
+        filePickerDisplay = (
+            <SketchFilePicker 
+                onSelect={updateSketchInfo}
+                setShowFilePicker={setShowFilePicker}
+            />
+        )
+    }
+
     return (
         <React.Fragment>
-            <div className='sample-editor-menu'>
+            <div className='sample-editor-menu'> 
                 <ul>
                     <li><a>New</a></li>
-                    <li><a>Load</a></li>
+                    <li><a onClick={() => setShowFilePicker(showFilePicker === true ? false : true)}>Load</a></li>
                     <li><a onClick={saveCurrentSketch}>Save</a></li>
-                    <li><a>Save As...</a></li>
+                    <li><a onClick={saveCurrentSketchAs}>Save As...</a></li>
+                    {sketchInfo !== null ? <li style={{float:"right"}}><a>{sketchInfo.lastSelectedSketch}</a></li>: ''}
                 </ul>
             </div>
             <div id="sample-editor">
                 {tracksDisplay}
             </div>
+            {filePickerDisplay}
         </React.Fragment>
     )
 }
@@ -130,7 +192,6 @@ const Track = (props) => {
 
     const [ title, setTitle ] = useState(track && track.name !== null ? track.name : `Track ${index + 1}`);
     const [ color, setColor ] = useState(props.color)
-    const [ trackExists, setTrackExists ] = useState(false)
     const [ samples, setSamples ] = useState(samplesArray)
     const [ showEditMode, setShowEditMode ] = useState(false);
     const [ showColorPicker, setShowColorPicker ] = useState(false);
@@ -145,17 +206,25 @@ const Track = (props) => {
         getTrackSampleSet()
     },[])
 
-    useEffect(() => {
-        if (title !==  `Track ${index + 1}`){
-            if (!track || track && track.name !== title) props.updateTrack(index,title,color)
-        }
-    },[title])
+    // useEffect(() => {
+    //     if (title !==  `Track ${index + 1}`){
+    //         if (!track || track && track.name !== title) props.updateTrack(index,title,color)
+    //     }
+    // },[title])
+
+    // useEffect(() => {
+    //     if (color !== props.color){
+    //         if (!track || track && track.color !== color) props.updateTrack(index,title,color)
+    //     }
+    // },[color])
 
     useEffect(() => {
-        if (color !== props.color){
-            if (!track || track && track.color !== color) props.updateTrack(index,title,color)
+        if (props.track && props.track !== null){
+            
+            // setColor(track.color)
+            getTrackSampleSet()
         }
-    },[color])
+    },[props.track])
 
     async function getTrackSampleSet(){
         
@@ -169,7 +238,6 @@ const Track = (props) => {
         if (res){
             // console.log(res,"res")
             setSamples(res);
-            setTrackExists(true)
         }
     }
 
@@ -330,9 +398,8 @@ const Track = (props) => {
             </div>
             <TrackTitle 
                 showEditMode={showEditMode}
-                title={title}
+                title={track.name}
                 trackIndex={index}
-                setTitle={setTitle}
                 setShowEditMode={setShowEditMode}
                 updateTrack={props.updateTrack}
             />
@@ -357,17 +424,14 @@ const Track = (props) => {
                 <li><a onClick={() => removeAllSamples()}><i style={{marginTop:"1px"}} className="glyphicon glyphicon-trash"></i></a></li>
                 <li style={{float:"right"}}><a onClick={() => setShowSampleSetDropZone(showSampleSetDropZone === true ? false : true)}><i className="glyphicon glyphicon-plus"></i></a></li>
             </ul>
-
             {sampleSetUploadDisplay}
-
         </div>
     )
 }
 
 const TrackTitle = (props) => {
 
-    const { showEditMode, setShowEditMode, title, setTitle } = props;
-
+    const { showEditMode, setShowEditMode, title, updateTrack, trackIndex } = props;
     const [ previousTitle, setPreviousTitle ] = useState(title)
 
     useEffect(() => {
@@ -398,18 +462,20 @@ const TrackTitle = (props) => {
         if (e.target.className !== "edit-button")  setShowEditMode(false)
     });
 
+    const displayedTitle = title === null ? `Track ${trackIndex+1}` : title
+
     let titleDisplay;
     if (showEditMode === true){
         titleDisplay = (
             <div className='input-wrapper'>
-                <input type="text" value={title} onChange={e => setTitle(e.target.value)}/>
+                <input type="text" placeholder={displayedTitle} value={title} onChange={e => updateTrack(trackIndex, e.target.value)}/>
                 <a className='undo-title-change' onClick={undoTitleChanges}>
                     <BiUndo/>
                 </a>
             </div>
         )
     } else {
-        titleDisplay = <h2>{title}</h2>;
+        titleDisplay = <h2>{displayedTitle}</h2>;
     }
 
     return (
@@ -418,6 +484,53 @@ const TrackTitle = (props) => {
                 {titleDisplay}
             </div>
         </div>
+    )
+}
+
+const SketchFilePicker = (props) => {
+
+    const { setShowFilePicker, onSelect } = props;
+
+    const [ fileList, setFileList ] = useState(null);
+
+    useEffect(() => {
+        getSketchFileList()
+    },[])
+
+    async function getSketchFileList(){
+        const response = await fetch(`http://${window.location.hostname}:3000/sketchlist/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        const res = await response.json();
+        setFileList(res)
+    }
+
+    let fileListDisplay = "";
+    if (fileList !== null){
+        const list = fileList.map((f,index) => {
+            if (f.indexOf('.sketch.json') > -1 ){
+                return (
+                    <li><a onClick={() => onSelect(f,true)}>{f}</a></li>
+                )
+            }
+        })
+        fileListDisplay = (
+            <ul>
+                {list}
+            </ul>
+        )
+    }
+    return (
+        <React.Fragment>
+        <div id="sample-editor-file-picker">
+            <h4>Load Sketch File</h4>
+            {fileListDisplay}
+        </div>
+        <div onClick={() => setShowFilePicker(false)} id="sample-editor-file-picker-overlay"></div>
+        </React.Fragment>
     )
 }
 

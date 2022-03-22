@@ -17,6 +17,62 @@
   z-index: 2;
   user-select: none;
 }
+#sample-editor-container #sample-editor-file-picker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #fdfdfd;
+  width: 400px;
+  min-height: 300px;
+  margin-left: -200px;
+  margin-top: -200px;
+  z-index: 100;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  overflow: hidden;
+}
+#sample-editor-container #sample-editor-file-picker ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+#sample-editor-container #sample-editor-file-picker ul li {
+  width: 100%;
+  height: auto;
+}
+#sample-editor-container #sample-editor-file-picker ul li a {
+  display: block;
+  height: 25px;
+  width: 100%;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: 0.2s;
+}
+#sample-editor-container #sample-editor-file-picker ul li a:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+#sample-editor-container #sample-editor-file-picker ul li + li {
+  border-top: 1px solid #ccc;
+}
+#sample-editor-container #sample-editor-file-picker h4 {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 10px;
+  background: black;
+  color: white;
+  font-weight: bold;
+  margin: 0;
+}
+#sample-editor-container #sample-editor-file-picker-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
 #sample-editor-container .sample-editor-menu {
   width: 100%;
   border: 1px solid #ccc;
