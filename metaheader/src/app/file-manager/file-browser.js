@@ -9,6 +9,7 @@ import {
   ChonkyActions,
   defineFileAction
 } from "chonky";
+import FileUploader from './file-uploader';
 
 function WebconfFileBrowser(props){
 
@@ -262,8 +263,23 @@ function WebconfFileBrowser(props){
     pasteFiles
   ];
 
+  let fileUploaderDisplay;
+  if (props.showFileUploader === true){
+      fileUploaderDisplay = (
+          <React.Fragment>
+              <FileUploader 
+                  selectedFolder={selectedFolder} 
+                  fsep={fsep} 
+                  refreshFileManager={props.refreshFileManager} 
+                  setShowFileUploader={props.setShowFileUploader}
+              />
+          </React.Fragment>
+      )
+  }
+
   return (
-      <div style={{ height: window.innerHeight - 190 }}>
+      <div style={{ height: window.innerHeight - 190, position:"relative" }} onDragOver={() => props.setShowFileUploader(true)}>
+          {fileUploaderDisplay}
           <FileBrowser
             files={displayedFiles}
             folderChain={folderChain}
