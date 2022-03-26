@@ -16,6 +16,7 @@ function WebconfFileBrowser(props){
   const { displayedFiles, selectedFolder, fsep, folderChain } = props;
   const [ copiedFiles, setCopiedFiles ] = useState('')
   const [ draggedFiles, setDraggedFiles ] = useState('')
+  const [ isDragInsideFileBrowser, setIsDragInsideFileBrowser ] = useState(false);
   const fileBrowserRef = useRef(null);
   
 
@@ -160,6 +161,8 @@ function WebconfFileBrowser(props){
 
   function startDragNDropAction(data){
 
+    setIsDragInsideFileBrowser(true);
+
     let paths = [];
     data.state.selectedFiles.forEach(function(sf,index){
       paths.push(sf.path)
@@ -169,6 +172,9 @@ function WebconfFileBrowser(props){
   }
 
   function endDragNDropAction(data){
+
+    setIsDragInsideFileBrowser(false);
+
     let destinationPaths = [];
     draggedFiles.forEach(function(df,index){
       let destination = selectedFolder + data.payload.destination.path.split(selectedFolder)[1];
@@ -260,9 +266,25 @@ function WebconfFileBrowser(props){
     ChonkyActions.CopyFiles,
     ChonkyActions.StartDragNDrop,
     ChonkyActions.EndDragNDrop,
-    pasteFiles
+    pasteFiles 
   ];
 
+
+  let hideMaskTimeout;
+
+  function onFileUploaderDragOver(){
+    if (isDragInsideFileBrowser === false){
+      clearTimeout(hideMaskTimeout)
+      props.setShowFileUploader(true)
+    }
+  }
+
+  function onFileUploaderDragLeave(){
+    hideMaskTimeout = setTimeout(() => {
+      props.setShowFileUploader(false)
+    }, 10);
+  }
+  
   let fileUploaderDisplay;
   if (props.showFileUploader === true){
       fileUploaderDisplay = (
@@ -278,7 +300,11 @@ function WebconfFileBrowser(props){
   }
 
   return (
-      <div style={{ height: window.innerHeight - 190, position:"relative" }} onDragOver={() => props.setShowFileUploader(true)}>
+      <div 
+        style={{ height: window.innerHeight - 190, position:"relative" }} 
+        onDragOver={onFileUploaderDragOver} 
+        onDragLeave={() => onFileUploaderDragLeave()}
+        >
           {fileUploaderDisplay}
           <FileBrowser
             files={displayedFiles}

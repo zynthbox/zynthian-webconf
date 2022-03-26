@@ -1,0 +1,33 @@
+
+var FilesController = require('./controllers/filesController.js');
+var sampleEditorController = require('./controllers/sketchEditorController.js');
+var favoritesController = require('./controllers/favoritesController.js');
+
+module.exports = function (app) {
+    
+    app.get('/', (req, res) => {
+        res.send('Webconf Files Manager App Server.')
+    })  
+
+    // FILES
+    app.get('/mydata',FilesController.getAllFiles)
+    app.post('/rename',FilesController.renameFile)
+    app.post('/createfolder',FilesController.createFolder)
+    app.post('/delete',FilesController.deleteFiles)
+    app.post('/copypaste',FilesController.copyPaste)
+    app.post('/upload/:folder',FilesController.uploadFiles)
+    app.post('/download',FilesController.downloadFiles)
+
+    // SAMPLE EDITOR
+    app.get('/sketchinfo/',sampleEditorController.getSketchInfo)
+    app.get('/sketchlist/', sampleEditorController.getSketchList)
+    app.get('/sketch/:path', sampleEditorController.getSketch)
+    app.get('/track/:id', sampleEditorController.getTrack)
+    app.post('/track/:id', sampleEditorController.updateTrack)
+    app.get('/sample/:id', sampleEditorController.getSample)
+    app.post('/sample/:id', sampleEditorController.updateSampleSet)
+
+    // FAVORITES
+    app.get('/favorites', favoritesController.getFavorites)
+
+};
