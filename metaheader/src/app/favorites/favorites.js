@@ -154,7 +154,7 @@ function Favorites(props) {
   let favColumnsDisplay;
   if (state !== null){
     favColumnsDisplay = state.map((el, ind) => (
-      <FavColumn el={el} ind={ind} state={state} color={colorsArray[ind]} setState={setState}/>
+      <FavColumn key={ind} el={el} ind={ind} state={state} color={colorsArray[ind]} setState={setState}/>
     ))
   }
 
@@ -195,6 +195,7 @@ const FavColumn = (props) => {
                 >
                     {el.items.map((item, index) => (
                         <FavColumnListItem 
+                            key={index}
                             item={item}
                             ind={ind}
                             index={index}
@@ -218,8 +219,6 @@ const FavColumnListItem = (props) => {
     const draggableId = index + "-" + ind;
 
     let itemContent = item[2]
-
-    console.log(item,itemContent);
 
     return (
         <Draggable

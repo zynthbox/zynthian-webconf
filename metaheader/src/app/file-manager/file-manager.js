@@ -4,21 +4,14 @@ import TreeView from './tree-view';
 
 const FileManager = () => {
 
-    // console.log(window.location)
-    // const rootFolder = "metaheader"
-
     const rootFolder = "/zynthian-my-data"
     const rootFolderChainObject = { id: 'xcv', name: rootFolder, isDir: true }
     const fsep = "/";
 
     const [ files, setFiles ] = useState([])
-    // console.log(files,"files")
     const [ displayedFiles, setDisplayedFiles ] = useState([])
-    // console.log(displayedFiles,"displayed files")
     const [ folderChain, setFolderChain ] = useState([rootFolderChainObject])
-    // console.log(folderChain)
     const [ selectedFolder, setSelectedFolder ] = useState(rootFolder)
-    // console.log(selectedFolder)
     const [ treeData, setTreeData ] = useState(null);
   
     const [ showFileUploader, setShowFileUploader ] = useState(false)
@@ -29,12 +22,10 @@ const FileManager = () => {
     }, []);
 
     useEffect(() => {
-        console.log('use effect on set selected folder')
       getDisplayFiles(files)
     },[selectedFolder])
 
     useEffect(() => {
-        console.log('use effect on set files')
         if (files.length > 0) generateTreeViewData()
     },[files])
 
@@ -198,7 +189,6 @@ const FileManager = () => {
     }
 
     function refreshFileManager(newFiles){
-        console.log("refresh file manager")
         setFiles(newFiles);
         getDisplayFiles(newFiles);
     }

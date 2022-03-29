@@ -26,7 +26,7 @@ const SketchFilePicker = (props) => {
         const list = fileList.map((f,index) => {
             if (f.indexOf('.sketch.json') > -1 ){
                 return (
-                    <li><a onClick={() => onSelect(f,true)}>{f}</a></li>
+                    <li key={index}><a onClick={() => onSelect(f,true)}>{f}</a></li>
                 )
             }
         })

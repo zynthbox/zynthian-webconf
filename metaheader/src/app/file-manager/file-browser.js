@@ -36,7 +36,6 @@ function WebconfFileBrowser(props){
   }
 
   async function createFolder(fullPath){
-    // console.log({fullPath})
     const response = await fetch(`http://${window.location.hostname}:3000/createfolder`, {
     method: 'POST',
     headers: {
@@ -45,20 +44,17 @@ function WebconfFileBrowser(props){
     body:JSON.stringify({fullPath})
     });
     const res = await response.json();
-    console.log(res,"res after create folder");
     props.refreshFileManager(res);
   }
 
   function renameFileAction(data){
     const previousPath = data.state.selectedFiles[0].path;
-    // console.log(previousPath);
     const folderName = window.prompt('Enter new Folder Name:');
     const fullPath = previousPath.split(selectedFolder)[0] + selectedFolder + fsep + folderName;
     renameFile(previousPath,fullPath)
   }
 
   async function renameFile(previousPath,fullPath){
-    // console.log({fullPath})
     const response = await fetch(`http://${window.location.hostname}:3000/rename`, {
     method: 'POST',
     headers: {
@@ -67,7 +63,6 @@ function WebconfFileBrowser(props){
     body:JSON.stringify({fullPath,previousPath})
     });
     const res = await response.json();
-    console.log(res,"res after rename");
     props.refreshFileManager(res);
   }
 
@@ -86,7 +81,6 @@ function WebconfFileBrowser(props){
 
   async function deleteFiles(paths){
     paths.forEach(async function(fullPath,index){
-      // console.log(fullPath)
       const response = await fetch(`http://${window.location.hostname}:3000/delete`, {
           method: 'POST',
           headers: {
@@ -95,7 +89,6 @@ function WebconfFileBrowser(props){
           body:JSON.stringify({fullPath})
       });
       const res = await response.json();
-      console.log(res,"res after delete");
       if (index === paths.length - 1){
         clearSelection();
         props.refreshFileManager(res);
@@ -187,7 +180,6 @@ function WebconfFileBrowser(props){
   }
 
   async function copyPasteFiles(previousPaths,destinationPaths,deleteOrigin){
-    // console.log({previousPaths,destinationPaths})
     previousPaths.forEach(async function(previousPath,index){
       const destinationPath = destinationPaths[index];
       const response = await fetch(`http://${window.location.hostname}:3000/copypaste`, {

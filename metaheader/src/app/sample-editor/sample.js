@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 const Sample = (props) => {
 
-    const { index, sample, trackIndex, removeSample, addSample, uploadSample } = props
+    const { index, sample, trackIndex, removeSample, addSample, uploadSample, setLoadFromSketchPadSampleIndex } = props
 
     const [ data, setData ] = useState(null);
     const [ isPlaying, setIsPlaying ] = useState(false);
@@ -35,7 +35,11 @@ const Sample = (props) => {
     }
 
     async function getSampleFile(){
-        const response = await fetch(`http://${window.location.hostname}:3000/sample/${(trackIndex+1) + "+++" + sample.path.split('.').join('++')}`, {
+
+        let sPath = sample.path.split('.').join('++');
+        if (sPath.indexOf('/') > -1) sPath = sPath.split('/').join('+');
+
+        const response = await fetch(`http://${window.location.hostname}:3000/sample/${(trackIndex+1) + "+++" + sPath}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -79,10 +83,7 @@ const Sample = (props) => {
     
     } else {
         sampleActionsDisplay = (
-            <a className="edit-sample-button">
-                <input type="file" 
-                    onChange={(e) => addSample(e.target.files[0],index)}
-                />
+            <a className="edit-sample-button" onClick={() => setLoadFromSketchPadSampleIndex(index)}>
                 <i className="glyphicon glyphicon-plus"></i> 
             </a>            
         )
@@ -90,10 +91,9 @@ const Sample = (props) => {
 
     let samplePath;
     if (sample){
-        samplePath = sample.path ? sample.path : sample.name
-        if (samplePath.split('.')[0].length > 16){
-            samplePath = samplePath.substring(0,17) + '...wav'
-        }
+        samplePath = sample.path ? sample.path : sample.name;
+        if (samplePath.indexOf('/') > -1) samplePath = samplePath.split('/')[samplePath.split('/').length - 1];
+        if (samplePath.split('.')[0].length > 16) samplePath = samplePath.substring(0,17) + '...wav';
     }
 
     return (

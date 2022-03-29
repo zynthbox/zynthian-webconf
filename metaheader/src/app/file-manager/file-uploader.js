@@ -62,8 +62,6 @@ function FileUploader(props) {
 
   const uploadFile = (index,multiple = false) => {
 
-    console.log(files[index], "upload this file")
-
     const url = `http://${window.location.hostname}:3000/upload/${selectedFolder.split(fsep).join('+++')}`
     const formData = new FormData();
     formData.append('file', files[index])

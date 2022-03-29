@@ -54,7 +54,7 @@ function TreeViewItem(props){
 
 function TreeViewSubMenu(props){
     const itemsDisplay = props.items.map((item,index) => (
-        <TreeViewItem {...props} item={item} />
+        <TreeViewItem key={index} {...props} item={item} />
     ))
 
     return (

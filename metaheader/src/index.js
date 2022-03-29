@@ -37,8 +37,6 @@ function MetaHeader(){
     let fileManagerLeftCss = 0;
     const containerElement = document.getElementsByClassName('container')[0];
     if (containerElement && containerElement !== null){
-        console.log(containerElement);
-        console.log(window.innerWidth)
         fileManagerLeftCss = (window.innerWidth - containerElement.offsetWidth) / 2
     }
 
@@ -109,7 +107,7 @@ function MetaHeader(){
                     <a className={showFileManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileManager(showFileManager === true ? false : true)}>Files</a>
                 </li>
                 <li>
-                    <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Sample Editor</a>
+                    <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Sample-Set Editor</a>
                 </li>
                 <li>
                     <a className={showFavorites === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFavorites(showFavorites === true ? false : true)}>Favorites</a>

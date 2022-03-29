@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs'); 
 const path = require("path")
 const rootFolder = "/home/pi/zynthian-my-data/"
 
@@ -30,7 +30,15 @@ exports.getTrack = (req,res) => {
 }
 
 exports.updateTrack = (req,res) => {
+
+  console.log('UPDATE TRACK')
+
   const trackId = req.params.id;
+  let sPath = req.body.sPath;
+  if (sPath.indexOf('%') > -1) sPath = sPath.split('%').join('/');
+  if (sPath.indexOf('++') > -1) sPath = sPath.split('++').join('.');
+  console.log(sPath);
+
   let sampleSetJson;
   if (!fs.existsSync(`${sampleSetFolder}.${trackId}/`)){
     fs.mkdirSync(`${sampleSetFolder}.${trackId}/`)
@@ -38,7 +46,7 @@ exports.updateTrack = (req,res) => {
     for (var i = 0; i < 5; ++i){
       if (i === req.body.sIndex){
         sampleSetJson[i] = {
-          path:req.body.sPath
+          path:sPath
         }
       } else {
         sampleSetJson[i] = null;
@@ -51,7 +59,7 @@ exports.updateTrack = (req,res) => {
     for (var i = 0; i < 5; ++i){
       if (i === req.body.sIndex){
         sampleSetJson[i] = {
-          path:req.body.sPath
+          path:sPath
         }
       } else {
         sampleSetJson[i] = currentSampleSetJson[i];
@@ -66,14 +74,27 @@ exports.updateTrack = (req,res) => {
 
 exports.getSample = (req,res) => {
   const trackId = req.params.id.split('+++')[0];
-  const samplePath = req.params.id.split('+++')[1].split('++').join('.');
-  var file = fs.readFileSync(`${sampleSetFolder}.${trackId}/${samplePath}`, 'binary');
+  let samplePath = req.params.id.split('+++')[1].split('++').join('.');
+  if (samplePath.indexOf('+') > -1) samplePath = samplePath.split('+').join('/');
+
+  // console.log('get sample')
+  // console.log(trackId,samplePath)
+
+  let filePath = `${sampleSetFolder}.${trackId}/${samplePath}`
+  if (samplePath.indexOf('/') > -1) filePath = samplePath; 
+
+  console.log(samplePath,"SAMPLE PATH")
+
+  var file = fs.readFileSync(filePath, 'binary');
   res.setHeader('Content-Disposition', 'attachment; filename='+samplePath);
   res.write(file, 'binary');
   res.end();
 }
 
 exports.updateSampleSet = (req,res) => {
+
+  console.log('update sample set!');
+
   const { trackIndex, sPath, sIndex } = req.body;
 
   let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackIndex}/bank.json`);
@@ -89,7 +110,7 @@ exports.updateSampleSet = (req,res) => {
   }
 
   fs.writeFileSync(`${sampleSetFolder}.${trackIndex}/bank.json`, JSON.stringify(sampleSetJson));
-  fs.unlinkSync(`${sampleSetFolder}.${trackIndex}/${sPath}`)
+  if (sPath && sPath.indexOf('/') === -1) fs.unlinkSync(`${sampleSetFolder}.${trackIndex}/${sPath}`)
   var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackIndex}/bank.json`));
   res.json(json)
 }

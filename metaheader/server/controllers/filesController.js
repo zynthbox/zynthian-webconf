@@ -37,8 +37,13 @@ const getAllFiles = function(dirPath, arrayOfFiles,index) {
 }
 
 exports.getAllFiles = (req,res) => {
-      const dirList = getAllFiles(rootFolder,[])
-      res.json(dirList)
+  const dirList = getAllFiles(rootFolder,[])
+  res.json(dirList)
+}
+
+exports.getFilesInFolder = (req,res) => {
+  const dirList = getAllFiles(rootFolder + req.params.folder,[])
+  res.json(dirList)
 }
 
 /* RENAME FILE / FOLDER */
