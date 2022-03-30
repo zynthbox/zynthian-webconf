@@ -4,14 +4,10 @@ import { useOnClickOutside } from '../helpers';
 
 const SketchPadFileLoader = (props) => {
 
-    console.log(props.fileType,"props.filetype")
-
     const initFolderPath = props.fileType === "json" ? "sketches/my-sketches/temp/wav/": "capture/";
 
     const [ fileList, setFileList ] = useState(null)
     const [ folderPath, setFolderPath ] = useState(initFolderPath)
-
-    console.log(fileList,"file list")
 
     useEffect(() => {
         getSketchPadFiles()

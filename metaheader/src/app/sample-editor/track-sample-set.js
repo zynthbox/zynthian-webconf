@@ -24,7 +24,6 @@ const TrackSampleSet = (props) => {
 
     useEffect(() => {
         if (loadFromSketchPadSampleIndex !== null){
-            console.log(loadFromSketchPadSampleIndex, "sample index load from ")
             setShowSampleSetSourcePicker(true)
         }
     },[loadFromSketchPadSampleIndex])
@@ -107,6 +106,7 @@ const TrackSampleSet = (props) => {
     }
 
     async function loadSampleSet(file){
+        const sampleSetIndex = file.path.split('bank.')[1];
         const path = file.path.split('/').join('+++')
         const response = await fetch(`http://${window.location.hostname}:3000/getjson/${path}`, {
             method: 'GET',
@@ -115,8 +115,16 @@ const TrackSampleSet = (props) => {
             }
         });
         const res = await response.json()
-        setSamples(res)
-        console.log(res,"load sample set");
+
+        let renderedSampleSet = []
+        res.forEach(function(sample,index){
+            let s = sample;
+            if (sample !== null && sample.path.indexOf('/') === -1){
+                s.path = file.path.split(sampleSetIndex)[0] + sampleSetIndex + sample.path
+            }
+            renderedSampleSet.push(s)
+        })
+        setSamples(renderedSampleSet)
     }
 
     let hideMaskTimeout;
