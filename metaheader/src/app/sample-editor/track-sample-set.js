@@ -16,6 +16,8 @@ const TrackSampleSet = (props) => {
     const [ loadFromSketchPadSampleIndex, setLoadFromSketchPadSampleIndex ] = useState(null)
     const [ loadFromSketchPadFileType, setLoadFromSketchPadFileType ] = useState('wav')
 
+    const selectedFolder = `/zynthian-my-data/sketches/my-sketches/temp/wav/sampleset/bank.${index+1}/`
+
     useEffect(() => {
         if (showSampleSetDropZone === true){
             setShowSampleSetSourcePicker(false);
@@ -56,7 +58,6 @@ const TrackSampleSet = (props) => {
     const uploadSample = async (sample) => {
         const formData = new FormData();
         formData.append('file', sample); // appending file
-        const selectedFolder = `/zynthian-my-data/sketches/my-sketches/temp/wav/sampleset/bank.${index+1}/`
         // console.log(selectedFolder,"selected folder")
         axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`, formData ).then(res => { // then print response status
         //   console.log(res)
@@ -108,23 +109,37 @@ const TrackSampleSet = (props) => {
     async function loadSampleSet(file){
         const sampleSetIndex = file.path.split('bank.')[1];
         const path = file.path.split('/').join('+++')
-        const response = await fetch(`http://${window.location.hostname}:3000/getjson/${path}`, {
+        const response = await fetch(`http://${window.location.hostname}:3000/json/${path}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             }
         });
         const res = await response.json()
-
-        let renderedSampleSet = []
+        let renderedSampleSet = [];
+        let savingJsonRequired = false;
         res.forEach(function(sample,index){
             let s = sample;
             if (sample !== null && sample.path.indexOf('/') === -1){
+                savingJsonRequired = true;
                 s.path = file.path.split(sampleSetIndex)[0] + sampleSetIndex + sample.path
             }
             renderedSampleSet.push(s)
         })
         setSamples(renderedSampleSet)
+        if (savingJsonRequired === true) uploadSampleSet(renderedSampleSet)
+    }
+
+    function uploadSampleSet(renderedSampleSet){
+
+        let json = JSON.stringify(renderedSampleSet);
+        const blob = new Blob([json], {type:"application/json"});
+        const formData = new FormData();
+        formData.append('file', blob,"bank.json"); // appending file
+        const url = `http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`
+        axios.post(url, formData ).then(res => { // then print response status
+        //   console.log(res)
+        });        
     }
 
     let hideMaskTimeout;

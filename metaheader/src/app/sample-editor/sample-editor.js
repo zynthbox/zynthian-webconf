@@ -26,6 +26,7 @@ const SampleEditor = (props) => {
     },[sketchInfo])
 
     useEffect(() => {
+        console.log(currentSketch,"currentSketch");
         if (currentSketch !== null){
             setTracks(currentSketch.tracks)
         }

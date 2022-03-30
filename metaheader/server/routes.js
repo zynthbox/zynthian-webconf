@@ -10,7 +10,7 @@ module.exports = function (app) {
     })  
 
     // FILES
-    app.get('/getjson/:path',FilesController.getJsonFile)
+    app.get('/json/:path',FilesController.getJsonFile)
     app.get('/mydata',FilesController.getAllFiles)
     app.get('/mydata/:folder',FilesController.getFilesInFolder)
     app.post('/rename',FilesController.renameFile)
