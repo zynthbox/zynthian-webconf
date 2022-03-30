@@ -91,7 +91,7 @@ exports.getSample = (req,res) => {
   res.end();
 }
 
-exports.updateSampleSet = (req,res) => {
+exports.removeSample = (req,res) => {
 
   console.log('update sample set!');
 

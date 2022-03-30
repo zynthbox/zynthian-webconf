@@ -133,27 +133,6 @@
   padding-left: 15px;
   border-radius: 5px 5px 0 0;
 }
-#sample-editor-container .sample-set-load-from-sketch-pad-dialog {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 500px;
-  height: 300px;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-left: -250px;
-  margin-top: -150px;
-  z-index: 1000;
-  overflow: hidden;
-}
-#sample-editor-container .sample-set-load-from-sketch-pad-dialog h4 {
-  background-color: black;
-  color: white;
-  margin: 0;
-  width: 100%;
-  padding: 10px;
-}
 #sample-editor-container .sample-set {
   width: 20%;
   height: auto;
@@ -432,6 +411,27 @@
 #sample-editor-container .sample-set:nth-child(10) {
   border-bottom-right-radius: 10px;
 }
+#sample-editor-container .sample-set-load-from-sketch-pad-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 300px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-left: -250px;
+  margin-top: -150px;
+  z-index: 1000;
+  overflow: hidden;
+}
+#sample-editor-container .sample-set-load-from-sketch-pad-dialog h4 {
+  background-color: black;
+  color: white;
+  margin: 0;
+  width: 100%;
+  padding: 10px;
+}
 #sample-editor-container .sample-set-load-from-sketch-pad-dialog a.close {
   position: absolute;
   top: 7px;
@@ -441,16 +441,23 @@
   cursor: pointer;
 }
 #sample-editor-container .sample-set-load-from-sketch-pad-dialog ul {
-  padding: 5px;
+  padding: 0;
   width: 100%;
+  height: calc(100% - 21px);
+  overflow: scroll;
+  box-sizing: border-box;
 }
 #sample-editor-container .sample-set-load-from-sketch-pad-dialog ul li {
   width: 100%;
-  height: 25px;
+  height: auto;
 }
 #sample-editor-container .sample-set-load-from-sketch-pad-dialog ul li a {
-  padding: 5px;
   width: 100%;
-  height: 100%;
-  cursor: pointer;
+  padding: 5px 10px;
+  display: block;
+  float: left;
+  height: auto;
+}
+#sample-editor-container .sample-set-load-from-sketch-pad-dialog ul li + li {
+  border-top: 1px solid #ccc;
 }

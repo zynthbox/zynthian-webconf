@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 const Sample = (props) => {
 
-    const { index, sample, trackIndex, removeSample, addSample, uploadSample, setLoadFromSketchPadSampleIndex } = props
+    const { index, sample, trackIndex, removeSample, uploadSample, setLoadFromSketchPadSampleIndex, setLoadFromSketchPadFileType } = props
 
     const [ data, setData ] = useState(null);
     const [ isPlaying, setIsPlaying ] = useState(false);
@@ -59,6 +59,11 @@ const Sample = (props) => {
         document.getElementById(`sample-${trackIndex + 1}-${index + 1}-audio-player`).pause();
     }
     
+    function onSamplePlusClick(index){
+        setLoadFromSketchPadFileType('wav')
+        setLoadFromSketchPadSampleIndex(index)
+    }
+
     let sampleControlDisplay, sampleActionsDisplay;
     if (sample){
         if (isPlaying === true){
@@ -83,7 +88,7 @@ const Sample = (props) => {
     
     } else {
         sampleActionsDisplay = (
-            <a className="edit-sample-button" onClick={() => setLoadFromSketchPadSampleIndex(index)}>
+            <a className="edit-sample-button" onClick={() => onSamplePlusClick(index)}>
                 <i className="glyphicon glyphicon-plus"></i> 
             </a>            
         )

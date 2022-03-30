@@ -151,29 +151,6 @@
         border-radius: 5px 5px 0 0;
     }
 
-    .sample-set-load-from-sketch-pad-dialog {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        width: 500px;
-        height: 300px;
-        background-color: white;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        margin-left: -250px;
-        margin-top: -150px;
-        z-index: 1000;
-        overflow: hidden;
-
-        h4 {
-            background-color: black;
-            color: white;
-            margin: 0;
-            width: 100%;
-            padding: 10px;
-        }
-    }
-
     .sample-set {
         width: 20%;
         height: auto;
@@ -508,6 +485,28 @@
     }
 
     .sample-set-load-from-sketch-pad-dialog {
+
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 500px;
+        height: 300px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-left: -250px;
+        margin-top: -150px;
+        z-index: 1000;
+        overflow: hidden;
+
+        h4 {
+            background-color: black;
+            color: white;
+            margin: 0;
+            width: 100%;
+            padding: 10px;
+        }
+
         a.close {
             position: absolute;
             top: 7px;
@@ -518,20 +517,27 @@
         }
         
         ul {
-            padding: 5px;
+            padding: 0;
             width: 100%;
+            height: calc(100% - 21px);
+            overflow: scroll;
+            box-sizing: border-box;
 
             li {
                 width: 100%;
-                height: 25px;
+                height: auto;
                 
                 a {
-                    padding: 5px;
                     width: 100%;
-                    height: 100%;
-                    cursor: pointer;
-
+                    padding: 5px 10px;
+                    display: block;
+                    float: left;
+                    height: auto;
                 }
+            }
+            
+            li + li {
+                border-top: 1px solid #ccc;
             }
         }
     }

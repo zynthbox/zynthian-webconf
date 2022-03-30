@@ -10,6 +10,7 @@ module.exports = function (app) {
     })  
 
     // FILES
+    app.get('/getjson/:path',FilesController.getJsonFile)
     app.get('/mydata',FilesController.getAllFiles)
     app.get('/mydata/:folder',FilesController.getFilesInFolder)
     app.post('/rename',FilesController.renameFile)
@@ -26,7 +27,7 @@ module.exports = function (app) {
     app.get('/track/:id', sampleEditorController.getTrack)
     app.post('/track/:id', sampleEditorController.updateTrack)
     app.get('/sample/:id', sampleEditorController.getSample)
-    app.post('/sample/:id', sampleEditorController.updateSampleSet)
+    app.post('/sample/:id', sampleEditorController.removeSample)
 
     // FAVORITES
     app.get('/favorites', favoritesController.getFavorites)

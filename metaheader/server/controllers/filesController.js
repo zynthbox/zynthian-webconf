@@ -42,8 +42,19 @@ exports.getAllFiles = (req,res) => {
 }
 
 exports.getFilesInFolder = (req,res) => {
-  const dirList = getAllFiles(rootFolder + req.params.folder,[])
+  
+  let folder = req.params.folder;
+  if (folder.indexOf('+++') > -1) folder = folder.split('+++').join('/');
+
+  const dirList = getAllFiles(rootFolder + folder,[])
   res.json(dirList)
+}
+
+exports.getJsonFile = (req,res) => {
+  const filePath = req.params.path.split('+++').join('/');
+  let rawdata = fs.readFileSync(filePath);
+  let json = JSON.parse(rawdata);
+  res.json(json)
 }
 
 /* RENAME FILE / FOLDER */
