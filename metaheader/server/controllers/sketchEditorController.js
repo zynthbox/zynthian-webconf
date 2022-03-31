@@ -31,7 +31,7 @@ exports.getTrack = (req,res) => {
 
 exports.updateTrack = (req,res) => {
 
-  console.log('UPDATE TRACK')
+  // console.log('UPDATE TRACK')
 
   const trackId = req.params.id;
   
@@ -39,7 +39,7 @@ exports.updateTrack = (req,res) => {
   if (sPath.indexOf('%') > -1) sPath = sPath.split('%').join('/');
   if (sPath.indexOf('++') > -1) sPath = sPath.split('++').join('.');
 
-  console.log(sPath,"sample path");
+  // console.log(sPath,"sample path");
 
   let sampleSetJson;
   if (!fs.existsSync(`${sampleSetFolder}.${trackId}/`)){
@@ -70,7 +70,7 @@ exports.updateTrack = (req,res) => {
     }
   }
 
-  console.log(sampleSetJson,"sampleSetJson")
+  // console.log(sampleSetJson,"sampleSetJson")
 
   fs.writeFileSync(`${sampleSetFolder}.${trackId}/bank.json`, JSON.stringify(sampleSetJson));
   var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackId}/bank.json`));
@@ -88,7 +88,7 @@ exports.getSample = (req,res) => {
   let filePath = `${sampleSetFolder}.${trackId}/${samplePath}`
   if (samplePath.indexOf('/') > -1) filePath = samplePath; 
 
-  console.log(samplePath,"SAMPLE PATH")
+  // console.log(samplePath,"SAMPLE PATH")
 
   var file = fs.readFileSync(filePath, 'binary');
   res.setHeader('Content-Disposition', 'attachment; filename='+samplePath);
@@ -97,8 +97,6 @@ exports.getSample = (req,res) => {
 }
 
 exports.removeSample = (req,res) => {
-
-  console.log('update sample set!');
 
   const { trackIndex, sPath, sIndex } = req.body;
 
