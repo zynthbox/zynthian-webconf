@@ -457,6 +457,10 @@
   display: block;
   float: left;
   height: auto;
+  cursor: pointer;
+}
+#sample-editor-container .sample-set-load-from-sketch-pad-dialog ul li:nth-child(even) {
+  background-color: aliceblue;
 }
 #sample-editor-container .sample-set-load-from-sketch-pad-dialog ul li + li {
   border-top: 1px solid #ccc;

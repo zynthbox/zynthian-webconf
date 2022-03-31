@@ -42,7 +42,7 @@ const TrackSampleSet = (props) => {
         setLoadFromSketchPadSampleIndex(null)
     }
 
-    async function onUploadSample(sample,sIndex){
+    async function onUploadSample(sample,sIndex,isInsert){
         const sPath = sample.name;
         const response = await fetch(`http://${window.location.hostname}:3000/track/${(index+1)}`, {
             method: 'POST',
@@ -64,19 +64,6 @@ const TrackSampleSet = (props) => {
         });
     };
 
-    async function insertSample(sPath,sIndex){
-        setLoadFromSketchPadSampleIndex(null)
-        const response = await fetch(`http://${window.location.hostname}:3000/track/${(index+1)}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body:JSON.stringify({sIndex,sPath})
-        });
-        const res = await response.json()        
-        getTrackSampleSet()
-    }
-
     async function removeSample(sample,sIndex,fetchSamples){
 
         const trackIndex = index + 1;
@@ -92,6 +79,40 @@ const TrackSampleSet = (props) => {
         const res = await response.json()
         // console.log(res)
         setSamples(res);
+    }
+
+    async function onInsertSample(filePath,sIndex,multiple){
+        // console.log('ON INSERT SAMPLE')
+        setLoadFromSketchPadSampleIndex(null)
+        const fileName = filePath.split('/')[filePath.split('/').length - 1];
+        const sPath = fileName;
+        // console.log(fileName,"fileName")
+        const response = await fetch(`http://${window.location.hostname}:3000/track/${(index+1)}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({sIndex,sPath})
+        });
+        const res = await response.json()
+        insertSample(filePath,fileName,sIndex,multiple)
+    }
+
+    async function insertSample(filePath,fileName,sIndex,multiple){
+        const previousPath = filePath
+        const destinationPath =  selectedFolder + fileName
+        const deleteOrigin = false;
+        const response = await fetch(`http://${window.location.hostname}:3000/copypaste`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
+        });
+        const res = await response.json()
+        if (multiple === true){
+            if (sIndex === samples.length - 1) getTrackSampleSet()
+        } else getTrackSampleSet()
     }
 
     function removeAllSamples(){
@@ -116,30 +137,15 @@ const TrackSampleSet = (props) => {
             }
         });
         const res = await response.json()
-        let renderedSampleSet = [];
-        let savingJsonRequired = false;
-        res.forEach(function(sample,index){
-            let s = sample;
-            if (sample !== null && sample.path.indexOf('/') === -1){
-                savingJsonRequired = true;
-                s.path = file.path.split(sampleSetIndex)[0] + sampleSetIndex + sample.path
+        const baseFilePath = "/home/pi" + selectedFolder.split(index + 1)[0] + sampleSetIndex;
+        res.forEach(function(sample,sIndex){
+            // console.log(sample,sIndex,"sample + sIndex on forEach in load")
+            if (sample !== null){
+                onInsertSample(baseFilePath + sample.path,sIndex,true)
+            } else {
+                if (sIndex === samples.length - 1) getTrackSampleSet()
             }
-            renderedSampleSet.push(s)
         })
-        setSamples(renderedSampleSet)
-        if (savingJsonRequired === true) uploadSampleSet(renderedSampleSet)
-    }
-
-    function uploadSampleSet(renderedSampleSet){
-
-        let json = JSON.stringify(renderedSampleSet);
-        const blob = new Blob([json], {type:"application/json"});
-        const formData = new FormData();
-        formData.append('file', blob,"bank.json"); // appending file
-        const url = `http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`
-        axios.post(url, formData ).then(res => { // then print response status
-        //   console.log(res)
-        });        
     }
 
     let hideMaskTimeout;
@@ -272,7 +278,7 @@ const TrackSampleSet = (props) => {
         sampleSetLoadFromSketchPadDialogDisplay = (
             <SketchPadFileLoader 
                 setShowLoadFromSketchPadDialog={setShowLoadFromSketchPadDialog}
-                insertSample={insertSample}
+                insertSample={onInsertSample}
                 loadSampleSet={loadSampleSet}
                 sampleIndex={sampleIndexToReplace}
                 fileType={loadFromSketchPadFileType}

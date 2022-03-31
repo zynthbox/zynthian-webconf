@@ -34,13 +34,16 @@ exports.updateTrack = (req,res) => {
   console.log('UPDATE TRACK')
 
   const trackId = req.params.id;
+  
   let sPath = req.body.sPath;
   if (sPath.indexOf('%') > -1) sPath = sPath.split('%').join('/');
   if (sPath.indexOf('++') > -1) sPath = sPath.split('++').join('.');
-  console.log(sPath);
+
+  console.log(sPath,"sample path");
 
   let sampleSetJson;
   if (!fs.existsSync(`${sampleSetFolder}.${trackId}/`)){
+    
     fs.mkdirSync(`${sampleSetFolder}.${trackId}/`)
     sampleSetJson = []
     for (var i = 0; i < 5; ++i){
@@ -66,6 +69,8 @@ exports.updateTrack = (req,res) => {
       }
     }
   }
+
+  console.log(sampleSetJson,"sampleSetJson")
 
   fs.writeFileSync(`${sampleSetFolder}.${trackId}/bank.json`, JSON.stringify(sampleSetJson));
   var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackId}/bank.json`));

@@ -35,9 +35,8 @@ const SketchPadFileLoader = (props) => {
     function selectFileFromSketchPad(file){
         // const newFolderPath = folderPath + file.path.split(folderPath)[1];
         // setFolderPath(newFolderPath)
-        const sPath = file.path.split('/').join('%');
         if (props.fileType === "wav"){
-            props.insertSample(sPath,props.sampleIndex)
+            props.insertSample(file.path,props.sampleIndex)
         } else {
             props.loadSampleSet(file)
         }
