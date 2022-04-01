@@ -31,6 +31,8 @@ function SketchPadXtractor(props){
     useEffect(() => {
         if (selectedSketchVersion !== null){
             getSketch()
+            setSketchItemGroups(null)
+            setSketchItemGroupItems(null)
         }
     },[selectedSketchVersion])
 
