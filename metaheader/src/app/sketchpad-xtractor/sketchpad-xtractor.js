@@ -175,7 +175,7 @@ function SketchPadXtractor(props){
                 // console.log('ERROR')
             } else {
                 const pattern = await res.json()
-                if (pattern && pattern.hasNotes === true || pattern && pattern.notes.length !== emptyPatternNotesLength){
+                if (pattern && pattern.hasNotes === true){
                     pattern.name = `scene-${letter}-${index}`
                     newPatterns.push(pattern)
                 }
