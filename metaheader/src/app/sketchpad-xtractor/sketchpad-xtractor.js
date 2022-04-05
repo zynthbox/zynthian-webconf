@@ -175,7 +175,8 @@ function SketchPadXtractor(props){
                 // console.log('ERROR')
             } else {
                 const pattern = await res.json()
-                if (pattern && pattern.hasNotes === true){
+                if (pattern && pattern.hasNotes === true || pattern && pattern.notes.length !== emptyPatternNotesLength){
+                    pattern.name = `scene-${letter}-${index}`
                     newPatterns.push(pattern)
                 }
             }
@@ -410,6 +411,8 @@ function SketchPadXtractorColumn(props){
                         <small>{item.engine_name}</small>
                     </React.Fragment>
                 )
+            } else if (subType === "patterns"){
+                itemTextDisplay = item.name
             }
 
             return (
