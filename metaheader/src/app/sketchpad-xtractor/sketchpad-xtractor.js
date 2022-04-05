@@ -282,6 +282,7 @@ function SketchPadXtractor(props){
             <SketchPadXtractorColumn 
                 type={"item groups"}
                 items={sketchItemGroups}
+                subType={itemGroupTypeArray[selectedSketchItemGroup]}
                 onSelectItem={onSetSelectedSketchItemGroup}
                 color={colorsArray[2]}
              />
@@ -358,16 +359,32 @@ function SketchPadXtractor(props){
 
 function SketchPadXtractorColumn(props){
 
-    const { type, subType, items, onSelectItem } = props
+    const { type, subType, items } = props
+    const [ selectedItemIndex, setSelectedItemIndex ] = useState(null)
+
+    useEffect(() => {
+        return () => {
+            setSelectedItemIndex(null)
+        }
+    },[])
+
+    function onSelectItem(item,index){
+        setSelectedItemIndex(index)
+        props.onSelectItem(item)
+    }
+
 
     let itemsDisplay;
     if (type === "item groups"){
+
+        console.log(subType,"subType")
+
         itemsDisplay = (
             <React.Fragment>
-                <li><a onClick={() => onSelectItem("clips")}>Clips ({items.clips !== null ? items.clips.length: 0})</a></li>
-                <li><a onClick={() => onSelectItem("samples")}>Samples ({items.samples !== null ? items.samples.length: 0})</a></li>
-                <li><a onClick={() => onSelectItem("patterns")}>Patterns ({items.patterns !== null ? items.patterns.length: 0})</a></li>
-                <li><a onClick={() => onSelectItem("sounds")}>Sounds ({items.sounds !== null ? items.sounds.length: 0})</a></li>
+                <li><a className={subType === "clips" ? "active" : ""} onClick={() => onSelectItem("clips")}>Clips ({items.clips !== null ? items.clips.length: 0})</a></li>
+                <li><a className={subType === "patterns" ? "active" : ""} onClick={() => onSelectItem("patterns")}>Patterns ({items.patterns !== null ? items.patterns.length: 0})</a></li>
+                <li><a className={subType === "samples" ? "active" : ""} onClick={() => onSelectItem("samples")}>Samples ({items.samples !== null ? items.samples.length: 0})</a></li>
+                <li><a className={subType === "sounds" ? "active" : ""} onClick={() => onSelectItem("sounds")}>Sounds ({items.sounds !== null ? items.sounds.length: 0})</a></li>
             </React.Fragment>
         )
     } else {
@@ -397,7 +414,7 @@ function SketchPadXtractorColumn(props){
 
             return (
                 <li key={index}>
-                    <a onClick={() => onSelectItem(item)}>{itemTextDisplay}</a>
+                    <a className={selectedItemIndex === index ? "active" : ""} onClick={() => onSelectItem(item,index)}>{itemTextDisplay}</a>
                 </li>
             )
         })
