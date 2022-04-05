@@ -361,6 +361,7 @@ function SketchPadXtractor(props){
 function SketchPadXtractorColumn(props){
 
     const { type, subType, items } = props
+    const previousItems = usePrevious(items)
     const [ selectedItemIndex, setSelectedItemIndex ] = useState(null)
 
     useEffect(() => {
@@ -368,6 +369,10 @@ function SketchPadXtractorColumn(props){
             setSelectedItemIndex(null)
         }
     },[])
+
+    useEffect(() => {
+        if (items !== previousItems) setSelectedItemIndex(null)
+    },[items])
 
     function onSelectItem(item,index){
         setSelectedItemIndex(index)
@@ -377,9 +382,6 @@ function SketchPadXtractorColumn(props){
 
     let itemsDisplay;
     if (type === "item groups"){
-
-        console.log(subType,"subType")
-
         itemsDisplay = (
             <React.Fragment>
                 <li><a className={subType === "clips" ? "active" : ""} onClick={() => onSelectItem("clips")}>Clips ({items.clips !== null ? items.clips.length: 0})</a></li>
