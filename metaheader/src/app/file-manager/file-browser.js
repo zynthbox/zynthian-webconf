@@ -75,25 +75,27 @@ function WebconfFileBrowser(props){
       })
       
       if ( window.confirm(message)){
-        deleteFiles(paths)
+        deleteFile(paths,0)
       }
   }
 
-  async function deleteFiles(paths){
-    paths.forEach(async function(fullPath,index){
-      const response = await fetch(`http://${window.location.hostname}:3000/delete`, {
-          method: 'POST',
-          headers: {
-          'Content-Type': 'application/json',
-          },
-          body:JSON.stringify({fullPath})
-      });
-      const res = await response.json();
+  async function deleteFile(paths,index){
+    const fullPath = paths[index];
+    fetch(`http://${window.location.hostname}:3000/delete`, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({fullPath})
+    }).then(async function(response){
       if (index === paths.length - 1){
+        const res = await response.json();
         clearSelection();
         props.refreshFileManager(res);
+      } else {
+        deleteFile(paths,index + 1)
       }
-    })
+    });
   }
 
   async function downloadFilesAction(data){

@@ -75,7 +75,7 @@ function MetaHeader(){
                 <div id="file-manager" className="container" style={{left:fileManagerLeftCss}}>
                     <h3>
                         <i className="glyphicon glyphicon-file"></i>
-                        FILES
+                        FILE MANAGER
                     </h3>
                     <FileManager/>
                 </div>
@@ -134,7 +134,7 @@ function MetaHeader(){
             <a href="#m" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More <span className="caret"></span></a>
             <ul className="dropdown-menu">
                 <li>
-                    <a className={showFileManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileManager(showFileManager === true ? false : true)}>Files</a>
+                    <a className={showFileManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileManager(showFileManager === true ? false : true)}>File Manager</a>
                 </li>
                 <li>
                     <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Sample-Set Editor</a>

@@ -1,20 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { AiOutlineCloseCircle } from 'react-icons/ai'
+import { AiOutlineCloseCircle, AiFillFolder, AiFillFolderOpen } from 'react-icons/ai'
+import { VscJson } from 'react-icons/vsc'
+import { BsFillFileEarmarkMusicFill, BsFillFileEarmarkFill } from 'react-icons/bs'
+import { FaWindowClose } from 'react-icons/fa'
 import { useOnClickOutside } from '../helpers';
 
 const SketchPadFileLoader = (props) => {
 
-    const initFolderPath = props.fileType === "json" ? "sketches/my-sketches/temp/wav/": "capture/";
-
+    let initFolderPath = props.fileType === "json" ? "sketches/my-sketches/temp/wav/": "capture/";
+    if (props.actionType === "SAVE") initFolderPath = "/"
     const [ fileList, setFileList ] = useState(null)
     const [ folderPath, setFolderPath ] = useState(initFolderPath)
+    console.log(folderPath,"folder path")
 
     useEffect(() => {
         getSketchPadFiles()
     },[])
 
     useEffect(() => {
-        if (folderPath !== null && folderPath !== initFolderPath){
+        if (folderPath !== null){
+            setFileList(null)
             getSketchPadFiles()
         }
     },[folderPath])
@@ -28,47 +33,78 @@ const SketchPadFileLoader = (props) => {
             },
         });
         const res = await response.json();
-        console.log(res,"res of sketch pad file picketr")
         setFileList(res)
     }
 
     function selectFileFromSketchPad(file){
         // const newFolderPath = folderPath + file.path.split(folderPath)[1];
         // setFolderPath(newFolderPath)
-        if (props.fileType === "wav"){
-            props.insertSample(file.path,props.sampleIndex)
-        } else {
-            props.loadSampleSet(file)
+        if (props.actionType === "LOAD"){
+            if (props.fileType === "wav"){
+                props.insertSample(file.path,props.sampleIndex)
+            } else {
+                props.loadSampleSet(file)
+            }
+            props.setShowLoadFromSketchPadDialog(false)
+        } else if (props.actionType === "SAVE"){
+            const newFolderPath = file.path.split('zynthian-my-data/')[1];
+            setFolderPath(newFolderPath)
         }
-        props.setShowLoadFromSketchPadDialog(false)
+    }
+
+    function goBack(){
+        
+        let newFolderPath;
+        if (folderPath.indexOf('/') > -1){
+            const lastFolderInChain = folderPath.split("/")[folderPath.split("/").length - 1]
+            newFolderPath = folderPath.split("/" + lastFolderInChain)[0];
+        } else {
+            newFolderPath = initFolderPath;
+        }
+        
+        setFolderPath(newFolderPath);
     }
 
     let fileListDisplay;
     if (fileList !== null){
+        
+        const fp = props.actionType === "LOAD" ? folderPath : "zynthian-my-data/" + (folderPath !== initFolderPath ? folderPath + "/" : "")
+        
         fileListDisplay = fileList.map((f,index) => {
+            
+            let relPath = f.path
+            let showItem = true
+            relPath = f.path.split(fp)[1];
 
-            const relPath = f.path.split(folderPath)[1];
+            let iconDispaly = <AiFillFolder/>
 
-            let showItem = true;
-            if (relPath.indexOf('/') > -1){
+            if (relPath && relPath.indexOf('/') > -1){
                 showItem = false;
-                if (relPath.split('/').length === 2){
+                if (props.actionType === "LOAD" && relPath.split('/').length === 2){
                     showItem = true;
                 }
             }
-
-            if (relPath.indexOf('.') > -1){
+            
+            if (relPath && relPath.indexOf('.') > -1){
+                
                 showItem = false;
-                if (relPath.split('.')[relPath.split('.').length - 1] === props.fileType){
+                const fileType = relPath.split('.')[relPath.split('.').length - 1];
+                
+                if (fileType === "json") iconDispaly = <VscJson/>
+                else if (fileType === "wav") iconDispaly = <BsFillFileEarmarkMusicFill/>
+                else iconDispaly = <BsFillFileEarmarkFill/>
+
+                if (props.actionType === "SAVE" && relPath.split('/').length === 1){
+                    showItem = true
+                } else if (props.actionType === "LOAD"  && fileType  === props.fileType){
                     showItem = true
                 }
             }
 
-
             if (showItem === true){
                 return (
                     <li>
-                        <a onClick={() => selectFileFromSketchPad(f)}>{relPath}</a>
+                        <a onClick={() => highlightFile(index)} onDoubleClick={() => selectFileFromSketchPad(f)}>{iconDispaly} {relPath}</a>
                     </li>
                 )
             }
@@ -80,15 +116,34 @@ const SketchPadFileLoader = (props) => {
         props.setShowLoadFromSketchPadDialog(false)
     });
 
+    let goBackDisplay;
+    if (folderPath !== initFolderPath){
+        goBackDisplay = <li><a onClick={() => goBack()}><AiFillFolderOpen/> ...</a></li>
+    }
+
+    let bottomSaveInput,
+        containerCssClass = 'sample-set-load-from-sketch-pad-dialog'
+    if (props.actionType === "SAVE"){
+        containerCssClass += " w-save"
+        bottomSaveInput = (
+            <div className='dialog-footer'>
+                <input type="text" />
+                <button>Save</button>
+            </div>
+        )
+    }
+
     return (
-        <div  ref={ref} className='sample-set-load-from-sketch-pad-dialog'>
+        <div  ref={ref} className={containerCssClass}>
             <a className='close' onClick={() => props.setShowLoadFromSketchPadDialog(false)}>
-                <AiOutlineCloseCircle/>
+                <FaWindowClose/>
             </a>
-            <h4>LOAD {props.fileType === "wav" ? "FILE" : "SAMPLESET"} FROM SKETCH PAD</h4>
+            <h4>{props.actionType} {props.fileType === "wav" ? "FILE" : "SAMPLESET"} FROM SKETCH PAD</h4>
             <ul>
+                {goBackDisplay}
                 {fileListDisplay}
             </ul>
+            {bottomSaveInput}
         </div>
     )
 }

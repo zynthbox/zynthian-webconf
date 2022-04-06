@@ -32,9 +32,19 @@ function FileUploader(props) {
   // const [file, setFile] = useState();
 
   const [ files, setFiles] = useState(null);
+  const [ fileListCssClass, setFileListCssClass ] = useState("")
   const [ uploadProgressData, setUploadProgressData ] = useState(null)
   const [ isMultiUploading, setIsMultiUploading ] = useState(false);
   const [ uploadedFileIndex, setUploadedFileIndex ] = useState(null);
+
+  useEffect(() => {
+    if (files !== null){
+      const fileUploaderHeight = document.getElementById('file-uploader').offsetHeight;
+      console.log((files.length + 1 * 37),fileUploaderHeight)
+      if (fileUploaderHeight < ((files.length + 1) * 37)) setFileListCssClass(' w-scroll')
+      else setFileListCssClass('')
+    }
+  },[files])
 
   useEffect(() => {
     if (isMultiUploading === true){
@@ -112,9 +122,9 @@ function FileUploader(props) {
 
     fileListDisplay = (
       <div id="file-uploader-summary-list">
-        <div id="file-list">
-          {filesList}
-        </div>
+          <div id="file-list" className={fileListCssClass}>
+            {filesList}
+          </div>
         <div id="file-list-actions">
           <div style={{float:"right"}}>
             <a className='button' onClick={() => props.setShowFileUploader(false)}>Close</a>

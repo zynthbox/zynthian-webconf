@@ -154,6 +154,9 @@
   float: left;
   width: 100%;
 }
+#file-manager #file-uploader #file-uploader-summary-list #file-list.w-scroll {
+  overflow-y: scroll;
+}
 #file-manager #file-uploader #file-uploader-summary-list #file-list .file-uploader-list-item {
   padding: 5px;
   padding-right: 100px;

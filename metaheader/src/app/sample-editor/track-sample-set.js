@@ -12,6 +12,7 @@ const TrackSampleSet = (props) => {
     const [ dragZoneContainerCssClass, setDragZoneContainerCssClass ] = useState('hidden')
     const [ showSampleSetSourcePicker, setShowSampleSetSourcePicker ] = useState(false)
     const [ showSampleSetDropZone, setShowSampleSetDropZone ] = useState(false)
+    const [ sketchPadDialogActionType, setSketchPadDialogActionType ] = useState("LOAD")
     const [ showLoadFromSketchPadDialog, setShowLoadFromSketchPadDialog ] = useState(false)
     const [ loadFromSketchPadSampleIndex, setLoadFromSketchPadSampleIndex ] = useState(null)
     const [ loadFromSketchPadFileType, setLoadFromSketchPadFileType ] = useState('wav')
@@ -124,7 +125,8 @@ const TrackSampleSet = (props) => {
     }
 
     function saveSampleSetAs(){
-        console.log('save sample set as')
+        setSketchPadDialogActionType("SAVE")
+        setShowLoadFromSketchPadDialog(true)
     }
 
     async function loadSampleSet(file){
@@ -183,6 +185,7 @@ const TrackSampleSet = (props) => {
     }
 
     function onLoadFromSketpchPadClick(){
+        setSketchPadDialogActionType("LOAD")
         setShowLoadFromSketchPadDialog(true)
         setShowSampleSetSourcePicker(false)
     }
@@ -277,6 +280,7 @@ const TrackSampleSet = (props) => {
 
         sampleSetLoadFromSketchPadDialogDisplay = (
             <SketchPadFileLoader 
+                actionType={sketchPadDialogActionType}
                 setShowLoadFromSketchPadDialog={setShowLoadFromSketchPadDialog}
                 insertSample={onInsertSample}
                 loadSampleSet={loadSampleSet}
