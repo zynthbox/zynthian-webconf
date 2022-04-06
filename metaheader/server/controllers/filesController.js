@@ -3,7 +3,7 @@ const path = require("path")
 
 var zipFolder = require('zip-folder');
 var rimraf = require("rimraf");
-var multer = require('multer')
+var multer = require('multer');
 
 // const rootFolder = "./"
 const rootFolder = "/home/pi/zynthian-my-data/"
@@ -205,8 +205,19 @@ exports.copyPaste = (req,res) => {
 /* UPLOAD FILES */
 
 var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-    cb(null, parentFolder)
+  destination: function (req, file, cb) {
+      const selectedFolder = req.params.folder.split('+++').join('/');
+      const folderChainArray = selectedFolder.split('/');
+      let fc = ""
+      for (var i in folderChainArray){
+        if (i > 0 && i < folderChainArray.length - 1){
+          var currentFolder = folderChainArray[i];
+          fc +=  currentFolder + "/"
+          // console.log(fc,"currentFolder", i);
+          fs.mkdirSync( parentFolder + "/" + fc, {recursive:true})  
+        }
+      }
+      cb(null, parentFolder)
   },
   filename: function (req, file, cb) {
     const selectedFolder = req.params.folder.split('+++').join('/');

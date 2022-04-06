@@ -72,7 +72,9 @@ function FileUploader(props) {
 
   const uploadFile = (index,multiple = false) => {
 
-    const url = `http://${window.location.hostname}:3000/upload/${selectedFolder.split(fsep).join('+++')}`
+    const filePath = selectedFolder + files[index].path.split(files[index].name)[0];
+    console.log(filePath,"filePath")
+    const url = `http://${window.location.hostname}:3000/upload/${filePath.split(fsep).join('+++')}`
     const formData = new FormData();
     formData.append('file', files[index])
 
@@ -88,6 +90,7 @@ function FileUploader(props) {
     }
 
     axios.post(url, formData, config ).then(res => {
+      console.log(res);
       if (multiple === true){
         if (index + 1 < files.length){
           setUploadedFileIndex(index + 1)
@@ -165,7 +168,7 @@ const FileUploaderListItem = (props) => {
   return (
     <div className='file-uploader-list-item'>
       <div className='list-item-file-info'>
-        <span className='file-name'>{file.name}</span>
+        <span className='file-name'>{file.path}</span>
         <span className='file-size'>{humanFileSize(file.size)}</span>
       </div>
       <div className='list-item-progress-container'>
