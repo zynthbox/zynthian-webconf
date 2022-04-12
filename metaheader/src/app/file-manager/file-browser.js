@@ -10,6 +10,9 @@ import {
   defineFileAction
 } from "chonky";
 import FileUploader from './file-uploader';
+import { IoArrowBack, IoArrowForward } from 'react-icons/io5';
+import { IoIosArrowDropdown } from 'react-icons/io'
+import { AiOutlineCloseCircle } from 'react-icons/ai'
 
 function WebconfFileBrowser(props){
 
@@ -309,11 +312,58 @@ function WebconfFileBrowser(props){
             clearSelectionOnOutsideClick={true}
             ref={fileBrowserRef}
           >
-            <FileNavbar />
+            <FileBrowserHeader 
+              navigateHistory={props.navigateHistory}
+              browserHistory={props.browserHistory}
+              browserHistoryIndex={props.browserHistoryIndex}
+            />
             <FileToolbar />
             <FileList />
             <FileContextMenu />
           </FileBrowser>
+      </div>
+  )
+}
+
+const FileBrowserHeader = (props) => {
+  
+  const { navigateHistory, browserHistory, browserHistoryIndex } = props;
+  const [ showHistoryDropDown, setShowHistoryDropDown] = useState(false)
+
+  let historyDropDownDisplay;
+  if (showHistoryDropDown === true){
+    const history = browserHistory.map((h,index) => {
+
+      let nameDisplay = h.path.split('/')[h.path.split('/').length - 1]
+      let itemCssClass;
+      if (index === browserHistoryIndex){
+        itemCssClass = "active"
+      }
+      return (
+        <li><a className={itemCssClass} title={h.path} onClick={() => navigateHistory(index)}>{nameDisplay}</a></li>
+      )
+    })
+    historyDropDownDisplay = (
+      <div className='browser-history-submenu'>
+        <a onClick={() => setShowHistoryDropDown(false)} className='close-browser-history'>
+          <AiOutlineCloseCircle/>
+        </a>
+        <ul>
+          {history}
+        </ul>
+      </div>
+    )
+  }
+
+  return (
+      <div className='file-navbar-container-custom'>   
+        <ul className='browser-navigation-menu'>
+          <li><a onClick={() => navigateHistory('back')}><IoArrowBack/></a></li>
+          <li><a onClick={() => navigateHistory('forward')}><IoArrowForward/></a></li>
+          <li><a onClick={() => setShowHistoryDropDown(true)}><IoIosArrowDropdown/></a></li>
+        </ul>
+        {historyDropDownDisplay}
+        <FileNavbar />
       </div>
   )
 }

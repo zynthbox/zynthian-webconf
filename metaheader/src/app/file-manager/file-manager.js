@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import WebconfFileBrowser from './file-browser';
 import TreeView from './tree-view';
+import { usePrevious } from '../helpers'
 
 const FileManager = () => {
 
@@ -12,6 +13,12 @@ const FileManager = () => {
     const [ displayedFiles, setDisplayedFiles ] = useState([])
     const [ folderChain, setFolderChain ] = useState([rootFolderChainObject])
     const [ selectedFolder, setSelectedFolder ] = useState(rootFolder)
+    const previousSelectedFolder = usePrevious(selectedFolder)
+    const [ browserHistory, setBrowserHistory ] = useState([])
+    // console.log(browserHistory);
+    const [ browserHistoryIndex, setBrowserHistoryIndex ] = useState(-1);
+    const [ isViewingHistory, setIsViewingHistory ] = useState(false)
+    // console.log(browserHistoryIndex,"browser history index")
     const [ treeData, setTreeData ] = useState(null);
   
     const [ showFileUploader, setShowFileUploader ] = useState(false)
@@ -23,7 +30,34 @@ const FileManager = () => {
 
     useEffect(() => {
       getDisplayFiles(files)
+      if (selectedFolder !== null && selectedFolder !== previousSelectedFolder && isViewingHistory === false){
+            let newBrowserHistory = []
+            const obj =  {path:selectedFolder,folderChain:folderChain}
+            if (browserHistoryIndex !== browserHistory.length - 1){
+                newBrowserHistory = [...browserHistory.slice(0,browserHistoryIndex),obj]
+            } else [
+                newBrowserHistory =  [ ...browserHistory,obj]
+            ]
+            console.log(newBrowserHistory,"new browser history");
+            setBrowserHistory(newBrowserHistory)
+       }
+       setIsViewingHistory(false)
     },[selectedFolder])
+
+    useEffect(() => {
+        const newBrowserHistoryIndex = browserHistory.length - 1;
+        setBrowserHistoryIndex(newBrowserHistoryIndex)
+    },[browserHistory])
+
+    useEffect(() => {
+        if (browserHistoryIndex !== browserHistory.length && browserHistory.length > 0 ){
+            // setIsViewingHistory(true)
+            setSelectedFolder(browserHistory[browserHistoryIndex].path)
+            setFolderChain(browserHistory[browserHistoryIndex].folderChain)
+        } else {
+            setIsViewingHistory(false)
+        }
+    },[browserHistoryIndex])
 
     useEffect(() => {
         if (files.length > 0) generateTreeViewData()
@@ -193,6 +227,23 @@ const FileManager = () => {
         getDisplayFiles(newFiles);
     }
 
+    function navigateHistory(val){
+        setIsViewingHistory(true)
+        let newBrowserHistoryIndex;
+        console.log(browserHistoryIndex <= browserHistory.length - 1 , "browser history index smaller or equal to browser history length - 1")
+        if (val === "back" && (browserHistoryIndex - 1) > -1){
+            newBrowserHistoryIndex = browserHistoryIndex - 1;
+        } else if (val === "forward" && browserHistoryIndex <= browserHistory.length - 1 ){
+            console.log('FUFUFSULFJSFLSAJSLJFFSLJAFSLJAFLJSAFLJSfljsaflj')
+            newBrowserHistoryIndex = browserHistoryIndex + 1;
+        } else if (val !== "forward" && val !== "back") {
+            newBrowserHistoryIndex = val;
+        }
+        console.log(val,newBrowserHistoryIndex, "val new browser history index")
+        console.log(browserHistory[newBrowserHistoryIndex])
+        if (typeof newBrowserHistoryIndex === "number") setBrowserHistoryIndex(newBrowserHistoryIndex)
+    }
+
     let treeViewDisplay;
     if (treeData !== null){
         treeViewDisplay = (
@@ -210,6 +261,9 @@ const FileManager = () => {
             <WebconfFileBrowser 
                 displayedFiles={displayedFiles}
                 selectedFolder={selectedFolder}
+                browserHistory={browserHistory}
+                browserHistoryIndex={browserHistoryIndex}
+                navigateHistory={navigateHistory}
                 fsep={fsep}
                 folderChain={folderChain}
                 setFolderChain={setFolderChain}
