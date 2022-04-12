@@ -38,7 +38,7 @@ const FileManager = () => {
             } else [
                 newBrowserHistory =  [ ...browserHistory,obj]
             ]
-            console.log(newBrowserHistory,"new browser history");
+
             setBrowserHistory(newBrowserHistory)
        }
        setIsViewingHistory(false)
@@ -230,17 +230,15 @@ const FileManager = () => {
     function navigateHistory(val){
         setIsViewingHistory(true)
         let newBrowserHistoryIndex;
-        console.log(browserHistoryIndex <= browserHistory.length - 1 , "browser history index smaller or equal to browser history length - 1")
+
         if (val === "back" && (browserHistoryIndex - 1) > -1){
             newBrowserHistoryIndex = browserHistoryIndex - 1;
         } else if (val === "forward" && browserHistoryIndex <= browserHistory.length - 1 ){
-            console.log('FUFUFSULFJSFLSAJSLJFFSLJAFSLJAFLJSAFLJSfljsaflj')
             newBrowserHistoryIndex = browserHistoryIndex + 1;
         } else if (val !== "forward" && val !== "back") {
             newBrowserHistoryIndex = val;
         }
-        console.log(val,newBrowserHistoryIndex, "val new browser history index")
-        console.log(browserHistory[newBrowserHistoryIndex])
+        
         if (typeof newBrowserHistoryIndex === "number") setBrowserHistoryIndex(newBrowserHistoryIndex)
     }
 

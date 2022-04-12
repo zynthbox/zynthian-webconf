@@ -52,7 +52,8 @@ function WebconfFileBrowser(props){
 
   function renameFileAction(data){
     const previousPath = data.state.selectedFiles[0].path;
-    const folderName = window.prompt('Enter new Folder Name:');
+    const previousName = previousPath.split('/')[previousPath.split('/').length - 1]
+    const folderName = window.prompt(`Enter new name for "${previousName}":`);
     const fullPath = previousPath.split(selectedFolder)[0] + selectedFolder + fsep + folderName;
     renameFile(previousPath,fullPath)
   }
