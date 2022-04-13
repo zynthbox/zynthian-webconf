@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   FileBrowser,
   FileNavbar,
@@ -13,6 +13,7 @@ import FileUploader from './file-uploader';
 import { IoArrowBack, IoArrowForward } from 'react-icons/io5';
 import { IoIosArrowDropdown } from 'react-icons/io'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
+import { useOnClickOutside } from '../helpers';
 
 function WebconfFileBrowser(props){
 
@@ -331,6 +332,18 @@ const FileBrowserHeader = (props) => {
   const { navigateHistory, browserHistory, browserHistoryIndex } = props;
   const [ showHistoryDropDown, setShowHistoryDropDown] = useState(false)
 
+  useEffect(() => {
+    setTimeout(() => {
+      const lvlUpSvg = document.getElementsByClassName('fa-level-up-alt')[0];
+      // console.log(lvlUpSvg)
+      if (lvlUpSvg && lvlUpSvg !== null) lvlUpSvg.setAttribute('transform','scale(-1 1)')
+    }, 10);
+  },[])
+  
+
+  const ref = useRef();
+  useOnClickOutside(ref, () => setShowHistoryDropDown(false));
+
   let historyDropDownDisplay;
   if (showHistoryDropDown === true){
     const history = browserHistory.map((h,index) => {
@@ -345,7 +358,7 @@ const FileBrowserHeader = (props) => {
       )
     })
     historyDropDownDisplay = (
-      <div className='browser-history-submenu'>
+      <div ref={ref} className='browser-history-submenu' >
         <a onClick={() => setShowHistoryDropDown(false)} className='close-browser-history'>
           <AiOutlineCloseCircle/>
         </a>
@@ -357,7 +370,7 @@ const FileBrowserHeader = (props) => {
   }
 
   return (
-      <div className='file-navbar-container-custom'>   
+      <div  className='file-navbar-container-custom'>   
         <ul className='browser-navigation-menu'>
           <li><a onClick={() => navigateHistory('back')}><IoArrowBack/></a></li>
           <li><a onClick={() => navigateHistory('forward')}><IoArrowForward/></a></li>
