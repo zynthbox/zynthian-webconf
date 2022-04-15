@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 
-import { setChonkyDefaults } from 'chonky';
-import { ChonkyIconFA } from 'chonky-icon-fontawesome';
-
-import FileManager from './app/file-manager/file-manager';
-import SampleEditor from './app/sample-editor/sample-editor'
-import Favorites from './app/favorites/favorites';
-import SketchPadXtractor from './app/sketchpad-xtractor/sketchpad-xtractor';
+const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
+const SampleEditor = lazy(()=>import('./app/sample-editor/sample-editor'))
+const Favorites = lazy(()=>import('./app/favorites/favorites'))
+const SketchPadXtractor = lazy(()=>import('./app/sketchpad-xtractor/sketchpad-xtractor'))
 
 function MetaHeader(){
 
@@ -77,7 +74,9 @@ function MetaHeader(){
                         <i className="glyphicon glyphicon-file"></i>
                         FILE MANAGER
                     </h3>
-                    <FileManager/>
+                    <Suspense fallback={<LoadingSpinner/>}>
+                        <FileManager/>
+                    </Suspense>
                 </div>
                 <div id="file-manager-overlay"></div>
             </React.Fragment>
@@ -92,7 +91,9 @@ function MetaHeader(){
                     <h3>
                         SAMPLE EDITOR
                     </h3>
-                    <SampleEditor colorsArray={colorsArray} />
+                    <Suspense fallback={<LoadingSpinner/>}>
+                        <SampleEditor colorsArray={colorsArray} />
+                    </Suspense>
                 </div>
                 <div id="sample-editor-overlay"></div>
             </React.Fragment>
@@ -107,7 +108,9 @@ function MetaHeader(){
                     <h3>
                         Favorites
                     </h3>
-                    <Favorites colorsArray={colorsArray} />
+                    <Suspense fallback={<LoadingSpinner/>}>
+                        <Favorites colorsArray={colorsArray} /> 
+                    </Suspense>
                 </div>
                 <div id="favorites-overlay"></div>
             </React.Fragment>
@@ -122,7 +125,9 @@ function MetaHeader(){
                     <h3>
                         SketchPad Xtractor
                     </h3>
-                    <SketchPadXtractor colorsArray={colorsArray} />
+                    <Suspense fallback={<LoadingSpinner/>}>
+                        <SketchPadXtractor colorsArray={colorsArray} />
+                    </Suspense>
                 </div>
                 <div id="sketch-pad-xtractor-overlay"></div>
             </React.Fragment>
@@ -154,7 +159,13 @@ function MetaHeader(){
     )
 }
 
-setChonkyDefaults({ iconComponent: ChonkyIconFA });
+const LoadingSpinner = () => {
+    return (
+        <div className='lds-grid-container'>
+            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+    )
+}
 
 const e = React.createElement;
 const domContainer = document.querySelector('#metaheader-container');

@@ -59,7 +59,6 @@ const TrackSampleSet = (props) => {
     const uploadSample = async (sample) => {
         const formData = new FormData();
         formData.append('file', sample); // appending file
-        // console.log(selectedFolder,"selected folder")
         axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`, formData ).then(res => { // then print response status
         //   console.log(res)
         });
@@ -82,7 +81,7 @@ const TrackSampleSet = (props) => {
         setSamples(res);
     }
 
-    async function onInsertSample(filePath,sIndex,multiple){
+    async function onInsertSample(filePath,sIndex,multiple,isSaveAs){
         // console.log('ON INSERT SAMPLE')
         setLoadFromSketchPadSampleIndex(null)
         const fileName = filePath.split('/')[filePath.split('/').length - 1];
@@ -96,12 +95,19 @@ const TrackSampleSet = (props) => {
             body:JSON.stringify({sIndex,sPath})
         });
         const res = await response.json()
-        insertSample(filePath,fileName,sIndex,multiple)
+        insertSample(filePath,fileName,sIndex,multiple,isSaveAs)
     }
 
-    async function insertSample(filePath,fileName,sIndex,multiple){
-        const previousPath = filePath
-        const destinationPath =  selectedFolder + fileName
+    async function insertSample(filePath,fileName,sIndex,multiple,isSaveAs){
+
+        console.log(isSaveAs, "is save as")
+
+        const previousPath = isSaveAs === true ? "/home/pi" + selectedFolder + fileName : filePath
+        const destinationPath =  isSaveAs === true ? filePath.split("/pi")[1] :  selectedFolder + fileName 
+
+        console.log(previousPath,"prevoois")
+        console.log(destinationPath,"dest")
+    
         const deleteOrigin = false;
         const response = await fetch(`http://${window.location.hostname}:3000/copypaste`, {
             method: 'POST',
@@ -111,6 +117,9 @@ const TrackSampleSet = (props) => {
             body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
         });
         const res = await response.json()
+
+        console.log(res,"res copy paste")
+
         if (multiple === true){
             if (sIndex === samples.length - 1) getTrackSampleSet()
         } else getTrackSampleSet()
@@ -140,14 +149,40 @@ const TrackSampleSet = (props) => {
         });
         const res = await response.json()
         const baseFilePath = "/home/pi" + selectedFolder.split(index + 1)[0] + sampleSetIndex;
+
+
         res.forEach(function(sample,sIndex){
             // console.log(sample,sIndex,"sample + sIndex on forEach in load")
             if (sample !== null){
+                console.log(baseFilePath + sample.path)
                 onInsertSample(baseFilePath + sample.path,sIndex,true)
             } else {
                 if (sIndex === samples.length - 1) getTrackSampleSet()
             }
         })
+    }
+
+    function saveSampleSet(dirPath){
+
+        const fullPath = dirPath.split('/pi')[1]
+        console.log(fullPath,"fullpath create directory")
+
+        fetch(`http://${window.location.hostname}:3000/createfolder`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({fullPath})
+        }).then(async function(res){
+            const response = await res.json()
+            console.log(response,"response on create folder")
+            samples.forEach(function(sample,sIndex){
+                // console.log(sample,sIndex,"sample + sIndex on forEach in load")
+                if (sample !== null){
+                    onInsertSample(dirPath + sample.path,sIndex,true,true)
+                }
+            })
+        });
     }
 
     let hideMaskTimeout;
@@ -284,6 +319,7 @@ const TrackSampleSet = (props) => {
                 setShowLoadFromSketchPadDialog={setShowLoadFromSketchPadDialog}
                 insertSample={onInsertSample}
                 loadSampleSet={loadSampleSet}
+                saveSampleSet={saveSampleSet}
                 sampleIndex={sampleIndexToReplace}
                 fileType={loadFromSketchPadFileType}
             />

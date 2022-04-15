@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { setChonkyDefaults } from 'chonky';
+import { ChonkyIconFA } from 'chonky-icon-fontawesome';
+
+setChonkyDefaults({ iconComponent: ChonkyIconFA });
+
 import WebconfFileBrowser from './file-browser';
 import TreeView from './tree-view';
 import { usePrevious } from '../helpers'

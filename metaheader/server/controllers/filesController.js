@@ -162,10 +162,13 @@ function copyFolderRecursiveSync( source, target ) {
 exports.copyPaste = (req,res) => {
 
   const { previousPath, destinationPath,deleteOrigin } = req.body;
-  // console.log( previousPath, destinationPath,deleteOrigin )
+  console.log('COPY PASTE FILE CONTROLLER')
+  console.log( previousPath, " :::: PREVIOUS PATH" )
+  console.log( destinationPath, " ::::: DESTINATION PATH")
+
   try {
 
-    // console.log(fs.existsSync())
+    console.log(fs.existsSync(destinationPath), "DESTINATION PATH IS EXISTS ")
 
     if (fs.statSync(previousPath).isDirectory()) {
       copyFolderRecursiveSync(previousPath, parentFolder + destinationPath)

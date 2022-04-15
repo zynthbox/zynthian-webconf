@@ -11,8 +11,8 @@ const SketchPadFileLoader = (props) => {
     if (props.actionType === "SAVE") initFolderPath = "/"
     const [ fileList, setFileList ] = useState(null)
     const [ folderPath, setFolderPath ] = useState(initFolderPath)
-    console.log(folderPath,"folder path")
-
+    const [ folderName, setFolderName ] = useState('')
+    
     useEffect(() => {
         getSketchPadFiles()
     },[])
@@ -50,6 +50,11 @@ const SketchPadFileLoader = (props) => {
             const newFolderPath = file.path.split('zynthian-my-data/')[1];
             setFolderPath(newFolderPath)
         }
+    }
+
+    function onSaveSampleSetAsClick(){
+        let destPath = "/home/pi/zynthian-my-data" + ( folderPath === "/" ? "" : "/") + folderPath + (folderPath === "/" ? "" : "/") + folderName + "/"
+        props.saveSampleSet(destPath)
     }
 
     function goBack(){
@@ -127,8 +132,8 @@ const SketchPadFileLoader = (props) => {
         containerCssClass += " w-save"
         bottomSaveInput = (
             <div className='dialog-footer'>
-                <input type="text" />
-                <button>Save</button>
+                <input value={folderName} onChange={(e) => setFolderName(e.target.value)} type="text" />
+                <button onClick={() => onSaveSampleSetAsClick()}>Save</button>
             </div>
         )
     }

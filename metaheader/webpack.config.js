@@ -50,4 +50,10 @@ module.exports = {
     path: path.resolve(__dirname, ''),
     filename: 'metaheader-bundle.js',
   },
+  output: {
+    path: path.resolve(__dirname, ''),
+    filename: 'metaheader-bundle.js',
+    chunkFilename: 'bundle/metaheader.[id].js',
+    publicPath: '/metaheader/'
+  },
 };
