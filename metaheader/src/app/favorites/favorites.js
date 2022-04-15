@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { RiDeleteBin2Fill } from 'react-icons/ri'
+import LoadingSpinner from "../loading-spinner";
 
 const getFavListTemplateArray = (currentLists) => {
   
@@ -85,14 +85,15 @@ function Favorites(props) {
 
   const { colorsArray } = props;
 
+  const [loading, setLoading ] = useState(true)
   const [state, setState] = useState(null);
 
   useEffect(() => {
     getFavoritesJson()
   },[])
 
-  async function getFavoritesJson(filter){
-
+  async function getFavoritesJson(){
+    setLoading(true)
     const response = await fetch(`http://${window.location.hostname}:3000/favorites/`, {
         method: 'GET',
         headers: {
@@ -112,6 +113,7 @@ function Favorites(props) {
     })
 
     updateState(presetsArray)
+    setLoading(false)
   }
 
   function updateState(presetsArray, listIndex){
@@ -159,15 +161,22 @@ function Favorites(props) {
   }
 
   /* RENDER */
+
+  let favRowDisplay = <LoadingSpinner/>
+  if (loading === false){
+    favRowDisplay = (
+      <div className="fav-row">
+        <DragDropContext onDragEnd={onDragEnd}>
+        {favColumnsDisplay}
+        </DragDropContext>
+      </div>
+    )
+  }
   
   return (
     <div id="favorites">
         <div id="fav-grid">
-            <div className="fav-row">
-              <DragDropContext onDragEnd={onDragEnd}>
-              {favColumnsDisplay}
-              </DragDropContext>
-            </div>
+          {favRowDisplay}
         </div>
     </div>
   );

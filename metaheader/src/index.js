@@ -1,6 +1,8 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 
+import LoadingSpinner from './app/loading-spinner';
+
 const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
 const SampleEditor = lazy(()=>import('./app/sample-editor/sample-editor'))
 const Favorites = lazy(()=>import('./app/favorites/favorites'))
@@ -156,14 +158,6 @@ function MetaHeader(){
             {favoritesDisplay}
             {xtractorDisplay}
         </React.Fragment>
-    )
-}
-
-const LoadingSpinner = () => {
-    return (
-        <div className='lds-grid-container'>
-            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-        </div>
     )
 }
 

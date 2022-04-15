@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
+import LoadingSpinner from '../loading-spinner'
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 
@@ -258,24 +259,33 @@ const FileManager = () => {
         )
     }
 
+    let fileBrowserDisplay = <LoadingSpinner/>
+    if (files !== null && displayedFiles !== null){
+        fileBrowserDisplay = (
+            <Suspense fallback={<LoadingSpinner/>}>
+                <WebconfFileBrowser 
+                    displayedFiles={displayedFiles}
+                    selectedFolder={selectedFolder}
+                    browserHistory={browserHistory}
+                    browserHistoryIndex={browserHistoryIndex}
+                    navigateHistory={navigateHistory}
+                    fsep={fsep}
+                    folderChain={folderChain}
+                    setFolderChain={setFolderChain}
+                    setSelectedFolder={setSelectedFolder}
+                    openFiles={openFiles}
+                    refreshFileManager={refreshFileManager}
+                    showFileUploader={showFileUploader}
+                    setShowFileUploader={setShowFileUploader}
+                />
+            </Suspense>
+        )
+    }
+
     return (
         <div className='file-manager-wrapper'>
             {treeViewDisplay}
-            <WebconfFileBrowser 
-                displayedFiles={displayedFiles}
-                selectedFolder={selectedFolder}
-                browserHistory={browserHistory}
-                browserHistoryIndex={browserHistoryIndex}
-                navigateHistory={navigateHistory}
-                fsep={fsep}
-                folderChain={folderChain}
-                setFolderChain={setFolderChain}
-                setSelectedFolder={setSelectedFolder}
-                openFiles={openFiles}
-                refreshFileManager={refreshFileManager}
-                showFileUploader={showFileUploader}
-                setShowFileUploader={setShowFileUploader}
-            />
+            {fileBrowserDisplay}
         </div>
     );
 };
