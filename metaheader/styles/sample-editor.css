@@ -164,6 +164,50 @@
   height: 21px;
   width: 100%;
 }
+#sample-editor-container .sample-set .track-keyzone-mode-menu div {
+  width: 100%;
+  float: left;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+#sample-editor-container .sample-set .track-keyzone-mode-menu div span {
+  float: left;
+  color: white;
+}
+#sample-editor-container .sample-set .track-keyzone-mode-menu div ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  width: auto;
+  float: right;
+}
+#sample-editor-container .sample-set .track-keyzone-mode-menu div ul li {
+  width: auto;
+  float: left;
+}
+#sample-editor-container .sample-set .track-keyzone-mode-menu div ul li a {
+  display: block;
+  padding: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+}
+#sample-editor-container .sample-set .track-keyzone-mode-menu div ul li a.active {
+  font-weight: bold;
+  background-color: dodgerblue;
+  color: white;
+}
+#sample-editor-container .sample-set .track-keyzone-mode-menu div ul li:first-of-type a {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+#sample-editor-container .sample-set .track-keyzone-mode-menu div ul li:last-of-type a {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+#sample-editor-container .sample-set .track-keyzone-mode-menu div ul li + li a {
+  border-left: 0;
+}
 #sample-editor-container .sample-set .color-picker-container {
   position: absolute;
   top: 35px;

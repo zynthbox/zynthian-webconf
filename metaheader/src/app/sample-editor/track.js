@@ -16,10 +16,12 @@ const Track = (props) => {
     const [ showEditMode, setShowEditMode ] = useState(false);
     const [ showColorPicker, setShowColorPicker ] = useState(false);
 
+
     const ref = useRef();
     useOnClickOutside(ref, () => setShowColorPicker(false));
 
     useEffect(() => {
+        console.log(track,"TRACK " + index)
         getTrackSampleSet()
     },[])
 
@@ -80,6 +82,8 @@ const Track = (props) => {
                     </div>
                     <TrackTitle 
                         showEditMode={showEditMode}
+                        keyZoneMode={track.keyzone_mode}
+                        trackAudioType={track.trackAudioType}
                         title={track.name}
                         trackIndex={index}
                         setShowEditMode={setShowEditMode}
@@ -99,7 +103,10 @@ const Track = (props) => {
 
 const TrackTitle = (props) => {
 
-    const { showEditMode, setShowEditMode, title, updateTrack, trackIndex } = props;
+    const { showEditMode, setShowEditMode, title, updateTrack, trackIndex, keyZoneMode, trackAudioType } = props;
+
+    console.log(keyZoneMode,trackAudioType,trackIndex);
+
     const [ previousTitle, setPreviousTitle ] = useState(title)
 
     useEffect(() => {
@@ -150,11 +157,33 @@ const TrackTitle = (props) => {
     }
 
     return (
-        <div className="sample-set-title">
-            <div ref={ref} className='title-wrapper'>
-                {titleDisplay}
+        <React.Fragment>
+            <div className="sample-set-title">
+                <div ref={ref} className='title-wrapper'>
+                    {titleDisplay}
+                </div>
             </div>
-        </div>
+            <div className='track-keyzone-mode-menu'>
+                <div className='keyzone-mode-menu-container'>
+                    {/* off - all-full | auto  - split-full | narrow - split-narrow */}
+                    <span>Auto Split:</span>
+                    <ul>
+                        <li><a className={keyZoneMode === "all-full" ? "active" : ""}>Off</a></li>
+                        <li><a className={keyZoneMode === "split-full" ? "active" : ""}>Auto</a></li>
+                        <li><a className={keyZoneMode === "split-narrow" ? "active" : ""}>Narrow</a></li>
+                    </ul>
+                </div>
+                <div className='track-audio-type-menu-container'>
+                    {/* trig - sample-trig | slice - smaple-slice | loop - sample-loop */}
+                    <ul>
+                        <li><a className={trackAudioType === "sample-trig" ? "active" : ""}>Trig</a></li>
+                        <li><a className={trackAudioType === "sample-slice" ? "active" : ""}>Slice</a></li>
+                        <li><a className={trackAudioType === "sample-loop" ? "active" : ""}>Loop</a></li>
+                    </ul>
+                </div>
+            </div>
+        </React.Fragment>
+
     )
 }
 

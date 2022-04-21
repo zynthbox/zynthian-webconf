@@ -1,12 +1,13 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect, Suspense, lazy } from 'react'
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import LoadingSpinner from '../loading-spinner'
 
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 
-import WebconfFileBrowser from './file-browser';
-import TreeView from './tree-view';
+const WebconfFileBrowser = lazy(()=>import('./file-browser'))
+const TreeView = lazy(()=>import('./tree-view'))
+
 import { usePrevious } from '../helpers'
 
 const FileManager = () => {
