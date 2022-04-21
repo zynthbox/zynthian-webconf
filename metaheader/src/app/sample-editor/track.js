@@ -48,17 +48,6 @@ const Track = (props) => {
         props.updateTrack(index, track.name, color.hex)
     }
 
-    const keyZoneMode = track.keyzone_mode;
-    const trackAudioType= track.trackAudioType;
-
-    function onKeyZoneModeOptionClick(kzm){
-        props.updateTrack(index,track.name,color,kzm)
-    }
-
-    function onTrackAudioTypeClick(tat){
-        props.updateTrack(index,track.name,color,keyZoneMode,tat)
-    }
-
     let colorPickerDisplay;
     if (showColorPicker === true){
         colorPickerDisplay = (
@@ -93,31 +82,18 @@ const Track = (props) => {
                     <TrackTitle 
                         showEditMode={showEditMode}
                         title={track.name}
-                        trackIndex={index}
+                        index={index}
                         setShowEditMode={setShowEditMode}
                         updateTrack={props.updateTrack}
                     />
-
-                    <div className='track-keyzone-mode-menu'>
-                        <div style={{opacity: (trackAudioType == "sample-trig" ? "1" : "0")}} className='keyzone-mode-menu-container'>
-                            {/* off - all-full | auto  - split-full | narrow - split-narrow */}
-                            <span>Auto Split:</span>
-                            <ul>
-                                <li><a onClick={() => onKeyZoneModeOptionClick("all-full")} className={keyZoneMode === "all-full" ? "active" : ""}>Off</a></li>
-                                <li><a onClick={() => onKeyZoneModeOptionClick("split-full")}  className={keyZoneMode === "split-full" ? "active" : ""}>Auto</a></li>
-                                <li><a onClick={() => onKeyZoneModeOptionClick("split-narrow")}  className={keyZoneMode === "split-narrow" ? "active" : ""}>Narrow</a></li>
-                            </ul>
-                        </div>
-                        <div className='track-audio-type-menu-container'>
-                            {/* trig - sample-trig | slice - smaple-slice | loop - sample-loop */}
-                            <ul>
-                                <li><a onClick={() => onTrackAudioTypeClick("sample-trig")} className={trackAudioType === "sample-trig" ? "active" : ""}>Trig</a></li>
-                                <li><a onClick={() => onTrackAudioTypeClick("sample-slice")} className={trackAudioType === "sample-slice" ? "active" : ""}>Slice</a></li>
-                                <li><a onClick={() => onTrackAudioTypeClick("sample-loop")} className={trackAudioType === "sample-loop" ? "active" : ""}>Loop</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
+                    <TrackSampleModesMenus 
+                        index={index}
+                        title={track.name}
+                        color={color}
+                        keyZoneMode={track.keyzone_mode}
+                        trackAudioType={track.trackAudioType}
+                        updateTrack={props.updateTrack}
+                    />
                     <TrackSampleSet 
                         index={index}
                         samples={samples}
@@ -132,7 +108,7 @@ const Track = (props) => {
 
 const TrackTitle = (props) => {
 
-    const { showEditMode, setShowEditMode, title, updateTrack, trackIndex, keyZoneMode, trackAudioType } = props;
+    const { showEditMode, setShowEditMode, title, updateTrack, index } = props;
 
     const [ previousTitle, setPreviousTitle ] = useState(title)
 
@@ -157,7 +133,7 @@ const TrackTitle = (props) => {
     }
 
     function undoTitleChanges(){
-        updateTrack(trackIndex,previousTitle)
+        updateTrack(index,previousTitle)
         setShowEditMode(false)
     }
 
@@ -166,13 +142,13 @@ const TrackTitle = (props) => {
         if (e.target.className !== "edit-button")  setShowEditMode(false)
     });
 
-    const displayedTitle = title === null ? `Track ${trackIndex+1}` : title
+    const displayedTitle = title === null ? `Track ${index+1}` : title
 
     let titleDisplay;
     if (showEditMode === true){
         titleDisplay = (
             <div className='input-wrapper'>
-                <input type="text" placeholder={""} value={title} onChange={e => updateTrack(trackIndex, e.target.value)}/>
+                <input type="text" placeholder={""} value={title} onChange={e => updateTrack(index, e.target.value)}/>
                 <a className='undo-title-change' onClick={undoTitleChanges}>
                     <BiUndo/>
                 </a>
@@ -195,8 +171,34 @@ const TrackSampleModesMenus = (props) => {
 
     const { index, title, color, keyZoneMode, trackAudioType, updateTrack } = props
 
+    function onKeyZoneModeOptionClick(kzm){
+        updateTrack(index,title,color,kzm)
+    }
+
+    function onTrackAudioTypeClick(tat){
+        updateTrack(index,title,color,keyZoneMode,tat)
+    }
+
     return (
-        <div></div>
+        <div className='track-keyzone-mode-menu'>
+            <div style={{opacity: (trackAudioType == "sample-trig" ? "1" : "0")}} className='keyzone-mode-menu-container'>
+                {/* off - all-full | auto  - split-full | narrow - split-narrow */}
+                <span>Auto Split:</span>
+                <ul>
+                    <li><a onClick={() => onKeyZoneModeOptionClick("all-full")} className={keyZoneMode === "all-full" ? "active" : ""}>Off</a></li>
+                    <li><a onClick={() => onKeyZoneModeOptionClick("split-full")}  className={keyZoneMode === "split-full" ? "active" : ""}>Auto</a></li>
+                    <li><a onClick={() => onKeyZoneModeOptionClick("split-narrow")}  className={keyZoneMode === "split-narrow" ? "active" : ""}>Narrow</a></li>
+                </ul>
+            </div>
+            <div className='track-audio-type-menu-container'>
+                {/* trig - sample-trig | slice - smaple-slice | loop - sample-loop */}
+                <ul>
+                    <li><a onClick={() => onTrackAudioTypeClick("sample-trig")} className={trackAudioType === "sample-trig" ? "active" : ""}>Trig</a></li>
+                    <li><a onClick={() => onTrackAudioTypeClick("sample-slice")} className={trackAudioType === "sample-slice" ? "active" : ""}>Slice</a></li>
+                    <li><a onClick={() => onTrackAudioTypeClick("sample-loop")} className={trackAudioType === "sample-loop" ? "active" : ""}>Loop</a></li>
+                </ul>
+            </div>
+        </div>
     )
 }
 

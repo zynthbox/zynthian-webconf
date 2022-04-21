@@ -284,7 +284,7 @@ const FileManager = () => {
     }
 
     return (
-        <div style={{height: window.innerHeight - 190}} className='file-manager-wrapper'>
+        <div style={{height: window.innerHeight - 170}} className='file-manager-wrapper'>
             {treeViewDisplay}
             {fileBrowserDisplay}
         </div>
