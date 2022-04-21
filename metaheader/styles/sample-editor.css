@@ -173,6 +173,7 @@
 #sample-editor-container .sample-set .track-keyzone-mode-menu div span {
   float: left;
   color: white;
+  text-shadow: 0px 1px 2px black;
 }
 #sample-editor-container .sample-set .track-keyzone-mode-menu div ul {
   padding: 0;

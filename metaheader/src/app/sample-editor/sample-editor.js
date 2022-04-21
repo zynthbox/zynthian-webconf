@@ -12,8 +12,10 @@ const SampleEditor = (props) => {
     const [ tracks, setTracks ] = useState(null)
     const [ showFilePicker, setShowFilePicker ] = useState(false);
 
-    console.log(sketchInfo);
-    console.log(currentSketch);
+    console.log("*** STATE UPDATE ****")
+    console.log(sketchInfo,"sketchInfo");
+    console.log(currentSketch,"current sketch");
+    console.log("*** /STATE UPDATE ****")
     
     useEffect(() => {
         getSketchInfo()
@@ -27,7 +29,6 @@ const SampleEditor = (props) => {
     },[sketchInfo])
 
     useEffect(() => {
-        console.log(currentSketch,"currentSketch");
         if (currentSketch !== null){
             setTracks(currentSketch.tracks)
         }
@@ -110,12 +111,16 @@ const SampleEditor = (props) => {
         saveCurrentSketch(result + ".sketch.json")
     }
 
-    function updateTrack(index,title,color){
+    function updateTrack(index,title,color,keyZoneMode,trackAudioType){
+
+        const currentTrack = currentSketch.tracks[index]
 
         const newTrack = {
-            ...currentSketch.tracks[index],
+            ...currentTrack,
             name:title,
-            color
+            color,
+            keyzone_mode: keyZoneMode && keyZoneMode !== null ? keyZoneMode : currentTrack.keyzone_mode,
+            trackAudioType: trackAudioType && trackAudioType !== null ? trackAudioType : currentTrack.trackAudioType
         }
 
         let newTracks = []

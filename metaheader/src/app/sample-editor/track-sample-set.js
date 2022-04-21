@@ -100,14 +100,9 @@ const TrackSampleSet = (props) => {
 
     async function insertSample(filePath,fileName,sIndex,multiple,isSaveAs){
 
-        console.log(isSaveAs, "is save as")
-
         const previousPath = isSaveAs === true ? "/home/pi" + selectedFolder + fileName : filePath
         const destinationPath =  isSaveAs === true ? filePath.split("/pi")[1] :  selectedFolder + fileName 
 
-        console.log(previousPath,"prevoois")
-        console.log(destinationPath,"dest")
-    
         const deleteOrigin = false;
         const response = await fetch(`http://${window.location.hostname}:3000/copypaste`, {
             method: 'POST',
@@ -117,8 +112,6 @@ const TrackSampleSet = (props) => {
             body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
         });
         const res = await response.json()
-
-        console.log(res,"res copy paste")
 
         if (multiple === true){
             if (sIndex === samples.length - 1) getTrackSampleSet()
@@ -154,7 +147,6 @@ const TrackSampleSet = (props) => {
         res.forEach(function(sample,sIndex){
             // console.log(sample,sIndex,"sample + sIndex on forEach in load")
             if (sample !== null){
-                console.log(baseFilePath + sample.path)
                 onInsertSample(baseFilePath + sample.path,sIndex,true)
             } else {
                 if (sIndex === samples.length - 1) getTrackSampleSet()
@@ -165,7 +157,6 @@ const TrackSampleSet = (props) => {
     function saveSampleSet(dirPath){
 
         const fullPath = dirPath.split('/pi')[1]
-        console.log(fullPath,"fullpath create directory")
 
         fetch(`http://${window.location.hostname}:3000/createfolder`, {
             method: 'POST',
@@ -175,7 +166,6 @@ const TrackSampleSet = (props) => {
             body:JSON.stringify({fullPath})
         }).then(async function(res){
             const response = await res.json()
-            console.log(response,"response on create folder")
             samples.forEach(function(sample,sIndex){
                 // console.log(sample,sIndex,"sample + sIndex on forEach in load")
                 if (sample !== null){
