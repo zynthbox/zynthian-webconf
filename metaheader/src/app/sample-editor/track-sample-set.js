@@ -228,7 +228,12 @@ const TrackSampleSet = (props) => {
         setShowSampleSetDropZone(false)
     }
 
-    const samplesDisplay = samplesArray.map((sample,i) => (
+    let itemsArray = samplesArray;
+    if (props.sampleSetMode === "sample-loop"){
+        itemsArray = samples;
+    }
+
+    const samplesDisplay = itemsArray.map((sample,i) => (
         <Sample 
             key={i} 
             index={i} 
@@ -239,6 +244,7 @@ const TrackSampleSet = (props) => {
             uploadSample={onUploadSample}
             setLoadFromSketchPadSampleIndex={setLoadFromSketchPadSampleIndex}
             setLoadFromSketchPadFileType={setLoadFromSketchPadFileType}
+            sampleSetMode={props.sampleSetMode}
         />
     ))
 
@@ -318,7 +324,7 @@ const TrackSampleSet = (props) => {
 
     return (
         <React.Fragment>
-            <div className={"sample-list-container"}  onDragOver={onSampleListDragOver} onDragLeave={onSampleListDragExit}>
+            <div className={"sample-list-container " + (props.sampleSetMode === "sample-loop" ? "show-clips" : "")}  onDragOver={onSampleListDragOver} onDragLeave={onSampleListDragExit}>
                 <div className={"dropzone-container " + dragZoneContainerCssClass}>
                     <Dropzone onDrop={acceptedFiles => onDropSamples(acceptedFiles)}>
                         {({getRootProps, getInputProps}) => (

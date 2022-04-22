@@ -96,10 +96,11 @@ const Track = (props) => {
                     />
                     <TrackSampleSet 
                         index={index}
-                        samples={samples}
+                        samples={track.trackAudioType === "sample-loop" ? track.clips : samples}
                         setSamples={setSamples}
                         samplesArray={samplesArray}
                         getTrackSampleSet={getTrackSampleSet}
+                        sampleSetMode={track.trackAudioType}
                     />
                 </div>
         </React.Fragment>

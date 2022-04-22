@@ -360,6 +360,10 @@
 #sample-editor-container .sample-set .sample-list-container ul.sample-list li + li {
   border-top: 0;
 }
+#sample-editor-container .sample-set .sample-list-container.show-clips {
+  max-height: 200px;
+  overflow-y: scroll;
+}
 #sample-editor-container .sample-set ul.sample-set-actions li a {
   padding-left: 0px;
   padding-right: 5px;
@@ -372,7 +376,7 @@
   width: calc(100% - 20px);
   height: 200px;
   position: absolute;
-  top: 77px;
+  top: 138px;
   left: 10px;
   padding: 0 10px;
   box-sizing: border-box;

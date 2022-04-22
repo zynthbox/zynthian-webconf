@@ -35,11 +35,9 @@ const Sample = (props) => {
     }
 
     async function getSampleFile(){
-
         let sPath = sample.path.split('.').join('++');
         if (sPath.indexOf('/') > -1) sPath = sPath.split('/').join('+');
-
-        const response = await fetch(`http://${window.location.hostname}:3000/sample/${(trackIndex+1) + "+++" + sPath}`, {
+        const response = await fetch(`http://${window.location.hostname}:3000/${props.sampleSetMode === "sample-loop" ? "clip" : "sample"}/${(trackIndex+1) + "+++" + sPath}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -65,7 +63,10 @@ const Sample = (props) => {
     }
 
     let sampleControlDisplay, sampleActionsDisplay;
-    if (sample){
+
+    console.log(sample)
+
+    if (sample && sample !== null && sample.path !== null){
         if (isPlaying === true){
             sampleControlDisplay = (
                 <a className='play-sample-button' onClick={pauseSample}>
@@ -97,8 +98,10 @@ const Sample = (props) => {
     let samplePath;
     if (sample){
         samplePath = sample.path ? sample.path : sample.name;
-        if (samplePath.indexOf('/') > -1) samplePath = samplePath.split('/')[samplePath.split('/').length - 1];
-        if (samplePath.split('.')[0].length > 16) samplePath = samplePath.substring(0,17) + '...wav';
+        if (samplePath && samplePath !== null){
+            if (samplePath.indexOf('/') > -1) samplePath = samplePath.split('/')[samplePath.split('/').length - 1];
+            if (samplePath.split('.')[0].length > 16) samplePath = samplePath.substring(0,17) + '...wav';
+        }
     }
 
     return (
@@ -110,7 +113,7 @@ const Sample = (props) => {
             </audio>
 
             {sampleControlDisplay}
-            <h4 title={sample ? sample.path : ''}>{sample ? samplePath : '---'}</h4>
+            <h4 title={sample && samplePath !== null ? sample.path : ''}>{sample && samplePath !== null ? samplePath : '---'}</h4>
             {sampleActionsDisplay}
         </li>
     )

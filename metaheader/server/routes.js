@@ -27,6 +27,7 @@ module.exports = function (app) {
     app.get('/track/:id', sampleEditorController.getTrack)
     app.post('/track/:id', sampleEditorController.updateTrack)
     app.get('/sample/:id', sampleEditorController.getSample)
+    app.get('/clip/:id', sampleEditorController.getClip)
     app.post('/sample/:id', sampleEditorController.removeSample)
 
     // FAVORITES

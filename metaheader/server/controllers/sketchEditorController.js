@@ -81,15 +81,20 @@ exports.getSample = (req,res) => {
   const trackId = req.params.id.split('+++')[0];
   let samplePath = req.params.id.split('+++')[1].split('++').join('.');
   if (samplePath.indexOf('+') > -1) samplePath = samplePath.split('+').join('/');
-
-  // console.log('get sample')
-  // console.log(trackId,samplePath)
-
   let filePath = `${sampleSetFolder}.${trackId}/${samplePath}`
   if (samplePath.indexOf('/') > -1) filePath = samplePath; 
+  var file = fs.readFileSync(filePath, 'binary');
+  res.setHeader('Content-Disposition', 'attachment; filename='+samplePath);
+  res.write(file, 'binary');
+  res.end();
+}
 
-  // console.log(samplePath,"SAMPLE PATH")
-
+exports.getClip = (req,res) => {
+  const clipsFolder = `${rootFolder}sketches/my-sketches/temp/wav`
+  let samplePath = req.params.id.split('+++')[1].split('++').join('.');
+  if (samplePath.indexOf('+') > -1) samplePath = samplePath.split('+').join('/');
+  let filePath = `${clipsFolder}/${samplePath}`
+  if (samplePath.indexOf('/') > -1) filePath = samplePath; 
   var file = fs.readFileSync(filePath, 'binary');
   res.setHeader('Content-Disposition', 'attachment; filename='+samplePath);
   res.write(file, 'binary');
