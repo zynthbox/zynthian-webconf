@@ -12,10 +12,10 @@ const SampleEditor = (props) => {
     const [ tracks, setTracks ] = useState(null)
     const [ showFilePicker, setShowFilePicker ] = useState(false);
 
-    console.log("*** STATE UPDATE ****")
-    console.log(sketchInfo,"sketchInfo");
-    console.log(currentSketch,"current sketch");
-    console.log("*** /STATE UPDATE ****")
+    // console.log("*** STATE UPDATE ****")
+    // console.log(sketchInfo,"sketchInfo");
+    // console.log(currentSketch,"current sketch");
+    // console.log("*** /STATE UPDATE ****")
     
     useEffect(() => {
         getSketchInfo()

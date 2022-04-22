@@ -182,6 +182,14 @@ const TrackSampleModesMenus = (props) => {
 
     return (
         <div className='track-keyzone-mode-menu'>
+            <div className='track-audio-type-menu-container'>
+                {/* trig - sample-trig | slice - smaple-slice | loop - sample-loop */}
+                <ul>
+                    <li><a onClick={() => onTrackAudioTypeClick("sample-trig")} className={trackAudioType === "sample-trig" ? "active" : ""}>Trig</a></li>
+                    <li><a onClick={() => onTrackAudioTypeClick("sample-slice")} className={trackAudioType === "sample-slice" ? "active" : ""}>Slice</a></li>
+                    <li><a onClick={() => onTrackAudioTypeClick("sample-loop")} className={trackAudioType === "sample-loop" ? "active" : ""}>Loop</a></li>
+                </ul>
+            </div>
             <div style={{opacity: (trackAudioType == "sample-trig" ? "1" : "0")}} className='keyzone-mode-menu-container'>
                 {/* off - all-full | auto  - split-full | narrow - split-narrow */}
                 <span>Auto Split:</span>
@@ -189,14 +197,6 @@ const TrackSampleModesMenus = (props) => {
                     <li><a onClick={() => onKeyZoneModeOptionClick("all-full")} className={keyZoneMode === "all-full" ? "active" : ""}>Off</a></li>
                     <li><a onClick={() => onKeyZoneModeOptionClick("split-full")}  className={keyZoneMode === "split-full" ? "active" : ""}>Auto</a></li>
                     <li><a onClick={() => onKeyZoneModeOptionClick("split-narrow")}  className={keyZoneMode === "split-narrow" ? "active" : ""}>Narrow</a></li>
-                </ul>
-            </div>
-            <div className='track-audio-type-menu-container'>
-                {/* trig - sample-trig | slice - smaple-slice | loop - sample-loop */}
-                <ul>
-                    <li><a onClick={() => onTrackAudioTypeClick("sample-trig")} className={trackAudioType === "sample-trig" ? "active" : ""}>Trig</a></li>
-                    <li><a onClick={() => onTrackAudioTypeClick("sample-slice")} className={trackAudioType === "sample-slice" ? "active" : ""}>Slice</a></li>
-                    <li><a onClick={() => onTrackAudioTypeClick("sample-loop")} className={trackAudioType === "sample-loop" ? "active" : ""}>Loop</a></li>
                 </ul>
             </div>
         </div>

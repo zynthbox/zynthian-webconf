@@ -64,8 +64,6 @@ const Sample = (props) => {
 
     let sampleControlDisplay, sampleActionsDisplay;
 
-    console.log(sample)
-
     if (sample && sample !== null && sample.path !== null){
         if (isPlaying === true){
             sampleControlDisplay = (
