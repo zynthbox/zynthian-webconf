@@ -193,7 +193,7 @@
   background-color: white;
   cursor: pointer;
 }
-#sample-editor-container .sample-set .track-keyzone-mode-menu div ul li a.active {
+#sample-editor-container .sample-set .track-keyzone-mode-menu div ul li a.is-active {
   font-weight: bold;
   background-color: dodgerblue;
   color: white;
@@ -435,6 +435,13 @@
   opacity: 0;
   top: 0;
   left: 0;
+  cursor: pointer;
+}
+#sample-editor-container .sample-set .sample-set-upload-container.source-picker a.close-source-picker {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  padding: 0;
   cursor: pointer;
 }
 #sample-editor-container .sample-set:first-of-type {

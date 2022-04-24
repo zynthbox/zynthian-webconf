@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone'
 import axios from 'axios';
 import { AiFillSave } from 'react-icons/ai'
+import { FaWindowClose } from 'react-icons/fa'
 import Sample from './sample';
 import SketchPadFileLoader from './sketch-pad-file-loader';
 
@@ -17,7 +18,22 @@ const TrackSampleSet = (props) => {
     const [ loadFromSketchPadSampleIndex, setLoadFromSketchPadSampleIndex ] = useState(null)
     const [ loadFromSketchPadFileType, setLoadFromSketchPadFileType ] = useState('wav')
 
-    const selectedFolder = `/zynthian-my-data/sketches/my-sketches/temp/wav/sampleset/bank.${index+1}/`
+    const selectedFolder = `/zynthian-my-data/sketches/my-sketches/temp/wav/sampleset/bank.${index+1}/`;
+
+    useEffect(() => {
+        window.addEventListener('keydown',handleKeyPress,false);
+        return () => {
+            window.removeEventListener('keydown',handleKeyPress,false)
+        }
+    },[])
+
+    function handleKeyPress(e){
+        if (e.key === "Escape"){
+            setShowSampleSetSourcePicker(false)
+            setShowSampleSetDropZone(false)
+            setShowLoadFromSketchPadDialog(false)
+        }
+    }
 
     useEffect(() => {
         if (showSampleSetDropZone === true){
@@ -244,10 +260,10 @@ const TrackSampleSet = (props) => {
             uploadSample={onUploadSample}
             setLoadFromSketchPadSampleIndex={setLoadFromSketchPadSampleIndex}
             setLoadFromSketchPadFileType={setLoadFromSketchPadFileType}
+            setShowSampleSetSourcePicker={setShowSampleSetSourcePicker}
             sampleSetMode={props.sampleSetMode}
         />
     ))
-
 
     let sampleSetUploadDisplay;
     if (showSampleSetDropZone === true){
@@ -274,7 +290,7 @@ const TrackSampleSet = (props) => {
 
         let lfxeDisplay = (
             <a className='button' onClick={onLoadFromExternalMachineClick}>
-                Load from External Machine
+                Load from External
             </a>
         )
 
@@ -284,7 +300,7 @@ const TrackSampleSet = (props) => {
                     <input type="file" 
                         onChange={(e) => addSample(e.target.files[0],loadFromSketchPadSampleIndex)}
                     />
-                    Load from External Machine
+                    Load from External
                 </a>
 
             )
@@ -292,8 +308,11 @@ const TrackSampleSet = (props) => {
 
         sampleSetSourcePickerDisplay = (
             <div className="sample-set-upload-container source-picker">
+                <a onClick={() => setShowSampleSetSourcePicker(false)} className='close-source-picker'>
+                    <FaWindowClose/>
+                </a>
                 <a className='button' onClick={onLoadFromSketpchPadClick}>
-                    Load from Sketchpad
+                    Pick from Internal
                 </a>
                 {lfxeDisplay}
             </div>

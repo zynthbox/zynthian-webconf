@@ -2,7 +2,16 @@ import React, { useState, useEffect } from 'react'
 
 const Sample = (props) => {
 
-    const { index, sample, trackIndex, removeSample, uploadSample, setLoadFromSketchPadSampleIndex, setLoadFromSketchPadFileType } = props
+    const { 
+        index, 
+        sample, 
+        trackIndex,
+        removeSample, 
+        uploadSample, 
+        setLoadFromSketchPadSampleIndex, 
+        setLoadFromSketchPadFileType, 
+        setShowSampleSetSourcePicker 
+    } = props
 
     const [ data, setData ] = useState(null);
     const [ isPlaying, setIsPlaying ] = useState(false);
@@ -60,6 +69,7 @@ const Sample = (props) => {
     function onSamplePlusClick(index){
         setLoadFromSketchPadFileType('wav')
         setLoadFromSketchPadSampleIndex(index)
+        setShowSampleSetSourcePicker(true)
     }
 
     let sampleControlDisplay, sampleActionsDisplay;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { AiOutlineCloseCircle, AiFillFolder, AiFillFolderOpen } from 'react-icons/ai'
+import { AiFillFolder, AiFillFolderOpen } from 'react-icons/ai'
 import { VscJson } from 'react-icons/vsc'
 import { BsFillFileEarmarkMusicFill, BsFillFileEarmarkFill } from 'react-icons/bs'
 import { FaWindowClose } from 'react-icons/fa'

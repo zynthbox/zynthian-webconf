@@ -91,7 +91,7 @@ function MetaHeader(){
             <React.Fragment>
                 <div id="sample-editor-container" className="container" style={{left:fileManagerLeftCss}}>
                     <h3>
-                        SAMPLE EDITOR
+                        SAMPLE {'&'} PATTERN EDITOR
                     </h3>
                     <Suspense fallback={<LoadingSpinner/>}>
                         <SampleEditor colorsArray={colorsArray} />
@@ -144,7 +144,7 @@ function MetaHeader(){
                     <a className={showFileManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileManager(showFileManager === true ? false : true)}>File Manager</a>
                 </li>
                 <li>
-                    <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Sample-Set Editor</a>
+                    <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Sample {'&'} Pattern Editor</a>
                 </li>
                 <li>
                     <a className={showFavorites === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFavorites(showFavorites === true ? false : true)}>Favorites</a>

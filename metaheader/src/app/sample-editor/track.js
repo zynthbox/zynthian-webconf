@@ -113,29 +113,44 @@ const TrackTitle = (props) => {
 
     const [ previousTitle, setPreviousTitle ] = useState(title)
 
+    const undoChangesRef = useRef(null)
+    const saveChangesRef = useRef(null)
+
+    useEffect(() => {
+        window.removeEventListener('keydown',handleKeyPress,false)
+        window.addEventListener('keydown',handleKeyPress,false);
+        return () => {
+            window.removeEventListener('keydown',handleKeyPress,false)
+        }
+    },[title])
+
+    function handleKeyPress(e){
+        // console.log(e.key);
+        if (e.key === "Escape"){
+            undoChangesRef.current.click()
+        } else if (e.key === "Enter"){
+            saveChangesRef.current.click()
+        }
+    }
+
     useEffect(() => {
         // console.log('on show edit mode change - ' + showEditMode)
         if (showEditMode === true){
             setPreviousTitle(title)
-            window.addEventListener('keypress',onKeyPress)
+            // window.addEventListener('keypress',onKeyPress)
         } else if (showEditMode === false){
-            window.removeEventListener('keypress',onKeyPress)
+            // window.removeEventListener('keypress',onKeyPress)
         }
     },[showEditMode])
-
-    function onKeyPress(e){
-        // console.log(e.keyCode)
-        if (e.keyCode === 13){
-            setPreviousTitle(title)
-            setShowEditMode(false)
-        } else if (e.keyCode === "Escape"){
-            undoTitleChanges();
-        }
-    }
 
     function undoTitleChanges(){
         updateTrack(index,previousTitle)
         setShowEditMode(false)
+    }
+
+    function saveTitleChanges(){
+        setPreviousTitle(title)
+        setShowEditMode(false)   
     }
 
     const ref = useRef();
@@ -149,10 +164,11 @@ const TrackTitle = (props) => {
     if (showEditMode === true){
         titleDisplay = (
             <div className='input-wrapper'>
-                <input type="text" placeholder={""} value={title} onChange={e => updateTrack(index, e.target.value)}/>
-                <a className='undo-title-change' onClick={undoTitleChanges}>
+                <input type="text" placeholder={""} value={title} onChange={e => updateTrack(index, e.target.value)} autoFocus />
+                <a ref={undoChangesRef} className='undo-title-change' onClick={undoTitleChanges}>
                     <BiUndo/>
                 </a>
+                <a ref={saveChangesRef} className='save-changes' onClick={() => saveTitleChanges()}></a>
             </div>
         )
     } else {
@@ -185,18 +201,18 @@ const TrackSampleModesMenus = (props) => {
             <div className='track-audio-type-menu-container'>
                 {/* trig - sample-trig | slice - smaple-slice | loop - sample-loop */}
                 <ul>
-                    <li><a onClick={() => onTrackAudioTypeClick("sample-trig")} className={trackAudioType === "sample-trig" ? "active" : ""}>Trig</a></li>
-                    <li><a onClick={() => onTrackAudioTypeClick("sample-slice")} className={trackAudioType === "sample-slice" ? "active" : ""}>Slice</a></li>
-                    <li><a onClick={() => onTrackAudioTypeClick("sample-loop")} className={trackAudioType === "sample-loop" ? "active" : ""}>Loop</a></li>
+                    <li><a onClick={() => onTrackAudioTypeClick("sample-trig")} className={trackAudioType === "sample-trig" ? "is-active" : ""}>Trig</a></li>
+                    <li><a onClick={() => onTrackAudioTypeClick("sample-slice")} className={trackAudioType === "sample-slice" ? "is-active" : ""}>Slice</a></li>
+                    <li><a onClick={() => onTrackAudioTypeClick("sample-loop")} className={trackAudioType === "sample-loop" ? "is-active" : ""}>Loop</a></li>
                 </ul>
             </div>
             <div style={{opacity: (trackAudioType == "sample-trig" ? "1" : "0")}} className='keyzone-mode-menu-container'>
                 {/* off - all-full | auto  - split-full | narrow - split-narrow */}
                 <span>Auto Split:</span>
                 <ul>
-                    <li><a onClick={() => onKeyZoneModeOptionClick("all-full")} className={keyZoneMode === "all-full" ? "active" : ""}>Off</a></li>
-                    <li><a onClick={() => onKeyZoneModeOptionClick("split-full")}  className={keyZoneMode === "split-full" ? "active" : ""}>Auto</a></li>
-                    <li><a onClick={() => onKeyZoneModeOptionClick("split-narrow")}  className={keyZoneMode === "split-narrow" ? "active" : ""}>Narrow</a></li>
+                    <li><a onClick={() => onKeyZoneModeOptionClick("all-full")} className={keyZoneMode === "all-full" ? "is-active" : ""}>Off</a></li>
+                    <li><a onClick={() => onKeyZoneModeOptionClick("split-full")}  className={keyZoneMode === "split-full" ? "is-active" : ""}>Auto</a></li>
+                    <li><a onClick={() => onKeyZoneModeOptionClick("split-narrow")}  className={keyZoneMode === "split-narrow" ? "is-active" : ""}>Narrow</a></li>
                 </ul>
             </div>
         </div>
