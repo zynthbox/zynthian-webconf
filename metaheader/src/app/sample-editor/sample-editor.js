@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import axios from 'axios';
 import Track from './track';
 import SketchFilePicker from './file-picker';
-
+import LoadingSpinner from '../loading-spinner';
+const PatternEditor = lazy(()=>import('./pattern-editor'))
 
 const SampleEditor = (props) => {
 
@@ -11,6 +12,8 @@ const SampleEditor = (props) => {
     const [ currentSketch, setCurrentSketch ] = useState(null)
     const [ tracks, setTracks ] = useState(null)
     const [ showFilePicker, setShowFilePicker ] = useState(false);
+    const [ showPatternEditor, setShowPatternEditor ] = useState(false);
+    const [ patternEditorTrackIndex, setPatternEditorTrackIndex ] = useState(null);
 
     // console.log("*** STATE UPDATE ****")
     // console.log(sketchInfo,"sketchInfo");
@@ -137,6 +140,11 @@ const SampleEditor = (props) => {
         setCurrentSketch(newCurrentSketch);
     }
 
+    function onShowPatternEditor(trackIndex){
+        setPatternEditorTrackIndex(trackIndex)
+        setShowPatternEditor(true)
+    }
+
     let tracksDisplay;
     if (tracks !== null){
         
@@ -150,6 +158,7 @@ const SampleEditor = (props) => {
                         index={index} 
                         color={track.color && track.color !== defaultColor ? track.color : colorsArray[index]}
                         updateTrack={updateTrack}
+                        onShowPatternEditor={onShowPatternEditor}
                         track={track}
                     />
                 )
@@ -164,6 +173,17 @@ const SampleEditor = (props) => {
                 onSelect={updateSketchInfo}
                 setShowFilePicker={setShowFilePicker}
             />
+        )
+    }
+
+    let patternEditorDisplay;
+    if (showPatternEditor === true){
+        patternEditorDisplay = (
+            <Suspense fallback={<LoadingSpinner/>}>
+                <PatternEditor 
+                    trackIndex={patternEditorTrackIndex}
+                />
+            </Suspense>
         )
     }
 
@@ -182,6 +202,7 @@ const SampleEditor = (props) => {
                 {tracksDisplay}
             </div>
             {filePickerDisplay}
+            {patternEditorDisplay}
         </React.Fragment>
     )
 }

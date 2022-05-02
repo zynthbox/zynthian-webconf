@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { SketchPicker } from 'react-color';
 import { AiOutlineBgColors } from 'react-icons/ai'
 import { MdEditNote } from 'react-icons/md'
-import { BiUndo } from 'react-icons/bi'
+import { BiUndo, BiGridVertical } from 'react-icons/bi'
 import { useOnClickOutside } from '../helpers';
 import TrackSampleSet from './track-sample-set';
 
@@ -74,6 +74,11 @@ const Track = (props) => {
                             <li>
                                 <a className="color-picker" onClick={() => setShowColorPicker(showColorPicker == true ? false : true)}>
                                     <AiOutlineBgColors/>
+                                </a>
+                            </li>
+                            <li>
+                                <a className="track-pattern-editor" onClick={() => props.onShowPatternEditor(index)}>
+                                    <BiGridVertical/>
                                 </a>
                             </li>
                         </ul>
