@@ -535,6 +535,20 @@
   float: left;
   height: auto;
   cursor: pointer;
+  padding-left: 25px !important;
+  position: relative;
+}
+#sample-editor-container .sample-set-load-from-sketch-pad-dialog ul li a svg {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+#sample-editor-container .sample-set-load-from-sketch-pad-dialog ul li a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+#sample-editor-container .sample-set-load-from-sketch-pad-dialog ul li a.active:hover {
+  color: white !important;
 }
 #sample-editor-container .sample-set-load-from-sketch-pad-dialog ul li:nth-child(even) {
   background-color: aliceblue;

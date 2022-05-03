@@ -11,7 +11,7 @@ const Track = (props) => {
     const samplesArray = [
         null,null,null,null,null
     ]
-    const { index, track, color } = props;
+    const { index, track, color, updateTrackClips } = props;
     const [ samples, setSamples ] = useState(samplesArray);
     const [ showEditMode, setShowEditMode ] = useState(false);
     const [ showColorPicker, setShowColorPicker ] = useState(false);
@@ -60,6 +60,12 @@ const Track = (props) => {
         )
     }
 
+    // <li>
+    //     <a className="track-pattern-editor" onClick={() => props.onShowPatternEditor(index)}>
+    //         <BiGridVertical/>
+    //     </a>
+    // </li>
+
     return (
         <React.Fragment>
                 <div className="sample-set" style={{backgroundColor:props.color}}>
@@ -74,11 +80,6 @@ const Track = (props) => {
                             <li>
                                 <a className="color-picker" onClick={() => setShowColorPicker(showColorPicker == true ? false : true)}>
                                     <AiOutlineBgColors/>
-                                </a>
-                            </li>
-                            <li>
-                                <a className="track-pattern-editor" onClick={() => props.onShowPatternEditor(index)}>
-                                    <BiGridVertical/>
                                 </a>
                             </li>
                         </ul>
@@ -106,6 +107,8 @@ const Track = (props) => {
                         samplesArray={samplesArray}
                         getTrackSampleSet={getTrackSampleSet}
                         sampleSetMode={track.trackAudioType}
+                        keyZoneMode={track.keyzone_mode}
+                        updateTrackClips={updateTrackClips}
                     />
                 </div>
         </React.Fragment>

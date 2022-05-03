@@ -103,7 +103,7 @@ const Sample = (props) => {
         )
     }
 
-    let samplePath;
+    let samplePath = "---";
     if (sample){
         samplePath = sample.path ? sample.path : sample.name;
         if (samplePath && samplePath !== null){

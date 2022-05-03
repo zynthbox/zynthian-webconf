@@ -8,7 +8,7 @@ import SketchPadFileLoader from './sketch-pad-file-loader';
 
 const TrackSampleSet = (props) => {
 
-    const { index, samples, setSamples, samplesArray, getTrackSampleSet } = props
+    const { index, samples, setSamples, samplesArray, getTrackSampleSet, sampleSetMode } = props
 
     const [ dragZoneContainerCssClass, setDragZoneContainerCssClass ] = useState('hidden')
     const [ showSampleSetSourcePicker, setShowSampleSetSourcePicker ] = useState(false)
@@ -81,20 +81,29 @@ const TrackSampleSet = (props) => {
     };
 
     async function removeSample(sample,sIndex,fetchSamples){
+        if (sampleSetMode === "sample-loop"){
+            
+            // CLIP
+            props.updateTrackClips("remove",index,sIndex)
 
-        const trackIndex = index + 1;
-        const sPath = sample.path;
-        
-        const response = await fetch(`http://${window.location.hostname}:3000/sample/${(trackIndex)}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body:JSON.stringify({trackIndex,sPath,sIndex})
-        });
-        const res = await response.json()
-        // console.log(res)
-        setSamples(res);
+        } else {
+
+            // SAMPLE
+
+            const trackIndex = index + 1;
+            const sPath = sample.path;
+            
+            const response = await fetch(`http://${window.location.hostname}:3000/sample/${(trackIndex)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({trackIndex,sPath,sIndex})
+            });
+            const res = await response.json()
+            // console.log(res)
+            setSamples(res);
+        }
     }
 
     async function onInsertSample(filePath,sIndex,multiple,isSaveAs){

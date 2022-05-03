@@ -12,6 +12,7 @@ const SketchPadFileLoader = (props) => {
     const [ fileList, setFileList ] = useState(null)
     const [ folderPath, setFolderPath ] = useState(initFolderPath)
     const [ folderName, setFolderName ] = useState('')
+    const [ selectedFile, setSelectedFile ] = useState(null)
     
     useEffect(() => {
         getSketchPadFiles()
@@ -70,6 +71,10 @@ const SketchPadFileLoader = (props) => {
         setFolderPath(newFolderPath);
     }
 
+    function highlightFile(){
+
+    }
+
     let fileListDisplay;
     if (fileList !== null){
         
@@ -109,7 +114,7 @@ const SketchPadFileLoader = (props) => {
             if (showItem === true){
                 return (
                     <li>
-                        <a onClick={() => highlightFile(index)} onDoubleClick={() => selectFileFromSketchPad(f)}>{iconDispaly} {relPath}</a>
+                        <a onClick={() => setSelectedFile(relPath)} className={relPath === selectedFile ? "active" : ""} onDoubleClick={() => selectFileFromSketchPad(f)}>{iconDispaly} {relPath}</a>
                     </li>
                 )
             }

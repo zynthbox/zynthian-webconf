@@ -140,6 +140,19 @@ const SampleEditor = (props) => {
         setCurrentSketch(newCurrentSketch);
     }
 
+    function updateTrackClips(actionType,index,clipIndex){
+        console.log(actionType)
+        if (actionType === "remove"){
+            console.log('remove clip from track')
+            // delete file - get file name + path, delete from server
+            // update currentSketch.tracks[index].clips[clipIndex].path = null
+        } else if (actionType === "insert"){
+            console.log('insert clip into track')
+        } else if (actionType === "upload"){
+            console.log('upload clip to track')
+        }
+    }
+
     function onShowPatternEditor(trackIndex){
         setPatternEditorTrackIndex(trackIndex)
         setShowPatternEditor(true)
@@ -160,6 +173,7 @@ const SampleEditor = (props) => {
                         updateTrack={updateTrack}
                         onShowPatternEditor={onShowPatternEditor}
                         track={track}
+                        updateTrackClips={updateTrackClips}
                     />
                 )
             }

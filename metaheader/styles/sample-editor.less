@@ -635,6 +635,23 @@
                     float: left;
                     height: auto;
                     cursor: pointer;
+                    padding-left: 25px !important;
+                    position: relative;
+
+                    svg {
+                        position: absolute;
+                        top: 5px;
+                        left: 5px;
+                    }
+
+                    &.active {
+                        background-color: dodgerblue;
+                        color: white;
+
+                        &:hover {
+                            color: white !important;
+                        }
+                    }
                 }
 
                 &:nth-child(even){
