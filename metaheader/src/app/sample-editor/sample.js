@@ -103,13 +103,18 @@ const Sample = (props) => {
         )
     }
 
-    let samplePath = "---";
+    let samplePath;
     if (sample){
         samplePath = sample.path ? sample.path : sample.name;
         if (samplePath && samplePath !== null){
             if (samplePath.indexOf('/') > -1) samplePath = samplePath.split('/')[samplePath.split('/').length - 1];
             if (samplePath.split('.')[0].length > 16) samplePath = samplePath.substring(0,17) + '...wav';
         }
+    }
+
+    let samplePathDisplay = "---";
+    if (samplePath && samplePath !== null){
+        samplePathDisplay = samplePath;
     }
 
     return (
@@ -121,7 +126,7 @@ const Sample = (props) => {
             </audio>
 
             {sampleControlDisplay}
-            <h4 title={sample && samplePath !== null ? sample.path : ''}>{sample && samplePath !== null ? samplePath : '---'}</h4>
+            <h4 title={sample && samplePath !== null ? sample.path : ''}>{samplePathDisplay}</h4>
             {sampleActionsDisplay}
         </li>
     )

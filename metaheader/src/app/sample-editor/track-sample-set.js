@@ -109,18 +109,26 @@ const TrackSampleSet = (props) => {
     async function onInsertSample(filePath,sIndex,multiple,isSaveAs){
         // console.log('ON INSERT SAMPLE')
         setLoadFromSketchPadSampleIndex(null)
-        const fileName = filePath.split('/')[filePath.split('/').length - 1];
-        const sPath = fileName;
-        // console.log(fileName,"fileName")
-        const response = await fetch(`http://${window.location.hostname}:3000/track/${(index+1)}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body:JSON.stringify({sIndex,sPath})
-        });
-        const res = await response.json()
-        insertSample(filePath,fileName,sIndex,multiple,isSaveAs)
+
+        if (sampleSetMode === "sample-loop"){
+            console.log('insert loop')
+            props.updateTrackClips("insert",index,sIndex,filePath,multiple,isSaveAs)
+        } else {
+
+            const fileName = filePath.split('/')[filePath.split('/').length - 1];
+            const sPath = fileName;
+            // console.log(fileName,"fileName")
+            const response = await fetch(`http://${window.location.hostname}:3000/track/${(index+1)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({sIndex,sPath})
+            });
+            const res = await response.json()
+            insertSample(filePath,fileName,sIndex,multiple,isSaveAs)
+
+        }
     }
 
     async function insertSample(filePath,fileName,sIndex,multiple,isSaveAs){

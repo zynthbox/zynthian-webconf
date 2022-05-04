@@ -140,10 +140,35 @@ const SampleEditor = (props) => {
         setCurrentSketch(newCurrentSketch);
     }
 
-    function updateTrackClips(actionType,index,clipIndex){
-        console.log(actionType)
+    async function updateTrackClips(actionType,index,clipIndex,filePath,multiple,isSaveAs){
+
+        const track = currentSketch.tracks[index];
+        let newTrack;
+
         if (actionType === "remove"){
             console.log('remove clip from track')
+
+            const fullPath = currentSketch.tracks[index].clips[clipIndex].path;
+            const res = await fetch(`http://${window.location.hostname}:3000/delete`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({fullPath})
+            })
+            const data = await res.json();
+            console.log(data,"data res on remove")
+            newTrack = {
+                ...track,
+                clips:[
+                    ...track.clips.slice(0,index),
+                    {
+                        ...track.clips[clipIndex],
+                        path:null
+                    },
+                    ...track.clips.slice(index + 1,track.clips.length - 1)
+                ]
+            }
             // delete file - get file name + path, delete from server
             // update currentSketch.tracks[index].clips[clipIndex].path = null
         } else if (actionType === "insert"){
@@ -151,6 +176,16 @@ const SampleEditor = (props) => {
         } else if (actionType === "upload"){
             console.log('upload clip to track')
         }
+        const newCurrentSketch = {
+            ...currentSketch,
+            tracks:[
+                ...currentSketch.tracks.slice(0,index),
+                newTrack,
+                ...currentSketch.tracks.slice(index + 1,currentSketch.tracks.length - 1)
+            ]
+        }
+        setCurrentSketch(newCurrentSketch);
+        saveCurrentSketch()
     }
 
     function onShowPatternEditor(trackIndex){

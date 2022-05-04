@@ -211,7 +211,7 @@ const TrackSampleModesMenus = (props) => {
                 <ul>
                     <li><a onClick={() => onTrackAudioTypeClick("sample-trig")} className={trackAudioType === "sample-trig" ? "is-active" : ""}>Trig</a></li>
                     <li><a onClick={() => onTrackAudioTypeClick("sample-slice")} className={trackAudioType === "sample-slice" ? "is-active" : ""}>Slice</a></li>
-                    <li><a onClick={() => onTrackAudioTypeClick("sample-loop")} className={trackAudioType === "sample-loop" ? "is-active" : ""}>Loop</a></li>
+                    {/* <li><a onClick={() => onTrackAudioTypeClick("sample-loop")} className={trackAudioType === "sample-loop" ? "is-active" : ""}>Loop</a></li> */}
                 </ul>
             </div>
             <div style={{opacity: (trackAudioType == "sample-trig" ? "1" : "0")}} className='keyzone-mode-menu-container'>
