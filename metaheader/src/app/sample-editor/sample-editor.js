@@ -22,6 +22,10 @@ const SampleEditor = (props) => {
     
     useEffect(() => {
         getSketchInfo()
+        setTimeout(() => {
+            const sampleEditorContainer = document.getElementById('sample-editor').clientHeight;
+            console.log(sampleEditorContainer,window.innerHeight)
+        }, 100);
     },[])
 
     useEffect(() => {
@@ -236,6 +240,13 @@ const SampleEditor = (props) => {
         )
     }
 
+    let sampleEditorStyle = {
+        "height": window.innerHeight - 165
+    }
+    if (window.innerHeight < 865){
+        sampleEditorStyle["overflow-y"] = "scroll"
+    }
+
     return (
         <React.Fragment>
             <div className='sample-editor-menu'> 
@@ -247,7 +258,7 @@ const SampleEditor = (props) => {
                     {sketchInfo !== null ? <li style={{float:"right"}}><a>{sketchInfo.lastSelectedSketch}</a></li>: ''}
                 </ul>
             </div>
-            <div id="sample-editor">
+            <div id="sample-editor" style={sampleEditorStyle}>
                 {tracksDisplay}
             </div>
             {filePickerDisplay}
