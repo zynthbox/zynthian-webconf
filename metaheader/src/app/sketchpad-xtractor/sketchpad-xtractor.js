@@ -3,6 +3,7 @@ import { usePrevious } from '../helpers'
 import { BsFillFolderFill, BsViewList } from 'react-icons/bs'
 import { GoVersions } from 'react-icons/go'
 import { HiCollection } from 'react-icons/hi'
+import { GiMagnifyingGlass } from 'react-icons/gi'
 
 function SketchPadXtractor(props){
 
@@ -40,6 +41,8 @@ function SketchPadXtractor(props){
     const [ selectedSketchItemGroup, setSelectedSketchItemGroup ] = useState(null)
 
     const [ selectedSketchItemGroupItem, setSelectedSketchItemGroupItem ] = useState(null)
+
+    // console.log(selectedSketchItemGroupItem,"selected sketch item group item")
 
     useEffect(() => {
         if (selectedSketchFolder !== null){
@@ -135,7 +138,7 @@ function SketchPadXtractor(props){
         } else if (itemGroupTypeGenerationIndex === 1){
             let patternsArray = [];
             if (patterns !== null) patternsArray = [...patterns]
-            generateTrackPatterns(0,patternsArray)
+            generateTrackPatterns(0,patternsArray,0)
         } else if (itemGroupTypeGenerationIndex === 2){
             generateTrackSamples()
         } else if (itemGroupTypeGenerationIndex === 3){
@@ -157,11 +160,13 @@ function SketchPadXtractor(props){
         incrementItemGenerationIndex()
     }
 
-    function generateTrackPatterns(i,patternsArray){
+    function generateTrackPatterns(i,patternsArray,partIndex){
         let index = i ? i : 0;
         const newPatterns = patternsArray ? [...patternsArray] : []
         const letter = letters[itemGroupsGenerationIndex];
-        const patternPath = `/home/pi/zynthian-my-data/${selectedSketchFolder.path}sequences/scene-${letter}/patterns/scene-${letter}-${index + 1}.pattern.json`
+        const patternPath = `/home/pi/zynthian-my-data/${selectedSketchFolder.path}sequences/scene-${letter}/patterns/scene-${letter}-${index + 1}${letters[partIndex]}.pattern.json`
+
+        console.log(patternPath,"pattern paths")
 
         fetch(`http://${window.location.hostname}:3000/json/${patternPath.split('/').join('+++')}`, {
             method: 'GET',
@@ -176,17 +181,22 @@ function SketchPadXtractor(props){
             } else {
                 const pattern = await res.json()
                 if (pattern && pattern.hasNotes === true){
-                    pattern.name = `scene-${letter}-${index}`
+                    pattern.name = `scene-${letter}-${index}${letters[partIndex]}`
                     newPatterns.push(pattern)
                 }
             }
-            
-            if ((index + 1) >= 10){
-                setPatterns(newPatterns)
-                incrementItemGenerationIndex()
+
+            if ((partIndex + 1) >= 5){
+                if ((index + 1) >= 10){
+                    setPatterns(newPatterns)
+                    incrementItemGenerationIndex()
+                } else {
+                    generateTrackPatterns(index + 1,newPatterns,0)
+                }
             } else {
-                generateTrackPatterns(index + 1,newPatterns)
+                generateTrackPatterns(index,newPatterns,partIndex + 1)
             }
+            
         })
     }
 
@@ -304,6 +314,19 @@ function SketchPadXtractor(props){
         )
     }
 
+    let sketchItemSelectedItemColumnDisplay;
+    if (selectedSketchItemGroupItem !== null){
+        sketchItemSelectedItemColumnDisplay  = (
+            <SketchPadXtractorColumn 
+                type={"item"}
+                subType={itemGroupTypeArray[selectedSketchItemGroup]}
+                item={selectedSketchItemGroupItem}
+                // onSelectItem={setSelectedSketchItemGroupItem}
+                color={colorsArray[4]}
+            />
+        )
+    }
+
     let loadingSpinnerDisplay;
     if (isGeneratingItemGroups === true){
         loadingSpinnerDisplay = (
@@ -352,7 +375,11 @@ function SketchPadXtractor(props){
                 {sketchItemGroupItemsColumnDisplay}
             </div>
             <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[4]}}>
-                
+                <h4>
+                    <GiMagnifyingGlass/>
+                    Details
+                </h4>
+                {sketchItemSelectedItemColumnDisplay}
             </div>
         </div>
     )
@@ -360,7 +387,7 @@ function SketchPadXtractor(props){
 
 function SketchPadXtractorColumn(props){
 
-    const { type, subType, items } = props
+    const { type, subType, items, item } = props
     const previousItems = usePrevious(items)
     const [ selectedItemIndex, setSelectedItemIndex ] = useState(null)
 
@@ -390,7 +417,36 @@ function SketchPadXtractorColumn(props){
                 <li><a className={subType === "sounds" ? "active" : ""} onClick={() => onSelectItem("sounds")}>Sounds ({items.sounds !== null ? items.sounds.length: 0})</a></li>
             </React.Fragment>
         )
-    } else {
+    } 
+    else if (type === "item"){
+
+        console.log(item)
+
+        if (subType === "patterns"){
+
+            console.log(JSON.parse(item.notes))
+            console.log(JSON.parse(item.layerData))
+
+            itemsDisplay = (
+                <li>
+                    <ul>
+                        <li><a>Active Bar: {item.activeBar}</a></li>
+                        <li><a>Available Bar: {item.availableBars}</a></li>
+                        <li><a>Bank Length: {item.bankLength}</a></li>
+                        <li><a>Enabled: {item.enabled === true ? "true" : "false"}</a></li>
+                        <li><a>Start Note: {item.gridModelStartNote}</a></li>
+                        <li><a>End Note: {item.gridModelEndNote}</a></li>
+                        <li><a>Midi Channel: {item.midiChannel}</a></li>
+                        <li><a>Note Length: {item.noteLength}</a></li>
+                    </ul>
+                </li>
+            )
+        }
+
+        console.log(subType,"subType")
+
+    }
+    else {
         itemsDisplay = items.map((item,index) => {
 
             let itemTextDisplay = item.path ? item.path : `item ${index + 1}`;
