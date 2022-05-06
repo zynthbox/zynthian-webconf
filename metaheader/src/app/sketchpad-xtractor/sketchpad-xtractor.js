@@ -166,7 +166,7 @@ function SketchPadXtractor(props){
         const letter = letters[itemGroupsGenerationIndex];
         const patternPath = `/home/pi/zynthian-my-data/${selectedSketchFolder.path}sequences/scene-${letter}/patterns/scene-${letter}-${index + 1}${letters[partIndex]}.pattern.json`
 
-        console.log(patternPath,"pattern paths")
+        // console.log(patternPath,"pattern paths")
 
         fetch(`http://${window.location.hostname}:3000/json/${patternPath.split('/').join('+++')}`, {
             method: 'GET',
@@ -420,12 +420,9 @@ function SketchPadXtractorColumn(props){
     } 
     else if (type === "item"){
 
-        console.log(item)
+        // console.log(item)
 
         if (subType === "patterns"){
-
-            console.log(JSON.parse(item.notes))
-            console.log(JSON.parse(item.layerData))
 
             itemsDisplay = (
                 <li>
@@ -442,8 +439,6 @@ function SketchPadXtractorColumn(props){
                 </li>
             )
         }
-
-        console.log(subType,"subType")
 
     }
     else {
