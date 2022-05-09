@@ -79,6 +79,12 @@ function SketchPadXtractor(props){
     },[selectedSketchScene])
 
     useEffect(() => {
+        if (selectedSketchItemGroup !== null){
+            setSelectedSketchItemGroupItem(null);
+        }
+    },[selectedSketchItemGroup])
+
+    useEffect(() => {
         if (currentSketch !== null && selectedSketchScene !== null){
             setIsGeneratingItemGroups(true)
         }
@@ -453,9 +459,6 @@ function SketchPadXtractor(props){
                 </div>
             </div>
             {sketchItemSelectedItemColumnDisplay}
-            {/* <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[4]}}>
-
-            </div> */}
         </div>
     )
 }
