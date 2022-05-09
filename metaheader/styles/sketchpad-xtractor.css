@@ -47,6 +47,10 @@
   border: 1px solid #ccc;
   position: relative;
 }
+#sketch-pad-xtractor-container #sketch-pad-xtractor .sketch-pad-xtractor-column.full {
+  width: 100%;
+  height: auto;
+}
 #sketch-pad-xtractor-container #sketch-pad-xtractor .sketch-pad-xtractor-column .loader-container {
   position: absolute;
   right: 11px;
@@ -92,6 +96,10 @@
 }
 #sketch-pad-xtractor-container #sketch-pad-xtractor .sketch-pad-xtractor-column ul li a small {
   word-break: break-all;
+}
+#sketch-pad-xtractor-container #sketch-pad-xtractor .sketch-pad-xtractor-row {
+  width: 100%;
+  height: auto;
 }
 /** SPINNER **/
 .lds-ellipsis {

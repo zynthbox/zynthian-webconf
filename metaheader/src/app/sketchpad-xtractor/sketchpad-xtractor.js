@@ -333,7 +333,7 @@ function SketchPadXtractor(props){
                 type="scenes"
                 onSelectItem={setSelectedSketchScene}
                 item={selectedSketchScene}
-                color={colorsArray[5]}
+                color={colorsArray[2]}
                 letters={letters}
             />
         )
@@ -347,7 +347,7 @@ function SketchPadXtractor(props){
                 items={sketchItemGroups}
                 subType={itemGroupTypeArray[selectedSketchItemGroup]}
                 onSelectItem={onSetSelectedSketchItemGroup}
-                color={colorsArray[2]}
+                color={colorsArray[3]}
              />
         )
     }
@@ -362,21 +362,35 @@ function SketchPadXtractor(props){
                 subType={itemGroupTypeArray[selectedSketchItemGroup]}
                 items={items}
                 onSelectItem={setSelectedSketchItemGroupItem}
-                color={colorsArray[3]}
+                color={colorsArray[4]}
              />
         )
     }
 
     let sketchItemSelectedItemColumnDisplay;
     if (selectedSketchItemGroupItem !== null){
+
+
+
         sketchItemSelectedItemColumnDisplay  = (
-            <SketchPadXtractorColumn 
-                type={"item"}
-                subType={itemGroupTypeArray[selectedSketchItemGroup]}
-                item={selectedSketchItemGroupItem}
-                // onSelectItem={setSelectedSketchItemGroupItem}
-                color={colorsArray[4]}
-            />
+
+            <div className='sketch-pad-xtractor-row'>
+                <div style={{backgroundColor:colorsArray[5]}} className={'sketch-pad-xtractor-column full'}>
+                    <h4>
+                        <GiMagnifyingGlass/>
+                        Details
+                    </h4>
+                    <SketchPadXtractorColumn 
+                        type={"item"}
+                        subType={itemGroupTypeArray[selectedSketchItemGroup]}
+                        item={selectedSketchItemGroupItem}
+                        // onSelectItem={setSelectedSketchItemGroupItem}
+                        color={colorsArray[5]}
+                    />
+                </div>
+            </div>
+
+
         )
     }
 
@@ -393,55 +407,54 @@ function SketchPadXtractor(props){
 
     return (
         <div id="sketch-pad-xtractor">
-            <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[0]}}>
-                <h4>
-                    <BsFillFolderFill/>
-                    Folders
-                </h4>
-                <SketchPadXtractorColumn 
-                    type="folders"
-                    items={folders}
-                    onSelectItem={setSelectedSketchFolder}
-                    color={colorsArray[0]}
-                />
-            </div>
-            <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[1]}}>
-                <h4>
-                    <GoVersions/>
-                    Versions
-                </h4>
-                {sketchVersionColumnDisplay}
-            </div>
+            <div className='sketch-pad-xtractor-row'>
+                <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[0]}}>
+                    <h4>
+                        <BsFillFolderFill/>
+                        Folders
+                    </h4>
+                    <SketchPadXtractorColumn 
+                        type="folders"
+                        items={folders}
+                        onSelectItem={setSelectedSketchFolder}
+                        color={colorsArray[0]}
+                    />
+                </div>
+                <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[1]}}>
+                    <h4>
+                        <GoVersions/>
+                        Versions
+                    </h4>
+                    {sketchVersionColumnDisplay}
+                </div>
 
-            <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[3]}}>
-                <h4>
-                    <BsViewList/>
-                    Scenes
-                </h4>
-                {sketchScenesColumnDisplay}
-            </div>
+                <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[2]}}>
+                    <h4>
+                        <BsViewList/>
+                        Scenes
+                    </h4>
+                    {sketchScenesColumnDisplay}
+                </div>
 
-            <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[2]}}>
-                {loadingSpinnerDisplay}
-                <h4>
-                    <HiCollection />
-                    Item Groups
-                </h4>
-                {sketchItemGroupColumnDisplay}
+                <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[3]}}>
+                    {loadingSpinnerDisplay}
+                    <h4>
+                        <HiCollection />
+                        Item Groups
+                    </h4>
+                    {sketchItemGroupColumnDisplay}
+                </div>
+                <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[4]}}>
+                    <h4>
+                        <BsViewList/>
+                        Items
+                    </h4>
+                    {sketchItemGroupItemsColumnDisplay}
+                </div>
             </div>
-            <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[3]}}>
-                <h4>
-                    <BsViewList/>
-                    Items
-                </h4>
-                {sketchItemGroupItemsColumnDisplay}
-            </div>
+            {sketchItemSelectedItemColumnDisplay}
             {/* <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[4]}}>
-                <h4>
-                    <GiMagnifyingGlass/>
-                    Details
-                </h4>
-                {sketchItemSelectedItemColumnDisplay}
+
             </div> */}
         </div>
     )
