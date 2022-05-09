@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { usePrevious } from '../helpers'
+import SketchPadXtractorColumn from './sketchpad-xtractor-column';
 import { BsFillFolderFill, BsViewList } from 'react-icons/bs'
 import { GoVersions } from 'react-icons/go'
 import { HiCollection } from 'react-icons/hi'
 import { GiMagnifyingGlass } from 'react-icons/gi'
+
 
 function SketchPadXtractor(props){
 
@@ -16,7 +18,9 @@ function SketchPadXtractor(props){
         "clips",
         "patterns",
         "samples",
-        "sounds"
+        "sounds",
+        "tracks",
+        "songs"
     ]
 
     const [ folders, setFolders ] = useState([initSketchFolder])
@@ -24,6 +28,8 @@ function SketchPadXtractor(props){
     
     const [ sketchVersions, setSketchVersions ] = useState(null)
     const [ selectedSketchVersion, setSelectedSketchVersion ] = useState(null)
+
+    const [ selectedSketchScene, setSelectedSketchScene ] = useState(null)
     
     const [ currentSketch, setCurrentSketch ] = useState(null)
 
@@ -53,6 +59,7 @@ function SketchPadXtractor(props){
     useEffect(() => {
         if (selectedSketchVersion !== null){
             getSketch()
+            setSelectedSketchScene(null)
             setClips(null)
             setPatterns(null)
             setSamples(null)
@@ -63,10 +70,19 @@ function SketchPadXtractor(props){
     },[selectedSketchVersion])
 
     useEffect(() => {
-        if (currentSketch !== null){
+        setClips(null)
+        setPatterns(null)
+        setSamples(null)
+        setSounds(null)
+        setSelectedSketchItemGroup(null)
+        setSketchItemGroups(null)
+    },[selectedSketchScene])
+
+    useEffect(() => {
+        if (currentSketch !== null && selectedSketchScene !== null){
             setIsGeneratingItemGroups(true)
         }
-    },[currentSketch])
+    },[currentSketch,selectedSketchScene])
 
     useEffect(() => {
         if (isGeneratingItemGroups === true){
@@ -76,15 +92,27 @@ function SketchPadXtractor(props){
 
     useEffect(() => {
         if (itemGroupTypeGenerationIndex !== null){
-            if (itemGroupTypeGenerationIndex === 0 && previousIGTgenerationIndex === (itemGroupTypeArray.length - 1)){
+
+            console.log(itemGroupTypeGenerationIndex,"IGTGI")
+            console.log(previousIGTgenerationIndex,"prev igtgi")
+            console.log(itemGroupTypeArray.length - 3)
+
+            if (itemGroupTypeGenerationIndex === 0 && previousIGTgenerationIndex === (itemGroupTypeArray.length - 3)){
+
+                console.log('FINISH!!!!!')
+
                 if (itemGroupsGenerationIndex + 1 >= currentSketch.tracks.length){
-                    setSketchItemGroups({clips,patterns,samples,sounds})
+                    setSketchItemGroups({clips,patterns,samples,sounds,tracks:[0,1,2,3,4,5,6,7,8,9],songs:[0,1,2]})
                     setIsGeneratingItemGroups(false)
                 } else {
                     const newIGGIndex = itemGroupsGenerationIndex + 1;
                     setItemGroupsGenerationIndex(newIGGIndex)
                 }
             } else {
+
+                console.log('DONT FINISH!!!!!')
+
+
                 if (itemGroupTypeGenerationIndex !== null){
                     generateItemGroups()
                 }
@@ -133,6 +161,8 @@ function SketchPadXtractor(props){
 
     async function generateItemGroups(){
     
+        console.log(itemGroupTypeGenerationIndex)
+
         if (itemGroupTypeGenerationIndex === 0){
             generateTrackClips()
         } else if (itemGroupTypeGenerationIndex === 1){
@@ -145,6 +175,10 @@ function SketchPadXtractor(props){
             let soundsArray = [];
             if (sounds !== null) soundsArray = [...sounds]
             generateTrackSounds(soundsArray)
+        } else {
+            console.log('now generate tracks or songs')
+            // setItemGroupTypeGenerationIndex(0)
+            // setItemGroupTypeGenerationIndex(itemGroupTypeGenerationIndex + 1)
         }
 
     }
@@ -153,8 +187,10 @@ function SketchPadXtractor(props){
         const track = currentSketch.tracks[itemGroupsGenerationIndex]
         const newClips = clips !== null ? [...clips] : []
         track.clips.forEach(async function(clip,cIndex){
-            // clips
-            if (clip.path !== null) newClips.push(clip)
+            if (cIndex === letters.findIndex(letter => letter === selectedSketchScene) && clip.path !== null) {
+                clip.track = cIndex;
+                newClips.push(clip)
+            }
         })
         setClips(newClips)
         incrementItemGenerationIndex()
@@ -164,9 +200,7 @@ function SketchPadXtractor(props){
         let index = i ? i : 0;
         const newPatterns = patternsArray ? [...patternsArray] : []
         const letter = letters[itemGroupsGenerationIndex];
-        const patternPath = `/home/pi/zynthian-my-data/${selectedSketchFolder.path}sequences/scene-${letter}/patterns/scene-${letter}-${index + 1}${letters[partIndex]}.pattern.json`
-
-        // console.log(patternPath,"pattern paths")
+        const patternPath = `/home/pi/zynthian-my-data/${selectedSketchFolder.path}sequences/scene-${selectedSketchScene}/patterns/scene-${selectedSketchScene}-${itemGroupsGenerationIndex + 1}${letters[partIndex]}.pattern.json`
 
         fetch(`http://${window.location.hostname}:3000/json/${patternPath.split('/').join('+++')}`, {
             method: 'GET',
@@ -181,18 +215,19 @@ function SketchPadXtractor(props){
             } else {
                 const pattern = await res.json()
                 if (pattern && pattern.hasNotes === true){
-                    pattern.name = `scene-${letter}-${index}${letters[partIndex]}`
+                    pattern.name = `scene-${selectedSketchScene}-${itemGroupsGenerationIndex + 1}${letters[partIndex]}`
                     newPatterns.push(pattern)
                 }
             }
 
             if ((partIndex + 1) >= 5){
-                if ((index + 1) >= 10){
+                // if ((itemGroupTypeGenerationIndex + 1) >= 10){
                     setPatterns(newPatterns)
                     incrementItemGenerationIndex()
-                } else {
-                    generateTrackPatterns(index + 1,newPatterns,0)
-                }
+                // }
+                // } else {
+                //     generateTrackPatterns(index + 1,newPatterns,0)
+                // }
             } else {
                 generateTrackPatterns(index,newPatterns,partIndex + 1)
             }
@@ -220,7 +255,11 @@ function SketchPadXtractor(props){
             const samples = await res.json();
         
             samples.forEach(function(sample,sIndex){
-                if (sample !== null) newSamples.push(sample)
+                if (sample !== null) {
+                    sample.track = itemGroupsGenerationIndex;
+                    sample.slot = sIndex;
+                    newSamples.push(sample)
+                }
             })
         
             setSamples(newSamples)
@@ -266,7 +305,7 @@ function SketchPadXtractor(props){
 
     function incrementItemGenerationIndex(){
         let newIGTGIndex = itemGroupTypeGenerationIndex + 1;
-        if (newIGTGIndex === itemGroupTypeArray.length) newIGTGIndex = 0;
+        if (newIGTGIndex === itemGroupTypeArray.length - 2) newIGTGIndex = 0;
         setItemGroupTypeGenerationIndex(newIGTGIndex)
     }
 
@@ -287,6 +326,19 @@ function SketchPadXtractor(props){
         )
     }
 
+    let sketchScenesColumnDisplay;
+    if (selectedSketchVersion !== null){
+        sketchScenesColumnDisplay = (
+            <SketchPadXtractorColumn 
+                type="scenes"
+                onSelectItem={setSelectedSketchScene}
+                item={selectedSketchScene}
+                color={colorsArray[5]}
+                letters={letters}
+            />
+        )
+    }
+
     let sketchItemGroupColumnDisplay;
     if (sketchItemGroups !== null){
         sketchItemGroupColumnDisplay = (
@@ -302,6 +354,7 @@ function SketchPadXtractor(props){
 
     let sketchItemGroupItemsColumnDisplay;
     if (selectedSketchItemGroup !== null){
+
         const items = sketchItemGroups[itemGroupTypeArray[selectedSketchItemGroup]];
         sketchItemGroupItemsColumnDisplay = (
             <SketchPadXtractorColumn 
@@ -359,6 +412,15 @@ function SketchPadXtractor(props){
                 </h4>
                 {sketchVersionColumnDisplay}
             </div>
+
+            <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[3]}}>
+                <h4>
+                    <BsViewList/>
+                    Scenes
+                </h4>
+                {sketchScenesColumnDisplay}
+            </div>
+
             <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[2]}}>
                 {loadingSpinnerDisplay}
                 <h4>
@@ -374,116 +436,17 @@ function SketchPadXtractor(props){
                 </h4>
                 {sketchItemGroupItemsColumnDisplay}
             </div>
-            <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[4]}}>
+            {/* <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[4]}}>
                 <h4>
                     <GiMagnifyingGlass/>
                     Details
                 </h4>
                 {sketchItemSelectedItemColumnDisplay}
-            </div>
+            </div> */}
         </div>
     )
 }
 
-function SketchPadXtractorColumn(props){
-
-    const { type, subType, items, item } = props
-    const previousItems = usePrevious(items)
-    const [ selectedItemIndex, setSelectedItemIndex ] = useState(null)
-
-    useEffect(() => {
-        return () => {
-            setSelectedItemIndex(null)
-        }
-    },[])
-
-    useEffect(() => {
-        if (items !== previousItems) setSelectedItemIndex(null)
-    },[items])
-
-    function onSelectItem(item,index){
-        setSelectedItemIndex(index)
-        props.onSelectItem(item)
-    }
-
-
-    let itemsDisplay;
-    if (type === "item groups"){
-        itemsDisplay = (
-            <React.Fragment>
-                <li><a className={subType === "clips" ? "active" : ""} onClick={() => onSelectItem("clips")}>Clips ({items.clips !== null ? items.clips.length: 0})</a></li>
-                <li><a className={subType === "patterns" ? "active" : ""} onClick={() => onSelectItem("patterns")}>Patterns ({items.patterns !== null ? items.patterns.length: 0})</a></li>
-                <li><a className={subType === "samples" ? "active" : ""} onClick={() => onSelectItem("samples")}>Samples ({items.samples !== null ? items.samples.length: 0})</a></li>
-                <li><a className={subType === "sounds" ? "active" : ""} onClick={() => onSelectItem("sounds")}>Sounds ({items.sounds !== null ? items.sounds.length: 0})</a></li>
-            </React.Fragment>
-        )
-    } 
-    else if (type === "item"){
-
-        // console.log(item)
-
-        if (subType === "patterns"){
-
-            itemsDisplay = (
-                <li>
-                    <ul>
-                        <li><a>Active Bar: {item.activeBar}</a></li>
-                        <li><a>Available Bar: {item.availableBars}</a></li>
-                        <li><a>Bank Length: {item.bankLength}</a></li>
-                        <li><a>Enabled: {item.enabled === true ? "true" : "false"}</a></li>
-                        <li><a>Start Note: {item.gridModelStartNote}</a></li>
-                        <li><a>End Note: {item.gridModelEndNote}</a></li>
-                        <li><a>Midi Channel: {item.midiChannel}</a></li>
-                        <li><a>Note Length: {item.noteLength}</a></li>
-                    </ul>
-                </li>
-            )
-        }
-
-    }
-    else {
-        itemsDisplay = items.map((item,index) => {
-
-            let itemTextDisplay = item.path ? item.path : `item ${index + 1}`;
-
-            if (type === "versions"){
-                const fileName = item.path.split('/')[item.path.split('/').length - 1];
-                const folderName = item.path.split(fileName)[0];
-                itemTextDisplay = (
-                    <React.Fragment>
-                        <span>{fileName}</span>
-                        <small>{folderName}</small>
-                    </React.Fragment>
-                )
-            }
-
-            if (subType === "sounds"){
-                itemTextDisplay = (
-                    <React.Fragment>
-                        <span>{item.preset_name}</span>
-                        <small>{item.engine_name}</small>
-                    </React.Fragment>
-                )
-            } else if (subType === "patterns"){
-                itemTextDisplay = item.name
-            }
-
-            return (
-                <li key={index}>
-                    <a className={selectedItemIndex === index ? "active" : ""} onClick={() => onSelectItem(item,index)}>{itemTextDisplay}</a>
-                </li>
-            )
-        })
-    }
-
-    return (
-        <React.Fragment>
-            <ul>
-                {itemsDisplay}
-            </ul>
-        </React.Fragment>
-    )
-}
 
 
 
