@@ -26,7 +26,7 @@ function SketchPadXtractorColumn(props){
     let itemsDisplay;
     if (type === "scenes"){
         itemsDisplay = letters.map((scene,index) => (
-            <li key={index}><a className={item === scene ? "active" : ""} onClick={() => onSelectItem(scene)}>Scene {scene}</a></li>
+            <li key={index}><a className={item === scene ? "active" : ""} onClick={() => onSelectItem(scene)}>Scene {scene.toUpperCase()}</a></li>
         ))
     } else if (type === "item groups"){
         itemsDisplay = (

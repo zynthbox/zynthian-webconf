@@ -66,6 +66,7 @@ function SketchPadXtractor(props){
             setSounds(null)
             setSelectedSketchItemGroup(null)
             setSketchItemGroups(null)
+            generateScenes()
         }
     },[selectedSketchVersion])
 
@@ -99,13 +100,7 @@ function SketchPadXtractor(props){
     useEffect(() => {
         if (itemGroupTypeGenerationIndex !== null){
 
-            console.log(itemGroupTypeGenerationIndex,"IGTGI")
-            console.log(previousIGTgenerationIndex,"prev igtgi")
-            console.log(itemGroupTypeArray.length - 3)
-
             if (itemGroupTypeGenerationIndex === 0 && previousIGTgenerationIndex === (itemGroupTypeArray.length - 3)){
-
-                console.log('FINISH!!!!!')
 
                 if (itemGroupsGenerationIndex + 1 >= currentSketch.tracks.length){
                     setSketchItemGroups({clips,patterns,samples,sounds,tracks:[0,1,2,3,4,5,6,7,8,9],songs:[0,1,2]})
@@ -115,9 +110,6 @@ function SketchPadXtractor(props){
                     setItemGroupsGenerationIndex(newIGGIndex)
                 }
             } else {
-
-                console.log('DONT FINISH!!!!!')
-
 
                 if (itemGroupTypeGenerationIndex !== null){
                     generateItemGroups()
@@ -165,10 +157,12 @@ function SketchPadXtractor(props){
         setCurrentSketch(res)    
     }
 
+    async function generateScenes(){
+        // count clips, patterns, samples, sounds, tracks, songs, SUKA BLYATZ
+    }
+
     async function generateItemGroups(){
     
-        console.log(itemGroupTypeGenerationIndex)
-
         if (itemGroupTypeGenerationIndex === 0){
             generateTrackClips()
         } else if (itemGroupTypeGenerationIndex === 1){
@@ -181,23 +175,30 @@ function SketchPadXtractor(props){
             let soundsArray = [];
             if (sounds !== null) soundsArray = [...sounds]
             generateTrackSounds(soundsArray)
-        } else {
-            console.log('now generate tracks or songs')
-            // setItemGroupTypeGenerationIndex(0)
-            // setItemGroupTypeGenerationIndex(itemGroupTypeGenerationIndex + 1)
         }
 
     }
 
     function generateTrackClips(){
         const track = currentSketch.tracks[itemGroupsGenerationIndex]
-        const newClips = clips !== null ? [...clips] : []
-        track.clips.forEach(async function(clip,cIndex){
-            if (cIndex === letters.findIndex(letter => letter === selectedSketchScene) && clip.path !== null) {
-                clip.track = cIndex;
-                newClips.push(clip)
+        const newClips = clips !== null ? [...clips] : [];
+
+        track.clips.forEach(async function(part,pIndex){
+            console.log(part,"track.clips[pIndex]")
+            const cIndex =  letters.findIndex(letter => letter === selectedSketchScene);
+            if (part[cIndex].path !== null){
+                const clip = part[cIndex];
+                clip.track = itemGroupTypeGenerationIndex;
+                newClips.push(clip)                
             }
         })
+
+        // track.clips.forEach(async function(clip,cIndex){
+        //     if (cIndex === letters.findIndex(letter => letter === selectedSketchScene) && clip.path !== null) {
+        //         clip.track = cIndex;
+        //         newClips.push(clip)
+        //     }
+        // })
         setClips(newClips)
         incrementItemGenerationIndex()
     }
@@ -227,13 +228,8 @@ function SketchPadXtractor(props){
             }
 
             if ((partIndex + 1) >= 5){
-                // if ((itemGroupTypeGenerationIndex + 1) >= 10){
                     setPatterns(newPatterns)
                     incrementItemGenerationIndex()
-                // }
-                // } else {
-                //     generateTrackPatterns(index + 1,newPatterns,0)
-                // }
             } else {
                 generateTrackPatterns(index,newPatterns,partIndex + 1)
             }
@@ -356,11 +352,18 @@ function SketchPadXtractor(props){
                 color={colorsArray[3]}
              />
         )
+    } else if (isGeneratingItemGroups === true){
+        sketchItemGroupColumnDisplay = (
+            <div className='loader-container'>
+                <div className="lds-ellipsis">
+                    <div></div><div></div><div></div><div></div>
+                </div>
+            </div>
+        )
     }
 
     let sketchItemGroupItemsColumnDisplay;
     if (selectedSketchItemGroup !== null){
-
         const items = sketchItemGroups[itemGroupTypeArray[selectedSketchItemGroup]];
         sketchItemGroupItemsColumnDisplay = (
             <SketchPadXtractorColumn 
@@ -375,39 +378,14 @@ function SketchPadXtractor(props){
 
     let sketchItemSelectedItemColumnDisplay;
     if (selectedSketchItemGroupItem !== null){
-
-
-
         sketchItemSelectedItemColumnDisplay  = (
-
-            <div className='sketch-pad-xtractor-row'>
-                <div style={{backgroundColor:colorsArray[5]}} className={'sketch-pad-xtractor-column full'}>
-                    <h4>
-                        <GiMagnifyingGlass/>
-                        Details
-                    </h4>
-                    <SketchPadXtractorColumn 
-                        type={"item"}
-                        subType={itemGroupTypeArray[selectedSketchItemGroup]}
-                        item={selectedSketchItemGroupItem}
-                        // onSelectItem={setSelectedSketchItemGroupItem}
-                        color={colorsArray[5]}
-                    />
-                </div>
-            </div>
-
-
-        )
-    }
-
-    let loadingSpinnerDisplay;
-    if (isGeneratingItemGroups === true){
-        loadingSpinnerDisplay = (
-            <div className='loader-container'>
-                <div className="lds-ellipsis">
-                    <div></div><div></div><div></div><div></div>
-                </div>
-            </div>
+            <SketchPadXtractorColumn 
+                type={"item"}
+                subType={itemGroupTypeArray[selectedSketchItemGroup]}
+                item={selectedSketchItemGroupItem}
+                // onSelectItem={setSelectedSketchItemGroupItem}
+                color={colorsArray[5]}
+            />
         )
     }
 
@@ -433,7 +411,6 @@ function SketchPadXtractor(props){
                     </h4>
                     {sketchVersionColumnDisplay}
                 </div>
-
                 <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[2]}}>
                     <h4>
                         <BsViewList/>
@@ -441,9 +418,7 @@ function SketchPadXtractor(props){
                     </h4>
                     {sketchScenesColumnDisplay}
                 </div>
-
                 <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[3]}}>
-                    {loadingSpinnerDisplay}
                     <h4>
                         <HiCollection />
                         Item Groups
@@ -457,8 +432,14 @@ function SketchPadXtractor(props){
                     </h4>
                     {sketchItemGroupItemsColumnDisplay}
                 </div>
+                <div className='sketch-pad-xtractor-column' style={{backgroundColor:colorsArray[5]}}>
+                    <h4>
+                        <GiMagnifyingGlass/>
+                        Details
+                    </h4>
+                    {sketchItemSelectedItemColumnDisplay}
+                </div>
             </div>
-            {sketchItemSelectedItemColumnDisplay}
         </div>
     )
 }

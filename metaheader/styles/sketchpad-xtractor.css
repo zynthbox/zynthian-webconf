@@ -16,6 +16,9 @@
   padding: 0;
   z-index: 2;
   user-select: none;
+  width: 98vw;
+  left: 1vw !important;
+  margin-left: 0 !important;
 }
 #sketch-pad-xtractor-container h3 {
   margin: 0;
@@ -39,7 +42,7 @@
   width: 100%;
 }
 #sketch-pad-xtractor-container #sketch-pad-xtractor .sketch-pad-xtractor-column {
-  width: 20%;
+  width: 16.6%;
   box-sizing: border-box;
   height: 400px;
   padding: 10px;
@@ -53,8 +56,10 @@
 }
 #sketch-pad-xtractor-container #sketch-pad-xtractor .sketch-pad-xtractor-column .loader-container {
   position: absolute;
-  right: 11px;
-  top: -11px;
+  left: 50%;
+  top: 50%;
+  margin-top: -30px;
+  margin-left: -38px;
 }
 #sketch-pad-xtractor-container #sketch-pad-xtractor .sketch-pad-xtractor-column h4 {
   text-transform: uppercase;
