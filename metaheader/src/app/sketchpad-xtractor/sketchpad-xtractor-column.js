@@ -36,7 +36,7 @@ function SketchPadXtractorColumn(props){
                 <li><a className={subType === "samples" ? "active" : ""} onClick={() => onSelectItem("samples")}>Samples ({items.samples !== null ? items.samples.length: 0})</a></li>
                 <li><a className={subType === "sounds" ? "active" : ""} onClick={() => onSelectItem("sounds")}>Sounds ({items.sounds !== null ? items.sounds.length: 0})</a></li>
                 <li><a className={subType === "tracks" ? "active" : ""} onClick={() => onSelectItem("tracks")}>Tracks (10)</a></li>
-                <li><a className={subType === "songs" ? "active" : ""} onClick={() => onSelectItem("songs")}>Songs (..)</a></li>
+                <li><a className={subType === "songs" ? "active" : ""} onClick={() => onSelectItem("songs")}>Songs (0)</a></li>
             </React.Fragment>
         )
     } 

@@ -33,6 +33,8 @@ function SketchPadXtractor(props){
     
     const [ currentSketch, setCurrentSketch ] = useState(null)
 
+    const [ scenes, setScenes ] = useState(null)
+
     const [ isGeneratingItemGroups, setIsGeneratingItemGroups ] = useState(false);
     const [ itemGroupsGenerationIndex, setItemGroupsGenerationIndex ] = useState(null);
     const [ itemGroupTypeGenerationIndex, setItemGroupTypeGenerationIndex ] = useState(0)

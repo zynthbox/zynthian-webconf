@@ -40,7 +40,7 @@ function FileUploader(props) {
   useEffect(() => {
     if (files !== null){
       const fileUploaderHeight = document.getElementById('file-uploader').offsetHeight;
-      console.log((files.length + 1 * 37),fileUploaderHeight)
+      // console.log((files.length + 1 * 37),fileUploaderHeight)
       if (fileUploaderHeight < ((files.length + 1) * 37)) setFileListCssClass(' w-scroll')
       else setFileListCssClass('')
     }
@@ -59,7 +59,7 @@ function FileUploader(props) {
   },[uploadedFileIndex])
 
   const renameFile = (index) => {
-    console.log(files[index], "rename this file")
+    // console.log(files[index], "rename this file")
   }
 
   const removeFile = (index) => {
@@ -73,7 +73,7 @@ function FileUploader(props) {
   const uploadFile = (index,multiple = false) => {
 
     const filePath = selectedFolder + files[index].path.split(files[index].name)[0];
-    console.log(filePath,"filePath")
+    // console.log(filePath,"filePath")
     const url = `http://${window.location.hostname}:3000/upload/${filePath.split(fsep).join('+++')}`
     const formData = new FormData();
     formData.append('file', files[index])
@@ -90,7 +90,7 @@ function FileUploader(props) {
     }
 
     axios.post(url, formData, config ).then(res => {
-      console.log(res);
+      // console.log(res);
       if (multiple === true){
         if (index + 1 < files.length){
           setUploadedFileIndex(index + 1)
