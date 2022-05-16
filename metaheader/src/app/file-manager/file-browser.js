@@ -10,7 +10,7 @@ import {
   defineFileAction
 } from "chonky";
 import FileUploader from './file-uploader';
-import { IoArrowBack, IoArrowForward } from 'react-icons/io5';
+import { IoArrowBack, IoArrowForward, IoRefresh } from 'react-icons/io5';
 import { IoIosArrowDropdown } from 'react-icons/io'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { useOnClickOutside } from '../helpers';
@@ -318,6 +318,7 @@ function WebconfFileBrowser(props){
               navigateHistory={props.navigateHistory}
               browserHistory={props.browserHistory}
               browserHistoryIndex={props.browserHistoryIndex}
+              getFiles={props.getFiles}
             />
             <FileToolbar />
             <FileList />
@@ -329,7 +330,7 @@ function WebconfFileBrowser(props){
 
 const FileBrowserHeader = (props) => {
   
-  const { navigateHistory, browserHistory, browserHistoryIndex } = props;
+  const { navigateHistory, browserHistory, browserHistoryIndex, getFiles } = props;
   const [ showHistoryDropDown, setShowHistoryDropDown] = useState(false)
 
   useEffect(() => {
@@ -372,12 +373,13 @@ const FileBrowserHeader = (props) => {
   return (
       <div  className='file-navbar-container-custom'>   
         <ul className='browser-navigation-menu'>
+          <li><a onClick={() => setShowHistoryDropDown(true)}><IoIosArrowDropdown/></a></li>
           <li><a onClick={() => navigateHistory('back')}><IoArrowBack/></a></li>
           <li><a onClick={() => navigateHistory('forward')}><IoArrowForward/></a></li>
-          <li><a onClick={() => setShowHistoryDropDown(true)}><IoIosArrowDropdown/></a></li>
         </ul>
         {historyDropDownDisplay}
         <FileNavbar />
+        <a className='refresh-button' onClick={() => getFiles()}><IoRefresh/></a>
       </div>
   )
 }

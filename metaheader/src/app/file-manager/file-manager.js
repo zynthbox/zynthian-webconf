@@ -82,9 +82,8 @@ const FileManager = () => {
         },
         });
         const res = await response.json();
-
         setFiles(res);
-        setSelectedFolder(rootFolder)
+        setSelectedFolder(selectedFolder)
         getDisplayFiles(res);
     }
 
@@ -278,6 +277,7 @@ const FileManager = () => {
                     refreshFileManager={refreshFileManager}
                     showFileUploader={showFileUploader}
                     setShowFileUploader={setShowFileUploader}
+                    getFiles={getFiles}
                 />
             </Suspense>
         )
