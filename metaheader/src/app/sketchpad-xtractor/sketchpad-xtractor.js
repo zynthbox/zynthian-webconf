@@ -11,7 +11,7 @@ function SketchPadXtractor(props){
 
     const { colorsArray } = props
 
-    const initSketchFolder = {path:"sketches/my-sketches/temp/"}
+    const initSketchFolder = {path:"sketches/my-sketches/"}
     const letters = ["a","b","c","d","e","f","g","h","i","j"]
     const emptyPatternNotesLength = 25283;
     const itemGroupTypeArray = [
