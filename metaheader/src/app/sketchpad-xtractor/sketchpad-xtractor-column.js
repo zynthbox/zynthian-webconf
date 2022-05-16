@@ -7,6 +7,8 @@ function SketchPadXtractorColumn(props){
     const previousItems = usePrevious(items)
     const [ selectedItemIndex, setSelectedItemIndex ] = useState(null)
 
+    console.log(items,"items")
+
     useEffect(() => {
         return () => {
             setSelectedItemIndex(null)
@@ -105,7 +107,13 @@ function SketchPadXtractorColumn(props){
                         </React.Fragment>
                     )
                 } else if (subType === "patterns"){
-                    itemTextDisplay = item.name
+                    itemTextDisplay = (
+                        <React.Fragment>
+                            <span>{item.name}</span>
+                            <span className='right'>Bars: <b>{item.bankLength}</b></span>
+                            
+                        </React.Fragment>
+                    )
                 }
             }
             

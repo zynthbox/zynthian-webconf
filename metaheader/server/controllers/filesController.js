@@ -254,15 +254,18 @@ exports.downloadFiles = (req,res) => {
   const { filePath } = req.body;
 
   if (fs.statSync(filePath).isDirectory()){
+
+    console.log(filePath," filePath")
+
           
     const folderName = filePath.split('/')[filePath.split("/").length - 1];
-    // console.log(folderName,"folder name")
+    console.log(folderName,"folder name")
     
-    const folderPath = rootFolder + filePath.split("/")[filePath.split("/").length - 1];
-    // console.log(folderPath, "folder path ")
+    const folderPath = filePath.split(folderName)[0];
+    console.log(folderPath, "folder path ")
     
     const zipFilePath = folderPath.split(folderName)[0] + folderName + ".zip";
-    // console.log(zipFilePath, "zipFilePath")
+    console.log(zipFilePath, "zipFilePath")
 
     zipFolder(folderPath, zipFilePath, function(err) {
 

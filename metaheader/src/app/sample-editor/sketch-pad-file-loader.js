@@ -7,12 +7,15 @@ import { useOnClickOutside } from '../helpers';
 
 const SketchPadFileLoader = (props) => {
 
-    let initFolderPath = props.fileType === "json" ? "sketches/my-sketches/temp/wav/": "capture/";
+    let initFolderPath = props.fileType === "json" ? "sketches/my-sketches/": "capture/";
     if (props.actionType === "SAVE") initFolderPath = "/"
     const [ fileList, setFileList ] = useState(null)
     const [ folderPath, setFolderPath ] = useState(initFolderPath)
     const [ folderName, setFolderName ] = useState('')
     const [ selectedFile, setSelectedFile ] = useState(null)
+
+    console.log(folderPath,"folder path skethc pad file loader")
+
     
     useEffect(() => {
         getSketchPadFiles()
