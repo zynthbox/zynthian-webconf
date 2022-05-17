@@ -61,7 +61,13 @@ const TrackSampleSet = (props) => {
 
     async function onUploadSample(sample,sIndex,isInsert){
         const sPath = sample.name;
-        const response = await fetch(`http://${window.location.hostname}:3000/track/${(index+1)}`, {
+
+        let trackSampleSetFolder = "/home/pi" + props.sketchFolder
+        trackSampleSetFolder = trackSampleSetFolder.split('/').join('+++');
+
+        console.log(trackSampleSetFolder," TRACK SAMPLE SET FOLDER")
+
+        const response = await fetch(`http://${window.location.hostname}:3000/track/${trackSampleSetFolder}:${(index+1)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -75,6 +81,9 @@ const TrackSampleSet = (props) => {
     const uploadSample = async (sample) => {
         const formData = new FormData();
         formData.append('file', sample); // appending file
+
+        console.log(selectedFolder.split('/').join('+++'))
+
         axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`, formData ).then(res => { // then print response status
         //   console.log(res)
         });
@@ -107,6 +116,9 @@ const TrackSampleSet = (props) => {
     }
 
     async function onInsertSample(filePath,sIndex,multiple,isSaveAs){
+
+        console.log('')
+
         // console.log('ON INSERT SAMPLE')
         setLoadFromSketchPadSampleIndex(null)
 
@@ -118,7 +130,12 @@ const TrackSampleSet = (props) => {
             const fileName = filePath.split('/')[filePath.split('/').length - 1];
             const sPath = fileName;
             // console.log(fileName,"fileName")
-            const response = await fetch(`http://${window.location.hostname}:3000/track/${(index+1)}`, {
+            let trackSampleSetFolder = "/home/pi" + props.sketchFolder
+            trackSampleSetFolder = trackSampleSetFolder.split('/').join('+++');
+    
+            console.log(trackSampleSetFolder, "TRACK SAMPLE SET FOLDER")
+
+            const response = await fetch(`http://${window.location.hostname}:3000/track/${trackSampleSetFolder}:${(index+1)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -364,6 +381,9 @@ const TrackSampleSet = (props) => {
                         {({getRootProps, getInputProps}) => (
                             <section>
                             <div {...getRootProps()}>
+                                <a onClick={() => onSampleListDragExit(false)} className='close-source-picker'>
+                                    <FaWindowClose/>
+                                </a>
                                 <input {...getInputProps()} />
                                 <p>Drag 'n' drop some files here</p>
                             </div>

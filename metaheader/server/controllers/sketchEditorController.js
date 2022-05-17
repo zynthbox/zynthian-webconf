@@ -44,11 +44,14 @@ exports.getTrack = (req,res) => {
 
 exports.updateTrack = (req,res) => {
 
-  sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
+  // sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
 
   // console.log('UPDATE TRACK')
 
-  const trackId = req.params.id;
+  sampleSetFolder = req.params.id.split(':')[0].split('+++').join('/');
+  sampleSetFolder += "wav/sampleset/bank";
+  const trackId = req.params.id.split(':')[1];
+
   
   let sPath = req.body.sPath;
   if (sPath.indexOf('%') > -1) sPath = sPath.split('%').join('/');

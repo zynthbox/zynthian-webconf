@@ -51,7 +51,6 @@ const SketchPadFileLoader = (props) => {
         } else {
 
             if (props.actionType === "LOAD"){
-                
                 if (fileType === "json"){
                     if (props.fileType === "json"){
                         props.loadSampleSet(file)

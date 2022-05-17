@@ -463,6 +463,14 @@
 #sample-editor-container .sample-set ul.sample-set-actions li a:hover {
   color: white;
 }
+#sample-editor-container .sample-set a.close-source-picker {
+  position: absolute !important;
+  top: 4px !important;
+  right: 5px !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  font-size: 12px;
+}
 #sample-editor-container .sample-set .sample-set-upload-container {
   width: calc(100% - 20px);
   height: 200px;
@@ -526,13 +534,6 @@
   opacity: 0;
   top: 0;
   left: 0;
-  cursor: pointer;
-}
-#sample-editor-container .sample-set .sample-set-upload-container.source-picker a.close-source-picker {
-  position: absolute;
-  top: 4px;
-  right: 5px;
-  padding: 0;
   cursor: pointer;
 }
 #sample-editor-container .sample-set:first-of-type {

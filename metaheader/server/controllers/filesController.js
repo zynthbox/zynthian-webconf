@@ -224,6 +224,7 @@ var storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const selectedFolder = req.params.folder.split('+++').join('/');
+    console.log(selectedFolder + "/" + file.originalname, " FILE PATH ON UPLOAD ")
     cb(null, selectedFolder + "/" + file.originalname )
   }
 })
