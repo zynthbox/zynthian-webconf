@@ -217,16 +217,9 @@ function SketchPadXtractor(props){
         let index = i ? i : 0;
         const newPatterns = patternsArray ? [...patternsArray] : []
         const letter = letters[itemGroupsGenerationIndex];
-
         let sketchFileName = selectedSketchVersion.path.split('/')[selectedSketchVersion.path.split('/').length - 1]
         const currentSketchFolder = selectedSketchVersion.path.split(sketchFileName)[0]
-
-        console.log(currentSketchFolder, " CURRENT SKETCH FOLDER")
-
         const patternPath = `${currentSketchFolder}sequences/scene-${selectedSketchScene}/patterns/scene-${selectedSketchScene}-${itemGroupsGenerationIndex + 1}${letters[partIndex]}.pattern.json`
-
-        console.log(patternPath, "PATTERN PATH")
-
         fetch(`http://${window.location.hostname}:3000/json/${patternPath.split('/').join('+++')}`, {
             method: 'GET',
             headers: {

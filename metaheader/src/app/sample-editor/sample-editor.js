@@ -31,7 +31,6 @@ const SampleEditor = (props) => {
 
     useEffect(() => {
         if (sketchInfo !== null){
-            console.log(sketchInfo, "sketch info")
             getCurrentSelectedSketch()
         }
     },[sketchInfo])
@@ -93,8 +92,6 @@ const SampleEditor = (props) => {
 
     async function updateSketchInfo(fn) {
 
-        console.log(fn, " FN");
-
         setShowFilePicker(false)
 
         // console.log("update sketch info")
@@ -105,9 +102,6 @@ const SampleEditor = (props) => {
             ...sketchInfo,
             lastSelectedSketch:fn.split('/home/pi')[1]
         }
-
-        // console.log(newSketchInfo,"newSketchInfo")
-
         const blob = new Blob([JSON.stringify(newSketchInfo)], {type:"application/json"});
         const formData = new FormData();
         formData.append('file', blob,'.cache.json'); // appending file
@@ -116,11 +110,17 @@ const SampleEditor = (props) => {
         });
     }
 
-    function saveCurrentSketchAs(newSketchPath){
-
-        console.log(newSketchPath," NEW SKETCH PATH")
-        console.log(sketchInfo.lastSelectedSketch, "last selected sketch file + folder")
-
+    async function saveCurrentSketchAs(destinationPath){
+        const previousPath = sketchInfo.lastSelectedSketch.replace('/zynthian/','/home/pi/');
+        const deleteOrigin = false;
+        const response = await fetch(`http://${window.location.hostname}:3000/copypaste`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
+        });
+        const res = await response.json();
     }
 
     function updateTrack(index,title,color,keyZoneMode,trackAudioType){
@@ -166,8 +166,6 @@ const SampleEditor = (props) => {
             })
             const data = await res.json();
             
-            console.log(data,"data res on remove")
-
             newTrack = {
                 ...track,
                 clips:[
@@ -209,7 +207,8 @@ const SampleEditor = (props) => {
         const defaultColor = "#000000";
         const sketchFileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
         let sketchFolder = sketchInfo.lastSelectedSketch.split(sketchFileName)[0];
-        sketchFolder = "/" + sketchFolder.split('/zynthian/')[1];
+        if (sketchFolder.indexOf('/zynthian/') > -1) sketchFolder = "/" + sketchFolder.split('/zynthian/')[1];
+
 
         tracksDisplay = tracks.map((track,index) => {
             if (index < 10){

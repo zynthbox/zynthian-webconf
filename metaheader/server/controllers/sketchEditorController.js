@@ -31,12 +31,15 @@ exports.getSketch = (req,res) => {
 
 exports.getTrack = (req,res) => {
 
+  let trackSampleSetFolder = req.params.id.split(':')[0].split('+++').join('/');
+  trackSampleSetFolder += "wav/sampleset/bank";
+  const trackId = req.params.id.split(':')[1];
+
   sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
 
-  var file = fs.readFileSync(`${sampleSetFolder}.${req.params.id}/bank.json`);
+  var file = fs.readFileSync(`${trackSampleSetFolder}.${trackId}/bank.json`);
   var json = JSON.parse(file);
   res.json(json)
-
 }
 
 exports.updateTrack = (req,res) => {

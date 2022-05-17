@@ -26,13 +26,17 @@ const Track = (props) => {
 
     useEffect(() => {
         if (props.track && props.track !== null){
+            setSamples(samplesArray)
             getTrackSampleSet()
         }
     },[props.track])
 
     async function getTrackSampleSet(){
         
-        const response = await fetch(`http://${window.location.hostname}:3000/track/${index+1}`, {
+        let trackSampleSetFolder = "/home/pi" + props.sketchFolder
+        trackSampleSetFolder = trackSampleSetFolder.split('/').join('+++');
+
+        const response = await fetch(`http://${window.location.hostname}:3000/track/${trackSampleSetFolder}:${index+1}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

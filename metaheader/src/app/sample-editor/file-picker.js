@@ -18,9 +18,6 @@ const SketchFilePicker = (props) => {
             }
         });
         const res = await response.json();
-
-        console.log(res," res of get sketch file list")
-
         setFileList(res)
     }
 

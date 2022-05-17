@@ -82,7 +82,7 @@ const SketchPadFileLoader = (props) => {
             props.saveSampleSet(destPath)
         } else if (props.fileType === "sketch.json"){
             console.log(folderPath + folderName,"folder name")
-            props.saveSketch("/home/pi/zynthian-my-data/" + folderPath + folderName)
+            props.saveSketch("/zynthian-my-data/" + folderPath + folderName)
         }
     }
 

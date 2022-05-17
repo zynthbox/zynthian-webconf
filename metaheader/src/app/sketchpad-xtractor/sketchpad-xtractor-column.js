@@ -20,9 +20,6 @@ function SketchPadXtractorColumn(props){
     },[items])
 
     function onSelectItem(item,index){
-
-        console.log(item, "ITEM ON SELECT ITEM")
-
         setSelectedItemIndex(index)
         props.onSelectItem(item)
     }
