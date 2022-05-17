@@ -2,7 +2,13 @@ const fs = require('fs');
 const path = require("path")
 const rootFolder = "/home/pi/zynthian-my-data/"
 
-const sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/wav/sampleset/bank`
+var sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/wav/sampleset/bank`
+
+function getLastSelectedSketchFolderName(){
+  var sketchInfojson = JSON.parse( fs.readFileSync(`${rootFolder}sessions/.cache.json`));
+  var folderName = sketchInfojson.lastSelectedSketch.split('/my-sketches/')[1].split('/')[0];
+  return folderName;
+}
 
 exports.getSketchInfo = (req,res) => {
   var file = fs.readFileSync(`${rootFolder}sessions/.cache.json`);
@@ -11,7 +17,7 @@ exports.getSketchInfo = (req,res) => {
 }
 
 exports.getSketchList = (req,res) => {
-  const dirList = fs.readdirSync(`${rootFolder}sketches/my-sketches/temp/`)
+  const dirList = fs.readdirSync(`${rootFolder}sketches/my-sketches/`)
   res.json(dirList)
 }
 
@@ -24,12 +30,18 @@ exports.getSketch = (req,res) => {
 }
 
 exports.getTrack = (req,res) => {
+
+  sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
+
   var file = fs.readFileSync(`${sampleSetFolder}.${req.params.id}/bank.json`);
   var json = JSON.parse(file);
   res.json(json)
+
 }
 
 exports.updateTrack = (req,res) => {
+
+  sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
 
   // console.log('UPDATE TRACK')
 
@@ -78,6 +90,7 @@ exports.updateTrack = (req,res) => {
 }
 
 exports.getSample = (req,res) => {
+  sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
   const trackId = req.params.id.split('+++')[0];
   let samplePath = req.params.id.split('+++')[1].split('++').join('.');
   if (samplePath.indexOf('+') > -1) samplePath = samplePath.split('+').join('/');
@@ -90,7 +103,7 @@ exports.getSample = (req,res) => {
 }
 
 exports.getClip = (req,res) => {
-  const clipsFolder = `${rootFolder}sketches/my-sketches/temp/wav`
+  const clipsFolder = `${rootFolder}sketches/my-sketches/${getLastSelectedSketchFolderName()}/wav`
   let samplePath = req.params.id.split('+++')[1].split('++').join('.');
   if (samplePath.indexOf('+') > -1) samplePath = samplePath.split('+').join('/');
   let filePath = `${clipsFolder}/${samplePath}`
@@ -104,7 +117,7 @@ exports.getClip = (req,res) => {
 exports.removeSample = (req,res) => {
 
   const { trackIndex, sPath, sIndex } = req.body;
-
+  sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
   let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackIndex}/bank.json`);
   let currentSampleSetJson = JSON.parse(rawdata);
 

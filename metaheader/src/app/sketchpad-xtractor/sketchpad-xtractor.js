@@ -53,6 +53,10 @@ function SketchPadXtractor(props){
     // console.log(selectedSketchItemGroupItem,"selected sketch item group item")
 
     useEffect(() => {
+        getSketchFolders();
+    },[])
+
+    useEffect(() => {
         if (selectedSketchFolder !== null){
             getSketchVersions()
         }
@@ -126,6 +130,10 @@ function SketchPadXtractor(props){
         }
     },[itemGroupsGenerationIndex])
 
+    async function getSketchFolders(){
+        
+    }
+
     async function getSketchVersions(){
 
         const folderPath = selectedSketchFolder.path.split('/').join('+++');
@@ -186,7 +194,7 @@ function SketchPadXtractor(props){
         const newClips = clips !== null ? [...clips] : [];
 
         track.clips.forEach(async function(part,pIndex){
-            console.log(part,"track.clips[pIndex]")
+            // console.log(part,"track.clips[pIndex]")
             const cIndex =  letters.findIndex(letter => letter === selectedSketchScene);
             if (part[cIndex].path !== null){
                 const clip = part[cIndex];
@@ -209,7 +217,15 @@ function SketchPadXtractor(props){
         let index = i ? i : 0;
         const newPatterns = patternsArray ? [...patternsArray] : []
         const letter = letters[itemGroupsGenerationIndex];
-        const patternPath = `/home/pi/zynthian-my-data/${selectedSketchFolder.path}sequences/scene-${selectedSketchScene}/patterns/scene-${selectedSketchScene}-${itemGroupsGenerationIndex + 1}${letters[partIndex]}.pattern.json`
+
+        let sketchFileName = selectedSketchVersion.path.split('/')[selectedSketchVersion.path.split('/').length - 1]
+        const currentSketchFolder = selectedSketchVersion.path.split(sketchFileName)[0]
+
+        console.log(currentSketchFolder, " CURRENT SKETCH FOLDER")
+
+        const patternPath = `${currentSketchFolder}sequences/scene-${selectedSketchScene}/patterns/scene-${selectedSketchScene}-${itemGroupsGenerationIndex + 1}${letters[partIndex]}.pattern.json`
+
+        console.log(patternPath, "PATTERN PATH")
 
         fetch(`http://${window.location.hostname}:3000/json/${patternPath.split('/').join('+++')}`, {
             method: 'GET',

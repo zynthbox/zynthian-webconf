@@ -8,7 +8,7 @@ import SketchPadFileLoader from './sketch-pad-file-loader';
 
 const TrackSampleSet = (props) => {
 
-    const { index, samples, setSamples, samplesArray, getTrackSampleSet, sampleSetMode } = props
+    const { index, samples, setSamples, samplesArray, getTrackSampleSet, sampleSetMode, sketchFolder } = props
 
     const [ dragZoneContainerCssClass, setDragZoneContainerCssClass ] = useState('hidden')
     const [ showSampleSetSourcePicker, setShowSampleSetSourcePicker ] = useState(false)
@@ -18,7 +18,7 @@ const TrackSampleSet = (props) => {
     const [ loadFromSketchPadSampleIndex, setLoadFromSketchPadSampleIndex ] = useState(null)
     const [ loadFromSketchPadFileType, setLoadFromSketchPadFileType ] = useState('wav')
 
-    const selectedFolder = `/zynthian-my-data/sketches/my-sketches/temp/wav/sampleset/bank.${index+1}/`;
+    const selectedFolder = `${sketchFolder}wav/sampleset/bank.${index+1}`;
 
     useEffect(() => {
         window.addEventListener('keydown',handleKeyPress,false);
@@ -111,7 +111,7 @@ const TrackSampleSet = (props) => {
         setLoadFromSketchPadSampleIndex(null)
 
         if (sampleSetMode === "sample-loop"){
-            console.log('insert loop')
+            // console.log('insert loop')
             props.updateTrackClips("insert",index,sIndex,filePath,multiple,isSaveAs)
         } else {
 
@@ -133,8 +133,8 @@ const TrackSampleSet = (props) => {
 
     async function insertSample(filePath,fileName,sIndex,multiple,isSaveAs){
 
-        const previousPath = isSaveAs === true ? "/home/pi" + selectedFolder + fileName : filePath
-        const destinationPath =  isSaveAs === true ? filePath.split("/pi")[1] :  selectedFolder + fileName 
+        const previousPath = isSaveAs === true ? "/home/pi" + selectedFolder + "/" + fileName : filePath
+        const destinationPath =  isSaveAs === true ? filePath.split("/pi")[1] :  selectedFolder + "/" + fileName 
 
         const deleteOrigin = false;
         const response = await fetch(`http://${window.location.hostname}:3000/copypaste`, {
@@ -174,9 +174,7 @@ const TrackSampleSet = (props) => {
             }
         });
         const res = await response.json()
-        const baseFilePath = "/home/pi" + selectedFolder.split(index + 1)[0] + sampleSetIndex;
-
-
+        const baseFilePath = "/home/pi" + selectedFolder.split('/bank')[0]  + "/bank." + sampleSetIndex;
         res.forEach(function(sample,sIndex){
             // console.log(sample,sIndex,"sample + sIndex on forEach in load")
             if (sample !== null){

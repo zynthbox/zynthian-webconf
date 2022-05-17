@@ -71,6 +71,10 @@
   position: absolute;
   left: 0;
 }
+#sketch-pad-xtractor-container #sketch-pad-xtractor .sketch-pad-xtractor-column .xtractor-column-container {
+  height: calc(100% - 32px);
+  overflow-y: auto;
+}
 #sketch-pad-xtractor-container #sketch-pad-xtractor .sketch-pad-xtractor-column ul {
   padding: 0;
   list-style-type: none;

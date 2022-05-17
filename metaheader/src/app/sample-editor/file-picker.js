@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 const SketchFilePicker = (props) => {
 
-    const { setShowFilePicker, onSelect } = props;
+    const { setShowFilePicker } = props;
 
     const [ fileList, setFileList ] = useState(null);
 
@@ -18,17 +18,24 @@ const SketchFilePicker = (props) => {
             }
         });
         const res = await response.json();
+
+        console.log(res," res of get sketch file list")
+
         setFileList(res)
+    }
+
+    function onSelect(f){
+
     }
 
     let fileListDisplay = "";
     if (fileList !== null){
         const list = fileList.map((f,index) => {
-            if (f.indexOf('.sketch.json') > -1 ){
+            // if (f.indexOf('.sketch.json') > -1 ){
                 return (
                     <li key={index}><a onClick={() => onSelect(f,true)}>{f}</a></li>
                 )
-            }
+            // }
         })
         fileListDisplay = (
             <ul>

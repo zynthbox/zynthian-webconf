@@ -7,7 +7,7 @@ function SketchPadXtractorColumn(props){
     const previousItems = usePrevious(items)
     const [ selectedItemIndex, setSelectedItemIndex ] = useState(null)
 
-    console.log(items,"items")
+    // console.log(items,"items")
 
     useEffect(() => {
         return () => {
@@ -20,6 +20,9 @@ function SketchPadXtractorColumn(props){
     },[items])
 
     function onSelectItem(item,index){
+
+        console.log(item, "ITEM ON SELECT ITEM")
+
         setSelectedItemIndex(index)
         props.onSelectItem(item)
     }
@@ -127,9 +130,11 @@ function SketchPadXtractorColumn(props){
 
     return (
         <React.Fragment>
-            <ul>
-                {itemsDisplay}
-            </ul>
+            <div className='xtractor-column-container'>
+                <ul>
+                    {itemsDisplay}
+                </ul>
+            </div>
         </React.Fragment>
     )
 }

@@ -130,6 +130,115 @@
         border-bottom-left-radius: 10px;
     }
 
+    .sample-set-load-from-sketch-pad-dialog {
+
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 500px;
+        height: 300px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-left: -250px;
+        margin-top: -150px;
+        z-index: 1000;
+        overflow: hidden;
+
+        &.w-save {
+            padding-bottom: 50px;
+        }
+
+        .dialog-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            padding: 13px;
+            border-top: 1px solid #ccc;
+            background-color: white;
+
+            input {
+                width: 400px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+            }
+
+            button {
+                float: right;
+            }
+        }
+
+        h4 {
+            background-color: black;
+            color: white;
+            margin: 0;
+            width: 100%;
+            padding: 10px;
+        }
+
+        a.close {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        
+        ul {
+            padding: 0;
+            width: 100%;
+            height: calc(100% - 21px);
+            overflow: scroll;
+            box-sizing: border-box;
+            list-style-type: none !important;
+
+            li {
+                width: 100%;
+                height: 28px;
+                
+                a {
+                    height: 100%;
+                    width: 100%;
+                    padding: 5px 10px;
+                    display: block;
+                    float: left;
+                    height: auto;
+                    cursor: pointer;
+                    padding-left: 25px !important;
+                    position: relative;
+
+                    svg {
+                        position: absolute;
+                        top: 5px;
+                        left: 5px;
+                    }
+
+                    &.active {
+                        background-color: dodgerblue;
+                        color: white;
+
+                        &:hover {
+                            color: white !important;
+                        }
+                    }
+                }
+
+                &:nth-child(even){
+                    background-color: aliceblue;
+                }
+            }
+            
+            li + li {
+                border-top: 1px solid #ccc;
+            }
+
+            
+        }
+    }
+
     .close-sample-editor {
         top: 5px;
         right: 20px;
@@ -559,114 +668,6 @@
     .sample-set:nth-child(10){
         border-bottom-right-radius: 10px;
     }
-
-    .sample-set-load-from-sketch-pad-dialog {
-
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        width: 500px;
-        height: 300px;
-        background-color: white;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        margin-left: -250px;
-        margin-top: -150px;
-        z-index: 1000;
-        overflow: hidden;
-
-        &.w-save {
-            padding-bottom: 50px;
-        }
-
-        .dialog-footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50px;
-            padding: 13px;
-            border-top: 1px solid #ccc;
-            background-color: white;
-
-            input {
-                width: 400px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-            }
-
-            button {
-                float: right;
-            }
-        }
-
-        h4 {
-            background-color: black;
-            color: white;
-            margin: 0;
-            width: 100%;
-            padding: 10px;
-        }
-
-        a.close {
-            position: absolute;
-            top: 7px;
-            right: 7px;
-            color: white;
-            font-size: 1.5em;
-            cursor: pointer;
-        }
-        
-        ul {
-            padding: 0;
-            width: 100%;
-            height: calc(100% - 21px);
-            overflow: scroll;
-            box-sizing: border-box;
-
-            li {
-                width: 100%;
-                height: auto;
-                
-                a {
-                    width: 100%;
-                    padding: 5px 10px;
-                    display: block;
-                    float: left;
-                    height: auto;
-                    cursor: pointer;
-                    padding-left: 25px !important;
-                    position: relative;
-
-                    svg {
-                        position: absolute;
-                        top: 5px;
-                        left: 5px;
-                    }
-
-                    &.active {
-                        background-color: dodgerblue;
-                        color: white;
-
-                        &:hover {
-                            color: white !important;
-                        }
-                    }
-                }
-
-                &:nth-child(even){
-                    background-color: aliceblue;
-                }
-            }
-            
-            li + li {
-                border-top: 1px solid #ccc;
-            }
-
-            
-        }
-    }
-    
 }
 
 #pattern-editor-container {

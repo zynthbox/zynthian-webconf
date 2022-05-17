@@ -1,7 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import axios from 'axios';
 import Track from './track';
-import SketchFilePicker from './file-picker';
+import SketchPadFileLoader from './sketch-pad-file-loader'
 import LoadingSpinner from '../loading-spinner';
 const PatternEditor = lazy(()=>import('./pattern-editor'))
 
@@ -14,6 +14,7 @@ const SampleEditor = (props) => {
     const [ showFilePicker, setShowFilePicker ] = useState(false);
     const [ showPatternEditor, setShowPatternEditor ] = useState(false);
     const [ patternEditorTrackIndex, setPatternEditorTrackIndex ] = useState(null);
+    const [ sketchPadDialogActionType, setSketchPadDialogActionType ] = useState(null)
 
     // console.log("*** STATE UPDATE ****")
     // console.log(sketchInfo,"sketchInfo");
@@ -24,13 +25,13 @@ const SampleEditor = (props) => {
         getSketchInfo()
         setTimeout(() => {
             const sampleEditorContainer = document.getElementById('sample-editor').clientHeight;
-            console.log(sampleEditorContainer,window.innerHeight)
+
         }, 100);
     },[])
 
     useEffect(() => {
         if (sketchInfo !== null){
-            // console.log(sketchInfo)
+            console.log(sketchInfo, "sketch info")
             getCurrentSelectedSketch()
         }
     },[sketchInfo])
@@ -92,15 +93,17 @@ const SampleEditor = (props) => {
 
     async function updateSketchInfo(fn) {
 
+        console.log(fn, " FN");
+
         setShowFilePicker(false)
 
         // console.log("update sketch info")
 
-        const originalFileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
-        const sketchFolderPath = sketchInfo.lastSelectedSketch.split(originalFileName)[0];
+        // const originalFileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
+        // const sketchFolderPath = sketchInfo.lastSelectedSketch.split(originalFileName)[0];
         const newSketchInfo = {
             ...sketchInfo,
-            lastSelectedSketch:sketchFolderPath + fn
+            lastSelectedSketch:fn.split('/home/pi')[1]
         }
 
         // console.log(newSketchInfo,"newSketchInfo")
@@ -113,9 +116,11 @@ const SampleEditor = (props) => {
         });
     }
 
-    function saveCurrentSketchAs(){
-        const result = window.prompt("Enter FileName");
-        saveCurrentSketch(result + ".sketch.json")
+    function saveCurrentSketchAs(newSketchPath){
+
+        console.log(newSketchPath," NEW SKETCH PATH")
+        console.log(sketchInfo.lastSelectedSketch, "last selected sketch file + folder")
+
     }
 
     function updateTrack(index,title,color,keyZoneMode,trackAudioType){
@@ -150,7 +155,6 @@ const SampleEditor = (props) => {
         let newTrack;
 
         if (actionType === "remove"){
-            console.log('remove clip from track')
 
             const fullPath = currentSketch.tracks[index].clips[clipIndex].path;
             const res = await fetch(`http://${window.location.hostname}:3000/delete`, {
@@ -161,7 +165,9 @@ const SampleEditor = (props) => {
                 body:JSON.stringify({fullPath})
             })
             const data = await res.json();
+            
             console.log(data,"data res on remove")
+
             newTrack = {
                 ...track,
                 clips:[
@@ -200,8 +206,11 @@ const SampleEditor = (props) => {
     let tracksDisplay;
     if (tracks !== null){
         
-        const defaultColor = "#000000" 
-        
+        const defaultColor = "#000000";
+        const sketchFileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
+        let sketchFolder = sketchInfo.lastSelectedSketch.split(sketchFileName)[0];
+        sketchFolder = "/" + sketchFolder.split('/zynthian/')[1];
+
         tracksDisplay = tracks.map((track,index) => {
             if (index < 10){
                 return (
@@ -213,6 +222,7 @@ const SampleEditor = (props) => {
                         onShowPatternEditor={onShowPatternEditor}
                         track={track}
                         updateTrackClips={updateTrackClips}
+                        sketchFolder={sketchFolder}
                     />
                 )
             }
@@ -222,11 +232,15 @@ const SampleEditor = (props) => {
     let filePickerDisplay;
     if (showFilePicker === true){
         filePickerDisplay = (
-            <SketchFilePicker 
-                onSelect={updateSketchInfo}
-                setShowFilePicker={setShowFilePicker}
+            <SketchPadFileLoader 
+                actionType={sketchPadDialogActionType}
+                setShowLoadFromSketchPadDialog={setShowFilePicker}
+                fileType={"sketch.json"}
+                loadSketch={updateSketchInfo}
+                saveSketch={saveCurrentSketchAs}
             />
         )
+
     }
 
     let patternEditorDisplay;
@@ -252,9 +266,15 @@ const SampleEditor = (props) => {
             <div className='sample-editor-menu'> 
                 <ul>
                     <li><a>New</a></li>
-                    <li><a onClick={() => setShowFilePicker(showFilePicker === true ? false : true)}>Load</a></li>
+                    <li><a onClick={() => {
+                        setShowFilePicker(showFilePicker === true ? false : true)
+                        setSketchPadDialogActionType('LOAD')
+                    }}>Load</a></li>
                     <li><a onClick={saveCurrentSketch}>Save</a></li>
-                    <li><a onClick={saveCurrentSketchAs}>Save As...</a></li>
+                    <li><a onClick={() => {
+                        setShowFilePicker(showFilePicker === true ? false : true)
+                        setSketchPadDialogActionType('SAVE')
+                    }}>Save As...</a></li>
                     {sketchInfo !== null ? <li style={{float:"right"}}><a>{sketchInfo.lastSelectedSketch}</a></li>: ''}
                 </ul>
             </div>

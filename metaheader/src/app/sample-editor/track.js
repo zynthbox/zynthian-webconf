@@ -11,7 +11,7 @@ const Track = (props) => {
     const samplesArray = [
         null,null,null,null,null
     ]
-    const { index, track, color, updateTrackClips } = props;
+    const { index, track, color, updateTrackClips, sketchFolder } = props;
     const [ samples, setSamples ] = useState(samplesArray);
     const [ showEditMode, setShowEditMode ] = useState(false);
     const [ showColorPicker, setShowColorPicker ] = useState(false);
@@ -109,6 +109,7 @@ const Track = (props) => {
                         sampleSetMode={track.trackAudioType}
                         keyZoneMode={track.keyzone_mode}
                         updateTrackClips={updateTrackClips}
+                        sketchFolder={sketchFolder}
                     />
                 </div>
         </React.Fragment>
