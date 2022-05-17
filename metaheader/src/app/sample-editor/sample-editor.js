@@ -71,7 +71,8 @@ const SampleEditor = (props) => {
         if (fn && typeof(fn) === "string") savedSketch.name = fn;
 
         let json = JSON.stringify(currentSketch);
-        let path = sketchInfo.lastSelectedSketch.split("zynthian/")[1];
+        let path = sketchInfo.lastSelectedSketch;
+        if (path.indexOf('/zynthian/') > -1 ) path = path.split('/zynthian/')[1];
         let fileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
 
         const blob = new Blob([json], {type:"application/json"});
