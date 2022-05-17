@@ -300,7 +300,7 @@ function WebconfFileBrowser(props){
 
   return (
       <div 
-        style={{ height: window.innerHeight - 190, position:"relative" }} 
+        style={{ height: window.innerHeight - 170, position:"relative" }} 
         onDragOver={onFileUploaderDragOver} 
         onDragLeave={() => onFileUploaderDragLeave()}
         >
