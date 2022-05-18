@@ -169,6 +169,18 @@
   padding: 5px !important;
   cursor: pointer;
 }
+#file-manager .file-manager-wrapper .file-browser-loading-spinner-container {
+  position: absolute;
+  top: 250px;
+  z-index: 100;
+  left: 50%;
+  margin-left: -40px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+}
+#file-manager .file-manager-wrapper .file-browser-loading-spinner-container .lds-grid-container {
+  margin: 0;
+}
 #file-manager #file-uploader {
   position: absolute;
   top: 85px;

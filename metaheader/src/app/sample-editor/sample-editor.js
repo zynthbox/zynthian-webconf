@@ -112,16 +112,30 @@ const SampleEditor = (props) => {
     }
 
     async function saveCurrentSketchAs(destinationPath){
-        const previousPath = sketchInfo.lastSelectedSketch.replace('/zynthian/','/home/pi/');
-        const deleteOrigin = false;
-        const response = await fetch(`http://${window.location.hostname}:3000/copypaste`, {
+        // create the folder
+        
+        const fullPath = destinationPath;
+        const createFolderResponse = await fetch(`http://${window.location.hostname}:3000/createfolder`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
+            body:JSON.stringify({fullPath})
         });
-        const res = await response.json();
+        const createFolderRes = await createFolderResponse.json();
+        
+        console.log(createFolderRes, " CREATE FOLDER RES");
+
+        // const previousPath = sketchInfo.lastSelectedSketch.replace('/zynthian/','/home/pi/');
+        // const deleteOrigin = false;
+        // const response = await fetch(`http://${window.location.hostname}:3000/copypaste`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
+        // });
+        // const res = await response.json();
     }
 
     function updateTrack(index,title,color,keyZoneMode,trackAudioType){

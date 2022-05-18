@@ -14,6 +14,7 @@ import { IoArrowBack, IoArrowForward, IoRefresh } from 'react-icons/io5';
 import { IoIosArrowDropdown } from 'react-icons/io'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { useOnClickOutside } from '../helpers';
+import LoadingSpinner from '../loading-spinner';
 
 function WebconfFileBrowser(props){
 
@@ -21,6 +22,7 @@ function WebconfFileBrowser(props){
   const [ copiedFiles, setCopiedFiles ] = useState('')
   const [ draggedFiles, setDraggedFiles ] = useState('')
   const [ isDragInsideFileBrowser, setIsDragInsideFileBrowser ] = useState(false);
+  const [ loading, setLoading ] = useState(false)
   const fileBrowserRef = useRef(null);
   
 
@@ -41,11 +43,11 @@ function WebconfFileBrowser(props){
 
   async function createFolder(fullPath){
     const response = await fetch(`http://${window.location.hostname}:3000/createfolder`, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body:JSON.stringify({fullPath})
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body:JSON.stringify({fullPath})
     });
     const res = await response.json();
     props.refreshFileManager(res);
@@ -80,6 +82,7 @@ function WebconfFileBrowser(props){
       })
       
       if ( window.confirm(message)){
+        setLoading(true)
         deleteFile(paths,0)
       }
   }
@@ -96,6 +99,7 @@ function WebconfFileBrowser(props){
       if (index === paths.length - 1){
         const res = await response.json();
         clearSelection();
+        setLoading(false)
         props.refreshFileManager(res);
       } else {
         deleteFile(paths,index + 1)
@@ -187,21 +191,38 @@ function WebconfFileBrowser(props){
   }
 
   async function copyPasteFiles(previousPaths,destinationPaths,deleteOrigin){
-    previousPaths.forEach(async function(previousPath,index){
-      const destinationPath = destinationPaths[index];
-      const response = await fetch(`http://${window.location.hostname}:3000/copypaste`, {
+    setLoading(true)
+    copyPasteFile(previousPaths,destinationPaths,deleteOrigin,0)
+  }
+
+  async function copyPasteFile(previousPaths,destinationPaths,deleteOrigin,index){
+    
+    const previousPath = previousPaths[index]
+    const destinationPath = destinationPaths[index];
+
+    console.log(previousPath,destinationPath, " pathsss ")
+
+    fetch(`http://${window.location.hostname}:3000/copypaste`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
-      });
-      const res = await response.json();
-      if (index === previousPaths.length - 1){
+    }).then(async function(res){
+      
+      console.log(res, " FILE COPY PASTE RES");
+      
+      if (index ===  previousPaths.length - 1){
+        const files = await res.json()
         clearSelection();
-        props.refreshFileManager(res);
+        setLoading(false)
+        props.refreshFileManager(files);
+      } else {
+        copyPasteFile(previousPaths,destinationPaths,deleteOrigin,index + 1)
       }
+      
     })
+
   }
 
   const handleAction = (data) => {
@@ -298,12 +319,22 @@ function WebconfFileBrowser(props){
       )
   }
 
+  let loadingDisplay;
+  if (loading === true){
+    loadingDisplay = (
+      <div className='file-browser-loading-spinner-container'>
+        <LoadingSpinner/>
+      </div>
+    )
+  }
+
   return (
       <div 
         style={{ height: window.innerHeight - 170, position:"relative" }} 
         onDragOver={onFileUploaderDragOver} 
         onDragLeave={() => onFileUploaderDragLeave()}
         >
+          {loadingDisplay}
           {fileUploaderDisplay}
           <FileBrowser
             files={displayedFiles}
