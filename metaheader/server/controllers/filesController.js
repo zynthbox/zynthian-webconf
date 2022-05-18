@@ -265,10 +265,10 @@ exports.downloadFiles = (req,res) => {
     const folderPath = filePath.split(folderName)[0];
     console.log(folderPath, "folder path ")
     
-    const zipFilePath = folderPath.split(folderName)[0] + folderName + ".zip";
+    const zipFilePath = "/home/pi/" + folderName + ".zip";
     console.log(zipFilePath, "zipFilePath")
 
-    zipFolder(folderPath, zipFilePath, function(err) {
+    zipFolder(filePath, zipFilePath, function(err) {
 
         if(err) {
             console.log('zipping error')
