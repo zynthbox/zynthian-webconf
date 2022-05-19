@@ -283,13 +283,34 @@ function WebconfFileBrowser(props){
       icon: ChonkyIconName.paste
     }
   })
+
+  const uploadFiles = defineFileAction({
+    id:ChonkyActions.UploadFiles.id,
+    button:{
+      name:"Upload",
+      toolbar: true,
+      contextMenu:true,
+      icon:ChonkyIconName.upload
+    }
+  })
+  
+  const downloadFiles = defineFileAction({
+    id:ChonkyActions.DownloadFiles.id,
+    button:{
+      name:"Download",
+      toolbar: true,
+      contextMenu:true,
+      icon:ChonkyIconName.download
+    }
+  })
+  
   
   const myFileActions = [
     createNewFolder,
     editFiles,
     renameFiles,
-    ChonkyActions.UploadFiles,
-    ChonkyActions.DownloadFiles,
+    uploadFiles,
+    downloadFiles,
     ChonkyActions.DeleteFiles,
     ChonkyActions.CopyFiles,
     ChonkyActions.StartDragNDrop,
