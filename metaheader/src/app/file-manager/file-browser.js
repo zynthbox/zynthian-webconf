@@ -115,6 +115,8 @@ function WebconfFileBrowser(props){
       paths.push(sf.path)
     });
 
+    setLoading(true)
+
     paths.forEach(async function(filePath,index){
 
       const response = await fetch(`http://${window.location.hostname}:3000/download`, {
@@ -133,6 +135,8 @@ function WebconfFileBrowser(props){
       document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
       a.click();
       a.remove();
+
+      setLoading(false)
 
     });
 
