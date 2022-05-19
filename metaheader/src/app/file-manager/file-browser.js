@@ -23,6 +23,9 @@ function WebconfFileBrowser(props){
   const [ draggedFiles, setDraggedFiles ] = useState('')
   const [ isDragInsideFileBrowser, setIsDragInsideFileBrowser ] = useState(false);
   const [ loading, setLoading ] = useState(false)
+  const [ loadingText, setLoadingText ] = useState('')
+  const [ loadingTotal, setLoadingTotal ] = useState(null)
+  const [ loadingCurrent, setLoadingCurrent ] = useState(null)
   const fileBrowserRef = useRef(null);
   
 
@@ -82,6 +85,7 @@ function WebconfFileBrowser(props){
       })
       
       if ( window.confirm(message)){
+        setLoadingText('Deleting Files')
         setLoading(true)
         deleteFile(paths,0)
       }
@@ -100,6 +104,7 @@ function WebconfFileBrowser(props){
         const res = await response.json();
         clearSelection();
         setLoading(false)
+        setLoadingText('')
         props.refreshFileManager(res);
       } else {
         deleteFile(paths,index + 1)
@@ -115,9 +120,11 @@ function WebconfFileBrowser(props){
       paths.push(sf.path)
     });
 
+    setLoadingText('Preparing Download')
     setLoading(true)
 
     paths.forEach(async function(filePath,index){
+
 
       const response = await fetch(`http://${window.location.hostname}:3000/download`, {
           method: 'POST',
@@ -137,6 +144,7 @@ function WebconfFileBrowser(props){
       a.remove();
 
       setLoading(false)
+      setLoadingText('')
 
     });
 
@@ -195,6 +203,7 @@ function WebconfFileBrowser(props){
   }
 
   async function copyPasteFiles(previousPaths,destinationPaths,deleteOrigin){
+    setLoadingText('Copying Files')
     setLoading(true)
     copyPasteFile(previousPaths,destinationPaths,deleteOrigin,0)
   }
@@ -203,23 +212,18 @@ function WebconfFileBrowser(props){
     
     const previousPath = previousPaths[index]
     const destinationPath = destinationPaths[index];
-
-    console.log(previousPath,destinationPath, " pathsss ")
-
     fetch(`http://${window.location.hostname}:3000/copypaste`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
-    }).then(async function(res){
-      
-      console.log(res, " FILE COPY PASTE RES");
-      
+    }).then(async function(res){      
       if (index ===  previousPaths.length - 1){
         const files = await res.json()
         clearSelection();
-        setLoading(false)
+        setLoading(false);
+        setLoadingText('');
         props.refreshFileManager(files);
       } else {
         copyPasteFile(previousPaths,destinationPaths,deleteOrigin,index + 1)
@@ -246,7 +250,7 @@ function WebconfFileBrowser(props){
   const createNewFolder = defineFileAction({
     id: "create_files",
     button: {
-      name: "Create Folder",
+      name: "Add Folder",
       toolbar: true,
       contextMenu: true,
       icon: ChonkyIconName.folderCreate
@@ -327,7 +331,9 @@ function WebconfFileBrowser(props){
   if (loading === true){
     loadingDisplay = (
       <div className='file-browser-loading-spinner-container'>
-        <LoadingSpinner/>
+        <LoadingSpinner
+          text={loadingText}
+        />
       </div>
     )
   }
@@ -414,7 +420,7 @@ const FileBrowserHeader = (props) => {
         </ul>
         {historyDropDownDisplay}
         <FileNavbar />
-        <a className='refresh-button' onClick={() => getFiles()}><IoRefresh/></a>
+        <a className='refresh-button' onClick={() => getFiles()}><span>Refresh</span><IoRefresh/></a>
       </div>
   )
 }

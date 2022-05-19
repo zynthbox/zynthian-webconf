@@ -16,6 +16,9 @@
   padding: 0;
   z-index: 2;
 }
+#file-manager a:hover {
+  color: #09f;
+}
 #file-manager * {
   user-select: none;
 }
@@ -71,11 +74,13 @@
 }
 #file-manager .file-manager-wrapper .tree-view-container ul li {
   position: relative;
+  cursor: pointer;
 }
 #file-manager .file-manager-wrapper .tree-view-container ul li .toggle-sub-menu {
   position: absolute;
   left: 3px;
   top: 6px;
+  cursor: pointer;
 }
 #file-manager .file-manager-wrapper .tree-view-container ul li a {
   padding: 5px;
@@ -90,9 +95,12 @@
 }
 #file-manager .file-manager-wrapper .tree-view-container ul li a.active {
   font-weight: bold;
+  color: #09f !important;
+  background-color: white;
 }
 #file-manager .file-manager-wrapper .tree-view-container ul li a:hover {
   background-color: white;
+  color: #09f !important;
 }
 #file-manager .file-manager-wrapper .tree-view-container > ul {
   min-height: 100%;
@@ -164,19 +172,26 @@
   position: absolute;
   right: 0;
   top: 0;
-  width: 30px;
+  width: auto;
   height: 30px;
   padding: 5px !important;
   cursor: pointer;
 }
+#file-manager .file-manager-wrapper .file-navbar-container-custom .refresh-button span {
+  font-size: 12px;
+  display: block;
+  float: left;
+}
 #file-manager .file-manager-wrapper .file-browser-loading-spinner-container {
   position: absolute;
-  top: 250px;
+  top: 240px;
   z-index: 100;
   left: 50%;
-  margin-left: -40px;
+  margin-left: -50px;
   background: rgba(0, 0, 0, 0.15);
   border-radius: 5px;
+  padding: 10px;
+  color: white;
 }
 #file-manager .file-manager-wrapper .file-browser-loading-spinner-container .lds-grid-container {
   margin: 0;

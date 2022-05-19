@@ -162,9 +162,6 @@ function copyFolderRecursiveSync( source, target ) {
 exports.copyPaste = (req,res) => {
 
   const { previousPath, destinationPath,deleteOrigin } = req.body;
-  console.log('COPY PASTE FILE CONTROLLER')
-  console.log( previousPath, " :::: PREVIOUS PATH" )
-  console.log( destinationPath, " ::::: DESTINATION PATH")
 
   try {
 

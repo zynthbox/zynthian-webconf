@@ -17,6 +17,12 @@
     padding: 0;
     z-index: 2;
 
+    a {
+      &:hover {
+        color: #09f;
+      }
+    }
+
     * {
       user-select: none;
     }
@@ -78,11 +84,13 @@
 
                 li {
                     position: relative;
+                    cursor: pointer;
 
                     .toggle-sub-menu {
                         position: absolute;
                         left: 3px;
                         top:6px;
+                        cursor: pointer;
                     }
 
                     a {
@@ -98,10 +106,13 @@
 
                         &.active {
                             font-weight: bold;
+                            color: #09f !important;
+                            background-color: white;
                         }
 
                         &:hover {
                             background-color: white;
+                            color: #09f !important;
                         }
                     }
                 }
@@ -191,21 +202,29 @@
             position: absolute;
             right: 0;
             top: 0;
-            width: 30px;
+            width: auto;
             height: 30px;
             padding: 5px !important;
             cursor: pointer;
+
+            span {
+              font-size: 12px;
+              display: block;
+              float: left;
+            }
           }
         }
 
         .file-browser-loading-spinner-container {
           position: absolute;
-          top: 250px;
+          top: 240px;
           z-index: 100;
           left: 50%;
-          margin-left: -40px;
+          margin-left: -50px;
           background: rgba(0,0,0,0.15);
           border-radius: 5px;
+          padding: 10px;
+          color: white;
 
           .lds-grid-container {
             margin: 0;

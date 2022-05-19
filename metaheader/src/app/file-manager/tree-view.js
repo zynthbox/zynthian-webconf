@@ -31,7 +31,7 @@ function TreeViewItem(props){
     if (item.children){
         
         toggleButton = (
-            <span className='toggle-sub-menu' style={{ left:8 + (item.level * 12)}}>
+            <span onClick={() => props.onClick(item,parentIds)} className='toggle-sub-menu' style={{ left:8 + (item.level * 12)}}>
                 <i className={item.toggled === true ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'}></i>
             </span>
         )
@@ -46,7 +46,7 @@ function TreeViewItem(props){
     return (
         <li>
             {toggleButton}
-            <a style={{paddingLeft:25 + (item.level * 15)}} className={item.active === true ? "active" : ""} onClick={() => props.onClick(item,parentIds)}>{item.name} </a>
+            <a onClick={() => props.onClick(item,parentIds)} style={{paddingLeft:25 + (item.level * 15)}} className={item.active === true ? "active" : ""}>{item.name} </a>
             {itemChildrenDisplay}
         </li>
     )
