@@ -18,7 +18,7 @@ const TrackSampleSet = (props) => {
     const [ loadFromSketchPadSampleIndex, setLoadFromSketchPadSampleIndex ] = useState(null)
     const [ loadFromSketchPadFileType, setLoadFromSketchPadFileType ] = useState('wav')
 
-    const selectedFolder = `${sketchFolder}wav/sampleset/bank.${index+1}`;
+    const selectedFolder = `${sketchFolder}wav/sampleset/sampleset-bank.${index+1}`;
 
     useEffect(() => {
         window.addEventListener('keydown',handleKeyPress,false);
@@ -79,7 +79,10 @@ const TrackSampleSet = (props) => {
     const uploadSample = async (sample) => {
         const formData = new FormData();
         formData.append('file', sample); // appending file
-        axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`, formData ).then(res => { // then print response status
+
+        console.log(selectedFolder, "  SELECTED FOLDER  ")
+
+        axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++') + '+++'}`, formData ).then(res => { // then print response status
         //   console.log(res)
         });
     };
@@ -173,7 +176,7 @@ const TrackSampleSet = (props) => {
     }
 
     async function loadSampleSet(file){
-        const sampleSetIndex = file.path.split('bank.')[1];
+        const sampleSetIndex = file.path.split('sampleset-bank.')[1];
         const path = file.path.split('/').join('+++')
         const response = await fetch(`http://${window.location.hostname}:3000/json/${path}`, {
             method: 'GET',
@@ -182,7 +185,7 @@ const TrackSampleSet = (props) => {
             }
         });
         const res = await response.json()
-        const baseFilePath = "/home/pi" + selectedFolder.split('/bank')[0]  + "/bank." + sampleSetIndex;
+        const baseFilePath = "/home/pi" + selectedFolder.split('/sampleset-bank')[0]  + "/sampleset-bank." + sampleSetIndex;
         res.forEach(function(sample,sIndex){
             // console.log(sample,sIndex,"sample + sIndex on forEach in load")
             if (sample !== null){

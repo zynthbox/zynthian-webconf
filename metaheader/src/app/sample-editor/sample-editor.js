@@ -81,6 +81,8 @@ const SampleEditor = (props) => {
         
         if (fn && typeof(fn) === "string") fileName = fn;
         
+        // console.log(sketchFolderPath)
+
         formData.append('file', blob,fileName); // appending file
         axios.post(`http://${window.location.hostname}:3000/upload/${sketchFolderPath.split('/').join('+++')}`, formData ).then(res => { // then print response status
 

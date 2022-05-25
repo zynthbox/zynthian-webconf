@@ -34,7 +34,8 @@ module.exports = {
             loader: 'ignore-loader'
           },
         ],
-      }
+      },
+      {test: /\.css$/, loader: 'css-loader'},
     ]
   },
   resolve: {
