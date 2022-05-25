@@ -137,7 +137,7 @@ function SketchPadXtractor(props){
     async function getSketchVersions(){
 
         const folderPath = selectedSketchFolder.path.split('/').join('+++');
-        const response = await fetch(`http://${window.location.hostname}:3000/mydata/${folderPath}`, {
+        const response = await fetch(`http://${window.location.hostname}:3000/mydata/+++home+++pi+++zynthian-my-data+++${folderPath.split('/').join('+++')}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -145,6 +145,8 @@ function SketchPadXtractor(props){
         });
         const res = await response.json();
         
+        console.log(res, " RES ")
+
         let newSketchVersions = [];
 
         res.forEach(function(sv,index){
@@ -258,6 +260,8 @@ function SketchPadXtractor(props){
                 'Content-Type': 'application/json',
             },
         }).then(async function(res){
+
+            
 
             if (res.status === 500){
                 setSamples(newSamples)

@@ -133,7 +133,7 @@ const SampleEditor = (props) => {
         console.log(sketchFolder, " SKETCH FOLDER ")
 
 
-        const filesInFolderResponse = await fetch(`http://${window.location.hostname}:3000/mydata/${sketchFolder.split('/').join('+++').split(' ').join('%20')}`, {
+        const filesInFolderResponse = await fetch(`http://${window.location.hostname}:3000/folder/${"+++home+++pi+++zynthian-my-data+++"+sketchFolder.split('/').join('+++').split(' ').join('%20')}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

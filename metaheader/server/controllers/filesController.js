@@ -47,7 +47,7 @@ const getAllFiles = function(dirPath, arrayOfFiles,index) {
 }
 
 exports.getAllFiles = (req,res) => {
-  const dirList = getAllFiles(parentFolder,[])
+  const dirList = getAllFiles(rootFolder,[])
   res.json(dirList)
 }
 

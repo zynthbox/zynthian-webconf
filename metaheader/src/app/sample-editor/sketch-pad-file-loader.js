@@ -29,7 +29,7 @@ const SketchPadFileLoader = (props) => {
 
     async function getSketchPadFiles(){
 
-        const response = await fetch(`http://${window.location.hostname}:3000/mydata/${folderPath.split('/').join('+++').split(' ').join('%20')}`, {
+        const response = await fetch(`http://${window.location.hostname}:3000/folder/${folderPath.split('/').join('+++').split(' ').join('%20')}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const SketchPadFileLoader = (props) => {
         });
         const res = await response.json();
 
-        
+        console.log(res)
 
         setFileList(res)
     }
