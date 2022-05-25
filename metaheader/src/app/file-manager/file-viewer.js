@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import ReactJson from 'react-json-view';
 import { useOnClickOutside } from '../helpers';
 import { FaWindowClose } from 'react-icons/fa';
+import LoadingSpinner from '../loading-spinner';
 
 const FileViewer = (props) => {
 
@@ -38,7 +39,7 @@ const FileViewer = (props) => {
           setLoading(false)
     }
 
-    let fileViewerDisplay;
+    let fileViewerDisplay = <LoadingSpinner/>
     if (fileType === "json" && loading === false){
         fileViewerDisplay = (
             <div className='json-viewer-container'>

@@ -430,6 +430,11 @@ const FileBrowserHeader = (props) => {
     setTimeout(() => {
       const lvlUpSvg = document.getElementsByClassName('fa-level-up-alt')[0];
       if (lvlUpSvg && lvlUpSvg !== null) lvlUpSvg.setAttribute('transform','scale(-1 1)')
+
+      var xpath = "//span[text()='Actions']";
+      var matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+      matchingElement.innerText = "More ..."
+      console.log(matchingElement)
     }, 10);
   },[])
   
