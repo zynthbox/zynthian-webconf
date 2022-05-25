@@ -43,7 +43,7 @@ const FileViewer = (props) => {
     if (fileType === "json" && loading === false){
         fileViewerDisplay = (
             <div className='json-viewer-container'>
-                <ReactJson src={data}/>
+                <ReactJson src={data} theme="monokai" />
             </div>
         )
     }

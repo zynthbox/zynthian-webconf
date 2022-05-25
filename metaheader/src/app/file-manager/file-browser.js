@@ -145,30 +145,34 @@ function WebconfFileBrowser(props){
       paths.push(sf.path)
     });
 
-    setLoadingText('Preparing Download')
-    setLoading(true)
+    if (paths.length > 0 ){
 
-    paths.forEach(async function(filePath,index){
-      const response = await fetch(`http://${window.location.hostname}:3000/download`, {
-          method: 'POST',
-          headers: {
-          'Content-Type': 'application/json',
-          },
-          body:JSON.stringify({filePath})
+      setLoadingText('Preparing Download')
+      setLoading(true)
+
+      paths.forEach(async function(filePath,index){
+        const response = await fetch(`http://${window.location.hostname}:3000/download`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({filePath})
+        });
+        const res = await response.blob();
+        var url = window.URL.createObjectURL(res);
+        var a = document.createElement('a');
+        a.href = url;
+        let dlFileName = filePath.split(fsep)[filePath.split(fsep).length - 1]
+        if (dlFileName.indexOf('.zip') === -1 && res.type === "application/zip") dlFileName += ".zip";
+        a.download = dlFileName;
+        document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+        a.click();
+        a.remove();
+        setLoading(false)
+        setLoadingText('')
       });
-      const res = await response.blob();
-      var url = window.URL.createObjectURL(res);
-      var a = document.createElement('a');
-      a.href = url;
-      let dlFileName = filePath.split(fsep)[filePath.split(fsep).length - 1]
-      if (dlFileName.indexOf('.zip') === -1 && res.type === "application/zip") dlFileName += ".zip";
-      a.download = dlFileName;
-      document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-      a.click();
-      a.remove();
-      setLoading(false)
-      setLoadingText('')
-    });
+
+    }
 
   }
 
@@ -433,7 +437,7 @@ const FileBrowserHeader = (props) => {
 
       var xpath = "//span[text()='Actions']";
       var matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-      matchingElement.innerText = "More ..."
+      matchingElement.innerText = "More..."
       console.log(matchingElement)
     }, 10);
   },[])
