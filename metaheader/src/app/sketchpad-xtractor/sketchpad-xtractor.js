@@ -253,8 +253,11 @@ function SketchPadXtractor(props){
     async function generateTrackSamples(){
 
         const newSamples = samples !== null ? [...samples ] : [];
+        
+        const fileName = selectedSketchVersion.path.split('/')[selectedSketchVersion.path.split('/').length - 1];
+        const folderName = selectedSketchVersion.path.split(fileName)[0];
 
-        fetch(`http://${window.location.hostname}:3000/track/${itemGroupsGenerationIndex+1}`, {
+        fetch(`http://${window.location.hostname}:3000/track/${folderName.split('/').join('+++').split(' ').join('%20')}:${itemGroupsGenerationIndex+1}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
