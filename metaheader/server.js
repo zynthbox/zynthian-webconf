@@ -17,6 +17,8 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(express.static('/home/pi/')); 
+
 var routes = require('./server/routes.js')(app);
 
 app.listen(port, () => {

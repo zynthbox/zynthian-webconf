@@ -1,5 +1,6 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
+import FileManagerContextProvider from './app/file-manager/context/context-provider';
 
 import LoadingSpinner from './app/loading-spinner';
 
@@ -76,9 +77,11 @@ function MetaHeader(){
                         <i className="glyphicon glyphicon-file"></i>
                         FILE MANAGER
                     </h3>
-                    <Suspense fallback={<LoadingSpinner/>}>
-                        <FileManager/>
-                    </Suspense>
+                    <FileManagerContextProvider>
+                        <Suspense fallback={<LoadingSpinner/>}>
+                            <FileManager/>
+                        </Suspense>
+                    </FileManagerContextProvider>
                 </div>
                 <div id="file-manager-overlay"></div>
             </React.Fragment>

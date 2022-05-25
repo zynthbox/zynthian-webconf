@@ -1,13 +1,19 @@
 const fs = require('fs');
 const path = require("path")
 
-var zipFolder = require('zip-folder');
+// var zipFolder = require('zip-folder');
 var rimraf = require("rimraf");
 var multer = require('multer');
 
 // const rootFolder = "./"
 const rootFolder = "/home/pi/zynthian-my-data/"
 const parentFolder = "/home/pi"
+
+const excludedFolders = [
+  "sf2",
+  "compile",
+  "jpmidi"
+]
 
 const getAllFiles = function(dirPath, arrayOfFiles,index) {
   files = fs.readdirSync(dirPath)
@@ -21,13 +27,17 @@ const getAllFiles = function(dirPath, arrayOfFiles,index) {
         id:index
       }
       fileData.path = rootFolder + fileData.path.split(rootFolder)[1]
-      if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-        arrayOfFiles.push(fileData)
-        arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
+      if (fs.statSync(`${dirPath}/${file}`).isDirectory()) {
+        if (excludedFolders.indexOf(file) === -1){
+          arrayOfFiles.push(fileData)
+          arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
+        }
       } else {
-        var stats = fs.statSync(dirPath + "/" + file)
-        fileData.size = stats.size
-        fileData.modDate = stats.ctimeMs
+        // if (file.indexOf('*') === -1){
+          var stats = fs.statSync(`${dirPath}/${file}`)
+          fileData.size = stats.size
+          fileData.modDate = stats.ctimeMs
+        // }
         arrayOfFiles.push(fileData)
       }
     }
@@ -37,17 +47,38 @@ const getAllFiles = function(dirPath, arrayOfFiles,index) {
 }
 
 exports.getAllFiles = (req,res) => {
-  const dirList = getAllFiles(rootFolder,[])
+  const dirList = getAllFiles(parentFolder,[])
   res.json(dirList)
 }
 
 exports.getFilesInFolder = (req,res) => {
   
   let folder = req.params.folder;
-  if (folder.indexOf('+++') > -1) folder = folder.split('+++').join('/');
+  if (!folder) folder = "/"
+  else if (folder.indexOf('+++') > -1) folder = folder.split('+++').join('/');
 
-  const dirList = getAllFiles(rootFolder + folder,[])
-  res.json(dirList)
+  fs.readdir(folder, (err, files) => {
+    if (err){
+      console.log(err);
+      res.json(err)
+    } else {
+      const filesList = [];
+      files.forEach(file => {
+        var stats = fs.statSync(`${folder}${file}`)
+        filesList.push({
+          size:stats.size,
+          modDate:stats.ctimeMs,
+          name:file,
+          folder,
+          path:`${folder}${file}`,
+          isDir:fs.statSync(folder + file).isDirectory(),
+          level:folder.match(/\//g).length - 2
+        })
+      })
+      res.json(filesList)
+    }
+  })
+
 }
 
 exports.getJsonFile = (req,res) => {
@@ -63,8 +94,8 @@ exports.renameFile = (req,res) => {
   const { previousPath, fullPath } = req.body;
   try {
     fs.renameSync(previousPath,fullPath)
-    const dirList = getAllFiles(rootFolder,[])
-    res.json(dirList)
+    // const dirList = getAllFiles(rootFolder,[])
+    res.status(200).json({message:'Rename successful!'})
   } catch(err) {
     console.error(err)
     res.json({error:err})
@@ -77,11 +108,11 @@ exports.renameFile = (req,res) => {
 
 exports.createFolder = (req,res) => {
   const { fullPath } = req.body;
+
   try {
-    if (!fs.existsSync(parentFolder + fullPath)) {
-      fs.mkdirSync(parentFolder + fullPath)
-      const dirList = getAllFiles(rootFolder,[])
-      res.json(dirList)
+    if (!fs.existsSync(parentFolder + "/" + fullPath)) {
+      fs.mkdirSync(parentFolder + "/" +  fullPath)
+      res.status(200).json({message:'Folder created!'})
     } else {
       res.json({message:'Folder already exists!'})
     }
@@ -105,8 +136,8 @@ const deleteFiles = (req,res) => {
     } else {
       fs.unlinkSync(fullPath)
     }
-    const dirList = getAllFiles(rootFolder,[])
-    res.json(dirList)
+    // const dirList = getAllFiles(rootFolder,[])
+    res.status(200).json({message:"Delete successfull!"})
     //file removed
   } catch(err) {
     console.error(err)
@@ -181,8 +212,8 @@ exports.copyPaste = (req,res) => {
         } else {
           fs.unlinkSync(previousPath)
         }
-        const dirList = getAllFiles(rootFolder,[])
-        res.json(dirList)  
+        // const dirList = getAllFiles(rootFolder,[])
+        res.status(200).json({message:"Copy successfull!"})  
         //file removed
       } catch(err) {
         console.error(err)
@@ -207,13 +238,14 @@ exports.copyPaste = (req,res) => {
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
       const selectedFolder = req.params.folder.split('+++').join('/');
+      // console.log(selectedFolder, " SELECTED FOLDER")
       const folderChainArray = selectedFolder.split('/');
+      // console.log(folderChainArray, " FOLDER CHAIN ARRAY")
       let fc = ""
       for (var i in folderChainArray){
-        if (i > 0 && i < folderChainArray.length - 1){
+        if (i < folderChainArray.length - 1){
           var currentFolder = folderChainArray[i];
           fc +=  currentFolder + "/"
-          // console.log(fc,"currentFolder", i);
           fs.mkdirSync( parentFolder + "/" + fc, {recursive:true})  
         }
       }
@@ -221,8 +253,7 @@ var storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const selectedFolder = req.params.folder.split('+++').join('/');
-    console.log(selectedFolder + "/" + file.originalname, " FILE PATH ON UPLOAD ")
-    cb(null, selectedFolder + "/" + file.originalname )
+    cb(null, selectedFolder + file.originalname )
   }
 })
 
@@ -238,14 +269,36 @@ exports.uploadFiles = (req, res) => {
       console.log(err);
         return res.status(500).json(err)
     }
-    const dirList = getAllFiles(rootFolder,[])
-    return res.status(200).json(dirList)
+    return res.status(200).json({message:"Upload successfull!"})
   })
 }
 
 /* UPLOAD FILES */
 
 /* DOWNLOAD FILES / ZIP FOLDER & DOWNLOAD */
+
+var archiver = require('archiver');
+
+function zipFolder(srcFolder, zipFilePath, callback) {
+	var output = fs.createWriteStream(zipFilePath);
+	var zipArchive = archiver('zip');
+
+	output.on('close', function() {
+		callback();
+	});
+
+	zipArchive.pipe(output);
+
+	zipArchive.bulk([
+		{ cwd: srcFolder, src: ['**/*'], expand: true, dot:true}
+	]);
+
+	zipArchive.finalize(function(err, bytes) {
+		if(err) {
+			callback(err);
+		}
+	});
+}
 
 exports.downloadFiles = (req,res) => {
   
@@ -255,7 +308,6 @@ exports.downloadFiles = (req,res) => {
 
     console.log(filePath," filePath")
 
-          
     const folderName = filePath.split('/')[filePath.split("/").length - 1];
     console.log(folderName,"folder name")
     

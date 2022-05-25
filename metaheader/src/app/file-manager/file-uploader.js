@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { BiRename } from 'react-icons/bi';
-import { ImUpload } from 'react-icons/im'
+import { ImUpload } from 'react-icons/im';
+import { FaWindowClose } from 'react-icons/fa';
 
 import { humanFileSize } from '../helpers';
 
@@ -130,6 +131,11 @@ function FileUploader(props) {
           </div>
         <div id="file-list-actions">
           <div style={{float:"right"}}>
+
+            <div className='upload-items-counter'>
+                {uploadedFileIndex !== null ? uploadedFileIndex + " / " + files.length + " Total" : ""}
+            </div>
+
             <a className='button' onClick={() => props.setShowFileUploader(false)}>Close</a>
             <a className='button' onClick={uploadFiles}> Upload Files </a>
           </div>
@@ -151,6 +157,11 @@ function FileUploader(props) {
   return (
     <React.Fragment>
     <div id="file-uploader">
+
+            <a className='close-file-uploader' onClick={() => props.setShowFileUploader(false)}>
+                <FaWindowClose/>
+            </a>
+
       {dropZoneDisplay}
       {fileListDisplay}
     </div>

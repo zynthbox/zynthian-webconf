@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import {
   FileBrowser,
   FileNavbar,
@@ -10,22 +10,30 @@ import {
   defineFileAction
 } from "chonky";
 import FileUploader from './file-uploader';
+import FileViewer from './file-viewer';
 import { IoArrowBack, IoArrowForward, IoRefresh } from 'react-icons/io5';
 import { IoIosArrowDropdown } from 'react-icons/io'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { useOnClickOutside } from '../helpers';
 import LoadingSpinner from '../loading-spinner';
 
+import { Context } from './context/context-provider'
+
 function WebconfFileBrowser(props){
 
-  const { displayedFiles, selectedFolder, fsep, folderChain } = props;
+  const { fileManagerState, fileManagerDispatch } = useContext(Context)
+  const { displayedFiles , selectedFolder, folderChain, ffolder } = fileManagerState;
+
+  const { fsep  } = props;
   const [ copiedFiles, setCopiedFiles ] = useState('')
   const [ draggedFiles, setDraggedFiles ] = useState('')
   const [ isDragInsideFileBrowser, setIsDragInsideFileBrowser ] = useState(false);
   const [ loading, setLoading ] = useState(false)
   const [ loadingText, setLoadingText ] = useState('')
-  const [ loadingTotal, setLoadingTotal ] = useState(null)
-  const [ loadingCurrent, setLoadingCurrent ] = useState(null)
+  
+  const [ showFileViewer, setShowFileViewer ] = useState('');
+  const [ viewedFile, setViewedFile ] = useState('')
+
   const fileBrowserRef = useRef(null);
   
 
@@ -35,13 +43,25 @@ function WebconfFileBrowser(props){
   }
 
   function openFilesAction(data){
-    props.openFiles(data.payload.files[0])
+    const file = data.payload.files[0]
+    if (file.isDir === true) fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:file})
+    else {
+      if (file.path.indexOf('.') > -1){
+        const fileType = file.path.split('.')[file.path.split('.').length - 1];
+        if (fileType === "json"){
+          setViewedFile(file);
+          setShowFileViewer(true)
+        }
+      }
+    }
   }
 
   function createFolderAction(){
     const folderName = window.prompt('Enter new Folder Name:');
-    const fullPath = selectedFolder + fsep + folderName;
-    createFolder(fullPath)
+    if (folderName !== null){
+      const fullPath = (selectedFolder !== null ? selectedFolder + fsep : "") + folderName;
+      createFolder(fullPath)
+    }
   }
 
   async function createFolder(fullPath){
@@ -53,15 +73,18 @@ function WebconfFileBrowser(props){
       body:JSON.stringify({fullPath})
     });
     const res = await response.json();
-    props.refreshFileManager(res);
+    props.getFiles();
   }
 
   function renameFileAction(data){
     const previousPath = data.state.selectedFiles[0].path;
     const previousName = previousPath.split('/')[previousPath.split('/').length - 1]
-    const folderName = window.prompt(`Enter new name for "${previousName}":`);
-    const fullPath = previousPath.split(selectedFolder)[0] + selectedFolder + fsep + folderName;
-    renameFile(previousPath,fullPath)
+    const folderName = window.prompt(`Enter new name for "${previousName}":`,previousName);
+    if (folderName !== null){
+      const fullPath = selectedFolder === null ? "/home/pi/" + folderName : previousPath.split(selectedFolder)[0] + selectedFolder + "/" + folderName;
+      fileManagerDispatch({type:"RENAME_FILE",payload:{previousPath,fullPath}})
+      renameFile(previousPath,fullPath)
+    }
   }
 
   async function renameFile(previousPath,fullPath){
@@ -73,7 +96,8 @@ function WebconfFileBrowser(props){
     body:JSON.stringify({fullPath,previousPath})
     });
     const res = await response.json();
-    props.refreshFileManager(res);
+    // fileManagerDispatch({type:"RENAME_FILE",payload:{previousPath,fullPath}})
+    props.getFiles(res);
   }
 
   function deleteFilesAction(data){
@@ -87,6 +111,7 @@ function WebconfFileBrowser(props){
       if ( window.confirm(message)){
         setLoadingText('Deleting Files')
         setLoading(true)
+        fileManagerDispatch({type:'DELETE_FILES',payload:paths})
         deleteFile(paths,0)
       }
   }
@@ -105,7 +130,7 @@ function WebconfFileBrowser(props){
         clearSelection();
         setLoading(false)
         setLoadingText('')
-        props.refreshFileManager(res);
+        props.getFiles();
       } else {
         deleteFile(paths,index + 1)
       }
@@ -124,8 +149,6 @@ function WebconfFileBrowser(props){
     setLoading(true)
 
     paths.forEach(async function(filePath,index){
-
-
       const response = await fetch(`http://${window.location.hostname}:3000/download`, {
           method: 'POST',
           headers: {
@@ -134,18 +157,17 @@ function WebconfFileBrowser(props){
           body:JSON.stringify({filePath})
       });
       const res = await response.blob();
-
       var url = window.URL.createObjectURL(res);
       var a = document.createElement('a');
       a.href = url;
-      a.download = filePath.split(fsep)[filePath.split(fsep).length - 1];
+      let dlFileName = filePath.split(fsep)[filePath.split(fsep).length - 1]
+      if (dlFileName.indexOf('.zip') === -1 && res.type === "application/zip") dlFileName += ".zip";
+      a.download = dlFileName;
       document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
       a.click();
       a.remove();
-
       setLoading(false)
       setLoadingText('')
-
     });
 
   }
@@ -359,6 +381,16 @@ function WebconfFileBrowser(props){
     )
   }
 
+  let fileViewerDisplay;
+  if (showFileViewer === true){
+    fileViewerDisplay = (
+      <FileViewer 
+        file={viewedFile}
+        setShowFileViewer={setShowFileViewer}
+      />
+    )
+  }
+
   return (
       <div 
         style={{ height: window.innerHeight - 170, position:"relative" }} 
@@ -367,6 +399,7 @@ function WebconfFileBrowser(props){
         >
           {loadingDisplay}
           {fileUploaderDisplay}
+          {fileViewerDisplay}
           <FileBrowser
             files={displayedFiles}
             folderChain={folderChain}
@@ -377,9 +410,6 @@ function WebconfFileBrowser(props){
             ref={fileBrowserRef}
           >
             <FileBrowserHeader 
-              navigateHistory={props.navigateHistory}
-              browserHistory={props.browserHistory}
-              browserHistoryIndex={props.browserHistoryIndex}
               getFiles={props.getFiles}
             />
             <FileToolbar />
@@ -391,35 +421,45 @@ function WebconfFileBrowser(props){
 }
 
 const FileBrowserHeader = (props) => {
-  
-  const { navigateHistory, browserHistory, browserHistoryIndex, getFiles } = props;
+  const { fileManagerState, fileManagerDispatch } = useContext(Context)
+  const {  browseHistory, browseHistoryIndex, } = fileManagerState;
+  const { getFiles } = props;
   const [ showHistoryDropDown, setShowHistoryDropDown] = useState(false)
 
   useEffect(() => {
     setTimeout(() => {
       const lvlUpSvg = document.getElementsByClassName('fa-level-up-alt')[0];
-      // console.log(lvlUpSvg)
       if (lvlUpSvg && lvlUpSvg !== null) lvlUpSvg.setAttribute('transform','scale(-1 1)')
     }, 10);
   },[])
   
-
   const ref = useRef();
   useOnClickOutside(ref, () => setShowHistoryDropDown(false));
 
+  function navigateHistory(val){
+    let newBrowseHistoryIndex;
+    if (val === "back" && fileManagerState.browseHistoryIndex - 1 >= 0) newBrowseHistoryIndex = fileManagerState.browseHistoryIndex - 1;
+    else if (val === "forward" &&  fileManagerState.browseHistoryIndex + 1 <= fileManagerState.browseHistory.length - 1) newBrowseHistoryIndex = fileManagerState.browseHistoryIndex + 1;
+    else newBrowseHistoryIndex = val;
+    if (typeof newBrowseHistoryIndex === "number"){
+      fileManagerDispatch({type:"SET_SELECTED_FOLDER", payload:fileManagerState.browseHistory[newBrowseHistoryIndex] ,isViewingHistory:true,browseHistoryIndex:newBrowseHistoryIndex})
+    }
+  }
+
   let historyDropDownDisplay;
   if (showHistoryDropDown === true){
-    const history = browserHistory.map((h,index) => {
 
-      let nameDisplay = h.path.split('/')[h.path.split('/').length - 1]
+    const history = browseHistory.map((h,index) => {
+      let nameDisplay = h.path === "/home/pi/" ? "zynthian" : h.path.indexOf('/home/pi/') > -1 ? "zynthian/" + h.path.split('/home/pi/')[1] : h.path;
       let itemCssClass;
-      if (index === browserHistoryIndex){
+      if (index === browseHistoryIndex){
         itemCssClass = "active"
       }
       return (
         <li><a className={itemCssClass} title={h.path} onClick={() => navigateHistory(index)}>{nameDisplay}</a></li>
       )
     })
+
     historyDropDownDisplay = (
       <div ref={ref} className='browser-history-submenu' >
         <a onClick={() => setShowHistoryDropDown(false)} className='close-browser-history'>

@@ -12,7 +12,8 @@ module.exports = function (app) {
     // FILES
     app.get('/json/:path',FilesController.getJsonFile)
     app.get('/mydata',FilesController.getAllFiles)
-    app.get('/mydata/:folder',FilesController.getFilesInFolder)
+    app.get('/folder/',FilesController.getFilesInFolder)
+    app.get('/folder/:folder',FilesController.getFilesInFolder)
     app.post('/rename',FilesController.renameFile)
     app.post('/createfolder',FilesController.createFolder)
     app.post('/delete',FilesController.deleteFiles)

@@ -230,6 +230,41 @@
             margin: 0;
           }
         }
+
+        #file-viewer {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(255, 255, 255, 0.5);
+          z-index: 1;
+          height: 100%;
+
+          .json-viewer-container {
+            margin: 10px;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
+            overflow-y: auto;
+            height: calc(100% - 20px);
+          }
+
+          .close-file-viewer {
+            font-size: 30px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            z-index: 1111;
+            background: white;
+            padding-left: 0;
+    
+            &:hover {
+              color: #09f;
+            }
+          }
+        }
     }
 
     #file-uploader {
@@ -246,6 +281,21 @@
       border-radius: 0;
       box-shadow: 0px 1px 2px rgb(0 0 0 / 50%);
       box-sizing: border-box;
+
+      .close-file-uploader {
+        font-size: 30px;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+        z-index: 1111;
+        background: white;
+        padding-left: 0;
+
+        &:hover {
+          color: #09f;
+        }
+      }
 
       .dropzone-container {
         display: block;
@@ -389,6 +439,11 @@
           height: auto;
           margin-top: 10px;
 
+          .upload-items-counter {
+            float: left;
+            padding-right: 20px;
+          }
+
           a.button {
             border-radius: 0px;
             border-top-left-radius: 5px;
@@ -401,6 +456,7 @@
             border-top-right-radius: 5px;
             border-bottom-right-radius: 5px;
           }
+
         }
       }
     }
@@ -561,5 +617,10 @@
     background-color: #E6E6E6;
     color: #333333;
     cursor: unset;
+  }
+
+  li.MuiButtonBase-root:hover {
+    background: None;
+    background-color: lightgray !important;
   }
   
