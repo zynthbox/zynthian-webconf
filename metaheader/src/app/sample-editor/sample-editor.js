@@ -115,7 +115,6 @@ const SampleEditor = (props) => {
 
     async function saveCurrentSketchAs(destinationPath){
         // create the folder
-        console.log(destinationPath, "DESTINATION PATH")
         const fullPath = destinationPath + "/";
         const createFolderResponse = await fetch(`http://${window.location.hostname}:3000/createfolder`, {
             method: 'POST',
@@ -129,10 +128,6 @@ const SampleEditor = (props) => {
         const sketchFileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
         let sketchFolder = sketchInfo.lastSelectedSketch.split(sketchFileName)[0];
         if (sketchFolder.indexOf('/zynthian-my-data/') > -1) sketchFolder = sketchFolder.split('/zynthian-my-data/')[1];
-
-        console.log(sketchFolder, " SKETCH FOLDER ")
-
-
         const filesInFolderResponse = await fetch(`http://${window.location.hostname}:3000/folder/${"+++home+++pi+++zynthian-my-data+++"+sketchFolder.split('/').join('+++').split(' ').join('%20')}`, {
             method: 'GET',
             headers: {

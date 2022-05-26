@@ -438,7 +438,6 @@ const FileBrowserHeader = (props) => {
       var xpath = "//span[text()='Actions']";
       var matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
       matchingElement.innerText = "More..."
-      console.log(matchingElement)
     }, 10);
   },[])
   

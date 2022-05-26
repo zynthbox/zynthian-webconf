@@ -28,10 +28,18 @@ const FileManager = () => {
                 'Content-Type': 'application/json',
             },
         });
-        // console.log(response)
+
+        console.log(response)
+        
         const res = await response.json();
-        // console.log(res, " RES ON GET FILES ")
-        if (!res.errno || !res.code ) fileManagerDispatch({type:'SET_FILES',payload:res})
+        
+        console.log(res, " RES ON GET FILES ")
+
+        if (!res.errno) fileManagerDispatch({type:'SET_FILES',payload:res})
+        else {
+            console.log(res, " RES ON GET FILES ")
+            console.log("SHOW ERROR MODAL WITH OPTIONS")
+        }
     }
 
     let fileManagerDisplay = <LoadingSpinner/>

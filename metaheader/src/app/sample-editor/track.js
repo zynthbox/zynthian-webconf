@@ -32,11 +32,9 @@ const Track = (props) => {
     },[props.track])
 
     async function getTrackSampleSet(){
-        
         let trackSampleSetFolder = "/home/pi" + props.sketchFolder
         trackSampleSetFolder = trackSampleSetFolder.split('/').join('+++');
-
-        const response = await fetch(`http://${window.location.hostname}:3000/track/${trackSampleSetFolder}:${index+1}`, {
+        const response = await fetch(`http://${window.location.hostname}:3000/track/${trackSampleSetFolder.split('/').join('+++')}:${index+1}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

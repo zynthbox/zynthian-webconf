@@ -7,14 +7,11 @@ import { useOnClickOutside } from '../helpers';
 
 const SketchPadFileLoader = (props) => {
 
-    let initFolderPath = "sketches/my-sketches/";
+    let initFolderPath = "/home/pi/zynthian-my-data/sketches/my-sketches/";
     const [ fileList, setFileList ] = useState(null)
     const [ folderPath, setFolderPath ] = useState(initFolderPath)
     const [ folderName, setFolderName ] = useState('')
     const [ selectedFile, setSelectedFile ] = useState(null)
-
-    // console.log(folderPath,"folder path skethc pad file loader")
-
     
     useEffect(() => {
         getSketchPadFiles()
@@ -37,17 +34,15 @@ const SketchPadFileLoader = (props) => {
         });
         const res = await response.json();
 
-        console.log(res)
-
         setFileList(res)
     }
 
     function selectFileFromSketchPad(file,fileType){
         // const newFolderPath = folderPath + file.path.split(folderPath)[1];
         // setFolderPath(newFolderPath)
-        if (file.path.indexOf('.') === -1){
-            const newFolderPath = file.path.split('zynthian-my-data/')[1];
-            setFolderPath(newFolderPath)
+
+        if (file.isDir === true){
+            setFolderPath(file.path + "/")
         } else {
 
             if (props.actionType === "LOAD"){
@@ -77,7 +72,8 @@ const SketchPadFileLoader = (props) => {
     function onSaveAsClick(folderName){
 
         if (props.fileType === "json"){
-            let destPath = "/home/pi/zynthian-my-data" + ( folderPath === "/" ? "" : "/") + folderPath + (folderPath === "/" ? "" : "/") + folderName + "/"
+            let destPath = folderPath + folderName;
+
             props.saveSampleSet(destPath)
             props.setShowLoadFromSketchPadDialog(false)
         } else if (props.fileType === "sketch.json"){
@@ -90,17 +86,12 @@ const SketchPadFileLoader = (props) => {
         
         let newFolderPath;
         if (folderPath.indexOf('/') > -1){
-            const lastFolderInChain = folderPath.split("/")[folderPath.split("/").length - 1]
-            newFolderPath = folderPath.split("/" + lastFolderInChain)[0];
+            const lastFolderInChain = folderPath.split("/")[folderPath.split("/").length - 2]
+            newFolderPath = folderPath.split("/" + lastFolderInChain)[0] + "/";
         } else {
             newFolderPath = initFolderPath;
         }
-        
         setFolderPath(newFolderPath);
-    }
-
-    function highlightFile(){
-
     }
 
     let fileListDisplay;
@@ -133,7 +124,7 @@ const SketchPadFileLoader = (props) => {
                     showItem = false
                 }
             }
-
+            
             if (showItem === true){
                 return (
                     <li key={index}>

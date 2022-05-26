@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 function PatternEditor(props){
-    console.log(props,"props pattern editor")
+
     const letters = ["a","b","c","d","e","f","g","h","i","j"]
     const  { trackIndex } = props;
     const [ patterns, setPatterns ] = useState([]);
-
-    console.log(patterns,"patterns")
-
 
     useEffect(() => {
         getTrackPatterns();
@@ -19,8 +16,6 @@ function PatternEditor(props){
         const newPatterns = patternsArray ? [...patternsArray] : []
         const letter = letters[trackIndex];
         const patternPath = `/home/pi/zynthian-my-data/sketches/my-sketches/temp/sequences/scene-${letter}/patterns/scene-${letter}-${index + 1}.pattern.json`
-
-        console.log(patternPath,"pattern path");
 
         fetch(`http://${window.location.hostname}:3000/json/${patternPath.split('/').join('+++')}`, {
             method: 'GET',

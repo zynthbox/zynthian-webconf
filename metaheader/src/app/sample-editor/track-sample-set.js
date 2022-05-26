@@ -79,9 +79,6 @@ const TrackSampleSet = (props) => {
     const uploadSample = async (sample) => {
         const formData = new FormData();
         formData.append('file', sample); // appending file
-
-        console.log(selectedFolder, "  SELECTED FOLDER  ")
-
         axios.post(`http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++') + '+++'}`, formData ).then(res => { // then print response status
         //   console.log(res)
         });
@@ -114,6 +111,9 @@ const TrackSampleSet = (props) => {
     }
 
     async function onInsertSample(filePath,sIndex,multiple,isSaveAs){
+
+        console.log("ON INSERT SAMPLE")
+        console.log(filePath,sIndex,multiple,isSaveAs)
 
         // console.log('ON INSERT SAMPLE')
         setLoadFromSketchPadSampleIndex(null)
@@ -171,6 +171,7 @@ const TrackSampleSet = (props) => {
     }
 
     function saveSampleSetAs(){
+        setLoadFromSketchPadFileType("json")
         setSketchPadDialogActionType("SAVE")
         setShowLoadFromSketchPadDialog(true)
     }
@@ -200,6 +201,10 @@ const TrackSampleSet = (props) => {
 
         const fullPath = dirPath.split('/pi')[1]
 
+        console.log(sketchFolder, " SKETCH FOLDER ")
+        console.log(index, " TRACK INDEX ")
+        console.log(dirPath)
+
         fetch(`http://${window.location.hostname}:3000/createfolder`, {
             method: 'POST',
             headers: {
@@ -207,12 +212,26 @@ const TrackSampleSet = (props) => {
             },
             body:JSON.stringify({fullPath})
         }).then(async function(res){
+            
             const response = await res.json()
-            samples.forEach(function(sample,sIndex){
-                // console.log(sample,sIndex,"sample + sIndex on forEach in load")
-                if (sample !== null){
-                    onInsertSample(dirPath + sample.path,sIndex,true,true)
-                }
+
+            fetch(`http://${window.location.hostname}:3000/copypaste`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    previousPath:`/home/pi${sketchFolder}wav/sampleset/sampleset-bank.${index + 1}/sampleset-bank.json`,
+                    destinationPath:dirPath.split('/home/pi')[1] + "/sampleset-bank.json",
+                    deleteOrigin:false})
+            }).then(async function(res){      
+
+                samples.forEach(function(sample,sIndex){
+                    // console.log(sample,sIndex,"sample + sIndex on forEach in load")
+                    if (sample !== null){
+                        onInsertSample(dirPath + "/" + sample.path,sIndex,true,true)
+                    }
+                })  
             })
         });
     }

@@ -34,7 +34,7 @@ const FileViewer = (props) => {
             },
           });
           const res = await response.json();
-          console.log(res, " JSON RES ");
+
           setData(res)
           setLoading(false)
     }
