@@ -225,13 +225,20 @@ function WebconfFileBrowser(props){
       }
       destinationPaths.push(destination)
     })
-    copyPasteFiles(draggedFiles,destinationPaths,true)
+
+
+    console.log(draggedFiles, destinationPaths)
+
+    if (draggedFiles.length > 0 && destinationPaths.length > 0) copyPasteFiles(draggedFiles,destinationPaths,true)
   }
 
   async function copyPasteFiles(previousPaths,destinationPaths,deleteOrigin){
 
     setLoadingText('Copying Files')
     setLoading(true)
+
+    console.log(previousPaths,destinationPaths)
+
     copyPasteFile(previousPaths,destinationPaths,deleteOrigin,0)
   }
 
@@ -247,6 +254,9 @@ function WebconfFileBrowser(props){
         body:JSON.stringify({previousPath,destinationPath:"/" + destinationPath,deleteOrigin})
     }).then(async function(res){      
       if (index ===  previousPaths.length - 1){
+
+        if (deleteOrigin === true) fileManagerDispatch({type:'DELETE_FILES',payload:previousPaths})
+
         const files = await res.json()
         clearSelection();
         setLoading(false);
