@@ -229,6 +229,7 @@ function WebconfFileBrowser(props){
   }
 
   async function copyPasteFiles(previousPaths,destinationPaths,deleteOrigin){
+
     setLoadingText('Copying Files')
     setLoading(true)
     copyPasteFile(previousPaths,destinationPaths,deleteOrigin,0)
@@ -243,7 +244,7 @@ function WebconfFileBrowser(props){
         headers: {
             'Content-Type': 'application/json',
         },
-        body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
+        body:JSON.stringify({previousPath,destinationPath:"/" + destinationPath,deleteOrigin})
     }).then(async function(res){      
       if (index ===  previousPaths.length - 1){
         const files = await res.json()

@@ -33,7 +33,6 @@ const FileManager = () => {
             },
         }).then(async function(response){
             const res = await response.json();
-            console.log(res, " RES ON GET FILES ")
             if (!res.errno) fileManagerDispatch({type:'SET_FILES',payload:res})
         }).catch(function(err) {
             fileManagerDispatch({type:'SET_ERROR',payload:{message:`failed to fetch ${folder}`,type:"Folder Error"}})

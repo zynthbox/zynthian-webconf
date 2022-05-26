@@ -196,7 +196,7 @@ exports.copyPaste = (req,res) => {
 
   try {
 
-    console.log(fs.existsSync(destinationPath), "DESTINATION PATH IS EXISTS ")
+    // console.log(fs.existsSync(destinationPath), "DESTINATION PATH IS EXISTS ")
 
     if (fs.statSync(previousPath).isDirectory()) {
       copyFolderRecursiveSync(previousPath, parentFolder + destinationPath)
