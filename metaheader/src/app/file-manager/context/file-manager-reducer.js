@@ -8,8 +8,12 @@ export const FileManagerInitialState = {
     selectedFolder:null,
     files:[],
     displayedFiles:[],
-    folderChain:[{ id: 'xcv', name: "zynthian", alias:ffolder , isDir: true }],
-    treeData:null,
+    folderChain:[{ 
+        id: 'xcv', 
+        name: "zynthian", 
+        alias:ffolder , 
+        isDir: true 
+    }],
     browseHistory:[{
         id: "xcv",
         isDir: true,
@@ -17,7 +21,9 @@ export const FileManagerInitialState = {
         name: "/home/pi/",
         path: "/home/pi/"
     }],
-    browseHistoryIndex:0
+    browseHistoryIndex:0,
+    treeData:null,
+    error:null
 }
 
 function ProductViewReducer(state,action){
@@ -143,7 +149,6 @@ function ProductViewReducer(state,action){
                 treeData
             }
         }
-
         case 'DELETE_FILES':{
 
             const paths = action.payload;
@@ -164,7 +169,13 @@ function ProductViewReducer(state,action){
                 treeData
             }
         }
-
+        case 'SET_ERROR':{
+            const error = action.payload;
+            return {
+                ...state,
+                error
+            }
+        }
     }
 }
 
