@@ -116,10 +116,7 @@ function SketchPadXtractor(props){
                     setItemGroupsGenerationIndex(newIGGIndex)
                 }
             } else {
-
-                if (itemGroupTypeGenerationIndex !== null){
-                    generateItemGroups()
-                }
+                generateItemGroups()
             }
         }
     },[itemGroupTypeGenerationIndex])
@@ -144,9 +141,7 @@ function SketchPadXtractor(props){
             },
         });
         const res = await response.json();
-        
-        console.log(res, " RES ")
-
+    
         let newSketchVersions = [];
 
         res.forEach(function(sv,index){
@@ -174,13 +169,13 @@ function SketchPadXtractor(props){
     }
 
     async function generateItemGroups(){
-    
+        
+
         if (itemGroupTypeGenerationIndex === 0){
-            generateTrackClips()
+            getSketchClips()
         } else if (itemGroupTypeGenerationIndex === 1){
-            let patternsArray = [];
-            if (patterns !== null) patternsArray = [...patterns]
-            generateTrackPatterns(0,patternsArray,0)
+            if (patterns === null) onGetScenePatterns()
+            else setItemGroupTypeGenerationIndex(2)
         } else if (itemGroupTypeGenerationIndex === 2){
             generateTrackSamples()
         } else if (itemGroupTypeGenerationIndex === 3){
@@ -191,7 +186,7 @@ function SketchPadXtractor(props){
 
     }
 
-    function generateTrackClips(){
+    function getSketchClips(){
         const track = currentSketch.tracks[itemGroupsGenerationIndex]
         const newClips = clips !== null ? [...clips] : [];
 
@@ -211,18 +206,38 @@ function SketchPadXtractor(props){
         //         newClips.push(clip)
         //     }
         // })
+
         setClips(newClips)
         incrementItemGenerationIndex()
     }
 
-    function generateTrackPatterns(i,patternsArray,partIndex){
-        let index = i ? i : 0;
-        const newPatterns = patternsArray ? [...patternsArray] : []
-        const letter = letters[itemGroupsGenerationIndex];
-        let sketchFileName = selectedSketchVersion.path.split('/')[selectedSketchVersion.path.split('/').length - 1]
+    function onGetScenePatterns(){
+
+        const sketchFileName = selectedSketchVersion.path.split('/')[selectedSketchVersion.path.split('/').length - 1]
         const currentSketchFolder = selectedSketchVersion.path.split(sketchFileName)[0]
-        const patternPath = `${currentSketchFolder}sequences/scene-${selectedSketchScene}/patterns/scene-${selectedSketchScene}-${itemGroupsGenerationIndex + 1}${letters[partIndex]}.pattern.json`
-        fetch(`http://${window.location.hostname}:3000/json/${patternPath.split('/').join('+++')}`, {
+        const scenePatternsPath = `${currentSketchFolder}sequences/scene-${selectedSketchScene}/patterns/`
+
+        console.log(scenePatternsPath, " SCENES PATTERNS PATH")
+
+        fetch(`http://${window.location.hostname}:3000/folder/${scenePatternsPath.split('/').join('+++')}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).catch(function(error) {
+            console.log(error,"error");
+        }).then(async function(res){
+
+            console.log(res);
+
+            const scenePatterns = await res.json();
+            if (scenePatterns.length > 0) getScenePatterns(scenePatterns,0,[],scenePatternsPath)
+            else setItemGroupTypeGenerationIndex(2)
+        })
+    }
+
+    function getScenePatterns(scenePatterns, index, patternsArray,scenePatternsPath){
+        fetch(`http://${window.location.hostname}:3000/json/${scenePatterns[index].path.split('/').join('+++')}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -231,22 +246,19 @@ function SketchPadXtractor(props){
             console.log(error,"error");
         }).then(async function(res){
             if (res.status === 500){
-                // console.log('ERROR')
+                console.log('ERROR')
+                console.log(res)
             } else {
-                const pattern = await res.json()
-                if (pattern && pattern.hasNotes === true){
-                    pattern.name = `scene-${selectedSketchScene}-${itemGroupsGenerationIndex + 1}${letters[partIndex]}`
-                    newPatterns.push(pattern)
-                }
+                let pattern = await res.json()
+                pattern.name = scenePatterns[index].path.split('/patterns/')[1].split('.pattern.json')[0];
+                patternsArray.push(pattern)
             }
-
-            if ((partIndex + 1) >= 5){
-                    setPatterns(newPatterns)
-                    incrementItemGenerationIndex()
+            if (index === scenePatterns.length - 1){
+                setPatterns(patternsArray)
+                setItemGroupTypeGenerationIndex(2)
             } else {
-                generateTrackPatterns(index,newPatterns,partIndex + 1)
+                getScenePatterns(scenePatterns,index + 1,patternsArray)
             }
-            
         })
     }
 
@@ -257,16 +269,12 @@ function SketchPadXtractor(props){
         const fileName = selectedSketchVersion.path.split('/')[selectedSketchVersion.path.split('/').length - 1];
         const folderName = selectedSketchVersion.path.split(fileName)[0];
 
-        console.log(folderName, itemGroupsGenerationIndex);
-
         fetch(`http://${window.location.hostname}:3000/track/${folderName.split('/').join('+++').split(' ').join('%20')}:${itemGroupsGenerationIndex+1}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         }).then(async function(res){
-
-            
 
             if (res.status === 500){
                 setSamples(newSamples)
@@ -325,7 +333,7 @@ function SketchPadXtractor(props){
 
     }
 
-    function incrementItemGenerationIndex(){
+    function incrementItemGenerationIndex(val){
         let newIGTGIndex = itemGroupTypeGenerationIndex + 1;
         if (newIGTGIndex === itemGroupTypeArray.length - 2) newIGTGIndex = 0;
         setItemGroupTypeGenerationIndex(newIGTGIndex)

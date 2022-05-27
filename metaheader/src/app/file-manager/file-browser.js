@@ -219,9 +219,11 @@ function WebconfFileBrowser(props){
 
     let destinationPaths = [];
     draggedFiles.forEach(function(df,index){
-      let destination = selectedFolder + data.payload.destination.path.split(selectedFolder)[1];
+      let destination = "/home/pi/" + selectedFolder + data.payload.destination.path.split(selectedFolder)[1];
       if (df.indexOf('.') > -1){
         destination += fsep + df.split(fsep)[df.split(fsep).length - 1]
+        if (destination.indexOf('undefined') > -1) destination = destination.split('undefined').join('');
+        console.log(destination, " DESTINATION")
       }
       destinationPaths.push(destination)
     })
