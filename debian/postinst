@@ -2,3 +2,4 @@
 
 cd /zynthian/zynthian-webconf/metaheader
 npm install
+systemctl restart zynthian-webconf
