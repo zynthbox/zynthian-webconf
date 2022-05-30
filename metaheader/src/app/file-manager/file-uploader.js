@@ -73,8 +73,11 @@ function FileUploader(props) {
 
   const uploadFile = (index,multiple = false) => {
 
-
-    const filePath = (selectedFolder.slice(-1) === "/" ? selectedFolder : selectedFolder + "/") + files[index].path.split(files[index].name)[0];
+    let folderPath = "/";
+    if (selectedFolder !== null){
+      folderPath = selectedFolder.slice(-1) === "/" ? selectedFolder : selectedFolder + "/";
+    }
+    const filePath = folderPath + files[index].path.split(files[index].name)[0];
     // console.log(selectedFolder)
     // console.log(files)
     // console.log(filePath,"filePath")
