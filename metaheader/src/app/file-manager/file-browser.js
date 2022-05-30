@@ -193,7 +193,7 @@ function WebconfFileBrowser(props){
     copiedFiles.forEach(function(cf,index){
       let destination = selectedFolder + fsep;
       if (cf.indexOf('.') > -1){
-        destination = selectedFolder + fsep + cf.split(fsep)[cf.split(fsep).length - 1];
+        destination = (selectedFolder !== null ? selectedFolder + fsep : "") + cf.split(fsep)[cf.split(fsep).length - 1];
       }
       destinationPaths.push(destination)
     })
@@ -219,17 +219,16 @@ function WebconfFileBrowser(props){
 
     let destinationPaths = [];
     draggedFiles.forEach(function(df,index){
-      let destination = "/home/pi/" + selectedFolder + data.payload.destination.path.split(selectedFolder)[1];
+      let destination = "";
+      if (selectedFolder !== null){
+        destination = selectedFolder + data.payload.destination.path.split(selectedFolder)[1];
+      } else destination =  data.payload.destination.path.split('/home/pi/')[1];
+
       if (df.indexOf('.') > -1){
         destination += fsep + df.split(fsep)[df.split(fsep).length - 1]
         if (destination.indexOf('undefined') > -1) destination = destination.split('undefined').join('');
-        console.log(destination, " DESTINATION")
       }
-      destinationPaths.push(destination)
     })
-
-
-    console.log(draggedFiles, destinationPaths)
 
     if (draggedFiles.length > 0 && destinationPaths.length > 0) copyPasteFiles(draggedFiles,destinationPaths,true)
   }
@@ -246,6 +245,12 @@ function WebconfFileBrowser(props){
 
   async function copyPasteFile(previousPaths,destinationPaths,deleteOrigin,index){
     
+    console.log('COPY PASTE FILES')
+
+    // console.log(previousPaths, " PREVIOUS PATHS ")
+    // console.log(destinationPaths, " DESTINATION PATHDS")
+    // console.log(deleteOrigin, " DELETE ORIGIN")
+
     const previousPath = previousPaths[index]
     const destinationPath = destinationPaths[index];
     fetch(`http://${window.location.hostname}:3000/copypaste`, {
