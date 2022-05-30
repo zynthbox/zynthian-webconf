@@ -409,6 +409,7 @@ function WebconfFileBrowser(props){
       <FileViewer 
         file={viewedFile}
         setShowFileViewer={setShowFileViewer}
+        selectedFolder={selectedFolder}
       />
     )
   }

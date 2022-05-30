@@ -1,6 +1,15 @@
 import { useCallback, useRef,useEffect, useState } from "react";
 
 
+export function getFormData(object,fileName) {
+  const formData = new FormData();
+  Object.keys(object).forEach(key => {
+    if (typeof object[key] !== 'object') formData.append(key, object[key])
+    else formData.append(key, JSON.stringify(object[key]))
+  })
+  return formData;
+}
+
 /**
  * Format bytes as human-readable text.
  * 
@@ -132,6 +141,3 @@ export const useLongPress = (
         event.preventDefault();
     }
   };
-
-  
-export default useLongPress;
