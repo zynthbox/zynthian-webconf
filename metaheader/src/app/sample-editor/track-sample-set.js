@@ -18,7 +18,7 @@ const TrackSampleSet = (props) => {
     const [ loadFromSketchPadSampleIndex, setLoadFromSketchPadSampleIndex ] = useState(null)
     const [ loadFromSketchPadFileType, setLoadFromSketchPadFileType ] = useState('wav')
 
-    const selectedFolder = `${sketchFolder}wav/sampleset/sampleset-bank.${index+1}`;
+    const selectedFolder = `${sketchFolder}wav/sampleset/sample-bank.${index+1}`;
 
     useEffect(() => {
         window.addEventListener('keydown',handleKeyPress,false);
@@ -177,7 +177,7 @@ const TrackSampleSet = (props) => {
     }
 
     async function loadSampleSet(file){
-        const sampleSetIndex = file.path.split('sampleset-bank.')[1];
+        const sampleSetIndex = file.path.split('sample-bank.')[1];
         const path = file.path.split('/').join('+++')
         const response = await fetch(`http://${window.location.hostname}:3000/json/${path}`, {
             method: 'GET',
@@ -186,7 +186,7 @@ const TrackSampleSet = (props) => {
             }
         });
         const res = await response.json()
-        const baseFilePath = "/home/pi" + selectedFolder.split('/sampleset-bank')[0]  + "/sampleset-bank." + sampleSetIndex;
+        const baseFilePath = "/home/pi" + selectedFolder.split('/sample-bank')[0]  + "/sample-bank." + sampleSetIndex;
         res.forEach(function(sample,sIndex){
             // console.log(sample,sIndex,"sample + sIndex on forEach in load")
             if (sample !== null){
@@ -221,8 +221,8 @@ const TrackSampleSet = (props) => {
                     'Content-Type': 'application/json',
                 },
                 body:JSON.stringify({
-                    previousPath:`/home/pi${sketchFolder}wav/sampleset/sampleset-bank.${index + 1}/sampleset-bank.json`,
-                    destinationPath:dirPath.split('/home/pi')[1] + "/sampleset-bank.json",
+                    previousPath:`/home/pi${sketchFolder}wav/sampleset/sample-bank.${index + 1}/sample-bank.json`,
+                    destinationPath:dirPath.split('/home/pi')[1] + "/sample-bank.json",
                     deleteOrigin:false})
             }).then(async function(res){      
 

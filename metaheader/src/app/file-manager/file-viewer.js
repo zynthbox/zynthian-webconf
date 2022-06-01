@@ -54,6 +54,7 @@ const FileViewer = (props) => {
         // console.log(filePath, " FILE PATH")
         const url = `http://${window.location.hostname}:3000/upload/${filePath.split("/").join('+++')}`
         axios.post(url, formData ).then(res => {
+            console.log("JSON UPDATED!")
             console.log(res, " RES ");
         });
     }

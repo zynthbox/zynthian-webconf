@@ -2,11 +2,14 @@ const fs = require('fs');
 const path = require("path")
 const rootFolder = "/home/pi/zynthian-my-data/"
 
-var sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/wav/sampleset/sampleset-bank`
+var sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/wav/sampleset/sample-bank`
 
 function getLastSelectedSketchFolderName(){
   var sketchInfojson = JSON.parse( fs.readFileSync(`${rootFolder}sessions/.cache.json`));
   var folderName = sketchInfojson.lastSelectedSketch.split('/my-sketches/')[1].split('/')[0];
+
+  console.log(folderName, " FOLDER NAME")
+
   return folderName;
 }
 
@@ -32,12 +35,14 @@ exports.getSketch = (req,res) => {
 exports.getTrack = (req,res) => {
 
   let trackSampleSetFolder = req.params.id.split(':')[0].split('+++').join('/');
-  trackSampleSetFolder += "wav/sampleset/sampleset-bank";
+  trackSampleSetFolder += "wav/sampleset/sample-bank";
   const trackId = req.params.id.split(':')[1];
 
   sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
 
-  var file = fs.readFileSync(`${trackSampleSetFolder}.${trackId}/sampleset-bank.json`);
+  console.log(sampleSetFolder, " SAMPLE SET FOLDER ")
+
+  var file = fs.readFileSync(`${trackSampleSetFolder}.${trackId}/sample-bank.json`);
   var json = JSON.parse(file);
   res.json(json)
 }
@@ -49,7 +54,7 @@ exports.updateTrack = (req,res) => {
   // console.log('UPDATE TRACK')
 
   sampleSetFolder = req.params.id.split(':')[0].split('+++').join('/');
-  sampleSetFolder += "wav/sampleset/sampleset-bank";
+  sampleSetFolder += "wav/sampleset/sample-bank";
   const trackId = req.params.id.split(':')[1];
 
   
@@ -74,7 +79,7 @@ exports.updateTrack = (req,res) => {
       }
     }  
   } else {
-    let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackId}/sampleset-bank.json`);
+    let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackId}/sample-bank.json`);
     currentSampleSetJson = JSON.parse(rawdata);
     sampleSetJson = []
     for (var i = 0; i < 5; ++i){
@@ -90,8 +95,8 @@ exports.updateTrack = (req,res) => {
 
   // console.log(sampleSetJson,"sampleSetJson")
 
-  fs.writeFileSync(`${sampleSetFolder}.${trackId}/sampleset-bank.json`, JSON.stringify(sampleSetJson));
-  var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackId}/sampleset-bank.json`));
+  fs.writeFileSync(`${sampleSetFolder}.${trackId}/sample-bank.json`, JSON.stringify(sampleSetJson));
+  var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackId}/sample-bank.json`));
   res.status(200).json(json)
 }
 
@@ -124,7 +129,7 @@ exports.removeSample = (req,res) => {
 
   const { trackIndex, sPath, sIndex } = req.body;
   sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
-  let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackIndex}/sampleset-bank.json`);
+  let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackIndex}/sample-bank.json`);
   let currentSampleSetJson = JSON.parse(rawdata);
 
   let sampleSetJson = [];
@@ -136,8 +141,8 @@ exports.removeSample = (req,res) => {
     }
   }
 
-  fs.writeFileSync(`${sampleSetFolder}.${trackIndex}/sampleset-bank.json`, JSON.stringify(sampleSetJson));
+  fs.writeFileSync(`${sampleSetFolder}.${trackIndex}/sample-bank.json`, JSON.stringify(sampleSetJson));
   if (sPath && sPath.indexOf('/') === -1) fs.unlinkSync(`${sampleSetFolder}.${trackIndex}/${sPath}`)
-  var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackIndex}/sampleset-bank.json`));
+  var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackIndex}/sample-bank.json`));
   res.json(json)
 }
