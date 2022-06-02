@@ -23,6 +23,7 @@ const FileManager = () => {
     },[fileManagerState.selectedFolder])
 
     async function getFiles(){
+
         const folder = "/home/pi/" + (fileManagerState.selectedFolder !== null ? fileManagerState.selectedFolder + "/" : "") 
         // const response = await 
 

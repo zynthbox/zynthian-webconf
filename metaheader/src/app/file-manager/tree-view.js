@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Context } from './context/context-provider'
 
 function TreeView(props){
@@ -37,14 +37,30 @@ function TreeView(props){
 }
 
 function TreeViewItem(props){
+    
     const { item } = props;
+
+    useEffect(() => {
+        setIsToggled(item.toggled)
+    },[item.toggled])
+
+    const [ isToggled, setIsToggled ] = useState(!item.children ? false : item.toggled)
+
+    function onItemClick(item,parentIds){
+        if (item.children){
+            const newIsToggled = isToggled === true ? false : true;
+            setIsToggled(newIsToggled)
+        }
+        props.onClick(item,parentIds)
+    }
+
     let parentIds = [];
     if (item.id){
         parentIds = [...props.parentIds,item.id]
     }
     // console.log(item,"id")
     let itemChildrenDisplay;
-    if (item.children){
+    if (item.children && isToggled === true){
         itemChildrenDisplay = (
             <div style={{height:item.toggled === true ? "auto" : "0px",overflow:"hidden"}}>
                 <TreeViewSubMenu {...props} items={item.children} parentIds={parentIds} />
@@ -54,10 +70,10 @@ function TreeViewItem(props){
 
     return (
         <li>
-            <span onClick={() => props.onClick(item,parentIds)} className='toggle-sub-menu' style={{ left:8 + (item.level * 12)}}>
-                <i className={item.toggled === true ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'}></i>
+            <span onClick={() => onItemClick(item,parentIds)} className='toggle-sub-menu' style={{ left:8 + (item.level * 12)}}>
+                <i className={isToggled=== true ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'}></i>
             </span>
-            <a onClick={() => props.onClick(item,parentIds)} style={{paddingLeft:25 + (item.level * 15)}} className={item.active === true ? "active" : ""}>{item.name} </a>
+            <a onClick={() => onItemClick(item,parentIds)} style={{paddingLeft:25 + (item.level * 15)}} className={item.active === true ? "active" : ""}>{item.name} </a>
             {itemChildrenDisplay}
         </li>
     )

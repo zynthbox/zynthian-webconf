@@ -5,6 +5,7 @@ const ffolder = "/home/pi/";
 
 export const FileManagerInitialState = {
     loading:true,
+    filesLoading:false,
     selectedFolder:null,
     files:[],
     displayedFiles:[],
@@ -130,7 +131,8 @@ function ProductViewReducer(state,action){
                 files,
                 displayedFiles,
                 treeData,
-                loading:false
+                loading:false,
+                filesLoading:false
             }
         }
         case 'RENAME_FILE':{
@@ -174,6 +176,13 @@ function ProductViewReducer(state,action){
             return {
                 ...state,
                 error
+            }
+        }
+        case 'ON_REFRESH_FILES':{
+            return {
+                ...state,
+                filesLoading:true,
+                // displayedFiles:null
             }
         }
     }

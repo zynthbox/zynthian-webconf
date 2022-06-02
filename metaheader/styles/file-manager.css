@@ -216,7 +216,7 @@
 #file-manager .file-manager-wrapper .file-navbar-container-custom .refresh-button span {
   font-size: 12px;
   display: block;
-  float: left;
+  float: right;
 }
 #file-manager .file-manager-wrapper .file-browser-loading-spinner-container {
   position: absolute;

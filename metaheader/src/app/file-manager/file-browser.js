@@ -333,7 +333,7 @@ function WebconfFileBrowser(props){
     button:{
       name:"Upload",
       toolbar: true,
-      contextMenu:true,
+      contextMenu:false,
       icon:ChonkyIconName.upload
     }
   })
@@ -347,7 +347,6 @@ function WebconfFileBrowser(props){
       icon:ChonkyIconName.download
     }
   })
-  
   
   const myFileActions = [
     createNewFolder,
@@ -378,6 +377,17 @@ function WebconfFileBrowser(props){
     }, 10);
   }
   
+  let fileViewerDisplay;
+  if (showFileViewer === true){
+    fileViewerDisplay = (
+      <FileViewer 
+        file={viewedFile}
+        setShowFileViewer={setShowFileViewer}
+        selectedFolder={selectedFolder}
+      />
+    )
+  }
+
   let fileUploaderDisplay;
   if (props.showFileUploader === true){
       fileUploaderDisplay = (
@@ -393,24 +403,14 @@ function WebconfFileBrowser(props){
   }
 
   let loadingDisplay;
-  if (loading === true){
+  if (loading === true || fileManagerState.filesLoading === true){
+    console.log(fileManagerState.filesLoading, " FILES LOADING")
     loadingDisplay = (
       <div className='file-browser-loading-spinner-container'>
         <LoadingSpinner
           text={loadingText}
         />
       </div>
-    )
-  }
-
-  let fileViewerDisplay;
-  if (showFileViewer === true){
-    fileViewerDisplay = (
-      <FileViewer 
-        file={viewedFile}
-        setShowFileViewer={setShowFileViewer}
-        selectedFolder={selectedFolder}
-      />
     )
   }
 
@@ -431,6 +431,7 @@ function WebconfFileBrowser(props){
             defaultFileViewActionId={ChonkyActions.EnableListView.id}
             clearSelectionOnOutsideClick={true}
             ref={fileBrowserRef}
+            disableDefaultFileActions={[ChonkyActions.OpenSelection.id]}
           >
             <FileBrowserHeader 
               getFiles={props.getFiles}
@@ -462,6 +463,11 @@ const FileBrowserHeader = (props) => {
   
   const ref = useRef();
   useOnClickOutside(ref, () => setShowHistoryDropDown(false));
+
+  function onRefreshClick(){
+    fileManagerDispatch({type:'ON_REFRESH_FILES'})
+    getFiles()
+  }
 
   function navigateHistory(val){
     let newBrowseHistoryIndex;
@@ -508,7 +514,10 @@ const FileBrowserHeader = (props) => {
         </ul>
         {historyDropDownDisplay}
         <FileNavbar />
-        <a className='refresh-button' onClick={() => getFiles()}><span>Refresh</span><IoRefresh/></a>
+        <a className='refresh-button' onClick={onRefreshClick}>
+          <IoRefresh/>
+          <span>Refresh</span>
+        </a>
       </div>
   )
 }

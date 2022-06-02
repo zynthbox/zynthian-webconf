@@ -319,6 +319,12 @@ exports.downloadFiles = (req,res) => {
     const zipFilePath = "/home/pi/" + folderName + ".zip";
     console.log(zipFilePath, "zipFilePath")
 
+    // copy the folder to be zipped to another folder with the same name to have a folder within the zip with the correct name
+    // mkdir /home/pi/zip/FOLDER_NAME
+    // copy filePath recursively to /home/pi/zip/FOLDER_NAME/
+    // zip folder /home/pi/zip/FOLDER_NAME/
+    // delete /home/pi/zip/
+
     zipFolder(filePath, zipFilePath, function(err) {
 
         if(err) {
