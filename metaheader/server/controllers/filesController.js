@@ -308,24 +308,23 @@ exports.downloadFiles = (req,res) => {
 
   if (fs.statSync(filePath).isDirectory()){
 
-    console.log(filePath," filePath")
+    // console.log(filePath," filePath")
 
     const folderName = filePath.split('/')[filePath.split("/").length - 1];
-    console.log(folderName,"folder name")
+    // console.log(folderName,"folder name")
     
     const folderPath = filePath.split(folderName)[0];
-    console.log(folderPath, "folder path ")
+    // console.log(folderPath, "folder path ")
     
     const zipFilePath = "/home/pi/" + folderName + ".zip";
-    console.log(zipFilePath, "zipFilePath")
+    // console.log(zipFilePath, "zipFilePath")
 
-    // copy the folder to be zipped to another folder with the same name to have a folder within the zip with the correct name
-    // mkdir /home/pi/zip/FOLDER_NAME
-    // copy filePath recursively to /home/pi/zip/FOLDER_NAME/
-    // zip folder /home/pi/zip/FOLDER_NAME/
-    // delete /home/pi/zip/
+    const tempZipFolder = "/home/pi/zip-temp/"
 
-    zipFolder(filePath, zipFilePath, function(err) {
+    fs.mkdirSync( tempZipFolder, {recursive:true})
+    copyFolderRecursiveSync(filePath, tempZipFolder)
+
+    zipFolder(tempZipFolder, zipFilePath, function(err) {
 
         if(err) {
             console.log('zipping error')
@@ -338,6 +337,7 @@ exports.downloadFiles = (req,res) => {
               console.log(err)
             } else {
               fs.unlinkSync(zipFilePath)
+              rimraf.sync(tempZipFolder);
             }
           })            
         }

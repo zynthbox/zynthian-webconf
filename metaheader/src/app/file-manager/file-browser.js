@@ -35,7 +35,6 @@ function WebconfFileBrowser(props){
   const [ viewedFile, setViewedFile ] = useState('')
 
   const fileBrowserRef = useRef(null);
-  
 
   function clearSelection(){
     if (!fileBrowserRef.current) return
@@ -277,6 +276,15 @@ function WebconfFileBrowser(props){
 
   }
 
+  function selectAllFiles(){
+    if (!fileBrowserRef.current) return
+    const newSelection = new Set()
+    for (const file of displayedFiles) {
+      newSelection.add(file.id)
+    }
+    fileBrowserRef.current.setFileSelection(newSelection)
+  }
+
   const handleAction = (data) => {
     if (data.id === ChonkyActions.OpenFiles.id) openFilesAction(data)
     if (data.id === createNewFolder.id) createFolderAction()
@@ -289,6 +297,7 @@ function WebconfFileBrowser(props){
     if (data.id === pasteFiles.id) pasteFilesAction(data)
     if (data.id === ChonkyActions.StartDragNDrop.id) startDragNDropAction(data)
     if (data.id === ChonkyActions.EndDragNDrop.id) endDragNDropAction(data)
+    // if (data.id === selectFiles.id) selectAllFiles()
   };
 
   const createNewFolder = defineFileAction({
@@ -347,6 +356,16 @@ function WebconfFileBrowser(props){
       icon:ChonkyIconName.download
     }
   })
+
+  const selectFiles = defineFileAction({
+    id:"select_files",
+    button:{
+      name:"Select Files",
+      toolbar: false,
+      contextMenu:true,
+      icon:ChonkyIconName.selectAllFiles
+    }
+  })
   
   const myFileActions = [
     createNewFolder,
@@ -354,6 +373,7 @@ function WebconfFileBrowser(props){
     renameFiles,
     uploadFiles,
     downloadFiles,
+    // selectFiles,
     ChonkyActions.DeleteFiles,
     ChonkyActions.CopyFiles,
     ChonkyActions.StartDragNDrop,
@@ -431,14 +451,23 @@ function WebconfFileBrowser(props){
             defaultFileViewActionId={ChonkyActions.EnableListView.id}
             clearSelectionOnOutsideClick={true}
             ref={fileBrowserRef}
-            disableDefaultFileActions={[ChonkyActions.OpenSelection.id]}
+            disableDefaultFileActions={[
+              ChonkyActions.OpenSelection.id,
+              // ChonkyActions.SelectAllFiles.id
+            ]}
           >
             <FileBrowserHeader 
               getFiles={props.getFiles}
             />
             <FileToolbar />
             <FileList />
-            <FileContextMenu />
+            <FileContextMenu  
+              
+              disableDefaultFileActions={[
+                // ChonkyActions.OpenSelection.id,
+                ChonkyActions.SelectAllFiles.id
+              ]} 
+            />
           </FileBrowser>
       </div>
   )
@@ -458,6 +487,10 @@ const FileBrowserHeader = (props) => {
       var xpath = "//span[text()='Actions']";
       var matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
       matchingElement.innerText = "More..."
+    
+      var xpath = "//span[text()='Select all files']";
+      var matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+      matchingElement.innerText = "Select Files"
     }, 10);
   },[])
   
