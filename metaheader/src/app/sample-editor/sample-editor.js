@@ -126,8 +126,6 @@ const SampleEditor = (props) => {
         });
         const createFolderRes = await createFolderResponse.json();
 
-        console.log(createFolderRes, " CREATE FOLDER RES")
-
         const sketchFileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
         let sketchFolder = sketchInfo.lastSelectedSketch.split(sketchFileName)[0];
         if (sketchFolder.indexOf('/zynthian-my-data/') > -1) sketchFolder = sketchFolder.split('/zynthian-my-data/')[1];
@@ -139,8 +137,6 @@ const SampleEditor = (props) => {
         });
         const filesInFolderRes = await filesInFolderResponse.json();
 
-        console.log(filesInFolderRes, " FILES IN FOLDER RES")
-        console.log(fullPath)
         let previousPaths = [],
             destinationPaths = [];
 
@@ -151,27 +147,11 @@ const SampleEditor = (props) => {
                 destinationPaths.push("/" + fullPath + (path.indexOf('.') > -1 && path !== ".cache" ? path : ""));
             }
         })
-
-        console.log(previousPaths, destinationPaths)
         
         copyPasteFile(previousPaths,destinationPaths,false,0)
-
-        // const previousPath = sketchInfo.lastSelectedSketch.replace('/zynthian/','/home/pi/');
-        // const deleteOrigin = false;
-        // const response = await fetch(`http://${window.location.hostname}:3000/copypaste`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
-        // });
-        // const res = await response.json();
     }
 
     async function copyPasteFile(previousPaths,destinationPaths,deleteOrigin,index){
-
-        console.log(previousPaths, destinationPaths, index)
-
         const previousPath = previousPaths[index]
         const destinationPath = destinationPaths[index];
         fetch(`http://${window.location.hostname}:3000/copypaste`, {
@@ -183,7 +163,7 @@ const SampleEditor = (props) => {
         }).then(async function(res){
             console.log(res, " RES ")
           if (index ===  previousPaths.length - 1){
-
+            console.log('DONE')
           } else {
             copyPasteFile(previousPaths,destinationPaths,deleteOrigin,index + 1)
           }
