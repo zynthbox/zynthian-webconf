@@ -142,7 +142,7 @@
   min-height: 100%;
 }
 #file-manager .file-manager-wrapper .file-navbar-container-custom {
-  padding-left: 90px;
+  padding-left: 60px;
   position: relative;
 }
 #file-manager .file-manager-wrapper .file-navbar-container-custom .browser-navigation-menu {
@@ -176,6 +176,9 @@
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
   z-index: 1;
   padding: 20px 14px;
+}
+#file-manager .file-manager-wrapper .file-navbar-container-custom .browser-history-submenu.forward {
+  left: 60px;
 }
 #file-manager .file-manager-wrapper .file-navbar-container-custom .browser-history-submenu a.close-browser-history {
   padding-left: 0 !important;

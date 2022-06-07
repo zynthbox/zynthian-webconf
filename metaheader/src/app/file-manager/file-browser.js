@@ -16,6 +16,7 @@ import { IoIosArrowDropdown } from 'react-icons/io'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { useOnClickOutside } from '../helpers';
 import LoadingSpinner from '../loading-spinner';
+import { useLongPress } from '../helpers';
 
 import { Context } from './context/context-provider'
 
@@ -227,9 +228,12 @@ function WebconfFileBrowser(props){
         destination += fsep + df.split(fsep)[df.split(fsep).length - 1]
         if (destination.indexOf('undefined') > -1) destination = destination.split('undefined').join('');
       }
+
+      destinationPaths.push(destination)
+
     })
 
-    if (draggedFiles.length > 0 && destinationPaths.length > 0) copyPasteFiles(draggedFiles,destinationPaths,true)
+    if (draggedFiles.length > 0 && destinationPaths.length > 0 && draggedFiles[0] !== destinationPaths[0]) copyPasteFiles(draggedFiles,destinationPaths,true)
   }
 
   async function copyPasteFiles(previousPaths,destinationPaths,deleteOrigin){
@@ -474,10 +478,13 @@ function WebconfFileBrowser(props){
 }
 
 const FileBrowserHeader = (props) => {
+  
   const { fileManagerState, fileManagerDispatch } = useContext(Context)
   const {  browseHistory, browseHistoryIndex, } = fileManagerState;
   const { getFiles } = props;
   const [ showHistoryDropDown, setShowHistoryDropDown] = useState(false)
+  const [ historyDropDownType, setHistoryDropDownType ] = useState(null)
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -514,20 +521,24 @@ const FileBrowserHeader = (props) => {
 
   let historyDropDownDisplay;
   if (showHistoryDropDown === true){
-
     const history = browseHistory.map((h,index) => {
-      let nameDisplay = h.path === "/home/pi/" ? "zynthian" : h.path.indexOf('/home/pi/') > -1 ? "zynthian/" + h.path.split('/home/pi/')[1] : h.path;
-      let itemCssClass;
-      if (index === browseHistoryIndex){
-        itemCssClass = "active"
+      let showItem = true;
+      if (historyDropDownType === "back" && index > browseHistoryIndex) showItem = false;
+      else if (historyDropDownType === "forward" && index < browseHistoryIndex) showItem = false;
+      if (showItem === true){
+        let nameDisplay = h.path.indexOf('/') > -1 ? h.path.split('/')[h.path.split('/').length - 1] : h.path;
+        let itemCssClass;
+        if (index === browseHistoryIndex){
+          itemCssClass = "active"
+        }
+        return (
+          <li><a className={itemCssClass} title={h.path} onClick={() => {navigateHistory(index);setShowHistoryDropDown(false)}}>{nameDisplay}</a></li>
+        )
       }
-      return (
-        <li><a className={itemCssClass} title={h.path} onClick={() => navigateHistory(index)}>{nameDisplay}</a></li>
-      )
     })
 
     historyDropDownDisplay = (
-      <div ref={ref} className='browser-history-submenu' >
+      <div ref={ref} className={'browser-history-submenu ' + historyDropDownType} >
         <a onClick={() => setShowHistoryDropDown(false)} className='close-browser-history'>
           <AiOutlineCloseCircle/>
         </a>
@@ -538,12 +549,38 @@ const FileBrowserHeader = (props) => {
     )
   }
 
+  const onBackLongPress = () => {
+    setHistoryDropDownType('back')
+    setShowHistoryDropDown(true)
+  };
+
+  const onForwardLongPress = () => {
+    setHistoryDropDownType('forward')
+    setShowHistoryDropDown(true)
+  }
+
+  const onForwardClick = () => {
+    navigateHistory('forward')
+  }
+
+  const onBackClick = () => {
+    navigateHistory('back')
+  }
+
+  const defaultOptions = {
+      shouldPreventDefault: true,
+      delay: 400,
+  };
+
+  const backLongPressEvent = useLongPress(onBackLongPress, onBackClick, defaultOptions);
+  const forwardLongPressEvent = useLongPress(onForwardLongPress, onForwardClick, defaultOptions);
+
+
   return (
       <div  className='file-navbar-container-custom'>   
         <ul className='browser-navigation-menu'>
-          <li><a onClick={() => setShowHistoryDropDown(true)}><IoIosArrowDropdown/></a></li>
-          <li><a onClick={() => navigateHistory('back')}><IoArrowBack/></a></li>
-          <li><a onClick={() => navigateHistory('forward')}><IoArrowForward/></a></li>
+          <li><a {...backLongPressEvent}><IoArrowBack/></a></li>
+          <li><a {...forwardLongPressEvent}><IoArrowForward/></a></li>
         </ul>
         {historyDropDownDisplay}
         <FileNavbar />

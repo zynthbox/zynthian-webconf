@@ -201,9 +201,9 @@ const TrackSampleSet = (props) => {
 
         const fullPath = dirPath.split('/pi')[1]
 
-        console.log(sketchFolder, " SKETCH FOLDER ")
-        console.log(index, " TRACK INDEX ")
-        console.log(dirPath)
+        // console.log(sketchFolder, " SKETCH FOLDER ")
+        // console.log(index, " TRACK INDEX ")
+        // console.log(dirPath)
 
         fetch(`http://${window.location.hostname}:3000/createfolder`, {
             method: 'POST',
