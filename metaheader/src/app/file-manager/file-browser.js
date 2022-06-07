@@ -521,21 +521,21 @@ const FileBrowserHeader = (props) => {
 
   let historyDropDownDisplay;
   if (showHistoryDropDown === true){
-    const history = browseHistory.map((h,index) => {
-      let showItem = true;
-      if (historyDropDownType === "back" && index > browseHistoryIndex) showItem = false;
-      else if (historyDropDownType === "forward" && index < browseHistoryIndex) showItem = false;
-      if (showItem === true){
-        let nameDisplay = h.path.indexOf('/') > -1 ? h.path.split('/')[h.path.split('/').length - 1] : h.path;
-        let itemCssClass;
-        if (index === browseHistoryIndex){
-          itemCssClass = "active"
+      const history = browseHistory.map((h,index) => {
+        let showItem = true;
+        if (historyDropDownType === "back" && index > browseHistoryIndex) showItem = false;
+        else if (historyDropDownType === "forward" && index < browseHistoryIndex) showItem = false;
+        if (showItem === true){
+          let nameDisplay = h.path === "/home/pi/" ? "zynthian" : h.path.indexOf('/') > -1 ? h.path.split('/')[h.path.split('/').length - 1] : h.path;
+          let itemCssClass;
+          if (index === browseHistoryIndex){
+            itemCssClass = "active"
+          }
+          return (
+            <li><a className={itemCssClass} title={h.path} onClick={() => {navigateHistory(index);setShowHistoryDropDown(false)}}>{nameDisplay}</a></li>
+          )
         }
-        return (
-          <li><a className={itemCssClass} title={h.path} onClick={() => {navigateHistory(index);setShowHistoryDropDown(false)}}>{nameDisplay}</a></li>
-        )
-      }
-    })
+      })
 
     historyDropDownDisplay = (
       <div ref={ref} className={'browser-history-submenu ' + historyDropDownType} >
