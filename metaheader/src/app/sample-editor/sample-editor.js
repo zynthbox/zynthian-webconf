@@ -116,6 +116,7 @@ const SampleEditor = (props) => {
     async function saveCurrentSketchAs(destinationPath){
         // create the folder
         const fullPath = destinationPath + "/";
+        // console.log(fullPath)
         const createFolderResponse = await fetch(`http://${window.location.hostname}:3000/createfolder`, {
             method: 'POST',
             headers: {
@@ -124,6 +125,8 @@ const SampleEditor = (props) => {
             body:JSON.stringify({fullPath})
         });
         const createFolderRes = await createFolderResponse.json();
+
+        console.log(createFolderRes, " CREATE FOLDER RES")
 
         const sketchFileName = sketchInfo.lastSelectedSketch.split('/')[sketchInfo.lastSelectedSketch.split('/').length - 1];
         let sketchFolder = sketchInfo.lastSelectedSketch.split(sketchFileName)[0];
@@ -136,6 +139,8 @@ const SampleEditor = (props) => {
         });
         const filesInFolderRes = await filesInFolderResponse.json();
 
+        console.log(filesInFolderRes, " FILES IN FOLDER RES")
+        console.log(fullPath)
         let previousPaths = [],
             destinationPaths = [];
 
@@ -143,11 +148,12 @@ const SampleEditor = (props) => {
             let path = file.path.split('/home/pi/zynthian-my-data/' + sketchFolder)[1];
             if (path.indexOf('/') === -1){
                 previousPaths.push(file.path);
-                let destPath = fullPath + path;
-                destinationPaths.push(destPath);
+                destinationPaths.push("/" + fullPath + (path.indexOf('.') > -1 && path !== ".cache" ? path : ""));
             }
         })
 
+        console.log(previousPaths, destinationPaths)
+        
         copyPasteFile(previousPaths,destinationPaths,false,0)
 
         // const previousPath = sketchInfo.lastSelectedSketch.replace('/zynthian/','/home/pi/');
@@ -163,6 +169,9 @@ const SampleEditor = (props) => {
     }
 
     async function copyPasteFile(previousPaths,destinationPaths,deleteOrigin,index){
+
+        console.log(previousPaths, destinationPaths, index)
+
         const previousPath = previousPaths[index]
         const destinationPath = destinationPaths[index];
         fetch(`http://${window.location.hostname}:3000/copypaste`, {
@@ -171,7 +180,8 @@ const SampleEditor = (props) => {
                 'Content-Type': 'application/json',
             },
             body:JSON.stringify({previousPath,destinationPath,deleteOrigin})
-        }).then(async function(res){      
+        }).then(async function(res){
+            console.log(res, " RES ")
           if (index ===  previousPaths.length - 1){
 
           } else {

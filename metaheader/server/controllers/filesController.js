@@ -194,6 +194,8 @@ exports.copyPaste = (req,res) => {
 
   const { previousPath, destinationPath,deleteOrigin } = req.body;
 
+  console.log(previousPath, destinationPath, " ON COPY PASTE")
+
   try {
 
     // console.log(fs.existsSync(destinationPath), "DESTINATION PATH IS EXISTS ")
@@ -252,7 +254,7 @@ var storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const selectedFolder = req.params.folder.split('+++').join('/');
-    console.log(selectedFolder, " SELECTED FOLDER")
+    // console.log(selectedFolder, " SELECTED FOLDER")
     cb(null, selectedFolder + file.originalname )
   }
 })
@@ -260,8 +262,6 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage,   limits: { fieldSize: 25 * 1024 * 1024 }  }).fields([{name:'file',maxCount:100}])
 
 exports.uploadFiles = (req, res) => {
-
-  console.log(req.body, " REQ BODY")
 
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
