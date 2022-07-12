@@ -8,6 +8,7 @@ const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
 const SampleEditor = lazy(()=>import('./app/sample-editor/sample-editor'))
 const Favorites = lazy(()=>import('./app/favorites/favorites'))
 const SketchPadXtractor = lazy(()=>import('./app/sketchpad-xtractor/sketchpad-xtractor'))
+const SongExport = lazy(()=>import('./app/song-export/SongExport'))
 
 function MetaHeader(){
 
@@ -15,12 +16,14 @@ function MetaHeader(){
     const [ showSampleEditor, setShowSampleEditor ] = useState(false);
     const [ showFavorites, setShowFavorites ] = useState(false)
     const [ showXtractor, setShowXtractor ] = useState(false)
+    const [ showSongExport, setShowSongExport ] = useState(false)
 
     useEffect(() => {
         if (showFileManager === true){
             setShowSampleEditor(false)
             setShowFavorites(false)
             setShowXtractor(false)
+            setShowSongExport(false)
         }
     },[showFileManager])
 
@@ -29,6 +32,7 @@ function MetaHeader(){
             setShowFileManager(false)
             setShowFavorites(false)
             setShowXtractor(false)
+            setShowSongExport(false)
         }
     },[showSampleEditor])
 
@@ -37,6 +41,7 @@ function MetaHeader(){
             setShowFileManager(false)
             setShowSampleEditor(false)
             setShowXtractor(false)
+            setShowSongExport(false)
         }
     },[showFavorites])
 
@@ -45,8 +50,18 @@ function MetaHeader(){
             setShowFileManager(false)
             setShowSampleEditor(false)
             setShowFavorites(false)
+            setShowSongExport(false)
         }
     },[showXtractor])
+
+    useEffect(() => {
+        if (showSongExport === true){
+            setShowFileManager(false)
+            setShowSampleEditor(false)
+            setShowFavorites(false)
+            setShowXtractor(false)
+        }
+    },[showSongExport])
 
     const colorsArray = [
         "#B23730",
@@ -139,6 +154,23 @@ function MetaHeader(){
         )
     }
 
+    let songExportDisplay;
+    if (showSongExport === true){
+        songExportDisplay = (
+            <React.Fragment>
+                <div id="song-export-container" className="container" style={{left:fileManagerLeftCss}}>
+                    <h3>
+                        Song Export
+                    </h3>
+                    <Suspense fallback={<LoadingSpinner/>}>
+                        <SongExport />
+                    </Suspense>
+                </div>
+                <div id="song-export-overlay"></div>
+            </React.Fragment>
+        )        
+    }
+
     return (
         <React.Fragment>
             <a href="#m" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More <span className="caret"></span></a>
@@ -155,11 +187,15 @@ function MetaHeader(){
                 <li>
                     <a className={showXtractor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowXtractor(showXtractor === true ? false : true)}>SketchPad Xtractor</a>
                 </li>
+                <li>
+                    <a className={showSongExport === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSongExport(showSongExport === true ? false : true)}>Song Export</a>
+                </li>
             </ul>
             {fileManagerDisplay}
             {sampleEditorDisplay}
             {favoritesDisplay}
             {xtractorDisplay}
+            {songExportDisplay}
         </React.Fragment>
     )
 }

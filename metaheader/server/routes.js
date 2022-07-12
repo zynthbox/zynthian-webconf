@@ -2,6 +2,7 @@
 var FilesController = require('./controllers/filesController.js');
 var sampleEditorController = require('./controllers/sketchEditorController.js');
 var favoritesController = require('./controllers/favoritesController.js');
+var songExportController = require('./controllers/songExportController.js');
 
 module.exports = function (app) {
     
@@ -34,5 +35,8 @@ module.exports = function (app) {
 
     // FAVORITES
     app.get('/favorites', favoritesController.getFavorites)
+
+    // SONG EXPORTS
+    app.get('/songexports', songExportController.getSongExports)
 
 };

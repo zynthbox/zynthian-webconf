@@ -1,0 +1,124 @@
+#song-export-overlay {
+    width: 100%;
+    height: 100%;
+    background: white;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    z-index: 1;
+}
+
+#song-export-container {
+    background: white;
+    height: auto;
+    position: fixed;
+    margin-top: 35px;
+    margin-left: -8px;
+    padding: 0;
+    z-index: 2;
+    user-select: none;
+    overflow: visible !important;
+
+    h3 {
+        margin: 0;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: black;
+        color: white;
+        padding: 5px;
+        padding-left: 15px;
+        border-radius: 5px 5px 0 0;
+    }
+
+    #song-export {
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-top: 0;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        height: auto;
+        float: left;
+        width: 100%;
+
+        .song-export-error {
+            border-radius: 5px;
+            background: black;
+            color: white;
+            width: 500px;
+            padding: 15px;
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            margin-left: -250px;
+            box-shadow: 0px 1px 2px rgb(0 0 0 / 25%);
+            z-index: 10;
+        }
+
+        .song-export-column {
+            float: left;
+            width: 33.33%;
+            padding: 15px;
+            height: 500px;
+
+            .column-header {
+                h4 {
+                text-transform: uppercase;
+                font-weight: bold;
+                position: relative;
+                padding-left: 25px;
+                > svg {
+                    position: absolute;
+                    left: 0;
+                }
+                }
+            }
+
+            ul {
+                padding: 0;
+                list-style-type: none;
+                margin: 0;
+
+                li {
+                    width: 100%;
+                    float: left;
+                    margin-bottom: 5px;
+
+                    a {
+                        padding: 5px;
+                        cursor: pointer;
+                        display: block;
+                        width: 100%;
+                        background: rgba(255,255,255,0.75);
+                        box-shadow: 0px 1px 2px rgb(0 0 0 / 50%);
+                        // font-weight: bold;
+                        position: relative;
+
+                        &:hover, &.active {
+                            color: rgba(255,255,255,0.75);
+                            background-color: rgba(0 0 0 / 50%);
+                        }
+
+                        span {
+                            width: 100%;
+                            display: block;
+                            margin-bottom: 3px;
+
+                            &.right {
+                              position: absolute;
+                              right: 5px;
+                              width: auto;
+                              top: 5px;
+                            }
+                        }
+
+                        small {
+                            // font-weight: normal;
+                            word-break: break-all;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
