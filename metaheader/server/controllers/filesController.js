@@ -53,6 +53,8 @@ exports.getAllFiles = (req,res) => {
 
 exports.getFilesInFolder = (req,res) => {
   
+  console.log(req.body, " REQ BODY ")
+
   let folder = req.params.folder;
   if (!folder) folder = "/"
   else if (folder.indexOf('+++') > -1) folder = folder.split('+++').join('/');
@@ -65,7 +67,7 @@ exports.getFilesInFolder = (req,res) => {
       const filesList = [];
       files.forEach(file => {
         var stats = fs.statSync(`${folder}${file}`)
-        filesList.push({
+        const f = {
           size:stats.size,
           modDate:stats.ctimeMs,
           name:file,
@@ -73,7 +75,9 @@ exports.getFilesInFolder = (req,res) => {
           path:`${folder}${file}`,
           isDir:fs.statSync(folder + file).isDirectory(),
           level:folder.match(/\//g).length - 2
-        })
+        }
+        if (f.isDir === true) f.count = fs.readdirSync(folder + file).length
+        filesList.push(f)
       })
       res.json(filesList)
     }
@@ -305,6 +309,8 @@ function zipFolder(srcFolder, zipFilePath, callback) {
 exports.downloadFiles = (req,res) => {
   
   const { filePath } = req.body;
+
+  console.log(filePath, " FILE PATH ")
 
   if (fs.statSync(filePath).isDirectory()){
 

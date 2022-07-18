@@ -1,9 +1,9 @@
 import React, { useEffect} from 'react'
 import { Provider } from 'react-redux';
 import { store } from '../../../store/store'
-import { getSongs, getSongExports, getExportParts, dismissError } from '../../../store/songExport/songExportSlice';
+import { getSketches, getSongExports, getExportParts, dismissError } from '../../../store/songExport/songExportSlice';
 import { useDispatch, useSelector } from 'react-redux'
-import SongExportListItem from './SongExportListItem';
+import ListItem from './ListItem';
 import { FaMusic, FaFileExport, FaFileAudio } from 'react-icons/fa'
 
 const SongExportWrapper = () => { 
@@ -31,19 +31,15 @@ const SongExport = (props) => {
         
     const dispatch = useDispatch();
 
-    const {error, songs, selectedSong, exports, selectedExport, parts, selectedPart } = useSelector(state => state.songExport)
+    const {error, sketches, selectedSong, exports, selectedExport, parts, selectedPart } = useSelector(state => state.songExport)
 
-    console.log(exports, " EXPORTS ")
 
     useEffect(() => {
-        dispatch(getSongs());
+        dispatch(getSketches());
     }, [])
 
     useEffect(() => {
-        if (selectedSong !== null){
-            console.log(selectedSong, " SELECTED SONG")
-            dispatch(getSongExports(selectedSong.path+"/"))
-        }
+        if (selectedSong !== null) dispatch(getSongExports(selectedSong.path+"/"))
     },[selectedSong])
     
     useEffect(() => {
@@ -62,8 +58,8 @@ const SongExport = (props) => {
         )
     }
 
-    const songsDisplay = songs.map((song,index) => (
-            <SongExportListItem
+    const sketchesDisplay = sketches.map((song,index) => (
+            <ListItem
                 key={Date.now() + index}
                 item={song} 
                 type="song"
@@ -71,7 +67,7 @@ const SongExport = (props) => {
     ))
 
     const exportsDisplay = exports.map((songExport,index)=>(
-        <SongExportListItem
+        <ListItem
             key={Date.now() + index}
             item={songExport} 
             type="songExport"
@@ -79,7 +75,7 @@ const SongExport = (props) => {
     ))
 
     const partsDisplay  = parts.map((part,index)=>(
-        <SongExportListItem
+        <ListItem
             key={Date.now() + index}
             item={part} 
             type="part"
@@ -92,9 +88,9 @@ const SongExport = (props) => {
             <div className='song-export-column' id='song-list' style={{backgroundColor:colorsArray[0]}}>
                 <div className='column-header'>
                     
-                    <h4><FaMusic/>Songs</h4>
+                    <h4><FaMusic/>Sketches</h4>
                 </div>
-                <ul>{songsDisplay}</ul>
+                <ul>{sketchesDisplay}</ul>
             </div>
             <div className='song-export-column' id='export-folders-list' style={{backgroundColor:colorsArray[1]}}>
                 <div className='column-header'>

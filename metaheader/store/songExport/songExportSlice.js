@@ -1,8 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export const getSongs = createAsyncThunk(
-    'songExport/fetchSongs',
+export const getSketches = createAsyncThunk(
+    'songExport/fetchSketches',
     async () => {
         const response = await fetch(`http://${window.location.hostname}:3000/songexports`, {
             method: 'GET',
@@ -44,7 +44,7 @@ export const getExportParts = createAsyncThunk(
 )
 
 let initialState = {
-    songs:[],
+    sketches:[],
     selectedSong:null,
     exports:[],
     selectedExport:null,
@@ -71,17 +71,18 @@ const songExportSlice = createSlice({
   },
   extraReducers: (builder) => {
 
-    // SONGS
-    builder.addCase(getSongs.fulfilled, (state, action) => {
-        state.songs = action.payload
+    // SKETCHES
+    builder.addCase(getSketches.fulfilled, (state, action) => {
+        state.sketches = action.payload
         state.status = 'idle'
     })
-    builder.addCase(getSongs.pending, (state) => {
+    builder.addCase(getSketches.pending, (state) => {
         state.status = 'loading'
+        state.sketches = []
         state.exports = []
         state.parts = []
     })
-    builder.addCase(getSongs.rejected, (state, action) => {
+    builder.addCase(getSketches.rejected, (state, action) => {
         state.error = action.error.message
         state.status = 'failed'
     })
@@ -93,6 +94,7 @@ const songExportSlice = createSlice({
     })
     builder.addCase(getSongExports.pending, (state) => {
         state.status = 'loading'
+        state.exports = []
         state.parts = []
     })
     builder.addCase(getSongExports.rejected, (state, action) => {
@@ -107,6 +109,7 @@ const songExportSlice = createSlice({
     })
     builder.addCase(getExportParts.pending, (state) => {
         state.status = 'loading'
+        state.parts = []
     })
     builder.addCase(getExportParts.rejected, (state, action) => {
         state.error = action.error.message

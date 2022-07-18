@@ -72,11 +72,14 @@
   padding: 0;
   list-style-type: none;
   margin: 0;
+  height: calc(100% - 50px);
+  overflow-y: auto;
 }
 #song-export-container #song-export .song-export-column ul li {
   width: 100%;
   float: left;
   margin-bottom: 5px;
+  height: auto;
 }
 #song-export-container #song-export .song-export-column ul li a {
   padding: 5px;
@@ -87,10 +90,41 @@
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
   position: relative;
 }
+#song-export-container #song-export .song-export-column ul li a .count {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0 0 0 / 50%);
+  color: rgba(255, 255, 255, 0.75);
+  border-radius: 100%;
+  display: block;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 19px;
+  font-size: 12px;
+}
+#song-export-container #song-export .song-export-column ul li a .count svg {
+  margin-top: 3px;
+}
 #song-export-container #song-export .song-export-column ul li a:hover,
 #song-export-container #song-export .song-export-column ul li a.active {
   color: rgba(255, 255, 255, 0.75);
   background-color: rgba(0 0 0 / 50%);
+}
+#song-export-container #song-export .song-export-column ul li a:hover .count,
+#song-export-container #song-export .song-export-column ul li a.active .count {
+  background-color: rgba(255, 255, 255, 0.75);
+  color: rgba(0 0 0 / 50%);
+}
+#song-export-container #song-export .song-export-column ul li a:hover h4,
+#song-export-container #song-export .song-export-column ul li a.active h4 {
+  color: rgba(255, 255, 255, 0.75);
+}
+#song-export-container #song-export .song-export-column ul li a h4 {
+  margin: 0;
+  height: 40px;
+  color: black;
 }
 #song-export-container #song-export .song-export-column ul li a span {
   width: 100%;
@@ -105,4 +139,106 @@
 }
 #song-export-container #song-export .song-export-column ul li a small {
   word-break: break-all;
+}
+#song-export-container #song-export .song-export-column ul li a small b {
+  margin-right: 5px;
+}
+#song-export-container #song-export .song-export-column ul li a small b + b::before {
+  content: "•";
+  text-align: center;
+  margin-right: 5px;
+}
+#song-export-container #song-export .song-export-column ul li a .audio-player > div {
+  width: 100%;
+  display: flex;
+}
+#song-export-container #song-export .song-export-column ul li a .audio-player .audio-player-top .audio-player-controls {
+  font-size: 50px;
+  padding: 5px;
+  height: 60px;
+}
+#song-export-container #song-export .song-export-column ul li a .audio-player .audio-player-bottom {
+  height: 20px;
+}
+#song-export-container #song-export .song-export-column ul li a .audio-player .audio-player-bottom .track-time,
+#song-export-container #song-export .song-export-column ul li a .audio-player .audio-player-bottom .track-duration {
+  width: 60px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 19px;
+}
+#song-export-container #song-export .song-export-column ul li a .audio-player .audio-player-bottom .track-time span.infinity,
+#song-export-container #song-export .song-export-column ul li a .audio-player .audio-player-bottom .track-duration span.infinity {
+  font-size: 30px;
+  margin-top: -2px;
+}
+#song-export-container #song-export .song-export-column ul li a .audio-player .audio-player-bottom .slider {
+  width: calc(100% - 120px);
+  background-color: rgba(0 0 0 / 50%);
+  height: 12px;
+  border-radius: 7px;
+  overflow: hidden;
+  margin-top: 4px;
+  position: relative;
+}
+#song-export-container #song-export .song-export-column ul li a .audio-player .audio-player-bottom .slider .progress {
+  background-color: dodgerblue;
+  background-image: none;
+  border-radius: 0;
+  margin: 0;
+  height: 100%;
+}
+#song-export-container #song-export .song-export-column ul li a .audio-player .audio-player-bottom .slider .rail {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+#song-export-container #song-export .song-export-column ul li a .react-draggable {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 2px 4px;
+}
+#song-export-container #song-export .song-export-column ul li a .react-draggable.react-draggable-dragged {
+  opacity: 1;
+}
+@-webkit-keyframes rotating {
+  /* Safari and Chrome */
+  from {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.rotating {
+  -webkit-animation: rotating 0.5s linear infinite;
+  -moz-animation: rotating 0.5s linear infinite;
+  -ms-animation: rotating 0.5s linear infinite;
+  -o-animation: rotating 0.5s linear infinite;
+  animation: rotating 0.5s linear infinite;
 }

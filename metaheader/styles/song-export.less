@@ -67,10 +67,10 @@
                 font-weight: bold;
                 position: relative;
                 padding-left: 25px;
-                > svg {
-                    position: absolute;
-                    left: 0;
-                }
+                    > svg {
+                        position: absolute;
+                        left: 0;
+                    }
                 }
             }
 
@@ -78,11 +78,14 @@
                 padding: 0;
                 list-style-type: none;
                 margin: 0;
+                height: calc(100% - 50px);
+                overflow-y: auto;
 
                 li {
                     width: 100%;
                     float: left;
                     margin-bottom: 5px;
+                    height:auto;
 
                     a {
                         padding: 5px;
@@ -94,9 +97,43 @@
                         // font-weight: bold;
                         position: relative;
 
+                        .count {
+                            position: absolute;
+                            top: 5px;
+                            right: 5px;
+                            background-color: rgba(0 0 0 / 50%);
+                            color: rgba(255,255,255,0.75);
+                            border-radius: 100%;
+                            display: block;
+                            width: 20px;
+                            height: 20px;
+                            text-align: center;
+                            line-height: 19px;
+                            font-size: 12px;
+
+                            svg {
+                                margin-top: 3px;
+                            }
+                        }
+
                         &:hover, &.active {
                             color: rgba(255,255,255,0.75);
                             background-color: rgba(0 0 0 / 50%);
+
+                            .count {
+                                background-color: rgba(255,255,255,0.75);
+                                color: rgba(0 0 0 / 50%);
+                            }
+
+                            h4 {
+                                color: rgba(255,255,255,0.75);
+                            }
+                        }
+
+                        h4 {
+                            margin: 0;
+                            height: 40px;
+                            color: black;
                         }
 
                         span {
@@ -115,6 +152,85 @@
                         small {
                             // font-weight: normal;
                             word-break: break-all;
+
+                            b {
+                                margin-right: 5px;
+                            }
+
+                            b+b::before{
+                                content: "•";
+                                text-align: center;
+                                margin-right: 5px;
+                            }
+                        }
+
+                        .audio-player {
+                            > div {
+                                width: 100%;
+                                display: flex;
+                            }
+
+                            .audio-player-top {
+                                .audio-player-controls {
+                                    font-size: 50px;
+                                    padding: 5px;
+                                    height: 60px;
+                                }
+                            }
+
+                            .audio-player-bottom {
+                                height: 20px;
+
+                                .track-time, .track-duration {
+                                    width: 60px;
+                                    text-align: center;
+                                    font-size: 14px;
+                                    line-height: 19px;
+
+                                    span.infinity {
+                                        font-size: 30px;
+                                        margin-top: -2px;
+                                    }
+                                }
+
+                                .slider {
+                                    width: calc(100% - 120px);
+                                    background-color: rgba(0 0 0 / 50%);
+                                    height: 12px;
+                                    border-radius: 7px;
+                                    overflow: hidden;
+                                    margin-top: 4px;
+                                    position: relative;
+
+                                    .progress {
+                                        background-color: dodgerblue;
+                                        background-image: none;
+                                        border-radius: 0;
+                                        margin: 0;
+                                        height: 100%;
+                                    }
+
+                                    .rail {
+                                        width: 100%;
+                                        height: 100%;
+                                        position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                        z-index: 10;
+                                    }
+                                }
+                            }
+                        }
+
+                        .react-draggable {
+                            opacity: 0;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            padding: 2px 4px;
+                            &.react-draggable-dragged {
+                                opacity: 1;
+                            }
                         }
                     }
                 }
@@ -122,3 +238,39 @@
         }
     }
 }
+
+@-webkit-keyframes rotating /* Safari and Chrome */ {
+    from {
+      -webkit-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes rotating {
+    from {
+      -ms-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -webkit-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    to {
+      -ms-transform: rotate(360deg);
+      -moz-transform: rotate(360deg);
+      -webkit-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  .rotating {
+    -webkit-animation: rotating 0.5s linear infinite;
+    -moz-animation: rotating 0.5s linear infinite;
+    -ms-animation: rotating 0.5s linear infinite;
+    -o-animation: rotating 0.5s linear infinite;
+    animation: rotating 0.5s linear infinite;
+  }

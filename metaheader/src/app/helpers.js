@@ -10,16 +10,6 @@ export function getFormData(object,fileName) {
   return formData;
 }
 
-/**
- * Format bytes as human-readable text.
- * 
- * @param bytes Number of bytes.
- * @param si True to use metric (SI) units, aka powers of 1000. False to use 
- *           binary (IEC), aka powers of 1024.
- * @param dp Number of decimal places to display.
- * 
- * @return Formatted string.
- */
 export function humanFileSize(bytes, si=false, dp=1) {
     const thresh = si ? 1000 : 1024;
   
@@ -129,15 +119,24 @@ export const useLongPress = (
     };
 };
 
+const isTouchEvent = event => {
+  return "touches" in event;
+};
 
-  const isTouchEvent = event => {
-    return "touches" in event;
-  };
-  
-  const preventDefault = event => {
-    if (!isTouchEvent(event)) return;
+const preventDefault = event => {
+  if (!isTouchEvent(event)) return;
 
-    if (event.touches.length < 2 && event.preventDefault) {
-        event.preventDefault();
-    }
-  };
+  if (event.touches.length < 2 && event.preventDefault) {
+      event.preventDefault();
+  }
+};
+
+export function millisToMinutesAndSeconds(time) {
+  let minutes = Math.floor(time / 60);
+  let seconds = time - minutes * 60;
+  seconds = Math.floor(seconds);
+  if (minutes < 10) minutes = "0" + minutes;
+  if (seconds < 10) seconds = "0" +  seconds;
+  const timestamp = minutes + ":" + seconds;
+  return timestamp;
+}
