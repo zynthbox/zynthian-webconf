@@ -31,7 +31,7 @@ const SongExport = (props) => {
         
     const dispatch = useDispatch();
 
-    const {error, sketches, selectedSong, exports, selectedExport, parts, selectedPart } = useSelector(state => state.songExport)
+    const {error, sketches, selectedSong, exports, selectedExport, parts, selectedPart, status } = useSelector(state => state.songExport)
 
 
     useEffect(() => {
@@ -74,13 +74,22 @@ const SongExport = (props) => {
         />
     ))
 
-    const partsDisplay  = parts.map((part,index)=>(
-        <ListItem
-            key={Date.now() + index}
-            item={part} 
-            type="part"
-        />
-    ))
+    let partsDisplay;
+    if (status.parts === "loading" || status.parts === "failed"){
+        partsDisplay = (
+            <div className='status-display'>
+                {status.parts}
+            </div>
+        )
+    } else {
+        partsDisplay  = parts.map((part,index)=>(
+            <ListItem
+                key={Date.now() + index}
+                item={part} 
+                type="part"
+            />
+        ))
+    }
 
     return (
         <div id="song-export">

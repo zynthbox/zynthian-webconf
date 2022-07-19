@@ -24,6 +24,32 @@ const AudioPlayer = ({item}) => {
     }
   },[trackProgress])
 
+  useEffect(() => {
+    if (data !== null){
+      const draggableDiv = document.getElementById(item.path)
+      draggableDiv.removeEventListener('dragstart', handleDragStart)
+      draggableDiv.removeEventListener('dragend',handleDragEnd)
+      draggableDiv.addEventListener('dragstart', handleDragStart)
+      draggableDiv.addEventListener('dragend',handleDragEnd)
+
+    }
+  },[data])
+
+  function handleDragStart(e){
+    var file = new File([data], item.name, {type:"audio/wav"});
+    const dataList = e.dataTransfer.items;
+    dataList.add(file);
+    console.log(e.dataTransfer.files, " DATA TRANSFER FILES")
+    console.log(e.dataTransfer.items[0])
+  }
+  
+  function handleDragEnd(e){
+    if (e.clientY <= 0 || e.clientX <= 0 || (e.clientX >= window.innerWidth || e.clientY >= window.innerHeight)) {  
+      console.log("I'm out");  
+      downloadFile()
+    }
+  }
+
   async function getData(){
     const filePath = item.path;
     const response = await fetch(`http://${window.location.hostname}:3000/download`, {
@@ -80,7 +106,6 @@ const AudioPlayer = ({item}) => {
   }
   
   function onPlayerTimeUpdate(e){
-    console.log('WHAT')
     const playerElement = e.target;
     const newCurrentTrackTime = millisToMinutesAndSeconds(playerElement.currentTime);
     let newTrackDurationSeconds = playerElement.duration;
@@ -129,7 +154,7 @@ const AudioPlayer = ({item}) => {
           </span>
         </div>
 
-        <div className='item-info'>
+        <div ref={nodeRef} draggable={true} id={item.path} className='draggable-div item-info'>
           <h4>{trackName}</h4>
           <small>
             <b>{humanFileSize(item.size)}</b>
@@ -160,18 +185,10 @@ export default AudioPlayer
  * 
  * 
  * 
-    <div ref={nodeRef} draggable={true} id={item.path}  className='draggable-div'>
+    <div>
       DRAG ME
     </div>
-    const draggableDiv = document.getElementById(item.path)
-    draggableDiv.addEventListener('drag', e => {
-      console.log('HELLO BITCH')
-      var file = new File([data], item.name);
-      const dataList = e.dataTransfer.items;
-      dataList.add(file);
-      // console.log(dataList)
-      console.log(dataList[0])
-    })
+
 
 (function($) {
     $.fn.extend({

@@ -24,7 +24,6 @@ const ListItem = ({item, type}) => {
     // CONTENT
     let listItemDisplay = <AudioPlayer item={item}/> 
     if (type !== "part"){
-        console.log(item)
         const itemName = type === "songExport" ? item.name : item.folder;
         const itemPath = type === "songExport" ? "" : <small>{item.path}</small>;
         listItemDisplay = (

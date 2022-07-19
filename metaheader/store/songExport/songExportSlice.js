@@ -50,7 +50,11 @@ let initialState = {
     selectedExport:null,
     parts:[],
     selectedPart:null,
-    status: 'idle',
+    status: {
+        sketches:'idle',
+        exports:'idle',
+        parts:'idle'
+    },
     error:''
 }
 
@@ -60,7 +64,9 @@ const songExportSlice = createSlice({
   reducers: {
     dismissError: (state, action) => {
         state.error = ''
-        state.status = 'idle';
+        state.status.sketches = 'idle';
+        state.status.exports = 'idle';
+        state.status.parts = 'idle';
     },
     setSelectedSong: (state, action) => {
         state.selectedSong = action.payload
@@ -74,46 +80,46 @@ const songExportSlice = createSlice({
     // SKETCHES
     builder.addCase(getSketches.fulfilled, (state, action) => {
         state.sketches = action.payload
-        state.status = 'idle'
+        state.status.sketches = 'idle'
     })
     builder.addCase(getSketches.pending, (state) => {
-        state.status = 'loading'
+        state.status.sketches = 'loading'
         state.sketches = []
         state.exports = []
         state.parts = []
     })
     builder.addCase(getSketches.rejected, (state, action) => {
         state.error = action.error.message
-        state.status = 'failed'
+        state.status.sketches = 'failed'
     })
     
     // EXPORTS
     builder.addCase(getSongExports.fulfilled, (state, action) => {
         state.exports = action.payload
-        state.status = 'idle'
+        state.status.exports = 'idle'
     })
     builder.addCase(getSongExports.pending, (state) => {
-        state.status = 'loading'
+        state.status.exports = 'loading'
         state.exports = []
         state.parts = []
     })
     builder.addCase(getSongExports.rejected, (state, action) => {
         state.error = action.error.message
-        state.status = 'failed'
+        state.status.exports = 'failed'
     })
 
     // PARTS
     builder.addCase(getExportParts.fulfilled, (state, action) => {
         state.parts = action.payload
-        state.status = 'idle'
+        state.status.parts = 'idle'
     })
     builder.addCase(getExportParts.pending, (state) => {
-        state.status = 'loading'
+        state.status.parts = 'loading'
         state.parts = []
     })
     builder.addCase(getExportParts.rejected, (state, action) => {
         state.error = action.error.message
-        state.status = 'failed'
+        state.status.parts = 'failed'
     })
 
   },
