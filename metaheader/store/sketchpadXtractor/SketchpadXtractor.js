@@ -166,9 +166,6 @@ function SketchpadXtractor(props) {
 
   return (
     <div id="sketch-pad-xtractor">
-      <div>
-        {statusItem} {status} {error}
-      </div>
       <div className="sketch-pad-xtractor-row">
         <div
           className="sketch-pad-xtractor-column"
