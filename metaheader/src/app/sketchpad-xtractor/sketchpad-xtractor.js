@@ -11,7 +11,7 @@ function SketchPadXtractor(props){
 
     const { colorsArray } = props
 
-    const initSketchFolder = {path:"sketches/my-sketches/"}
+    const initSketchpadFolder = {path:"sketchpads/my-sketchpads/"}
     const letters = ["a","b","c","d","e","f","g","h","i","j"]
     const emptyPatternNotesLength = 25283;
     const itemGroupTypeArray = [
@@ -19,19 +19,20 @@ function SketchPadXtractor(props){
         "patterns",
         "samples",
         "sounds",
-        "tracks",
+        "channels",
         "songs"
     ]
 
-    const [ folders, setFolders ] = useState([initSketchFolder])
-    const [ selectedSketchFolder, setSelectedSketchFolder ] = useState(null)
+    const [ folders, setFolders ] = useState([initSketchpadFolder])
+    const [ selectedSketchpadFolder, setSelectedSketchpadFolder ] = useState(null)
     
-    const [ sketchVersions, setSketchVersions ] = useState(null)
-    const [ selectedSketchVersion, setSelectedSketchVersion ] = useState(null)
+    const [ sketchpadVersions, setSketchpadVersions ] = useState(null)
+    const [ selectedSketchpadVersion, setSelectedSketchpadVersion ] = useState(null)
 
-    const [ selectedSketchScene, setSelectedSketchScene ] = useState(null)
+    const [ selectedSketchpadScene, setSelectedSketchpadScene ] = useState(null)
     
-    const [ currentSketch, setCurrentSketch ] = useState(null)
+    const [ currentSketchpad, setCurrentSketchpad ] = useState(null)
+    // console.log(currentSketchpad, " CURRENT SKETCH PAD")
 
     const [ scenes, setScenes ] = useState(null)
 
@@ -41,14 +42,15 @@ function SketchPadXtractor(props){
     const previousIGTgenerationIndex = usePrevious(itemGroupTypeGenerationIndex)
 
     const [ clips, setClips ] = useState(null)
+    // console.log(clips)
     const [ patterns, setPatterns ] = useState(null)
     const [ samples, setSamples ] = useState(null)
     const [ sounds, setSounds ] = useState(null)
  
-    const [ sketchItemGroups, setSketchItemGroups ] = useState(null)
-    const [ selectedSketchItemGroup, setSelectedSketchItemGroup ] = useState(null)
+    const [ sketchpadItemGroups, setSketchpadItemGroups ] = useState(null)
+    const [ selectedSketchpadItemGroup, setSelectedSketchpadItemGroup ] = useState(null)
 
-    const [ selectedSketchItemGroupItem, setSelectedSketchItemGroupItem ] = useState(null)
+    const [ selectedSketchpadItemGroupItem, setSelectedSketchpadItemGroupItem ] = useState(null)
 
     // console.log(selectedSketchItemGroupItem,"selected sketch item group item")
 
@@ -57,45 +59,45 @@ function SketchPadXtractor(props){
     },[])
 
     useEffect(() => {
-        if (selectedSketchFolder !== null){
+        if (selectedSketchpadFolder !== null){
             getSketchVersions()
         }
-    },[selectedSketchFolder])
+    },[selectedSketchpadFolder])
 
     useEffect(() => {
-        if (selectedSketchVersion !== null){
+        if (selectedSketchpadVersion !== null){
             getSketch()
-            setSelectedSketchScene(null)
+            setSelectedSketchpadScene(null)
             setClips(null)
             setPatterns(null)
             setSamples(null)
             setSounds(null)
-            setSelectedSketchItemGroup(null)
-            setSketchItemGroups(null)
+            setSelectedSketchpadItemGroup(null)
+            setSketchpadItemGroups(null)
             generateScenes()
         }
-    },[selectedSketchVersion])
+    },[selectedSketchpadVersion])
 
     useEffect(() => {
         setClips(null)
         setPatterns(null)
         setSamples(null)
         setSounds(null)
-        setSelectedSketchItemGroup(null)
-        setSketchItemGroups(null)
-    },[selectedSketchScene])
+        setSelectedSketchpadItemGroup(null)
+        setSketchpadItemGroups(null)
+    },[selectedSketchpadScene])
 
     useEffect(() => {
-        if (selectedSketchItemGroup !== null){
-            setSelectedSketchItemGroupItem(null);
+        if (selectedSketchpadItemGroup !== null){
+            setSelectedSketchpadItemGroupItem(null);
         }
-    },[selectedSketchItemGroup])
+    },[selectedSketchpadItemGroup])
 
     useEffect(() => {
-        if (currentSketch !== null && selectedSketchScene !== null){
+        if (currentSketchpad !== null && selectedSketchpadScene !== null){
             setIsGeneratingItemGroups(true)
         }
-    },[currentSketch,selectedSketchScene])
+    },[currentSketchpad,selectedSketchpadScene])
 
     useEffect(() => {
         if (isGeneratingItemGroups === true){
@@ -108,8 +110,8 @@ function SketchPadXtractor(props){
 
             if (itemGroupTypeGenerationIndex === 0 && previousIGTgenerationIndex === (itemGroupTypeArray.length - 3)){
 
-                if (itemGroupsGenerationIndex + 1 >= currentSketch.tracks.length){
-                    setSketchItemGroups({clips,patterns,samples,sounds,tracks:[0,1,2,3,4,5,6,7,8,9],songs:[0,1,2]})
+                if (itemGroupsGenerationIndex + 1 >= currentSketchpad.channels.length){
+                    setSketchpadItemGroups({clips,patterns,samples,sounds,channels:[0,1,2,3,4,5,6,7,8,9],songs:[0,1,2]})
                     setIsGeneratingItemGroups(false)
                 } else {
                     const newIGGIndex = itemGroupsGenerationIndex + 1;
@@ -133,7 +135,7 @@ function SketchPadXtractor(props){
 
     async function getSketchVersions(){
 
-        const folderPath = selectedSketchFolder.path.split('/').join('+++');
+        const folderPath = selectedSketchpadFolder.path.split('/').join('+++');
         const response = await fetch(`http://${window.location.hostname}:3000/mydata/+++home+++pi+++zynthian-my-data+++${folderPath.split('/').join('+++')}`, {
             method: 'GET',
             headers: {
@@ -145,79 +147,80 @@ function SketchPadXtractor(props){
         let newSketchVersions = [];
 
         res.forEach(function(sv,index){
-            if (sv.path.indexOf(selectedSketchFolder.path) > -1){
-                if (sv.path.indexOf("sketch.json") > -1) newSketchVersions.push(sv)
+            if (sv.path.indexOf(selectedSketchpadFolder.path) > -1){
+                if (sv.path.indexOf("sketchpad.json") > -1) newSketchVersions.push(sv)
             }
         })
 
-        setSketchVersions(newSketchVersions)
+        setSketchpadVersions(newSketchVersions)
     }
 
     async function getSketch(){
-        const response = await fetch(`http://${window.location.hostname}:3000/sketch/${selectedSketchVersion.path.split('/').join('+++')}`, {
+        const response = await fetch(`http://${window.location.hostname}:3000/sketch/${selectedSketchpadVersion.path.split('/').join('+++')}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             }
         });
         const res = await response.json();
-        setCurrentSketch(res)    
+        setCurrentSketchpad(res)    
     }
 
     async function generateScenes(){
-        // count clips, patterns, samples, sounds, tracks, songs, SUKA BLYATZ
+        // count clips, patterns, samples, sounds, channels, songs, SUKA BLYATZ
     }
 
     async function generateItemGroups(){
         
 
         if (itemGroupTypeGenerationIndex === 0){
-            getSketchClips()
+            getSketchpadClips()
         } else if (itemGroupTypeGenerationIndex === 1){
             if (patterns === null) onGetScenePatterns()
             else setItemGroupTypeGenerationIndex(2)
         } else if (itemGroupTypeGenerationIndex === 2){
-            generateTrackSamples()
+            generateChannelSamples()
         } else if (itemGroupTypeGenerationIndex === 3){
             let soundsArray = [];
             if (sounds !== null) soundsArray = [...sounds]
-            generateTrackSounds(soundsArray)
+            generateChannelSounds(soundsArray)
         }
 
     }
 
-    function getSketchClips(){
-        const track = currentSketch.tracks[itemGroupsGenerationIndex]
+    function getSketchpadClips(){
+        const channel = currentSketchpad.channels[itemGroupsGenerationIndex]
         const newClips = clips !== null ? [...clips] : [];
 
-        track.clips.forEach(async function(part,pIndex){
-            // console.log(part,"track.clips[pIndex]")
-            const cIndex =  letters.findIndex(letter => letter === selectedSketchScene);
+        console.log(channel, " channel")
+
+        channel.clips.forEach(async function(part,pIndex){
+            console.log(part)
+            // console.log(part,"channel.clips[pIndex]")
+            const cIndex =  letters.findIndex(letter => letter === selectedSketchpadScene);
             if (part[cIndex].path !== null){
                 const clip = part[cIndex];
-                clip.track = itemGroupTypeGenerationIndex;
+                clip.channel = itemGroupTypeGenerationIndex;
                 newClips.push(clip)                
             }
         })
 
-        // track.clips.forEach(async function(clip,cIndex){
+        // channel.clips.forEach(async function(clip,cIndex){
         //     if (cIndex === letters.findIndex(letter => letter === selectedSketchScene) && clip.path !== null) {
-        //         clip.track = cIndex;
+        //         clip.channel = cIndex;
         //         newClips.push(clip)
         //     }
         // })
-
+        console.log(newClips, " NEW CIPS ")
         setClips(newClips)
         incrementItemGenerationIndex()
     }
 
     function onGetScenePatterns(){
 
-        const sketchFileName = selectedSketchVersion.path.split('/')[selectedSketchVersion.path.split('/').length - 1]
-        const currentSketchFolder = selectedSketchVersion.path.split(sketchFileName)[0]
-        const scenePatternsPath = `${currentSketchFolder}sequences/scene-${selectedSketchScene}/patterns/`
-
-        console.log(scenePatternsPath, " SCENES PATTERNS PATH")
+        const sketchFileName = selectedSketchpadVersion.path.split('/')[selectedSketchpadVersion.path.split('/').length - 1]
+        const currentSketchFolder = selectedSketchpadVersion.path.split(sketchFileName)[0]
+        const scenePatternsPath = `${currentSketchFolder}sequences/scene-${selectedSketchpadScene}/patterns/`
 
         fetch(`http://${window.location.hostname}:3000/folder/${scenePatternsPath.split('/').join('+++')}`, {
             method: 'GET',
@@ -227,9 +230,7 @@ function SketchPadXtractor(props){
         }).catch(function(error) {
             console.log(error,"error");
         }).then(async function(res){
-
             console.log(res);
-
             const scenePatterns = await res.json();
             if (scenePatterns.length > 0) getScenePatterns(scenePatterns,0,[],scenePatternsPath)
             else setItemGroupTypeGenerationIndex(2)
@@ -262,19 +263,22 @@ function SketchPadXtractor(props){
         })
     }
 
-    async function generateTrackSamples(){
+    async function generateChannelSamples(){
 
         const newSamples = samples !== null ? [...samples ] : [];
         
-        const fileName = selectedSketchVersion.path.split('/')[selectedSketchVersion.path.split('/').length - 1];
-        const folderName = selectedSketchVersion.path.split(fileName)[0];
-
-        fetch(`http://${window.location.hostname}:3000/track/${folderName.split('/').join('+++').split(' ').join('%20')}:${itemGroupsGenerationIndex+1}`, {
+        const fileName = selectedSketchpadVersion.path.split('/')[selectedSketchpadVersion.path.split('/').length - 1];
+        const folderName = selectedSketchpadVersion.path.split(fileName)[0];
+        const trackUrl = `${folderName.split('/').join('+++').split(' ').join('%20')}:${itemGroupsGenerationIndex+1}`;
+        console.log(trackUrl, " TRACK URL ")
+        fetch(`http://${window.location.hostname}:3000/track/${trackUrl}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         }).then(async function(res){
+
+            console.log(res, " RES FROM FETCH SAMPLES")
 
             if (res.status === 500){
                 setSamples(newSamples)
@@ -286,7 +290,7 @@ function SketchPadXtractor(props){
         
             samples.forEach(function(sample,sIndex){
                 if (sample !== null) {
-                    sample.track = itemGroupsGenerationIndex;
+                    sample.channel = itemGroupsGenerationIndex;
                     sample.slot = sIndex;
                     newSamples.push(sample)
                 }
@@ -298,9 +302,9 @@ function SketchPadXtractor(props){
 
     }
 
-    function generateTrackSounds(soundsArray){
+    function generateChannelSounds(soundsArray){
 
-        const track = currentSketch.tracks[itemGroupsGenerationIndex]
+        const channel = currentSketchpad.channels[itemGroupsGenerationIndex]
         const newSounds = soundsArray ? [...soundsArray ] : []
 
         const lastStateZssPath = "/home/pi/zynthian-my-data/snapshots/last_state.zss"
@@ -315,7 +319,7 @@ function SketchPadXtractor(props){
             
             const lastStateZss = await res.json()
 
-            track.chainedSounds.forEach(function(chainedSound,csIndex){
+            channel.chainedSounds.forEach(function(chainedSound,csIndex){
                 if (chainedSound >= 0){
                     lastStateZss.layers.forEach(function(layer,lIndex){
                         if (layer.engine_type === "MIDI Synth" && layer.midi_chan === chainedSound){
@@ -341,28 +345,28 @@ function SketchPadXtractor(props){
 
     function onSetSelectedSketchItemGroup(val){
         const iggtIndex = itemGroupTypeArray.findIndex((igt,index) => val === igt);
-        setSelectedSketchItemGroup(iggtIndex)
+        setSelectedSketchpadItemGroup(iggtIndex)
     }
 
     let sketchVersionColumnDisplay;
-    if (sketchVersions !== null){
+    if (sketchpadVersions !== null){
         sketchVersionColumnDisplay = (
             <SketchPadXtractorColumn 
                 type="versions"
-                items={sketchVersions}
-                onSelectItem={setSelectedSketchVersion}
+                items={sketchpadVersions}
+                onSelectItem={setSelectedSketchpadVersion}
                 color={colorsArray[1]}
             />            
         )
     }
 
     let sketchScenesColumnDisplay;
-    if (selectedSketchVersion !== null){
+    if (selectedSketchpadVersion !== null){
         sketchScenesColumnDisplay = (
             <SketchPadXtractorColumn 
                 type="scenes"
-                onSelectItem={setSelectedSketchScene}
-                item={selectedSketchScene}
+                onSelectItem={setSelectedSketchpadScene}
+                item={selectedSketchpadScene}
                 color={colorsArray[2]}
                 letters={letters}
             />
@@ -370,12 +374,12 @@ function SketchPadXtractor(props){
     }
 
     let sketchItemGroupColumnDisplay;
-    if (sketchItemGroups !== null){
+    if (sketchpadItemGroups !== null){
         sketchItemGroupColumnDisplay = (
             <SketchPadXtractorColumn 
                 type={"item groups"}
-                items={sketchItemGroups}
-                subType={itemGroupTypeArray[selectedSketchItemGroup]}
+                items={sketchpadItemGroups}
+                subType={itemGroupTypeArray[selectedSketchpadItemGroup]}
                 onSelectItem={onSetSelectedSketchItemGroup}
                 color={colorsArray[3]}
              />
@@ -391,26 +395,26 @@ function SketchPadXtractor(props){
     }
 
     let sketchItemGroupItemsColumnDisplay;
-    if (selectedSketchItemGroup !== null){
-        const items = sketchItemGroups[itemGroupTypeArray[selectedSketchItemGroup]];
+    if (selectedSketchpadItemGroup !== null){
+        const items = sketchpadItemGroups[itemGroupTypeArray[selectedSketchpadItemGroup]];
         sketchItemGroupItemsColumnDisplay = (
             <SketchPadXtractorColumn 
                 type={"items"}
-                subType={itemGroupTypeArray[selectedSketchItemGroup]}
+                subType={itemGroupTypeArray[selectedSketchpadItemGroup]}
                 items={items}
-                onSelectItem={setSelectedSketchItemGroupItem}
+                onSelectItem={setSelectedSketchpadItemGroupItem}
                 color={colorsArray[4]}
              />
         )
     }
 
     let sketchItemSelectedItemColumnDisplay;
-    if (selectedSketchItemGroupItem !== null){
+    if (selectedSketchpadItemGroupItem !== null){
         sketchItemSelectedItemColumnDisplay  = (
             <SketchPadXtractorColumn 
                 type={"item"}
-                subType={itemGroupTypeArray[selectedSketchItemGroup]}
-                item={selectedSketchItemGroupItem}
+                subType={itemGroupTypeArray[selectedSketchpadItemGroup]}
+                item={selectedSketchpadItemGroupItem}
                 // onSelectItem={setSelectedSketchItemGroupItem}
                 color={colorsArray[5]}
             />
@@ -428,7 +432,7 @@ function SketchPadXtractor(props){
                     <SketchPadXtractorColumn 
                         type="folders"
                         items={folders}
-                        onSelectItem={setSelectedSketchFolder}
+                        onSelectItem={setSelectedSketchpadFolder}
                         color={colorsArray[0]}
                     />
                 </div>

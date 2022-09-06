@@ -1,6 +1,6 @@
 
 var FilesController = require('./controllers/filesController.js');
-var sampleEditorController = require('./controllers/sketchEditorController.js');
+var sketchEditorController = require('./controllers/sketchEditorController.js');
 var favoritesController = require('./controllers/favoritesController.js');
 var songExportController = require('./controllers/songExportController.js');
 
@@ -24,14 +24,14 @@ module.exports = function (app) {
     app.post('/download',FilesController.downloadFiles)
 
     // SAMPLE EDITOR
-    app.get('/sketchinfo/',sampleEditorController.getSketchInfo)
-    app.get('/sketchlist/', sampleEditorController.getSketchList)
-    app.get('/sketch/:path', sampleEditorController.getSketch)
-    app.get('/track/:id', sampleEditorController.getTrack)
-    app.post('/track/:id', sampleEditorController.updateTrack)
-    app.get('/sample/:id', sampleEditorController.getSample)
-    app.get('/clip/:id', sampleEditorController.getClip)
-    app.post('/sample/:id', sampleEditorController.removeSample)
+    app.get('/sketchinfo/',sketchEditorController.getSketchInfo)
+    app.get('/sketchlist/', sketchEditorController.getSketchList)
+    app.get('/sketch/:path', sketchEditorController.getSketch)
+    app.get('/track/:id', sketchEditorController.getTrack)
+    app.post('/track/:id', sketchEditorController.updateTrack)
+    app.get('/sample/:id', sketchEditorController.getSample)
+    app.get('/clip/:id', sketchEditorController.getClip)
+    app.post('/sample/:id', sketchEditorController.removeSample)
 
     // FAVORITES
     app.get('/favorites', favoritesController.getFavorites)

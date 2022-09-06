@@ -80,6 +80,8 @@
                 margin: 0;
                 height: calc(100% - 50px);
                 overflow-y: auto;
+                width: 100%;
+                position: relative;
 
                 li {
                     width: 100%;
@@ -236,6 +238,22 @@
                             }
                         }
                     }
+                }
+            }
+
+            .status-display {
+                position: absolute;
+                width: 100%;
+                top: 50%;
+                height: 100px;
+                margin-top: -50px;
+                font-size: 25px;
+                color: white;
+                text-align: center;
+                text-shadow: 0px 1px 1px rgba(0 0 0 / 50%);
+
+                img {
+                    width: 50px;
                 }
             }
         }

@@ -1,4 +1,6 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
+import { Provider } from 'react-redux';
+import { store } from '../store/store'
 import ReactDOM from 'react-dom';
 import FileManagerContextProvider from './app/file-manager/context/context-provider';
 
@@ -6,9 +8,9 @@ import LoadingSpinner from './app/loading-spinner';
 
 const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
 const SampleEditor = lazy(()=>import('./app/sample-editor/sample-editor'))
-const Favorites = lazy(()=>import('./app/favorites/favorites'))
-const SketchPadXtractor = lazy(()=>import('./app/sketchpad-xtractor/sketchpad-xtractor'))
-const SongExport = lazy(()=>import('./app/song-export/SongExport'))
+const Favorites = lazy(()=>import('../store/favorites/favorites'))
+const SketchPadXtractor = lazy(()=>import('../store/sketchpadXtractor/SketchpadXtractor')) 
+const SongExport = lazy(()=>import('../store/songExport/SongExport'))
 
 function MetaHeader(){
 
@@ -172,7 +174,8 @@ function MetaHeader(){
     }
 
     return (
-        <React.Fragment>
+        <Provider store={store}>
+            <React.Fragment>
             <a href="#m" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More <span className="caret"></span></a>
             <ul className="dropdown-menu">
                 <li>
@@ -197,6 +200,7 @@ function MetaHeader(){
             {xtractorDisplay}
             {songExportDisplay}
         </React.Fragment>
+        </Provider>
     )
 }
 

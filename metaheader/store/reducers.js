@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import count from './count/countSlice'
 import songExport from './songExport/songExportSlice';
+import sketchpadXtractor from './sketchpadXtractor/sketchpadXtractorSlice';
 
 const reducers = combineReducers({ 
-  count,
-  songExport
+  songExport,
+  sketchpadXtractor
 })
 
 export default reducers;

@@ -2,14 +2,11 @@ const fs = require('fs');
 const path = require("path")
 const rootFolder = "/home/pi/zynthian-my-data/"
 
-var sampleSetFolder = `${rootFolder}sketches/my-sketches/temp/wav/sampleset/sample-bank`
+var sampleBankFolder = `${rootFolder}sketchpads/my-sketchpads/temp/wav/sampleset/sample-bank`
 
 function getLastSelectedSketchFolderName(){
   var sketchInfojson = JSON.parse( fs.readFileSync(`${rootFolder}sessions/.cache.json`));
-  var folderName = sketchInfojson.lastSelectedSketch.split('/my-sketches/')[1].split('/')[0];
-
-  console.log(folderName, " FOLDER NAME")
-
+  var folderName = sketchInfojson.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[0];
   return folderName;
 }
 
@@ -34,17 +31,23 @@ exports.getSketch = (req,res) => {
 
 exports.getTrack = (req,res) => {
 
-  let trackSampleSetFolder = req.params.id.split(':')[0].split('+++').join('/');
-  trackSampleSetFolder += "wav/sampleset/sample-bank";
+  let trackSampleBankFolder = req.params.id.split(':')[0].split('+++').join('/');
+  trackSampleBankFolder += "wav/sampleset/sample-bank";
   const trackId = req.params.id.split(':')[1];
 
-  sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
+  sampleBankFolder = sampleBankFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
+  const sampleBankJsonPath = `${trackSampleBankFolder}.${trackId}/sample-bank.json`
+  console.log(sampleBankJsonPath, " SB JSON PATH")
+  console.log(fs.existsSync(sampleBankJsonPath), " SB JSON PATH EXISTS")
+  if (fs.existsSync(sampleBankJsonPath)){
+    var file = fs.readFileSync(sampleBankJsonPath);
+    var json = JSON.parse(file);
+    res.json(json)
+  } else {
+    res.json({message:`sample bank file ${sampleBankJsonPath} doesnt exist!`})
+  }
 
-  console.log(sampleSetFolder, " SAMPLE SET FOLDER ")
 
-  var file = fs.readFileSync(`${trackSampleSetFolder}.${trackId}/sample-bank.json`);
-  var json = JSON.parse(file);
-  res.json(json)
 }
 
 exports.updateTrack = (req,res) => {
@@ -53,8 +56,8 @@ exports.updateTrack = (req,res) => {
 
   // console.log('UPDATE TRACK')
 
-  sampleSetFolder = req.params.id.split(':')[0].split('+++').join('/');
-  sampleSetFolder += "wav/sampleset/sample-bank";
+  sampleBankFolder = req.params.id.split(':')[0].split('+++').join('/');
+  sampleBankFolder += "wav/sampleset/sample-bank";
   const trackId = req.params.id.split(':')[1];
 
   
@@ -65,9 +68,9 @@ exports.updateTrack = (req,res) => {
   // console.log(sPath,"sample path");
 
   let sampleSetJson;
-  if (!fs.existsSync(`${sampleSetFolder}.${trackId}/`)){
+  if (!fs.existsSync(`${sampleBankFolder}.${trackId}/`)){
     
-    fs.mkdirSync(`${sampleSetFolder}.${trackId}/`)
+    fs.mkdirSync(`${sampleBankFolder}.${trackId}/`)
     sampleSetJson = []
     for (var i = 0; i < 5; ++i){
       if (i === req.body.sIndex){
@@ -79,7 +82,7 @@ exports.updateTrack = (req,res) => {
       }
     }  
   } else {
-    let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackId}/sample-bank.json`);
+    let rawdata = fs.readFileSync(`${sampleBankFolder}.${trackId}/sample-bank.json`);
     currentSampleSetJson = JSON.parse(rawdata);
     sampleSetJson = []
     for (var i = 0; i < 5; ++i){
@@ -95,17 +98,17 @@ exports.updateTrack = (req,res) => {
 
   // console.log(sampleSetJson,"sampleSetJson")
 
-  fs.writeFileSync(`${sampleSetFolder}.${trackId}/sample-bank.json`, JSON.stringify(sampleSetJson));
-  var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackId}/sample-bank.json`));
+  fs.writeFileSync(`${sampleBankFolder}.${trackId}/sample-bank.json`, JSON.stringify(sampleSetJson));
+  var json = JSON.parse( fs.readFileSync(`${sampleBankFolder}.${trackId}/sample-bank.json`));
   res.status(200).json(json)
 }
 
 exports.getSample = (req,res) => {
-  sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
+  sampleBankFolder = sampleBankFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
   const trackId = req.params.id.split('+++')[0];
   let samplePath = req.params.id.split('+++')[1].split('++').join('.');
   if (samplePath.indexOf('+') > -1) samplePath = samplePath.split('+').join('/');
-  let filePath = `${sampleSetFolder}.${trackId}/${samplePath}`
+  let filePath = `${sampleBankFolder}.${trackId}/${samplePath}`
   if (samplePath.indexOf('/') > -1) filePath = samplePath; 
   var file = fs.readFileSync(filePath, 'binary');
   res.setHeader('Content-Disposition', 'attachment; filename='+samplePath);
@@ -128,8 +131,8 @@ exports.getClip = (req,res) => {
 exports.removeSample = (req,res) => {
 
   const { trackIndex, sPath, sIndex } = req.body;
-  sampleSetFolder = sampleSetFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
-  let rawdata = fs.readFileSync(`${sampleSetFolder}.${trackIndex}/sample-bank.json`);
+  sampleBankFolder = sampleBankFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
+  let rawdata = fs.readFileSync(`${sampleBankFolder}.${trackIndex}/sample-bank.json`);
   let currentSampleSetJson = JSON.parse(rawdata);
 
   let sampleSetJson = [];
@@ -141,8 +144,8 @@ exports.removeSample = (req,res) => {
     }
   }
 
-  fs.writeFileSync(`${sampleSetFolder}.${trackIndex}/sample-bank.json`, JSON.stringify(sampleSetJson));
-  if (sPath && sPath.indexOf('/') === -1) fs.unlinkSync(`${sampleSetFolder}.${trackIndex}/${sPath}`)
-  var json = JSON.parse( fs.readFileSync(`${sampleSetFolder}.${trackIndex}/sample-bank.json`));
+  fs.writeFileSync(`${sampleBankFolder}.${trackIndex}/sample-bank.json`, JSON.stringify(sampleSetJson));
+  if (sPath && sPath.indexOf('/') === -1) fs.unlinkSync(`${sampleBankFolder}.${trackIndex}/${sPath}`)
+  var json = JSON.parse( fs.readFileSync(`${sampleBankFolder}.${trackIndex}/sample-bank.json`));
   res.json(json)
 }

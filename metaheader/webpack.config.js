@@ -24,6 +24,7 @@ module.exports = {
             loader: 'file-loader',
             options: {
               esModule: false,
+              name:'bundle/[path][name].[ext]'
             },
           },
         ],

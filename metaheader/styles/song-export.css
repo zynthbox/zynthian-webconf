@@ -74,6 +74,8 @@
   margin: 0;
   height: calc(100% - 50px);
   overflow-y: auto;
+  width: 100%;
+  position: relative;
 }
 #song-export-container #song-export .song-export-column ul li {
   width: 100%;
@@ -208,6 +210,20 @@
 }
 #song-export-container #song-export .song-export-column ul li a .react-draggable.react-draggable-dragged {
   opacity: 1;
+}
+#song-export-container #song-export .song-export-column .status-display {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  height: 100px;
+  margin-top: -50px;
+  font-size: 25px;
+  color: white;
+  text-align: center;
+  text-shadow: 0px 1px 1px rgba(0 0 0 / 50%);
+}
+#song-export-container #song-export .song-export-column .status-display img {
+  width: 50px;
 }
 @-webkit-keyframes rotating {
   /* Safari and Chrome */

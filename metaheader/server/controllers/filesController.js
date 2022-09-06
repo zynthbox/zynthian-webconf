@@ -16,6 +16,7 @@ const excludedFolders = [
 ]
 
 const getAllFiles = function(dirPath, arrayOfFiles,index) {
+  // console.timeLog()
   files = fs.readdirSync(dirPath)
   arrayOfFiles = arrayOfFiles || []
   index = index || 0
@@ -47,14 +48,19 @@ const getAllFiles = function(dirPath, arrayOfFiles,index) {
 }
 
 exports.getAllFiles = (req,res) => {
-  const dirList = getAllFiles(rootFolder,[])
+
+  let folder = rootFolder;
+  if (req.params.folder){
+    folder = req.params.folder;
+    if (folder.indexOf('+++') > -1) folder = folder.split('+++').join('/');
+  }
+  console.log(req.params.folder, " REQ PARAMS ")
+  const dirList = getAllFiles(folder,[])
   res.json(dirList)
 }
 
 exports.getFilesInFolder = (req,res) => {
   
-  console.log(req.body, " REQ BODY ")
-
   let folder = req.params.folder;
   if (!folder) folder = "/"
   else if (folder.indexOf('+++') > -1) folder = folder.split('+++').join('/');
@@ -198,8 +204,6 @@ exports.copyPaste = (req,res) => {
 
   const { previousPath, destinationPath,deleteOrigin } = req.body;
 
-  console.log(previousPath, destinationPath, " ON COPY PASTE")
-
   try {
 
     // console.log(fs.existsSync(destinationPath), "DESTINATION PATH IS EXISTS ")
@@ -309,8 +313,6 @@ function zipFolder(srcFolder, zipFilePath, callback) {
 exports.downloadFiles = (req,res) => {
   
   const { filePath } = req.body;
-
-  console.log(filePath, " FILE PATH ")
 
   if (fs.statSync(filePath).isDirectory()){
 
