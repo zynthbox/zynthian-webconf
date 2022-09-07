@@ -7,7 +7,7 @@ import FileManagerContextProvider from './app/file-manager/context/context-provi
 import LoadingSpinner from './app/loading-spinner';
 
 const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
-const SampleEditor = lazy(()=>import('./app/sample-editor/sample-editor'))
+const SampleEditor = lazy(()=>import('../store/sampleEditor/SampleEditor'))
 const Favorites = lazy(()=>import('../store/favorites/favorites'))
 const SketchPadXtractor = lazy(()=>import('../store/sketchpadXtractor/SketchpadXtractor')) 
 const SongExport = lazy(()=>import('../store/songExport/SongExport'))

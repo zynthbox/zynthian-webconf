@@ -182,7 +182,6 @@
   padding: 5px 10px;
   display: block;
   float: left;
-  height: auto;
   cursor: pointer;
   padding-left: 25px !important;
   position: relative;
@@ -233,6 +232,10 @@
   box-sizing: border-box;
   border: 1px solid #cecece;
   position: relative;
+}
+#sample-editor-container .sample-set .track-keyzone-mode-menu {
+  position: relative;
+  z-index: 100;
 }
 #sample-editor-container .sample-set .sample-set-title {
   padding: 15px 0 25px;

@@ -51,9 +51,7 @@ const AudioPlayer = ({item}) => {
   }
 
   function onPlayClick(){
-    console.log('on play click - ' + item.path)
     if (data !== null){
-      console.log('data is not null')
       const playerElement = document.getElementById(`audio-player-${item.name}`).getElementsByTagName('audio');
       if (isPlaying === true){
         playerElement[0].pause();

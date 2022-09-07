@@ -35,7 +35,6 @@ const SongExport = (props) => {
     
     useEffect(() => {
         if (selectedExport !== null){
-            console.log(selectedExport, " SELECTED EXPORT")
             dispatch(getExportParts(selectedExport.path+"/"))
         }
     },[selectedExport])

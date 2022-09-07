@@ -37,8 +37,6 @@ exports.getTrack = (req,res) => {
 
   sampleBankFolder = sampleBankFolder.replace('/temp/',`/${getLastSelectedSketchFolderName()}/`)
   const sampleBankJsonPath = `${trackSampleBankFolder}.${trackId}/sample-bank.json`
-  console.log(sampleBankJsonPath, " SB JSON PATH")
-  console.log(fs.existsSync(sampleBankJsonPath), " SB JSON PATH EXISTS")
   if (fs.existsSync(sampleBankJsonPath)){
     var file = fs.readFileSync(sampleBankJsonPath);
     var json = JSON.parse(file);
@@ -46,8 +44,6 @@ exports.getTrack = (req,res) => {
   } else {
     res.json({message:`sample bank file ${sampleBankJsonPath} doesnt exist!`})
   }
-
-
 }
 
 exports.updateTrack = (req,res) => {
