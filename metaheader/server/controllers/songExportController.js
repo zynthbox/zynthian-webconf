@@ -3,7 +3,7 @@ const fs = require('fs');
 const rootFolder = "/home/pi/zynthian-my-data/"
 
 exports.getSongExports = (req,res) => {
-    const sketchesFolder = `${rootFolder}sketches/my-sketches/`
+    const sketchesFolder = `${rootFolder}sketchpads/my-sketchpads/`
 
     fs.readdir(sketchesFolder, (err, sketchFolders) => {
         if (err){

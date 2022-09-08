@@ -48,21 +48,28 @@ const SongExport = (props) => {
         )
     }
 
-    const sketchesDisplay = sketches.map((song,index) => (
+    let sketchesDisplay;
+    if (sketches && sketches !== null){
+        sketchesDisplay = sketches.map((song,index) => (
+                <ListItem
+                    key={Date.now() + index}
+                    item={song} 
+                    type="song"
+                />
+        ))
+
+    }
+    
+    let exportsDisplay;
+    if (exports && exports !== null){
+        exportsDisplay = exports.map((songExport,index)=>(
             <ListItem
                 key={Date.now() + index}
-                item={song} 
-                type="song"
+                item={songExport} 
+                type="songExport"
             />
-    ))
-
-    const exportsDisplay = exports.map((songExport,index)=>(
-        <ListItem
-            key={Date.now() + index}
-            item={songExport} 
-            type="songExport"
-        />
-    ))
+        ))
+    }
 
     let partsDisplay;
     if (status.parts === "loading" || status.parts === "failed"){

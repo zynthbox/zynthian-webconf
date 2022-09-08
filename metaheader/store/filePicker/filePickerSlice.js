@@ -15,8 +15,6 @@ export const getFolderFiles = createAsyncThunk(
     }
 );
 
-
-
 let initialState = {
     showFilePicker:false,
     mode:'LOAD',
@@ -26,7 +24,9 @@ let initialState = {
     files:[],
     selectedFile:null,
     status:null,
-    statusItem:null
+    statusItem:null,
+    channelIndex:null,
+    sampleIndex:null
 }
 
 const filePickerSlice = createSlice({
@@ -34,11 +34,13 @@ const filePickerSlice = createSlice({
     initialState,
     reducers: {
         setFilePicker: (state,action) => {
-            const { folder, mode, type } = action.payload
+            const { folder, mode, type, channelIndex, sampleIndex } = action.payload
             state.folder = folder;
             state.initFolder = folder;
             state.mode = mode;
             state.type = type;
+            state.channelIndex = channelIndex;
+            state.sampleIndex = sampleIndex;
             state.showFilePicker = true
         },
         hideFilePicker: (state) => {
@@ -56,12 +58,11 @@ const filePickerSlice = createSlice({
         builder.addCase(getFolderFiles.fulfilled, (state, action) => {
             let files = [];
             action.payload.forEach(function(file,index){
-                if (state.type !== null){
-                    if (file.name.indexOf('.') > -1 ){
-                        if (file.name !== '.cache' && file.name.indexOf(state.type) > -1){
-                            files.push(file)
-                        }
-                    } else files.push(file)
+                if (file.isDir === true) files.push(file)
+                else if (file.isDir === false && state.type !== null){
+                    if (file.name.indexOf('.') > -1 && file.name.indexOf(state.type) > -1){
+                        files.push(file)
+                    }
                 } else files.push(file)
             })
             state.files = files;

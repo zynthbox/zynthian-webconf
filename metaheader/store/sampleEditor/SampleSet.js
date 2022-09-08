@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { AiFillSave } from 'react-icons/ai';
 import Sample from './Sample';
 import { removeSamples, setDropZone, setSourcePicker, uploadSamples } from './sampleEditorSlice';
+import { setFilePicker } from '../filePicker/filePickerSlice';
 import { FaWindowClose } from 'react-icons/fa';
 import Dropzone from 'react-dropzone'
 
 const SampleSet = ({index,samples,sampleSetMode,keyZoneMode}) => {
 
     const dispatch = useDispatch()
-    const { sketchpad, sourcePicker, dropZone } = useSelector((state) => state.sampleEditor);
+    const { sketchpad, sketchpadInfo, sourcePicker, dropZone } = useSelector((state) => state.sampleEditor);
     
     useEffect(() => {
         window.addEventListener('keydown',handleKeyPress,false);
@@ -54,8 +55,15 @@ const SampleSet = ({index,samples,sampleSetMode,keyZoneMode}) => {
         )
     }
     
-    function handlePickFromInternal(){
-        console.log('pick from internal BIATCH!!!!')
+    function handlePickFromInternal(sampleIndex){
+        dispatch(setFilePicker({
+            folder:sketchpadInfo.lastSelectedSketchpad.split(`${sketchpad.name}.sketchpad.json`)[0],
+            mode:'LOAD',
+            type: sampleIndex || sampleIndex === 0 ? '.wav':'sample-bank.json' ,
+            sampleIndex: sampleIndex,
+            channelIndex: index
+        }))
+        dispatch(setSourcePicker({showSourcePicker:false}))
     }
 
     function handleAddSample(file,sampleIndex){
@@ -66,13 +74,13 @@ const SampleSet = ({index,samples,sampleSetMode,keyZoneMode}) => {
         dispatch(
             setSourcePicker({
                 channelIndex:index,
-                sampleIndex:null,
-                showSourcePicker:true
+                showSourcePicker:true,
             })
         )
     }
 
     function handleLoadSamplesFromExternal(){
+        dispatch(setSourcePicker({showSourcePicker:false}))
         dispatch(
             setDropZone({
                 channelIndex:index,
@@ -95,7 +103,7 @@ const SampleSet = ({index,samples,sampleSetMode,keyZoneMode}) => {
     }
 
     function handleSaveSampleSetAs(){
-        console.log('SAVE SAMPLE SET AS SUKKKAAAA')
+        // console.log('SAVE SAMPLE SET AS SUKKKAAAA')
     }
 
     const samplesDisplay = samples.map((sample,i) => (
@@ -119,7 +127,7 @@ const SampleSet = ({index,samples,sampleSetMode,keyZoneMode}) => {
             </a>
         )
 
-        if (sourcePicker.sampleIndex !== null){
+        if (sourcePicker.sampleIndex){
             lfxeDisplay = (
                 <a className='button'>
                     <input type="file" 
@@ -136,7 +144,7 @@ const SampleSet = ({index,samples,sampleSetMode,keyZoneMode}) => {
                    onClick={() => dispatch(setSourcePicker({showSourcePicker:false}))}>
                     <FaWindowClose/>
                 </a>
-                <a className='button' onClick={handlePickFromInternal}>
+                <a className='button' onClick={() => handlePickFromInternal(sourcePicker.sampleIndex)}>
                     Pick from Internal
                 </a>
                 {lfxeDisplay}

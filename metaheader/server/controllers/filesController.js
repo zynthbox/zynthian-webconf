@@ -54,7 +54,6 @@ exports.getAllFiles = (req,res) => {
     folder = req.params.folder;
     if (folder.indexOf('+++') > -1) folder = folder.split('+++').join('/');
   }
-  console.log(req.params.folder, " REQ PARAMS ")
   const dirList = getAllFiles(folder,[])
   res.json(dirList)
 }
@@ -139,7 +138,6 @@ exports.createFolder = (req,res) => {
 const deleteFiles = (req,res) => {
 
   const { fullPath } = req.body;
-  console.log(fullPath, " FULL PATH")
   try {
     if (fs.statSync(fullPath).isDirectory()) {
       rimraf.sync(fullPath);
@@ -202,7 +200,10 @@ function copyFolderRecursiveSync( source, target ) {
 
 exports.copyPaste = (req,res) => {
 
-  const { previousPath, destinationPath,deleteOrigin } = req.body;
+  const { previousPath, destinationPath,deleteOrigin, newName } = req.body;
+
+  console.log(previousPath, " PREVIOUS PATH")
+  console.log(destinationPath, " DESTINATION PATH")
 
   try {
 
@@ -249,7 +250,6 @@ var storage = multer.diskStorage({
   destination: function (req, file, cb) {
       const selectedFolder = req.params.folder.split('+++').join('/');
       const folderChainArray = selectedFolder.split('/');
-      console.log(folderChainArray, " FOLDER CHAIN ARRAY")
       let fc = ""
       for (var i in folderChainArray){
         if (i < folderChainArray.length - 1){
@@ -262,8 +262,6 @@ var storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const selectedFolder = req.params.folder.split('+++').join('/');
-    console.log(selectedFolder, " SELECTED FOLDER")
-    console.log(file.originalname, " ORIGINAL NAME ")
     cb(null, selectedFolder + file.originalname )
   }
 })

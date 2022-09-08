@@ -11,6 +11,7 @@ export const getSketches = createAsyncThunk(
             },
         })
         const res = await response.json()
+        // console.log(res)
         return res
     }
 )
