@@ -39,7 +39,7 @@ from zyngine.zynthian_engine_mixer import *
 soundcard_presets = OrderedDict([
     ['ZynADAC', {
 		'SOUNDCARD_CONFIG': 'dtoverlay=hifiberry-dacplusadcpro',
-		'JACKD_OPTIONS': '-P 70 -t 2000 -s -d alsa -d hw:sndrpihifiberry -S -r 44100 -p 256 -n 2 -X raw',
+		'JACKD_OPTIONS': '-P 70 -t 2000 -s -d alsa -d hw:sndrpihifiberry -S -r 44100 -p 512 -n 1 -X raw',
 		'SOUNDCARD_MIXER': 'Digital Left,ADC Left,Digital Right,ADC Right,ADC Left Input,ADC Right Input'
 	}],
 	['HifiBerry DAC+ ADC PRO', {
