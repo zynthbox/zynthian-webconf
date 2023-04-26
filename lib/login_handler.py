@@ -25,9 +25,9 @@
 import os
 import crypt
 import logging
+import spwd
 import tornado.web
 from collections import OrderedDict
-from subprocess import check_output
 
 #------------------------------------------------------------------------------
 # Login Handler
@@ -41,16 +41,11 @@ class LoginHandler(tornado.web.RequestHandler):
     def post(self):
         input_passwd = self.get_argument("PASSWORD")
         try:
-            root_crypt=check_output("getent shadow root", shell=True).decode("utf-8").split(':')[1]
-            rcparts = root_crypt.split('$')
-            input_crypt = crypt.crypt(input_passwd, "$%s$%s" % (rcparts[1], rcparts[2]))
-        except:
-            logging.info("OPENING DEVELOPERS BACKDOOR ...")  # only open when running on pc
-            root_crypt = "webconfdeveloper"
-            input_crypt = input_passwd
-        try:
-            logging.debug("PASSWD: %s <=> %s" % (root_crypt, input_crypt))
-            if input_crypt == root_crypt:
+            input_passwd = self.get_argument("PASSWORD")
+            user_passwd_enc = spwd.getspnam("root")[1]
+            input_passwd_enc = crypt.crypt(input_passwd, user_passwd_enc)
+            logging.debug("PASSWD: %s <=> %s" % (input_passwd_enc, user_passwd_enc))
+            if input_passwd_enc == user_passwd_enc:
                 self.set_secure_cookie("user", "root")
                 if self.get_argument("next", ""):
                     self.redirect(self.get_argument("next"))
