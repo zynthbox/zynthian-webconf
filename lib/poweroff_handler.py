@@ -34,19 +34,19 @@ from lib.zynthian_config_handler import ZynthianBasicHandler
 
 class PoweroffHandler(ZynthianBasicHandler):
 
-	@tornado.web.authenticated
-	def get(self):
-		self.reboot_flag = False
-		super().get("poweroff_confirm_block.html", "Power Off", None, None)
+    @tornado.web.authenticated
+    def get(self):
+        self.reboot_flag = False
+        super().get("poweroff_confirm_block.html", "Power Off", None, None)
 
 
-	@tornado.web.authenticated
-	def post(self):
-		if self.genjson:
-			self.write("POWEROFF")
-		else:
-			self.render("config.html", body="poweroff_block.html", config=None, title="Power Off", errors=None)
-		try:
-			system("killall -SIGQUIT zynthian_gui.py; sleep 4; poweroff")
-		except Exception as e:
-			logging.error(e)
+    @tornado.web.authenticated
+    def post(self):
+        if self.genjson:
+            self.write("POWEROFF")
+        else:
+            self.render("config.html", body="poweroff_block.html", config=None, title="Power Off", errors=None)
+        try:
+            system("killall -SIGQUIT zynthian_gui.py; sleep 4; poweroff")
+        except Exception as e:
+            logging.error(e)

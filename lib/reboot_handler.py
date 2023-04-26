@@ -34,18 +34,18 @@ from lib.zynthian_config_handler import ZynthianBasicHandler
 
 class RebootHandler(ZynthianBasicHandler):
 
-	@tornado.web.authenticated
-	def get(self):
-		self.reboot_flag = False
-		super().get("reboot_confirm_block.html", "Reboot", None, None)
+    @tornado.web.authenticated
+    def get(self):
+        self.reboot_flag = False
+        super().get("reboot_confirm_block.html", "Reboot", None, None)
 
 
-	@tornado.web.authenticated
-	def post(self):
-		self.reboot_flag = False
-		super().get("reboot_block.html", "Reboot", None, None)
+    @tornado.web.authenticated
+    def post(self):
+        self.reboot_flag = False
+        super().get("reboot_block.html", "Reboot", None, None)
 
-		try:
-			system("killall -SIGINT zynthian_gui.py; sleep 4; reboot")
-		except Exception as e:
-			logging.error(e)
+        try:
+            system("killall -SIGINT zynthian_gui.py; sleep 4; reboot")
+        except Exception as e:
+            logging.error(e)
