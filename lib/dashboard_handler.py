@@ -317,7 +317,13 @@ class DashboardHandler(ZynthianBasicHandler):
                         pass
         except Exception as e:
             logging.warning("Can't get build info! => {}".format(e))
-            info['Timestamp'] = '???'
+
+            # The file /etc/apt/trusted.gpg.d/microsoft.gpg is touched every build. Newer image builds will contain the build_info.txt file
+            # If build_info is not found (for example in old images), display the last modified date of this file instead if possible
+            try:
+                info['Timestamp'] = check_output("stat --format='%z' /etc/apt/trusted.gpg.d/microsoft.gpg", shell=True).decode().split(" ")[0]
+            except:
+                info['Timestamp'] = '???'
 
         return info
 
