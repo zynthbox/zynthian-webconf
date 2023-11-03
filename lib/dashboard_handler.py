@@ -350,7 +350,7 @@ class DashboardHandler(ZynthianBasicHandler):
 
     def get_temperature(self):
         try:
-            return check_output("/opt/vc/bin/vcgencmd measure_temp", shell=True).decode()[5:-3] + "ºC"
+            return check_output("vcgencmd measure_temp", shell=True).decode()[5:-3] + "ºC"
         except:
             return "???"
 
