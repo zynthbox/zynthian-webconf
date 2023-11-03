@@ -273,7 +273,7 @@ class DashboardHandler(ZynthianBasicHandler):
         try:
             if apt_package is not None:
                 branch = "deb"
-                gitid = apt_package.installed
+                gitid = apt_package.installed.version
                 update = None
             else:
                 branch = check_output("cd %s; git branch | grep '*'" % path, shell=True).decode()[2:-1]
