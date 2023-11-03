@@ -46,12 +46,12 @@ class DashboardHandler(ZynthianBasicHandler):
     @tornado.web.authenticated
     def get(self):
         # Get git info
-        git_info_zyncoder=self.get_git_info("/zynthian/zyncoder")
-        git_info_ui=self.get_git_info("/zynthian/zynthian-ui", apt_package_name="zynthian-qml")
+        git_info_zyncoder=self.get_git_info("", apt_package_name="zyncoder")
+        git_info_ui=self.get_git_info("", apt_package_name="zynthbox-qml")
+        git_info_webconf=self.get_git_info("", apt_package_name="zynthian-webconf")
+        git_info_libzynthbox=self.get_git_info("", apt_package_name="libzynthbox")
         git_info_sys=self.get_git_info("/zynthian/zynthian-sys")
-        git_info_webconf=self.get_git_info("/zynthian/zynthian-webconf")
         git_info_data=self.get_git_info("/zynthian/zynthian-data")
-        git_info_quick_components=self.get_git_info("", apt_package_name="zynthian-quick-components")
 
         # Get Memory & SD Card info
         ram_info=self.get_ram_info()
@@ -147,17 +147,17 @@ class DashboardHandler(ZynthianBasicHandler):
                 'info': OrderedDict([
                     ['ZYNCODER', {
                         'title': 'zyncoder',
-                        'value': "%s (%s) %s" % (git_info_zyncoder['branch'], git_info_zyncoder['gitid'][0:7], 'Update available' if git_info_zyncoder['update'] == '1' else ''),
-                        'url': "https://github.com/zynthian/zyncoder/commit/{}".format(git_info_zyncoder['gitid'])
+                        'value': "{} ({})".format(git_info_zyncoder['branch'], git_info_zyncoder['gitid']),
+                        'url': ''
                     }],
                     ['UI', {
-                        'title': 'zynthian-ui',
-                        'value': "{} ({})".format(git_info_ui['branch'], git_info_ui['gitid'] if git_info_ui['branch'] == 'deb' else git_info_ui['gitid'][0:7], 'Update available' if git_info_ui['update'] == '1' else ''),
-                        'url': '' if git_info_ui['branch'] == 'deb' else "https://github.com/zynthian/zynthian-ui/commit/{}".format(git_info_ui['gitid'])
+                        'title': 'zynthbox-qml',
+                        'value': "{} ({})".format(git_info_ui['branch'], git_info_ui['gitid']),
+                        'url': ''
                     }],
-                    ['QUICK COMPONENTS', {
-                        'title': 'zynthian-quick-components',
-                        'value': "{} ({})".format(git_info_quick_components['branch'], git_info_quick_components['gitid'], ''),
+                    ['LIBZYNTHBOX', {
+                        'title': 'libzynthbox',
+                        'value': "{} ({})".format(git_info_libzynthbox['branch'], git_info_libzynthbox['gitid'], ''),
                         'url': ''
                     }],
                     ['SYS', {
@@ -172,8 +172,8 @@ class DashboardHandler(ZynthianBasicHandler):
                     }],
                     ['WEBCONF', {
                         'title': 'zynthian-webconf',
-                        'value': "{} ({})".format(git_info_webconf['branch'], git_info_webconf['gitid'][0:7], 'Update available' if git_info_webconf['update'] == '1' else ''),
-                        'url': "https://github.com/zynthian/zynthian-webconf/commit/{}".format(git_info_webconf['gitid'])
+                        'value': "{} ({})".format(git_info_webconf['branch'], git_info_webconf['gitid']),
+                        'url': ''
                     }]
                 ])
             }],
