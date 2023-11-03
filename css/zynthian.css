@@ -89,7 +89,7 @@ header#header ul.navbar-nav .dropdown a.dropdown-toggle:active {
   color: #ffffff;
 }
 header#header ul.navbar-nav .dropdown .dropdown-menu {
-  position: relative;
+  position: absolute;
   background-color: #000000;
   color: #ffffff;
   opacity: 0.95;

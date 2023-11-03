@@ -335,6 +335,10 @@ section.section {
 	padding-bottom:0;
 }
 
+.navbar .container{
+	overflow: visible;
+}
+
 .navbar .navbar-collapse {
 	margin-bottom: 0;
 	padding-bottom:0;
