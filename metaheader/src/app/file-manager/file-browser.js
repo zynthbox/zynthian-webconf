@@ -427,8 +427,7 @@ function WebconfFileBrowser(props){
   }
 
   let loadingDisplay;
-  if (loading === true || fileManagerState.filesLoading === true){
-    console.log(fileManagerState.filesLoading, " FILES LOADING")
+  if (loading === true || fileManagerState.filesLoading === true){    
     loadingDisplay = (
       <div className='file-browser-loading-spinner-container'>
         <LoadingSpinner
@@ -504,7 +503,7 @@ const FileBrowserHeader = (props) => {
   const ref = useRef();
   useOnClickOutside(ref, () => setShowHistoryDropDown(false));
 
-  function onRefreshClick(){
+  function onRefreshClick(){   
     fileManagerDispatch({type:'ON_REFRESH_FILES'})
     getFiles()
   }

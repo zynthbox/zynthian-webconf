@@ -1,7 +1,7 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { Provider } from 'react-redux';
 import { store } from '../store/store'
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import FileManagerContextProvider from './app/file-manager/context/context-provider';
 
 import LoadingSpinner from './app/loading-spinner';
@@ -204,6 +204,9 @@ function MetaHeader(){
     )
 }
 
-const e = React.createElement;
-const domContainer = document.querySelector('#metaheader-container');
-ReactDOM.render(e(MetaHeader), domContainer);
+// const e = React.createElement;
+// const domContainer = document.querySelector('#metaheader-container');
+// ReactDOM.render(e(MetaHeader), domContainer);
+
+const root = ReactDOM.createRoot(document.getElementById('metaheader-container'));
+root.render(<MetaHeader/>);

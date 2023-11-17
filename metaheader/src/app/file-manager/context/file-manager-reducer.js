@@ -99,31 +99,30 @@ function ProductViewReducer(state,action){
                 browseHistoryIndex
             }
         }
-        case 'SET_FILES':{
-
-            let files = arrayUnique(action.payload.concat(state.files))
+        case 'SET_FILES':{            
+            let files = arrayUnique(action.payload.concat(state.files))            
             let displayedFiles = [];
             
-            files.forEach(function(f,index){
+            // files.forEach(function(f,index){
+            //     let displayFile = false;
+            //     if (state.selectedFolder === null && f.folder === "/home/pi/") displayFile = true;
+            //     else  {
+            //         if ("/home/pi/" + state.selectedFolder + "/" + f.name === f.path){
+            //             displayFile = true;
+            //         }
+            //     }
+            //     if (displayFile === true && displayedFiles.findIndex(df => df.id === f.id) === -1){
+            //         let file = {
+            //             ...f,
+            //             id:f.path,
+            //         }
+            //         displayedFiles.push(file);
+            //     }
+            // });
+            // displayedFiles = arrayUnique(displayedFiles)
 
-                let displayFile = false;
-                if (state.selectedFolder === null && f.folder === "/home/pi/") displayFile = true;
-                else  {
-                    if ("/home/pi/" + state.selectedFolder + "/" + f.name === f.path){
-                        displayFile = true;
-                    }
-                }
-                if (displayFile === true && displayedFiles.findIndex(df => df.id === f.id) === -1){
-                    let file = {
-                        ...f,
-                        id:f.path,
-                    }
-                    displayedFiles.push(file);
-                }
-            });
-
-            displayedFiles = arrayUnique(displayedFiles)
-
+            displayedFiles = action.payload.map(f=>({...f,id:f.path}));            
+            
             let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder)
 
             return {

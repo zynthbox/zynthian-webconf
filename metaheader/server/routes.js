@@ -7,9 +7,9 @@ var songExportController = require('./controllers/songExportController.js');
 module.exports = function (app) {
     
     app.get('/', (req, res) => {
-         res.send('Webconf Files Manager App Server.')
+        //  res.send('Webconf Files Manager App Server.')
         // for local test server only
-        // res.sendFile('./views/index.html',{root:__dirname});
+        res.sendFile('./views/index.html',{root:__dirname});
     })  
 
     // FILES
