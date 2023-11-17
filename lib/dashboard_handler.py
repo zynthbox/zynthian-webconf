@@ -45,6 +45,9 @@ class DashboardHandler(ZynthianBasicHandler):
 
     @tornado.web.authenticated
     def get(self):
+        self.apt_cache = apt.cache.Cache()
+        self.apt_cache.open()
+
         # Get git info
         git_info_zyncoder=self.get_git_info("", apt_package_name="zyncoder")
         git_info_ui=self.get_git_info("", apt_package_name="zynthbox-qml")
@@ -52,6 +55,8 @@ class DashboardHandler(ZynthianBasicHandler):
         git_info_libzynthbox=self.get_git_info("", apt_package_name="libzynthbox")
         git_info_sys=self.get_git_info("/zynthian/zynthian-sys")
         git_info_data=self.get_git_info("/zynthian/zynthian-data")
+
+        self.apt_cache.close()
 
         # Get Memory & SD Card info
         ram_info=self.get_ram_info()
@@ -261,12 +266,9 @@ class DashboardHandler(ZynthianBasicHandler):
         apt_package = None
 
         if apt_package_name is not None:
-            cache = apt.cache.Cache()
-            cache.open()
-
             try:
-                if cache[apt_package_name].is_installed:
-                    apt_package = cache[apt_package_name]
+                if self.apt_cache[apt_package_name].is_installed:
+                    apt_package = self.apt_cache[apt_package_name]
             except:
                 logging.error(f"Apt package {apt_package_name} not found")
 
