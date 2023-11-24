@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@ramonak/react-progress-bar": "^5.0.3",
-    "archiver": "^6.0.1",
+    "archiver": "0.11.0",
     "cors": "^2.8.5",
     "fs-extra": "^11.1.1",
     "mmmagic": "^0.5.3",
