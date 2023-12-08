@@ -158,14 +158,15 @@ const sketchpadXtractorSlice = createSlice({
   name: "sketchpadXtractor",
   initialState,
   reducers: {
-    setFolder: (state, action) => {
-        state.versions = null;
-        state.version = null;
-        state.scene = null;
-        state.itemDetails = null
-        state.itemGroup = null
-        state.item = null
-        state.folder = action.payload;
+    setFolder: (state, action) => {     
+      state.versions = null;
+      state.version = null;
+      state.scene = null;
+      state.itemDetails = null
+      state.itemGroup = null
+      state.item = null
+      state.folder = action.payload;     
+      
     },
     setVersion: (state, action) => {
       state.scene = null;

@@ -108,7 +108,7 @@ function SketchpadXtractor(props) {
     sketchScenesColumnDisplay = (
       <SketchPadXtractorColumn
         type="scenes"
-        onSelectItem={(val) => dispatch(setScene(val))}
+        onSelectItem={(val) => {if(val!=scene) dispatch(setScene(val))}}
         item={scene}
         color={colorsArray[2]}
         letters={letters}
@@ -178,7 +178,7 @@ function SketchpadXtractor(props) {
           <SketchPadXtractorColumn
             type="folders"
             items={folders}
-            onSelectItem={(val) => dispatch(setFolder(val))}
+            onSelectItem={(val) => { if(val!=folder) dispatch(setFolder(val))}}
             color={colorsArray[0]}
           />
         </div>
