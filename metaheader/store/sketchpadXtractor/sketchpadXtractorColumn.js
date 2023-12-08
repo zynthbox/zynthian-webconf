@@ -61,12 +61,12 @@ function SketchPadXtractorColumn(props){
         }
 
     }
-    else {       
+    else {              
         itemsDisplay = items.map((item,index) => {
 
             let itemTextDisplay = item.path ? item.path : `item ${index + 1}`;
 
-            if (type === "versions"){
+            if (type === "versions"){               
                 const fileName = item.path.split('/')[item.path.split('/').length - 1];
                 const folderName = item.path.split(fileName)[0];
                 itemTextDisplay = (

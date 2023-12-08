@@ -93,9 +93,9 @@ export const getPatterns = createAsyncThunk(
   "sketchpadXtractor/fetchPatters",
   async (arrgs, { getState }) => {
     const { version, sketchpad , scene } = getState().sketchpadXtractor;
-    const folderPath = `${version.path.split(sketchpad.name)[0]}/sequences/`
+    const folderPath = `${version.path.split(sketchpad.name)[0]+sketchpad.name}/sequences/`
       .split("/")
-      .join("+++");
+      .join("+++");   
     const response = await fetch(
       `http://${window.location.hostname}:3000/mydata/${folderPath}`,
       {

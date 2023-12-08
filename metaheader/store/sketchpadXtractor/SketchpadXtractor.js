@@ -44,7 +44,7 @@ function SketchpadXtractor(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (folder !== null) dispatch(getSketchpadVersions(folder));
+    if (folder !== null) dispatch(getSketchpadVersions(folder));      
   }, [folder]);
   useEffect(() => {
     if (version !== null) dispatch(getSketchpad(version));
