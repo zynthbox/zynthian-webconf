@@ -9,6 +9,7 @@ import FileManagerContextProvider from './app/file-manager/context/context-provi
 
 import LoadingSpinner from './app/loading-spinner';
 import RootLayout from './layouts/RootLayout';
+import NotFound from './app/NotFound';
 
 const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
 const SampleEditor = lazy(()=>import('../store/sampleEditor/SampleEditor'))
@@ -57,7 +58,7 @@ function FileManagerDisplay(){
 function SampleEditorDisplay(){
     return (
             <React.Fragment>
-                <Provider store={store}>
+               
                 <div id="sample-editor-container" className="container" style={{left:fileManagerLeftCss()}}>
                     <h3>
                         SAMPLE {'&'} PATTERN EDITOR
@@ -67,7 +68,7 @@ function SampleEditorDisplay(){
                     </Suspense>
                 </div>
                 <div id="sample-editor-overlay"></div>
-                </Provider>
+               
             </React.Fragment>
     )
 }
@@ -75,7 +76,7 @@ function SampleEditorDisplay(){
 function FavoritesDisplay(){
     return(
         <React.Fragment>
-                <Provider store={store}>
+               
                 <div id="favorites-container" className="container" style={{left:fileManagerLeftCss()}}>
                     <h3>
                         Favorites
@@ -85,7 +86,7 @@ function FavoritesDisplay(){
                     </Suspense>
                 </div>
                 <div id="favorites-overlay"></div>
-                </Provider>
+                
             </React.Fragment>
     )
 }
@@ -94,7 +95,7 @@ function FavoritesDisplay(){
 function XtractorDisplay(){
     return(
         <React.Fragment>
-        <Provider store={store}>
+       
          <div id="sketch-pad-xtractor-container" className="container" style={{left:fileManagerLeftCss()}}>
             <h3>
                 SketchPad Xtractor
@@ -104,7 +105,7 @@ function XtractorDisplay(){
             </Suspense>
         </div>
         <div id="sketch-pad-xtractor-overlay"></div>
-        </Provider>
+       
         </React.Fragment>
     )
 }
@@ -112,7 +113,7 @@ function XtractorDisplay(){
 function SongExportDisplay(){
     return(
         <React.Fragment>
-        <Provider store={store}>
+       
         <div id="song-export-container" className="container" style={{left:fileManagerLeftCss()}}>
             <h3>
                 Song Export
@@ -122,7 +123,7 @@ function SongExportDisplay(){
             </Suspense>
         </div>
         <div id="song-export-overlay"></div>
-        </Provider>
+      
         </React.Fragment>
     )
 }
@@ -135,23 +136,12 @@ const router = createBrowserRouter(
         <Route path="favorites" element={<FavoritesDisplay />}> </Route>
         <Route path="sketchpad-xtractor" element={<XtractorDisplay />}></Route>
         <Route path="song-export" element={<SongExportDisplay />}></Route>
+        <Route path='*' element={<NotFound />}></Route>
      </Route>
     )
   )
 
-function App(){
-
-    useEffect(() => {
-        const handleBeforeUnload = (event) => {
-          event.preventDefault();
-          // Custom logic to handle the refresh
-          // Display a confirmation message or perform necessary actions          
-        };
-        window.addEventListener('beforeunload', handleBeforeUnload);
-        return () => {
-          window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-      }, []);
+function App(){    
     return (
         <RouterProvider router={router} />
     )
