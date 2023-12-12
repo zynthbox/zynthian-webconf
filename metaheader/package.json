@@ -2,7 +2,7 @@
   "name": "zynthbox-webconf-metaheader",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "author": "David Nelvand",
   "license": "ISC",
   "proxy": "http://localhost:3000",
@@ -10,7 +10,9 @@
     "build": "webpack --mode production",
     "watch": "webpack --mode development --watch",
     "build-watch": "webpack --mode production --watch",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "watch-app": "webpack --config webpack.app.config.js --mode development --watch",
+    "build-app": "webpack --config webpack.app.config.js --mode production"
   },
   "dependencies": {
     "@ramonak/react-progress-bar": "^5.0.3",
@@ -30,7 +32,8 @@
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",
     "react-icons": "^4.12.0",
-    "react-json-editor-ajrm": "^2.5.14"
+    "react-json-editor-ajrm": "^2.5.14",
+    "react-router-dom": "^6.20.1"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
