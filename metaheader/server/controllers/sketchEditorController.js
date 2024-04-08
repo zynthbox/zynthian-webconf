@@ -5,13 +5,13 @@ const rootFolder = "/home/pi/zynthian-my-data/"
 var sampleBankFolder = `${rootFolder}sketchpads/my-sketchpads/temp/wav/sampleset/sample-bank`
 
 function getLastSelectedSketchFolderName(){
-  var sketchInfojson = JSON.parse( fs.readFileSync(`${rootFolder}sessions/.cache.json`));
+  var sketchInfojson = JSON.parse( fs.readFileSync(`${rootFolder}/.cache.json`));
   var folderName = sketchInfojson.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[0];
   return folderName;
 }
 
 exports.getSketchInfo = (req,res) => {
-  var file = fs.readFileSync(`${rootFolder}sessions/.cache.json`);
+  var file = fs.readFileSync(`${rootFolder}/.cache.json`);
   var json = JSON.parse(file);
   res.json(json)
 }
