@@ -12,4 +12,4 @@ fi
 export ZYNTHIAN_LOG_LEVEL=10
 export ZYNTHIAN_WEBCONF_LOG_LEVEL=10
 
-./zynthian_webconf.py
+python3 zynthian_webconf.py
