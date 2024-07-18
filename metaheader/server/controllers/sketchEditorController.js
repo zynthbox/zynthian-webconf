@@ -7,47 +7,26 @@ const zynthboxConfigFolder = `/root/.config/zynthbox/zynthbox-qml.conf`;
 // const zynthboxConfigFolder = `${rootFolder}sessions/zynthbox-qml.conf`;
 
 function getLastSelectedSketchFolderName(){
-  // var ConfigIniParser = require("config-ini-parser").ConfigIniParser;
-  // parser = new ConfigIniParser(); //Use default delimiter
-  // var file = fs.readFileSync(zynthboxConfigFolder,'utf8');  
-  // parser.parse(file);
-  // var lastSelectedSketchpad = parser.get("Sketchpad","lastSelectedSketchpad");
-  // var folderName  = lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[1];  
-  // return folderName;
-
-    var conf = readConfig();
-    var folderName  = conf.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[1];
-    return conf.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[1]; 
+    var ConfigIniParser = require("config-ini-parser").ConfigIniParser;
+    parser = new ConfigIniParser(); //Use default delimiter
+    var file = fs.readFileSync(zynthboxConfigFolder,'utf8');  
+    parser.parse(file);
+    var lastSelectedSketchpad = parser.get("Sketchpad","lastSelectedSketchpad");
+    var folderName  = lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[1];  
+    return folderName; 
 
 }
 
 exports.getSketchInfo = (req,res) => {
-  const config = readConfig()  
-  res.json(config);    
-}
 
-function readConfig_(){
-  var ConfigIniParser = require("config-ini-parser").ConfigIniParser;
-  parser = new ConfigIniParser(); //Use default delimiter
-  var file = fs.readFileSync(zynthboxConfigFolder,'utf8');  
-  parser.parse(file);
-  // var value = parser.get("Sketchpad","lastSelectedSketchpad");
-  var value = parser.items("Sketchpad");
-  return value;  
-}
-
-function readConfig(){
+    var ConfigIniParser = require("config-ini-parser").ConfigIniParser;
+    parser = new ConfigIniParser(); //Use default delimiter
     var file = fs.readFileSync(zynthboxConfigFolder,'utf8');  
-    const obj = {}
-    for (const line of file.split('\n')) {      
-      if (line && !line.startsWith('#')&& !line.startsWith('[')) {        
-        let [ key, val ] = line.split('=');        
-        key = key.trim()        
-        val = val.trim().replaceAll('"', '').replaceAll("'", "");        
-        obj[key] = val;
-      }
-    }
-    return obj;
+    parser.parse(file);
+    var sketchpad = parser.items("Sketchpad");
+    const entries = new Map(sketchpad);
+    const config = Object.fromEntries(entries);
+    res.json(config);    
 }
 
 exports.getSketchList = (req,res) => {
