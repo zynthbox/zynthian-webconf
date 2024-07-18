@@ -1,19 +1,34 @@
 const fs = require('fs'); 
 const path = require("path")
 const rootFolder = "/home/pi/zynthian-my-data/"
-
-var sampleBankFolder = `${rootFolder}sketchpads/my-sketchpads/temp/wav/sampleset/sample-bank`
+var sampleBankFolder = `${rootFolder}sketchpads/my-sketchpads/temp/wav/sampleset/sample-bank`;
+const zynthboxConfigFolder = `/root/.config/zynthbox/zynthbox-qml.conf`;
+// for local testing
+//const zynthboxConfigFolder = `${rootFolder}sessions/zynthbox-qml.conf`;
 
 function getLastSelectedSketchFolderName(){
-  var sketchInfojson = JSON.parse( fs.readFileSync(`${rootFolder}sessions/.cache.json`));
-  var folderName = sketchInfojson.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[0];
+  const config = readConfig()  
+  var folderName  = config.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[0];
   return folderName;
 }
 
 exports.getSketchInfo = (req,res) => {
-  var file = fs.readFileSync(`${rootFolder}sessions/.cache.json`);
-  var json = JSON.parse(file);
-  res.json(json)
+  const config = readConfig()  
+  res.json(config);    
+}
+
+function readConfig(){
+    var file = fs.readFileSync(zynthboxConfigFolder,'utf8');  
+    const obj = {}
+    for (const line of file.split('\n')) {      
+      if (line && !line.startsWith('#')&& !line.startsWith('[')) {        
+        let [ key, val ] = line.split('=');        
+        key = key.trim()        
+        val = val.trim().replaceAll('"', '').replaceAll("'", "");        
+        obj[key] = val;
+      }
+    }
+    return obj;
 }
 
 exports.getSketchList = (req,res) => {
