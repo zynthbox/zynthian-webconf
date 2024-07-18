@@ -7,12 +7,18 @@ const zynthboxConfigFolder = `/root/.config/zynthbox/zynthbox-qml.conf`;
 //const zynthboxConfigFolder = `${rootFolder}sessions/zynthbox-qml.conf`;
 
 function getLastSelectedSketchFolderName(){
+<<<<<<< HEAD
   const config = readConfig()  
   var folderName  = config.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[0];
+=======
+  var sketchInfojson = JSON.parse( fs.readFileSync(`${rootFolder}/.cache.json`));
+  var folderName = sketchInfojson.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[0];
+>>>>>>> 1f7dcfb2fd2fd9695a6d34ec35f4aef5c469588b
   return folderName;
 }
 
 exports.getSketchInfo = (req,res) => {
+<<<<<<< HEAD
   const config = readConfig()  
   res.json(config);    
 }
@@ -29,6 +35,11 @@ function readConfig(){
       }
     }
     return obj;
+=======
+  var file = fs.readFileSync(`${rootFolder}/.cache.json`);
+  var json = JSON.parse(file);
+  res.json(json)
+>>>>>>> 1f7dcfb2fd2fd9695a6d34ec35f4aef5c469588b
 }
 
 exports.getSketchList = (req,res) => {
