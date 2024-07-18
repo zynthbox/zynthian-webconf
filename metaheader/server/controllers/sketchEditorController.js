@@ -4,23 +4,36 @@ const rootFolder = "/home/pi/zynthian-my-data/"
 var sampleBankFolder = `${rootFolder}sketchpads/my-sketchpads/temp/wav/sampleset/sample-bank`;
 const zynthboxConfigFolder = `/root/.config/zynthbox/zynthbox-qml.conf`;
 // for local testing
-//const zynthboxConfigFolder = `${rootFolder}sessions/zynthbox-qml.conf`;
+// const zynthboxConfigFolder = `${rootFolder}sessions/zynthbox-qml.conf`;
 
 function getLastSelectedSketchFolderName(){
-<<<<<<< HEAD
-  const config = readConfig()  
-  var folderName  = config.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[0];
-=======
-  var sketchInfojson = JSON.parse( fs.readFileSync(`${rootFolder}/.cache.json`));
-  var folderName = sketchInfojson.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[0];
->>>>>>> 1f7dcfb2fd2fd9695a6d34ec35f4aef5c469588b
-  return folderName;
+  // var ConfigIniParser = require("config-ini-parser").ConfigIniParser;
+  // parser = new ConfigIniParser(); //Use default delimiter
+  // var file = fs.readFileSync(zynthboxConfigFolder,'utf8');  
+  // parser.parse(file);
+  // var lastSelectedSketchpad = parser.get("Sketchpad","lastSelectedSketchpad");
+  // var folderName  = lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[1];  
+  // return folderName;
+
+    var conf = readConfig();
+    var folderName  = conf.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[1];
+    return conf.lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[1]; 
+
 }
 
 exports.getSketchInfo = (req,res) => {
-<<<<<<< HEAD
   const config = readConfig()  
   res.json(config);    
+}
+
+function readConfig_(){
+  var ConfigIniParser = require("config-ini-parser").ConfigIniParser;
+  parser = new ConfigIniParser(); //Use default delimiter
+  var file = fs.readFileSync(zynthboxConfigFolder,'utf8');  
+  parser.parse(file);
+  // var value = parser.get("Sketchpad","lastSelectedSketchpad");
+  var value = parser.items("Sketchpad");
+  return value;  
 }
 
 function readConfig(){
@@ -35,11 +48,6 @@ function readConfig(){
       }
     }
     return obj;
-=======
-  var file = fs.readFileSync(`${rootFolder}/.cache.json`);
-  var json = JSON.parse(file);
-  res.json(json)
->>>>>>> 1f7dcfb2fd2fd9695a6d34ec35f4aef5c469588b
 }
 
 exports.getSketchList = (req,res) => {
