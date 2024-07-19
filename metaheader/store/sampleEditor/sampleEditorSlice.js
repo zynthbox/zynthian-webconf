@@ -62,7 +62,7 @@ export const getSketchpad = createAsyncThunk(
     const folder =
       lastSelectedSketchpad.split(sketchpad.name)[0] + sketchpad.name + "/";
     let samplesEndpoints = [];
-    sketchpad.channels.forEach(function (channel, index) {
+    sketchpad.tracks.forEach(function (channel, index) {
       const url = `http://${window.location.hostname}:3000/track/${folder
         .split("/")
         .join("+++")}:${index + 1}`;
@@ -74,7 +74,7 @@ export const getSketchpad = createAsyncThunk(
     responses.forEach(function (res, index) {
       let samples = [null, null, null, null, null];
       if (!res.data.message) samples = res.data;
-      sketchpad.channels[index].samples = samples;
+      sketchpad.tracks[index].samples = samples;
     });
     return sketchpad;
   }
@@ -122,7 +122,7 @@ export const saveSketchpad = createAsyncThunk(
 export const uploadSamples = createAsyncThunk(
   "sampleEditor/uploadSamples",
   async ({files,channelIndex,sampleIndex},{getState}) => {
-    const { sketchpadInfo, sketchpad, channels} = getState().sampleEditor;
+    const { sketchpadInfo, sketchpad, tracks} = getState().sampleEditor;
     const folder = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name)
     const selectedFolder = getSampleSelectedFolder(folder,channelIndex)
 
@@ -145,7 +145,7 @@ export const uploadSamples = createAsyncThunk(
       payloadArray.push({ data: res.data });
     });
     
-    const newSamples = generateNewSamples(sampleIndex,sketchpad.channels[channelIndex].samples,files)
+    const newSamples = generateNewSamples(sampleIndex,sketchpad.tracks[channelIndex].samples,files)
 
     let json = JSON.stringify(newSamples);
     const blob = new Blob([json], { type: "application/json" });
@@ -171,12 +171,12 @@ export const removeSamples = createAsyncThunk(
 
     let deleteSampleRequests = []
     let newSamples = [
-      ...sketchpad.channels[channelIndex].samples
+      ...sketchpad.tracks[channelIndex].samples
     ]
 
     if (sampleIndex || sampleIndex == 0 ){
       newSamples[sampleIndex] = null
-      const sample = sketchpad.channels[channelIndex].samples[sampleIndex]
+      const sample = sketchpad.tracks[channelIndex].samples[sampleIndex]
       let sampleFilePath = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name);
       sampleFilePath += `wav/sampleset/sample-bank.${channelIndex+1}/` + sample.path;
       sampleFilePath = `/home/pi/${sampleFilePath.split('/zynthian/')[1]}`
@@ -188,7 +188,7 @@ export const removeSamples = createAsyncThunk(
     } else {
 
       newSamples = [null,null,null,null,null]
-      const samples = sketchpad.channels[channelIndex].samples
+      const samples = sketchpad.tracks[channelIndex].samples
       samples.forEach(function(sample,index){
         if (sample !== null){
           let sampleFilePath = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name);
@@ -256,7 +256,7 @@ export const copyPasteSamples = createAsyncThunk(
     
 
     // UPDATE sample-bank.json
-    const newSamples = generateNewSamples(sampleIndex,sketchpad.channels[channelIndex].samples,files)
+    const newSamples = generateNewSamples(sampleIndex,sketchpad.tracks[channelIndex].samples,files)
     let json = JSON.stringify(newSamples);
     const blob = new Blob([json], { type: "application/json" });
     const formData = new FormData();
@@ -341,27 +341,27 @@ const sampleEditorSlice = createSlice({
     updateChannelTitle: (state, action) => {
       const { index, title } = action.payload;
       const updatedChannel = {
-        ...state.sketchpad.channels[index],
+        ...state.sketchpad.tracks[index],
         name: title,
       };
-      state.sketchpad.channels[index] = updatedChannel;
+      state.sketchpad.tracks[index] = updatedChannel;
     },
     updateChannelSampleModes: (state, action) => {
       const { index, keyZone_mode, channelAudioType } = action.payload;
       const updatedChannel = {
-        ...state.sketchpad.channels[index],
+        ...state.sketchpad.tracks[index],
         keyZone_mode,
         channelAudioType,
       };
-      state.sketchpad.channels[index] = updatedChannel;
+      state.sketchpad.tracks[index] = updatedChannel;
     },
     updateChannelColor: (state, action) => {
       const { index, color } = action.payload;
       const updatedChannel = {
-        ...state.sketchpad.channels[index],
+        ...state.sketchpad.tracks[index],
         color,
       };
-      state.sketchpad.channels[index] = updatedChannel;
+      state.sketchpad.tracks[index] = updatedChannel;
     },
     setSourcePicker: (state, action) => {
         state.sourcePicker = {
@@ -433,7 +433,7 @@ const sampleEditorSlice = createSlice({
     // UPLOAD SAMPLES
     builder.addCase(uploadSamples.fulfilled, (state, action) => {
       const { channelIndex, samples} = action.payload
-      state.sketchpad.channels[channelIndex].samples = samples
+      state.sketchpad.tracks[channelIndex].samples = samples
       state.sourcePicker.showSourcePicker = false;
       state.dropZone.showDropZone = false;
       state.status = "idle";
@@ -450,7 +450,7 @@ const sampleEditorSlice = createSlice({
     // REMOVE SAMPLES
     builder.addCase(removeSamples.fulfilled, (state, action) => {
       const { channelIndex, samples} = action.payload
-      state.sketchpad.channels[channelIndex].samples = samples
+      state.sketchpad.tracks[channelIndex].samples = samples
       state.sourcePicker.showSourcePicker = false;
       state.dropZone.showDropZone = false;
       state.status = "idle";
@@ -467,7 +467,7 @@ const sampleEditorSlice = createSlice({
     // COPY PASTE SAMPLES
     builder.addCase(copyPasteSamples.fulfilled, (state, action) => {
       const { channelIndex, samples} = action.payload
-      state.sketchpad.channels[channelIndex].samples = samples
+      state.sketchpad.tracks[channelIndex].samples = samples
       state.sourcePicker.showSourcePicker = false;
       state.dropZone.showDropZone = false;
       state.status = "idle";

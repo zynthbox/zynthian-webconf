@@ -177,8 +177,8 @@ const SampleSet = ({index,samples,sampleSetMode,keyZoneMode}) => {
         dragZoneContainerCssClass = ""
     }
 
-    let nextFreeSampleSlot = sketchpad.channels[index].samples.indexOf(null)
-    if (nextFreeSampleSlot == -1) nextFreeSampleSlot = sketchpad.channels[index].samples.length - 1    
+    let nextFreeSampleSlot = sketchpad.tracks[index].samples.indexOf(null)
+    if (nextFreeSampleSlot == -1) nextFreeSampleSlot = sketchpad.tracks[index].samples.length - 1    
 
     return (
         <React.Fragment>

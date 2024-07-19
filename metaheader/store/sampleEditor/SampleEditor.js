@@ -71,7 +71,7 @@ const SampleEditor = ({colorsArray}) => {
         const sketchFileName = lastSelectedSketchpad.split('/')[lastSelectedSketchpad.split('/').length - 1];
         let sketchFolder = lastSelectedSketchpad.split(sketchFileName)[0];
         if (sketchFolder.indexOf('/zynthian/') > -1) sketchFolder = "/" + sketchFolder.split('/zynthian/')[1];
-        channelsDisplay = sketchpad.channels.map((channel,index) => (
+        channelsDisplay = sketchpad.tracks.map((channel,index) => (
             <Channel
                 key={index} 
                 index={index} 
