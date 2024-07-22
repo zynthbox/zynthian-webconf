@@ -5,3 +5,11 @@ zynthian_envars.sh
 /.idea/
 node_modules/
 react-dev-test.html
+
+# Ignore some editor files
+zynthian-webconf.cflags
+zynthian-webconf.config
+zynthian-webconf.creator
+zynthian-webconf.cxxflags
+zynthian-webconf.files
+zynthian-webconf.includes
