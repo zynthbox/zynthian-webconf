@@ -9,7 +9,7 @@ function SketchPadXtractorColumn(props){
     const previousItems = usePrevious(items)
     const [ selectedItemIndex, setSelectedItemIndex ] = useState(null)
 
-    // console.log(items,"items")
+    // console.log(items,"items");
 
     useEffect(() => {
         return () => {
@@ -61,63 +61,65 @@ function SketchPadXtractorColumn(props){
         }
 
     }
-    else {              
-        itemsDisplay = items.map((item,index) => {
+    else {          
+        if(typeof items !== 'undefined' && items){
+            itemsDisplay = items.map((item,index) => {
 
-            let itemTextDisplay = item.path ? item.path : `item ${index + 1}`;
+                let itemTextDisplay = item.path ? item.path : `item ${index + 1}`;
 
-            if (type === "versions"){               
-                const fileName = item.path.split('/')[item.path.split('/').length - 1];
-                const folderName = item.path.split(fileName)[0];
-                itemTextDisplay = (
-                    <React.Fragment>
-                        <span>{fileName}</span>
-                        <small>{folderName}</small>
-                    </React.Fragment>
+                if (type === "versions"){               
+                    const fileName = item.path.split('/')[item.path.split('/').length - 1];
+                    const folderName = item.path.split(fileName)[0];
+                    itemTextDisplay = (
+                        <React.Fragment>
+                            <span>{fileName}</span>
+                            <small>{folderName}</small>
+                        </React.Fragment>
+                    )
+                } else if (type === "items"){
+
+                    itemTextDisplay = item.path ? item.path : `${subType.substring(0,subType.length - 1)} ${index + 1}`;
+
+                    if (subType === "clips"){
+                        itemTextDisplay = (
+                            <React.Fragment>
+                                <span>{item.path}</span>
+                                <small>Track: {item.track + 1}</small>
+                            </React.Fragment>
+                        )                
+                    } else if (subType === "samples"){
+                        itemTextDisplay = (
+                            <React.Fragment>
+                                <span>{item.path}</span>
+                                <small>Channel: {item.channel + 1} | Slot: {item.slot + 1}</small>
+                            </React.Fragment>
+                        )         
+                    }
+                    else if (subType === "sounds"){
+                        itemTextDisplay = (
+                            <React.Fragment>
+                                <span>{item.preset_name}</span>
+                                <small>{item.engine_name}</small>
+                            </React.Fragment>
+                        )
+                    } else if (subType === "patterns"){
+                        itemTextDisplay = (
+                            <React.Fragment>
+                                <span>{item.name}</span>
+                                <span className='right'>Bars: <b>{item.bankLength}</b></span>
+                                
+                            </React.Fragment>
+                        )
+                    }
+                }
+                
+                return (
+                    <li key={index}>
+                        <a className={selectedItemIndex === index ? "active" : ""} onClick={() => onSelectItem(item,index)}>{itemTextDisplay}</a>
+                    </li>
                 )
-            } else if (type === "items"){
-
-                itemTextDisplay = item.path ? item.path : `${subType.substring(0,subType.length - 1)} ${index + 1}`;
-
-                if (subType === "clips"){
-                    itemTextDisplay = (
-                        <React.Fragment>
-                            <span>{item.path}</span>
-                            <small>Track: {item.track + 1}</small>
-                        </React.Fragment>
-                    )                
-                } else if (subType === "samples"){
-                    itemTextDisplay = (
-                        <React.Fragment>
-                            <span>{item.path}</span>
-                            <small>Channel: {item.channel + 1} | Slot: {item.slot + 1}</small>
-                        </React.Fragment>
-                    )         
-                }
-                 else if (subType === "sounds"){
-                    itemTextDisplay = (
-                        <React.Fragment>
-                            <span>{item.preset_name}</span>
-                            <small>{item.engine_name}</small>
-                        </React.Fragment>
-                    )
-                } else if (subType === "patterns"){
-                    itemTextDisplay = (
-                        <React.Fragment>
-                            <span>{item.name}</span>
-                            <span className='right'>Bars: <b>{item.bankLength}</b></span>
-                            
-                        </React.Fragment>
-                    )
-                }
-            }
-            
-            return (
-                <li key={index}>
-                    <a className={selectedItemIndex === index ? "active" : ""} onClick={() => onSelectItem(item,index)}>{itemTextDisplay}</a>
-                </li>
-            )
-        })
+            })
+        }    
     }
 
     return (

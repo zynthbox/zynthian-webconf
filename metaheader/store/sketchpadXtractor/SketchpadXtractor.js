@@ -69,10 +69,10 @@ function SketchpadXtractor(props) {
   function handleSceneSelection() {
     // CLIPS
     let newClips = [];
-    sketchpad.channels.forEach(function (channel, index) {
+    sketchpad.tracks.forEach(function (channel, index) {
       channel.clips.forEach(async function (part, pIndex) {
         const cIndex = letters.findIndex((letter) => letter === scene);
-        if (part[cIndex].path !== null) {
+        if (typeof part[cIndex] !== 'undefined' && part[cIndex].path !== null) {
           const clip = {
             ...part[cIndex],
           };
@@ -85,7 +85,7 @@ function SketchpadXtractor(props) {
     dispatch(setTracks([]))
     dispatch(setSongs([]))
     dispatch(getPatterns())
-    dispatch(getSamples({version,channels:sketchpad.channels}))
+    dispatch(getSamples({version,channels:sketchpad.tracks}))
     dispatch(getSounds())
   }
 

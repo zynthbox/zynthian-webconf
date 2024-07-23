@@ -7,9 +7,6 @@
   "license": "ISC",
   "proxy": "http://localhost:3000",
   "scripts": {
-    "build": "webpack --mode production",
-    "watch": "webpack --mode development --watch",
-    "build-watch": "webpack --mode production --watch",
     "server": "nodemon server.js",
     "watch-app": "webpack --config webpack.app.config.js --mode development --watch",
     "build-app": "webpack --config webpack.app.config.js --mode production"

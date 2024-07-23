@@ -277,7 +277,7 @@ const sketchpadXtractorSlice = createSlice({
     builder.addCase(getSounds.fulfilled, (state, action) => {
       const sounds = [];
       const lastStateZss = action.payload;
-      state.sketchpad.channels.forEach(function (channel, index) {
+      state.sketchpad.tracks.forEach(function (channel, index) {
         channel.chainedSounds.forEach(function (chainedSound, csIndex) {
           if (chainedSound >= 0) {
             lastStateZss.layers.forEach(function (layer, lIndex) {

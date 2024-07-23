@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require("path")
 const rootFolder = "/home/pi/zynthian-my-data/"
 var sampleBankFolder = `${rootFolder}sketchpads/my-sketchpads/temp/wav/sampleset/sample-bank`;
-const zynthboxConfigFolder = `/root/.config/zynthbox/zynthbox-qml.conf`;
+// const zynthboxConfigFolder = `/root/.config/zynthbox/zynthbox-qml.conf`;
 // for local testing
-// const zynthboxConfigFolder = `${rootFolder}sessions/zynthbox-qml.conf`;
+const zynthboxConfigFolder = `${rootFolder}sessions/zynthbox-qml.conf`;
 
 function getLastSelectedSketchFolderName(){
     var ConfigIniParser = require("config-ini-parser").ConfigIniParser;
