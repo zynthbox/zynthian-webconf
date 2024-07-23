@@ -19,9 +19,10 @@ const ChannelSampleModesMenus = ({ index,keyZoneMode, channelAudioType } ) => {
             <div className='track-audio-type-menu-container'>
                 {/* trig - sample-trig | slice - smaple-slice | loop - sample-loop */}
                 <ul>
-                    <li><a onClick={() => onTrackAudioTypeClick("sample-trig")} className={channelAudioType === "sample-trig" ? "is-active" : ""}>Trig</a></li>
-                    <li><a onClick={() => onTrackAudioTypeClick("sample-slice")} className={channelAudioType === "sample-slice" ? "is-active" : ""}>Slice</a></li>
                     <li><a onClick={() => onTrackAudioTypeClick("synth")} className={channelAudioType === "synth" ? "is-active" : ""}>Synth</a></li>
+                    <li><a onClick={() => onTrackAudioTypeClick("sample-trig")} className={channelAudioType === "sample-trig" ? "is-active" : ""}>Sample</a></li>
+                    <li><a onClick={() => onTrackAudioTypeClick("sample-loop")} className={channelAudioType === "sample-loop" ? "is-active" : ""}>Sketch</a></li>
+                    <li><a onClick={() => onTrackAudioTypeClick("external")} className={channelAudioType === "external" ? "is-active" : ""}>External</a></li>
                     {/* <li><a onClick={() => onTrackAudioTypeClick("sample-loop")} className={trackAudioType === "sample-loop" ? "is-active" : ""}>Loop</a></li> */}
                 </ul>
             </div>
