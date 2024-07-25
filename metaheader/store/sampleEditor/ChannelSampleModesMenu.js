@@ -2,12 +2,12 @@ import React from 'react'
 import { useDispatch } from "react-redux";
 import { updateChannelSampleModes } from './sampleEditorSlice';
 
-const ChannelSampleModesMenus = ({ index,keyZoneMode, trackType } ) => {
+const ChannelSampleModesMenus = ({ index,keyzone_mode, trackType } ) => {
 
     const dispatch = useDispatch()
 
     function onTrackAudioTypeClick(val){        
-        dispatch(updateChannelSampleModes({index,keyZoneMode,trackType:val}))        
+        dispatch(updateChannelSampleModes({index,keyzone_mode,trackType:val}))        
     }
 
     function onKeyZoneModeOptionClick(val){
@@ -30,9 +30,9 @@ const ChannelSampleModesMenus = ({ index,keyZoneMode, trackType } ) => {
                 {/* off - all-full | auto  - split-full | narrow - split-narrow */}
                 <span>Auto Split:</span>
                 <ul>
-                    <li><a onClick={() => onKeyZoneModeOptionClick("all-full")} className={keyZoneMode === "all-full" ? "is-active" : ""}>Off</a></li>
-                    <li><a onClick={() => onKeyZoneModeOptionClick("split-full")}  className={keyZoneMode === "split-full" ? "is-active" : ""}>Auto</a></li>
-                    <li><a onClick={() => onKeyZoneModeOptionClick("split-narrow")}  className={keyZoneMode === "split-narrow" ? "is-active" : ""}>Narrow</a></li>
+                    <li><a onClick={() => onKeyZoneModeOptionClick("all-full")} className={keyzone_mode === "all-full" ? "is-active" : ""}>Off</a></li>
+                    <li><a onClick={() => onKeyZoneModeOptionClick("split-full")}  className={keyzone_mode === "split-full" ? "is-active" : ""}>Auto</a></li>
+                    <li><a onClick={() => onKeyZoneModeOptionClick("split-narrow")}  className={keyzone_mode === "split-narrow" ? "is-active" : ""}>Narrow</a></li>
                 </ul>
             </div>
         </div>

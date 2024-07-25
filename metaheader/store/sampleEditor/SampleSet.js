@@ -7,7 +7,7 @@ import { setFilePicker } from '../filePicker/filePickerSlice';
 import { FaWindowClose } from 'react-icons/fa';
 import Dropzone from 'react-dropzone'
 
-const SampleSet = ({index,samples,sampleSetMode,keyZoneMode}) => {
+const SampleSet = ({index,samples,sampleSetMode,keyzone_mode}) => {
 
     const dispatch = useDispatch()
     const { sketchpad, sketchpadInfo, sourcePicker, dropZone } = useSelector((state) => state.sampleEditor);
