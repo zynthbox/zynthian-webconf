@@ -65,12 +65,12 @@ const Channel = (props) => {
                     <ChannelSampleModesMenus 
                         index={index}
                         keyZoneMode={channel.keyzone_mode}
-                        channelAudioType={channel.channelAudioType}
+                        trackType={channel.trackType}
                     />
                     <SampleSet 
                         index={index}
-                        samples={channel.channelAudioType === "sample-loop" ? channel.clips : channel.samples}
-                        sampleSetMode={channel.channelAudioType}
+                        samples={channel.trackType === "sample-loop" ? channel.clips : channel.samples}
+                        sampleSetMode={channel.trackType}
                         keyZoneMode={channel.keyzone_mode}
                     />
                 </div>

@@ -29,8 +29,10 @@ const SampleEditor = ({colorsArray}) => {
     },[pendingFiles])
 
     function handleLoadClick(){
-        const filePickerFolder = sketchpadInfo.lastSelectedSketchpad.split(sketchpad.name)[0];
-        dispatch(setFilePicker({folder:filePickerFolder,mode:'LOAD',type:'.sketchpad.json'}))
+        
+        //const filePickerFolder = sketchpadInfo.lastSelectedSketchpad.split(sketchpad.name)[0];    
+        const filePickerFolder = '/zynthian/zynthian-my-data/sketchpads/my-sketchpads/';                
+        dispatch(setFilePicker({folder:filePickerFolder,mode:'LOAD',type:'.sketchpad.json'})) 
     }
 
     function handleFilePickerSelection(val,channelIndex,sampleIndex){

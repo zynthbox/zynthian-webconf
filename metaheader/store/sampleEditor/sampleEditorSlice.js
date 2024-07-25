@@ -347,11 +347,11 @@ const sampleEditorSlice = createSlice({
       state.sketchpad.tracks[index] = updatedChannel;
     },
     updateChannelSampleModes: (state, action) => {
-      const { index, keyZone_mode, channelAudioType } = action.payload;
+      const { index, keyZone_mode, trackType } = action.payload;
       const updatedChannel = {
         ...state.sketchpad.tracks[index],
         keyZone_mode,
-        channelAudioType,
+        trackType,
       };
       state.sketchpad.tracks[index] = updatedChannel;
     },
