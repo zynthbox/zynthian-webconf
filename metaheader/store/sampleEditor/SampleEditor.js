@@ -71,14 +71,14 @@ const SampleEditor = ({colorsArray}) => {
         const defaultColor = "#000000";
         const { lastSelectedSketchpad } = sketchpadInfo;
         const sketchFileName = lastSelectedSketchpad.split('/')[lastSelectedSketchpad.split('/').length - 1];
-        let sketchFolder = lastSelectedSketchpad.split(sketchFileName)[0];
+        let sketchFolder = lastSelectedSketchpad.split(sketchFileName)[0];     
         if (sketchFolder.indexOf('/zynthian/') > -1) sketchFolder = "/" + sketchFolder.split('/zynthian/')[1];
         channelsDisplay = sketchpad.tracks.map((channel,index) => (
             <Channel
                 key={index} 
                 index={index} 
                 color={channel.color && channel.color !== defaultColor ? channel.color : colorsArray[index]}
-                channel={channel}
+                channel={channel}              
             />
         ))
     }

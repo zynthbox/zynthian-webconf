@@ -2,17 +2,17 @@ const fs = require('fs');
 const path = require("path")
 const rootFolder = "/home/pi/zynthian-my-data/"
 var sampleBankFolder = `${rootFolder}sketchpads/my-sketchpads/temp/wav/sampleset/sample-bank`;
-const zynthboxConfigFolder = `/root/.config/zynthbox/zynthbox-qml.conf`;
+// const zynthboxConfigFolder = `/root/.config/zynthbox/zynthbox-qml.conf`;
 // for local testing
-// const zynthboxConfigFolder = `${rootFolder}sessions/zynthbox-qml.conf`;  
+const zynthboxConfigFolder = `${rootFolder}sessions/zynthbox-qml.conf`;  
 
 function getLastSelectedSketchFolderName(){
     var ConfigIniParser = require("config-ini-parser").ConfigIniParser;
     parser = new ConfigIniParser(); //Use default delimiter
     var file = fs.readFileSync(zynthboxConfigFolder,'utf8');  
     parser.parse(file);
-    var lastSelectedSketchpad = parser.get("Sketchpad","lastSelectedSketchpad");
-    var folderName  = lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[1];  
+    var lastSelectedSketchpad = parser.get("Sketchpad","lastSelectedSketchpad"); 
+    var folderName  = lastSelectedSketchpad.split('/my-sketchpads/')[1].split('/')[0];  
     return folderName; 
 
 }
@@ -126,7 +126,8 @@ exports.getSample = (req,res) => {
 }
 
 exports.getClip = (req,res) => {
-  const clipsFolder = `${rootFolder}sketches/my-sketches/${getLastSelectedSketchFolderName()}/wav`
+  //const clipsFolder = `${rootFolder}sketches/my-sketches/${getLastSelectedSketchFolderName()}/wav`
+  const clipsFolder = `${rootFolder}sketchpads/my-sketchpads/${getLastSelectedSketchFolderName()}/wav`
   let samplePath = req.params.id.split('+++')[1].split('++').join('.');
   if (samplePath.indexOf('+') > -1) samplePath = samplePath.split('+').join('/');
   let filePath = `${clipsFolder}/${samplePath}`

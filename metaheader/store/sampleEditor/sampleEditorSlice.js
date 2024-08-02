@@ -59,15 +59,18 @@ export const getSketchpad = createAsyncThunk(
       }
     );
     const sketchpad = await response.json();
+
     const folder =
       lastSelectedSketchpad.split(sketchpad.name)[0] + sketchpad.name + "/";
+     
     let samplesEndpoints = [];
     sketchpad.tracks.forEach(function (channel, index) {
       const url = `http://${window.location.hostname}:3000/track/${folder
         .split("/")
-        .join("+++")}:${index + 1}`;
+        .join("+++")}:${index + 1}`;        
       samplesEndpoints.push(url);
     });
+    
     const responses = await axios.all(
       samplesEndpoints.map((endpoint) => axios.get(endpoint))
     );

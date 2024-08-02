@@ -28,10 +28,10 @@ const ChannelSampleModesMenus = ({ index,keyzone_mode, trackType } ) => {
             </div>
             <div style={{opacity: (trackType == "sample-trig" ? "1" : "0")}} className='keyzone-mode-menu-container'>
                 {/* off - all-full | auto  - split-full | narrow - split-narrow */}
-                <span>Auto Split:</span>
+                <span>Key Split:</span>
                 <ul>
                     <li><a onClick={() => onKeyZoneModeOptionClick("all-full")} className={keyzone_mode === "all-full" ? "is-active" : ""}>Off</a></li>
-                    <li><a onClick={() => onKeyZoneModeOptionClick("split-full")}  className={keyzone_mode === "split-full" ? "is-active" : ""}>Auto</a></li>
+                    {/*  <li><a onClick={() => onKeyZoneModeOptionClick("split-full")}  className={keyzone_mode === "split-full" ? "is-active" : ""}>Auto</a></li>*/}
                     <li><a onClick={() => onKeyZoneModeOptionClick("split-narrow")}  className={keyzone_mode === "split-narrow" ? "is-active" : ""}>Narrow</a></li>
                 </ul>
             </div>

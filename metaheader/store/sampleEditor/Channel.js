@@ -71,7 +71,7 @@ const Channel = (props) => {
                         index={index}
                         samples={channel.trackType === "sample-loop" ? channel.clips : channel.samples}
                         sampleSetMode={channel.trackType}
-                        keyzone_mode={channel.keyzone_mode}
+                        keyzone_mode={channel.keyzone_mode}                       
                     />
                 </div>
         </React.Fragment>

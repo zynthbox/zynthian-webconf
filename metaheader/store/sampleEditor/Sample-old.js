@@ -16,25 +16,42 @@ const Sample = (props) => {
         setShowSampleSetSourcePicker 
     } = props
    
-   
+    const [ data, setData ] = useState(null);
     const [ isPlaying, setIsPlaying ] = useState(false);
     const { sketchpad } = useSelector((state) => state.sampleEditor);
-   
-    const [ url, setUrl ] = useState(null);
 
+   
     useEffect(() => {
-        if (sample){                
-            let url;                      
-            if(sampleSetMode=='sample-trig'){
-                url = `/zynthian-my-data/sketchpads/my-sketchpads/${sketchpad.name}/wav/sampleset/sample-bank.${channelIndex +1}/${sample.path}`
-            }else{
-                url = `/zynthian-my-data/sketchpads/my-sketchpads/${sketchpad.name}/wav/${sample.path}`;
-            }
-           setUrl(url);
+        if (sample){
+            if (sample.path) getSampleFile()
         }
     },[sample])
 
-    
+    async function getSampleFile(){
+        let sPath = sample.path.split('.').join('++');
+        if (sPath.indexOf('/') > -1) sPath = sPath.split('/').join('+');
+        const response = await fetch(`http://${window.location.hostname}:3000/${sampleSetMode === "sample-loop" ? "clip" : "sample"}/${(channelIndex+1) + "+++" + sPath}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const res = await response.blob();
+        readSampleData(res);
+    }
+
+    function readSampleData(file){
+        // console.log(sample,"sample")
+        const reader = new FileReader();
+        reader.addEventListener('load',function(){
+            let result = reader.result;
+            if (reader.result.indexOf('data:application/octet-stream;') > -1){
+                result = reader.result.split(':application/octet-stream;').join(':audio/wav;')
+            }
+            setData(result)
+        },false)
+        reader.readAsDataURL(file)
+    }
 
     function playSample(){
         setIsPlaying(true);
@@ -95,11 +112,11 @@ const Sample = (props) => {
     if (samplePath && samplePath !== null) samplePathDisplay = samplePath;
 
     let audioPlayerDisplay;
-    if (url){
+    if (data !== null){
         audioPlayerDisplay = (
             <audio
                 id={`sample-${channelIndex + 1}-${index + 1}-audio-player`}
-                src={url}
+                src={data}
                 onTimeUpdate={(e) => onPlayerTimeUpdate(e)}  
                 onLoadedMetadata={(e) => onPlayerTimeUpdate(e)}>
             </audio>

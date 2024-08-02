@@ -104,17 +104,16 @@ const SampleSet = ({index,samples,sampleSetMode,keyzone_mode}) => {
 
     function handleSaveSampleSetAs(){
         // console.log('SAVE SAMPLE SET AS SUKKKAAAA')
-    }
-
-    const samplesDisplay = samples.map((sample,i) => (
+    }  
+    const samplesDisplay = samples.map((sample,i) => (        
         <Sample 
             key={i} 
             index={i} 
-            sample={sample}
+            sample={sample?(sampleSetMode=='sample-loop')?sample[0]:sample:null}
             channelIndex={index}
             sampleSetMode={sampleSetMode}
             onRemoveSample={handleRemoveSample}
-            onAddSample={onAddSample}
+            onAddSample={onAddSample}            
         />
     ))
 
@@ -202,13 +201,12 @@ const SampleSet = ({index,samples,sampleSetMode,keyzone_mode}) => {
                     {samplesDisplay}
                 </ul>
             </div>
-
-            <ul className="sample-set-actions">
+ {/* l className="sample-set-actions">
                 <li><a onClick={() => handleRemoveAllSamples()}><i style={{marginTop:"1px"}} className="glyphicon glyphicon-trash"></i></a></li>
                 <li><a onClick={() => handleSaveSampleSetAs()}> <AiFillSave/> </a></li>
                 <li style={{float:"right"}}><a onClick={onAddSamples}><i className="glyphicon glyphicon-plus"></i></a></li>
             </ul>
-
+ */}
             {sampleSetSourcePickerDisplay}
             {sampleSetUploadDisplay}
             {/* 

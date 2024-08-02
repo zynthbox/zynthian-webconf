@@ -282,7 +282,7 @@
 }
 #sample-editor-container .sample-set .track-keyzone-mode-menu div ul li a {
   display: block;
-  padding: 5px;
+  padding: 3px;
   border: 1px solid #ccc;
   background-color: white;
   cursor: pointer;
