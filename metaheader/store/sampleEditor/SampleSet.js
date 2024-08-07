@@ -19,6 +19,7 @@ const SampleSet = ({index,samples,sampleSetMode,keyzone_mode}) => {
         }
     },[])
 
+  
     function handleKeyPress(e){
         if (e.key === "Escape"){
             dispatch(setSourcePicker({showSourcePicker:false}))
@@ -105,7 +106,7 @@ const SampleSet = ({index,samples,sampleSetMode,keyzone_mode}) => {
     function handleSaveSampleSetAs(){
         // console.log('SAVE SAMPLE SET AS SUKKKAAAA')
     }  
-    const samplesDisplay = samples.map((sample,i) => (        
+    const samplesDisplay = samples.map((sample,i) => (                
         <Sample 
             key={i} 
             index={i} 

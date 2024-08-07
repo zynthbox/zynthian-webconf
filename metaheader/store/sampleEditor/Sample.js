@@ -18,23 +18,26 @@ const Sample = (props) => {
    
    
     const [ isPlaying, setIsPlaying ] = useState(false);
-    const { sketchpad } = useSelector((state) => state.sampleEditor);
-   
+    const { sketchpad } = useSelector((state) => state.sampleEditor);    
     const [ url, setUrl ] = useState(null);
+    
 
-    useEffect(() => {
-        if (sample){                
-            let url;                      
+
+    useEffect(() => {       
+        if (sample && sample.path){                
+            let url=null;                      
             if(sampleSetMode=='sample-trig'){
-                url = `/zynthian-my-data/sketchpads/my-sketchpads/${sketchpad.name}/wav/sampleset/sample-bank.${channelIndex +1}/${sample.path}`
-            }else{
-                url = `/zynthian-my-data/sketchpads/my-sketchpads/${sketchpad.name}/wav/${sample.path}`;
+                url = `http://${window.location.hostname}:3000/zynthian-my-data/sketchpads/my-sketchpads/${sketchpad.name}/wav/sampleset/sample-bank.${channelIndex +1}/${sample.path}`
+            }else if(sampleSetMode=='synth' || sampleSetMode=='sample-loop'){
+                url = `http://${window.location.hostname}:3000/zynthian-my-data/sketchpads/my-sketchpads/${sketchpad.name}/wav/${sample.path}`;
             }
-           setUrl(url);
+           setUrl(url);         
         }
     },[sample])
 
-    
+    function isShowClips(){
+        return (sampleSetMode=='external')?false:true        
+    }
 
     function playSample(){
         setIsPlaying(true);
@@ -53,7 +56,7 @@ const Sample = (props) => {
 
     let sampleControlDisplay, sampleActionsDisplay;
 
-    if (sample && sample !== null && sample.path !== null){
+    if (sample && sample !== null && sample.path !== null && isShowClips()){
         if (isPlaying === true){
             sampleControlDisplay = (
                 <a className='play-sample-button' onClick={pauseSample}>
@@ -83,19 +86,21 @@ const Sample = (props) => {
     }
 
     let samplePath;
-    if (sample){        
+    if (sample){                
         samplePath = sample.path ? sample.path : sample.name;
-        if (samplePath && samplePath !== null){
+        if (samplePath && samplePath !== null && samplePath!=''){
             if (samplePath.indexOf('/') > -1) samplePath = samplePath.split('/')[samplePath.split('/').length - 1];
             if (samplePath.split('.')[0].length > 16) samplePath = samplePath.substring(0,17) + '...wav';
+        }else{
+            samplePath = "---";
         }
     }
 
     let samplePathDisplay = "---";
-    if (samplePath && samplePath !== null) samplePathDisplay = samplePath;
+    if (sample && url && isShowClips()) samplePathDisplay = samplePath;
 
     let audioPlayerDisplay;
-    if (url){
+    if (sample && url && isShowClips()){          
         audioPlayerDisplay = (
             <audio
                 id={`sample-${channelIndex + 1}-${index + 1}-audio-player`}
@@ -105,7 +110,6 @@ const Sample = (props) => {
             </audio>
         )
     }
-
     return (
         <li id={`sample-${channelIndex + 1}-${index + 1}`}>
             {audioPlayerDisplay}
