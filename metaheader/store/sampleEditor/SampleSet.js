@@ -12,11 +12,12 @@ const SampleSet = ({index,samples,sampleSetMode,keyzone_mode}) => {
     const dispatch = useDispatch()
     const { sketchpad, sketchpadInfo, sourcePicker, dropZone } = useSelector((state) => state.sampleEditor);
     
-    useEffect(() => {
+    useEffect(() => {       
         window.addEventListener('keydown',handleKeyPress,false);
         return () => {
             window.removeEventListener('keydown',handleKeyPress,false)
         }
+        
     },[])
 
   
@@ -106,7 +107,7 @@ const SampleSet = ({index,samples,sampleSetMode,keyzone_mode}) => {
     function handleSaveSampleSetAs(){
         // console.log('SAVE SAMPLE SET AS SUKKKAAAA')
     }  
-    const samplesDisplay = samples.map((sample,i) => (                
+    const samplesDisplay = samples.map((sample,i) => (                        
         <Sample 
             key={i} 
             index={i} 

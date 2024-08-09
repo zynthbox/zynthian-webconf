@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-
+import { getCurrentSketchpadFolder } from "./helpers";
 const Sample = (props) => {
    
     const { 
@@ -18,20 +18,23 @@ const Sample = (props) => {
    
    
     const [ isPlaying, setIsPlaying ] = useState(false);
-    const { sketchpad } = useSelector((state) => state.sampleEditor);    
+    const { sketchpadInfo,sketchpad } = useSelector((state) => state.sampleEditor);    
     const [ url, setUrl ] = useState(null);
     
 
-
+    
     useEffect(() => {       
         if (sample && sample.path){                
-            let url=null;                      
+            let url=null;    
+            const folder = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name)                 
             if(sampleSetMode=='sample-trig'){
-                url = `http://${window.location.hostname}:3000/zynthian-my-data/sketchpads/my-sketchpads/${sketchpad.name}/wav/sampleset/sample-bank.${channelIndex +1}/${sample.path}`
+                url = `http://${window.location.hostname}:3000/${folder.split('/zynthian/')[1]}/wav/sampleset/sample-bank.${channelIndex +1}/${sample.path}`
             }else if(sampleSetMode=='synth' || sampleSetMode=='sample-loop'){
-                url = `http://${window.location.hostname}:3000/zynthian-my-data/sketchpads/my-sketchpads/${sketchpad.name}/wav/${sample.path}`;
+                url = `http://${window.location.hostname}:3000/${folder.split('/zynthian/')[1]}/wav/${sample.path}`;
             }
            setUrl(url);         
+        }else{
+            setUrl(url);         
         }
     },[sample])
 
@@ -56,7 +59,7 @@ const Sample = (props) => {
 
     let sampleControlDisplay, sampleActionsDisplay;
 
-    if (sample && sample !== null && sample.path !== null && isShowClips()){
+    if (sample && sample.path){
         if (isPlaying === true){
             sampleControlDisplay = (
                 <a className='play-sample-button' onClick={pauseSample}>
@@ -97,10 +100,10 @@ const Sample = (props) => {
     }
 
     let samplePathDisplay = "---";
-    if (sample && url && isShowClips()) samplePathDisplay = samplePath;
+    if (sample && sample.path) samplePathDisplay = samplePath;
 
     let audioPlayerDisplay;
-    if (sample && url && isShowClips()){          
+    if (sample && sample.path){          
         audioPlayerDisplay = (
             <audio
                 id={`sample-${channelIndex + 1}-${index + 1}-audio-player`}

@@ -69,7 +69,7 @@ const Channel = (props) => {
                     />
                     <SampleSet 
                         index={index}
-                        samples={channel.trackType === "sample-loop" ? channel.clips : channel.samples}
+                        samples={channel.trackType === "sample-trig" ? channel.samples : channel.clips}
                         sampleSetMode={channel.trackType}
                         keyzone_mode={channel.keyzone_mode}                       
                     />
