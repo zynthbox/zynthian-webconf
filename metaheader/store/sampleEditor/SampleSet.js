@@ -111,7 +111,7 @@ const SampleSet = ({index,samples,sampleSetMode,keyzone_mode}) => {
         <Sample 
             key={i} 
             index={i} 
-            sample={sample?(sampleSetMode=='sample-loop')?sample[0]:sample:null}
+            sample={sample?(sampleSetMode=='sample-trig')?sample:sample[0]:null}
             channelIndex={index}
             sampleSetMode={sampleSetMode}
             onRemoveSample={handleRemoveSample}

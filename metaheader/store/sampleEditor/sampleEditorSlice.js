@@ -79,6 +79,7 @@ export const getSketchpad = createAsyncThunk(
       if (!res.data.message) samples = res.data;
       sketchpad.tracks[index].samples = samples;
     });
+  
     return sketchpad;
   }
 );
