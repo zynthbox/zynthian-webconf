@@ -276,12 +276,16 @@ div.lib-treeview .row {
 div.treeview .node-selected {
   background-color: #fe8fa5 !important;
 }
-div.sw-jalv .row {
+div.sw-jalv .row,
+div.sw-jucy .row {
   padding-bottom: 10px;
 }
 div.sw-jalv .col-md-12,
 div.sw-jalv .col-md-10,
-div.sw-jalv .col-md-2 {
+div.sw-jalv .col-md-2,
+div.sw-jucy .col-md-12,
+div.sw-jucy .col-md-10,
+div.sw-jucy .col-md-2{
   padding-right: 0px;
   padding-left: 0px;
 }
@@ -399,13 +403,16 @@ div.log-panel.updating {
   background-color: #606060;
   color: #ffffff;
 }
-div.jalv-lv2-plugin-panel {
+div.jalv-lv2-plugin-panel,
+div.jucy-vst3-plugin-panel{
   margin: 0 1em;
 }
-div.jalv-lv2-plugin-panel .advanced-view {
+div.jalv-lv2-plugin-panel .advanced-view,
+div.jucy-vst3-plugin-panel .advanced-view {
   background-color: transparent;
 }
-div.jalv-lv2-plugin-panel .header {
+div.jalv-lv2-plugin-panel .header,
+div.jucy-vst3-plugin-panel .header {
   background-color: #404040;
   color: #ffffff;
 }

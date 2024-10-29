@@ -58,6 +58,7 @@ from lib.zynthian_websocket_handler import ZynthianWebSocketHandler
 from lib.pianoteq_handler import PianoteqHandler
 from lib.captures_config_handler import CapturesConfigHandler
 from lib.jalv_lv2_handler import JalvLv2Handler
+from lib.jucy_vst3_handler import JucyVst3Handler
 from lib.ui_log_handler import UiLogHandler
 from lib.midi_log_handler import MidiLogHandler
 from lib.repository_handler import RepositoryHandler
@@ -157,6 +158,7 @@ def make_app():
         (r"/sw-update$", SoftwareUpdateHandler),
         (r"/sw-pianoteq$", PianoteqHandler),
         (r"/sw-jalv-lv2$", JalvLv2Handler),
+        (r"/sw-jucy-vst3$", JucyVst3Handler),
         (r"/sw-repos$", RepositoryHandler),
         (r"/ui-options$", UiConfigHandler),
         (r"/ui-keybind$", UiKeybindHandler),
