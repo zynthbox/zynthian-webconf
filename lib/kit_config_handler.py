@@ -41,15 +41,7 @@ from lib.wiring_config_handler import WiringConfigHandler
 class KitConfigHandler(ZynthianConfigHandler):
 
     kit_options = [
-        'Z2_V3',
-        'Z2_V2',
-        'Z2_V1',
-        'V4',
-        'V3-PRO',
-        'V3',
-        'V2+',
-        'V2',
-        'V1',
+        'Z1_V1',
         'Custom'
     ]
 
@@ -60,7 +52,7 @@ class KitConfigHandler(ZynthianConfigHandler):
             ['ZYNTHIAN_KIT_VERSION', {
                 'type': 'select',
                 'title': 'Kit',
-                'value': os.environ.get('ZYNTHIAN_KIT_VERSION', 'V4'),
+                'value': os.environ.get('ZYNTHIAN_KIT_VERSION', 'Z1_V1'),
                 'options': self.kit_options
             }]
         ])
@@ -84,44 +76,12 @@ class KitConfigHandler(ZynthianConfigHandler):
     def configure_kit(self, pconfig):
         kit_version = pconfig['ZYNTHIAN_KIT_VERSION'][0]
         if kit_version!="Custom":
-            if kit_version in ("Z2_V3"):
-                soundcard_name = "ZynADAC"
-                display_name = "Z2 Display"
-                wiring_layout = "Z2_V3"
-                wiring_layout_custom_profile = "z2_v2"
+            if kit_version in ("Z1_V1"):
+                soundcard_name = "Z1 ADAC"
+                display_name = "Z1 Display"
+                wiring_layout = "Z1_V1"
+                wiring_layout_custom_profile = "Z1_V1"
                 ui_font_size = "16"
-            elif kit_version in ("Z2_V2"):
-                soundcard_name = "ZynADAC"
-                display_name = "Z2 Display"
-                wiring_layout = "Z2_V2"
-                wiring_layout_custom_profile = "z2_v2"
-                ui_font_size = "16"
-            elif kit_version=="Z2_V1":
-                soundcard_name = "ZynADAC"
-                display_name = "Z2 Display"
-                wiring_layout = "Z2_V1"
-                wiring_layout_custom_profile = "z2_v2"
-                ui_font_size = "16"
-            elif kit_version in ("V4", "V3-PRO"):
-                soundcard_name = "HifiBerry DAC+ ADC PRO"
-                display_name = "ZynScreen 3.5 (v1)"
-                wiring_layout = "MCP23017_ZynScreen"
-            elif kit_version=="V3":
-                soundcard_name = "HifiBerry DAC+ ADC"
-                display_name = "ZynScreen 3.5 (v1)"
-                wiring_layout = "MCP23017_ZynScreen"
-            elif kit_version=="V2+":
-                soundcard_name = "HifiBerry DAC+ ADC"
-                display_name = "PiScreen 3.5 (v2)"
-                wiring_layout = "MCP23017_EXTRA"
-            elif kit_version=="V2":
-                soundcard_name = "HifiBerry DAC+"
-                display_name = "PiScreen 3.5 (v2)"
-                wiring_layout = "MCP23017_EXTRA"
-            elif kit_version=="V1":
-                soundcard_name = "HifiBerry DAC+"
-                display_name = "PiTFT 2.8 Resistive"
-                wiring_layout = "PROTOTYPE-4"
 
             pconfig['SOUNDCARD_NAME']=[soundcard_name]
             for k,v in soundcard_presets[soundcard_name].items():
