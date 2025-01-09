@@ -53,8 +53,8 @@ class DashboardHandler(ZynthianBasicHandler):
         git_info_ui=self.get_git_info("", apt_package_name="zynthbox-qml")
         git_info_webconf=self.get_git_info("", apt_package_name="zynthian-webconf")
         git_info_libzynthbox=self.get_git_info("", apt_package_name="libzynthbox")
-        git_info_sys=self.get_git_info("/zynthian/zynthian-sys")
-        git_info_data=self.get_git_info("/zynthian/zynthian-data")
+        git_info_sys=self.get_git_info("", apt_package_name="zynthian-sys")
+        git_info_data=self.get_git_info("", apt_package_name="zynthian-data")
 
         self.apt_cache.close()
 
@@ -84,12 +84,12 @@ class DashboardHandler(ZynthianBasicHandler):
                         'title': 'Wiring',
                         'value': os.environ.get('ZYNTHIAN_WIRING_LAYOUT'),
                         'url': "/hw-wiring"
-                    }],
-                    ['GPIO_EXPANDER', {
-                        'title': 'GPIO Expander',
-                        'value': self.get_gpio_expander(),
-                        'url': "/hw-wiring"
                     }]
+                    # ['GPIO_EXPANDER', {
+                    #     'title': 'GPIO Expander',
+                    #     'value': self.get_gpio_expander(),
+                    #     'url': "/hw-wiring"
+                    # }]
                 ])
             }],
             ['SYSTEM', {
