@@ -62,6 +62,9 @@ class DashboardHandler(ZynthianBasicHandler):
         ram_info=self.get_ram_info()
         sd_info=self.get_sd_info()
 
+        # Get build info
+        build_info = self.get_build_info()
+
         config=OrderedDict([
             ['HARDWARE', {
                 #'icon': 'glyphicon glyphicon-wrench',
@@ -101,7 +104,11 @@ class DashboardHandler(ZynthianBasicHandler):
                     }],
                     ['BUILD_DATE', {
                         'title': 'Build Date',
-                        'value': self.get_build_info()['Timestamp'],
+                        'value': build_info['Timestamp'],
+                    }],
+                    ['BUILD_VERSION', {
+                        'title': 'Build Version',
+                        'value': build_info['Build Version'] if 'Build Version' in build_info else "RC",
                     }],
                     ['RAM', {
                         'title': 'Memory',
