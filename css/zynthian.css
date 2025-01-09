@@ -265,6 +265,7 @@ div.dashboard-block h3 {
   border-radius: 0.1em 0.4em;
 }
 div.dashboard-block div.content {
+  height: 100%;
   margin: 0;
   padding: 0.5em;
   background: rgba(221, 221, 221, 0.3);
