@@ -484,3 +484,10 @@ table.table tr.success th {
   color: #ffffff;
   padding-bottom: 0px;
 }
+
+/* Custom main container width for large screens */
+@media (min-width: 1200px) {
+  .container {
+    width: 1400px !important;
+  }
+}

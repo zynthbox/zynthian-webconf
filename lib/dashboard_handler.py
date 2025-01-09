@@ -152,33 +152,33 @@ class DashboardHandler(ZynthianBasicHandler):
                 'info': OrderedDict([
                     ['ZYNCODER', {
                         'title': 'zyncoder',
-                        'value': "{} ({})".format(git_info_zyncoder['branch'], git_info_zyncoder['gitid']),
-                        'url': ''
+                        'value': git_info_zyncoder['gitid'],
+                        'url': '#'
                     }],
                     ['UI', {
                         'title': 'zynthbox-qml',
-                        'value': "{} ({})".format(git_info_ui['branch'], git_info_ui['gitid']),
-                        'url': ''
+                        'value': git_info_ui['gitid'],
+                        'url': '#'
                     }],
                     ['LIBZYNTHBOX', {
                         'title': 'libzynthbox',
-                        'value': "{} ({})".format(git_info_libzynthbox['branch'], git_info_libzynthbox['gitid'], ''),
-                        'url': ''
+                        'value': git_info_libzynthbox['gitid'],
+                        'url': '#'
                     }],
                     ['SYS', {
                         'title': 'zynthian-sys',
-                        'value': "{} ({})".format(git_info_sys['branch'], git_info_sys['gitid'][0:7], 'Update available' if git_info_sys['update'] == '1' else ''),
-                        'url': "https://github.com/zynthian/zynthian-sys/commit/{}".format(git_info_sys['gitid'])
+                        'value': git_info_sys['gitid'],
+                        'url': '#'
                     }],
                     ['DATA', {
                         'title': 'zynthian-data',
-                        'value': "{} ({})".format(git_info_data['branch'], git_info_data['gitid'][0:7], 'Update available' if git_info_data['update'] == '1' else ''),
-                        'url': "https://github.com/zynthian/zynthian-data/commit/{}".format(git_info_data['gitid'])
+                        'value': git_info_data['gitid'],
+                        'url': '#'
                     }],
                     ['WEBCONF', {
                         'title': 'zynthian-webconf',
-                        'value': "{} ({})".format(git_info_webconf['branch'], git_info_webconf['gitid']),
-                        'url': ''
+                        'value': git_info_webconf['gitid'],
+                        'url': '#'
                     }]
                 ])
             }],
@@ -373,7 +373,7 @@ class DashboardHandler(ZynthianBasicHandler):
 
 
     def get_sd_info(self):
-        return self.get_volume_info('/dev/root')
+        return self.get_volume_info('/dev/mmcblk0p2')
 
 
     def get_media_info(self, mpath="/media/usb0"):
