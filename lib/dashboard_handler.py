@@ -104,7 +104,7 @@ class DashboardHandler(ZynthianBasicHandler):
                     }],
                     ['BUILD_DATE', {
                         'title': 'Build Date',
-                        'value': build_info['Timestamp'],
+                        'value': build_info['Build Date'],
                     }],
                     ['BUILD_VERSION', {
                         'title': 'Build Version',
@@ -330,9 +330,10 @@ class DashboardHandler(ZynthianBasicHandler):
             # The file /etc/apt/trusted.gpg.d/microsoft.gpg is touched every build. Newer image builds will contain the build_info.txt file
             # If build_info is not found (for example in old images), display the last modified date of this file instead if possible
             try:
-                info['Timestamp'] = check_output("stat --format='%z' /etc/apt/trusted.gpg.d/microsoft.gpg", shell=True).decode().split(" ")[0]
+                info['Build Date'] = check_output("stat --format='%z' /etc/apt/trusted.gpg.d/microsoft.gpg", shell=True).decode().split(" ")[0]
             except:
-                info['Timestamp'] = '???'
+                info['Build Date'] = '???'
+            info['Build Version'] = 'RC'
 
         return info
 
