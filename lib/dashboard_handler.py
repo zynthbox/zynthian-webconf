@@ -53,14 +53,17 @@ class DashboardHandler(ZynthianBasicHandler):
         git_info_ui=self.get_git_info("", apt_package_name="zynthbox-qml")
         git_info_webconf=self.get_git_info("", apt_package_name="zynthian-webconf")
         git_info_libzynthbox=self.get_git_info("", apt_package_name="libzynthbox")
-        git_info_sys=self.get_git_info("/zynthian/zynthian-sys")
-        git_info_data=self.get_git_info("/zynthian/zynthian-data")
+        git_info_sys=self.get_git_info("", apt_package_name="zynthian-sys")
+        git_info_data=self.get_git_info("", apt_package_name="zynthian-data")
 
         self.apt_cache.close()
 
         # Get Memory & SD Card info
         ram_info=self.get_ram_info()
         sd_info=self.get_sd_info()
+
+        # Get build info
+        build_info = self.get_build_info()
 
         config=OrderedDict([
             ['HARDWARE', {
@@ -84,12 +87,12 @@ class DashboardHandler(ZynthianBasicHandler):
                         'title': 'Wiring',
                         'value': os.environ.get('ZYNTHIAN_WIRING_LAYOUT'),
                         'url': "/hw-wiring"
-                    }],
-                    ['GPIO_EXPANDER', {
-                        'title': 'GPIO Expander',
-                        'value': self.get_gpio_expander(),
-                        'url': "/hw-wiring"
                     }]
+                    # ['GPIO_EXPANDER', {
+                    #     'title': 'GPIO Expander',
+                    #     'value': self.get_gpio_expander(),
+                    #     'url': "/hw-wiring"
+                    # }]
                 ])
             }],
             ['SYSTEM', {
@@ -101,7 +104,11 @@ class DashboardHandler(ZynthianBasicHandler):
                     }],
                     ['BUILD_DATE', {
                         'title': 'Build Date',
-                        'value': self.get_build_info()['Timestamp'],
+                        'value': build_info['Build Date'],
+                    }],
+                    ['BUILD_VERSION', {
+                        'title': 'Build Version',
+                        'value': build_info['Build Version'] if 'Build Version' in build_info else "RC",
                     }],
                     ['RAM', {
                         'title': 'Memory',
@@ -152,33 +159,33 @@ class DashboardHandler(ZynthianBasicHandler):
                 'info': OrderedDict([
                     ['ZYNCODER', {
                         'title': 'zyncoder',
-                        'value': "{} ({})".format(git_info_zyncoder['branch'], git_info_zyncoder['gitid']),
-                        'url': ''
+                        'value': git_info_zyncoder['gitid'],
+                        'url': '#'
                     }],
                     ['UI', {
                         'title': 'zynthbox-qml',
-                        'value': "{} ({})".format(git_info_ui['branch'], git_info_ui['gitid']),
-                        'url': ''
+                        'value': git_info_ui['gitid'],
+                        'url': '#'
                     }],
                     ['LIBZYNTHBOX', {
                         'title': 'libzynthbox',
-                        'value': "{} ({})".format(git_info_libzynthbox['branch'], git_info_libzynthbox['gitid'], ''),
-                        'url': ''
+                        'value': git_info_libzynthbox['gitid'],
+                        'url': '#'
                     }],
                     ['SYS', {
                         'title': 'zynthian-sys',
-                        'value': "{} ({})".format(git_info_sys['branch'], git_info_sys['gitid'][0:7], 'Update available' if git_info_sys['update'] == '1' else ''),
-                        'url': "https://github.com/zynthian/zynthian-sys/commit/{}".format(git_info_sys['gitid'])
+                        'value': git_info_sys['gitid'],
+                        'url': '#'
                     }],
                     ['DATA', {
                         'title': 'zynthian-data',
-                        'value': "{} ({})".format(git_info_data['branch'], git_info_data['gitid'][0:7], 'Update available' if git_info_data['update'] == '1' else ''),
-                        'url': "https://github.com/zynthian/zynthian-data/commit/{}".format(git_info_data['gitid'])
+                        'value': git_info_data['gitid'],
+                        'url': '#'
                     }],
                     ['WEBCONF', {
                         'title': 'zynthian-webconf',
-                        'value': "{} ({})".format(git_info_webconf['branch'], git_info_webconf['gitid']),
-                        'url': ''
+                        'value': git_info_webconf['gitid'],
+                        'url': '#'
                     }]
                 ])
             }],
@@ -323,9 +330,10 @@ class DashboardHandler(ZynthianBasicHandler):
             # The file /etc/apt/trusted.gpg.d/microsoft.gpg is touched every build. Newer image builds will contain the build_info.txt file
             # If build_info is not found (for example in old images), display the last modified date of this file instead if possible
             try:
-                info['Timestamp'] = check_output("stat --format='%z' /etc/apt/trusted.gpg.d/microsoft.gpg", shell=True).decode().split(" ")[0]
+                info['Build Date'] = check_output("stat --format='%z' /etc/apt/trusted.gpg.d/microsoft.gpg", shell=True).decode().split(" ")[0]
             except:
-                info['Timestamp'] = '???'
+                info['Build Date'] = '???'
+            info['Build Version'] = 'RC'
 
         return info
 
@@ -373,7 +381,7 @@ class DashboardHandler(ZynthianBasicHandler):
 
 
     def get_sd_info(self):
-        return self.get_volume_info('/dev/root')
+        return self.get_volume_info('/dev/mmcblk0p2')
 
 
     def get_media_info(self, mpath="/media/usb0"):

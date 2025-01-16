@@ -265,6 +265,7 @@ div.dashboard-block h3 {
   border-radius: 0.1em 0.4em;
 }
 div.dashboard-block div.content {
+  height: 100%;
   margin: 0;
   padding: 0.5em;
   background: rgba(221, 221, 221, 0.3);
@@ -276,12 +277,16 @@ div.lib-treeview .row {
 div.treeview .node-selected {
   background-color: #fe8fa5 !important;
 }
-div.sw-jalv .row {
+div.sw-jalv .row,
+div.sw-jucy .row {
   padding-bottom: 10px;
 }
 div.sw-jalv .col-md-12,
 div.sw-jalv .col-md-10,
-div.sw-jalv .col-md-2 {
+div.sw-jalv .col-md-2,
+div.sw-jucy .col-md-12,
+div.sw-jucy .col-md-10,
+div.sw-jucy .col-md-2{
   padding-right: 0px;
   padding-left: 0px;
 }
@@ -399,13 +404,16 @@ div.log-panel.updating {
   background-color: #606060;
   color: #ffffff;
 }
-div.jalv-lv2-plugin-panel {
+div.jalv-lv2-plugin-panel,
+div.jucy-vst3-plugin-panel{
   margin: 0 1em;
 }
-div.jalv-lv2-plugin-panel .advanced-view {
+div.jalv-lv2-plugin-panel .advanced-view,
+div.jucy-vst3-plugin-panel .advanced-view {
   background-color: transparent;
 }
-div.jalv-lv2-plugin-panel .header {
+div.jalv-lv2-plugin-panel .header,
+div.jucy-vst3-plugin-panel .header {
   background-color: #404040;
   color: #ffffff;
 }
@@ -476,4 +484,11 @@ table.table tr.success th {
   font-size: 120%;
   color: #ffffff;
   padding-bottom: 0px;
+}
+
+/* Custom main container width for large screens */
+@media (min-width: 1200px) {
+  .container {
+    width: 1400px !important;
+  }
 }
