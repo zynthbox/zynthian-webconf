@@ -1,3 +1,5 @@
+const ROOTDIR = "/home/pi/";
+
 function getTreeChildren(array,folderChain,selectedFolder,parentPath){
 
     let children = [];
@@ -9,7 +11,7 @@ function getTreeChildren(array,folderChain,selectedFolder,parentPath){
                 toggled:folderChain.findIndex(fc => fc.path === item.path) > -1 ? true : false,
             }
 
-            if ( "/home/pi/" + selectedFolder === item.path){
+            if ( ROOTDIR + selectedFolder === item.path){
                 newItem.active = true;
             }
     
@@ -26,13 +28,13 @@ function getTreeChildren(array,folderChain,selectedFolder,parentPath){
 }
 
 export function generateTreeFromArray(array,folderChain,selectedFolder){
-
+   
     let newTreeData = {
         name:'zynthian',
         toggled:true,
         path:'/home/pi',
         active:selectedFolder === null ? true : false,
-        children:getTreeChildren(array,folderChain,selectedFolder,'/home/pi/')
+        children:getTreeChildren(array,folderChain,selectedFolder,ROOTDIR)
     }
 
     return newTreeData

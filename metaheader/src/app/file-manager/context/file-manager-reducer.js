@@ -2,7 +2,7 @@ import { generateTreeFromArray } from "../helpers/tree-data-helpers";
 import { arrayUnique, generateNewFolderChain } from '../helpers/file-manager-helpers';
 
 const ffolder = "/home/pi/";
-
+const ROOTDIR = "/home/pi/";
 export const FileManagerInitialState = {
     loading:true,
     filesLoading:false,
@@ -18,9 +18,9 @@ export const FileManagerInitialState = {
     browseHistory:[{
         id: "xcv",
         isDir: true,
-        label: "/home/pi/",
-        name: "/home/pi/",
-        path: "/home/pi/"
+        label: ROOTDIR,
+        name: ROOTDIR,
+        path: ROOTDIR
     }],
     browseHistoryIndex:0,
     treeData:null,
@@ -45,11 +45,12 @@ function ProductViewReducer(state,action){
               if (folder.id === data.id) idIsInChain = true
             });
 
-            let selectedFolder, folderChain;
+            let selectedFolder, folderChain;           
             if (!idIsInChain){
-
+                
                 if (state.selectedFolder !== null){
-                    const shortPath = data.path.split('/home/pi/')[1]
+                    const shortPath = data.path.split(ROOTDIR)[1]
+                    
                     if (shortPath && shortPath.indexOf(state.selectedFolder) === -1){
                         selectedFolder = shortPath;
                         folderChain = [
@@ -67,7 +68,7 @@ function ProductViewReducer(state,action){
 
             } else {
 
-              selectedFolder = dataName === "/home/pi/" ? null : state.selectedFolder.split(dataName)[0] + dataName;
+              selectedFolder = dataName === ROOTDIR ? null : state.selectedFolder.split(dataName)[0] + dataName;
               const folderIndexInChain = state.folderChain.findIndex(item => item.id === data.id);
               folderChain = [...state.folderChain.slice(0,folderIndexInChain + 1)]
             
@@ -80,10 +81,10 @@ function ProductViewReducer(state,action){
                 if (state.browseHistoryIndex !== state.browseHistory.length - 1  ){
                     browseHistory = [
                         ...state.browseHistory.slice(0,state.browseHistoryIndex + 1),
-                        {...data,path:data.path ? data.path : "/home/pi/"}
+                        {...data,path:data.path ? data.path : ROOTDIR}
                     ]
                 } else {
-                    browseHistory = [ ...state.browseHistory, {...data,path:data.path ? data.path : "/home/pi/"} ]
+                    browseHistory = [ ...state.browseHistory, {...data,path:data.path ? data.path : ROOTDIR} ]
                 }
                 browseHistoryIndex = browseHistory.length - 1;
             }
@@ -105,9 +106,9 @@ function ProductViewReducer(state,action){
             
             // files.forEach(function(f,index){
             //     let displayFile = false;
-            //     if (state.selectedFolder === null && f.folder === "/home/pi/") displayFile = true;
+            //     if (state.selectedFolder === null && f.folder === ROOTDIR) displayFile = true;
             //     else  {
-            //         if ("/home/pi/" + state.selectedFolder + "/" + f.name === f.path){
+            //         if (ROOTDIR + state.selectedFolder + "/" + f.name === f.path){
             //             displayFile = true;
             //         }
             //     }
@@ -122,9 +123,10 @@ function ProductViewReducer(state,action){
             // displayedFiles = arrayUnique(displayedFiles)
 
             displayedFiles = action.payload.map(f=>({...f,id:f.path}));            
-            
+          
             let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder)
 
+      
             return {
                 ...state,
                 files,

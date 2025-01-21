@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from './context/context-provider'
 
+const ROOTDIR = "/home/pi/";
+
 function TreeView(props){
 
     const { fileManagerState, fileManagerDispatch } = useContext(Context)
@@ -12,15 +14,14 @@ function TreeView(props){
             id:item.folder ? item.folder + item.name : null
         }
         
-        if (item.path === "/home/pi"){
+        if (item.path === ROOTDIR){
             treeItemPayload = {
                 id:"xcv",
                 isDir:true,
-                label:"/home/pi/",
-                name:"/home/pi/"
+                label:ROOTDIR,
+                name:ROOTDIR
             }
-        }
-
+        }   
         fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})
     }
 

@@ -270,7 +270,7 @@ var upload = multer({ storage: storage,   limits: { fieldSize: 25 * 1024 * 1024 
 
 exports.uploadFiles = (req, res) => {
 
-  upload(req, res, function (err) {
+  upload(req, res, function (err) {   
     if (err instanceof multer.MulterError) {
       console.log(err);
         return res.status(500).json(err)

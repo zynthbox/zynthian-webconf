@@ -12,10 +12,13 @@ export default function RootLayout() {
             <NavLink to="file-manager"> File manager </NavLink>
             </li>
             <li>
-            <NavLink to="sample-pattern-editor"> Tracks Editor </NavLink>              
+            <NavLink to="sample-manager"> Sample Manager </NavLink>              
             </li>
             <li>
-            <NavLink to="favorites"> Favorites </NavLink>                   
+            <NavLink to="track-manager"> Track Manager </NavLink>              
+            </li>
+            <li>
+            <NavLink to="sound-manager"> Sound Manager </NavLink>                   
             </li>
             <li>
             <NavLink to="sketchpad-xtractor"> SketchPad Xtractor </NavLink>     

@@ -10,8 +10,9 @@ setChonkyDefaults({ iconComponent: ChonkyIconFA });
 
 const WebconfFileBrowser = lazy(()=>import('./file-browser'))
 const TreeView = lazy(()=>import('./tree-view'))
+const ROOTDIR = "/home/pi/";
 
-const FileManager = () => {
+const FileManager = ({dir}) => {
 
     const { fileManagerState, fileManagerDispatch } = useContext(Context);
     const fsep = "/";
@@ -23,17 +24,14 @@ const FileManager = () => {
     },[fileManagerState.selectedFolder])
 
     async function getFiles(){
-
-        const folder = "/home/pi/" + (fileManagerState.selectedFolder !== null ? fileManagerState.selectedFolder + "/" : "") 
-        // const response = await 
-
+        const folder = (dir)?dir:ROOTDIR + (fileManagerState.selectedFolder !== null ? fileManagerState.selectedFolder + "/" : "")              
         fetch(`http://${window.location.hostname}:3000/folder/${folder.split('/').join('+++')}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         }).then(async function(response){
-            const res = await response.json();
+            const res = await response.json();                      
             if (!res.errno) fileManagerDispatch({type:'SET_FILES',payload:res})
         }).catch(function(err) {
             fileManagerDispatch({type:'SET_ERROR',payload:{message:`failed to fetch ${folder}`,type:"Folder Error"}})

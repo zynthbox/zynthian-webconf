@@ -6,12 +6,12 @@ import { Provider } from 'react-redux';
 import { store } from '../store/store'
 import ReactDOM from 'react-dom/client';
 import FileManagerContextProvider from './app/file-manager/context/context-provider';
-
 import LoadingSpinner from './app/loading-spinner';
 import RootLayout from './layouts/RootLayout';
 import NotFound from './app/NotFound';
 
 const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
+const SampleManger= lazy(()=>import('./app/sample-manager/SampleManager'))
 const SampleEditor = lazy(()=>import('../store/sampleEditor/SampleEditor'))
 const Favorites = lazy(()=>import('../store/favorites/favorites'))
 const SketchPadXtractor = lazy(()=>import('../store/sketchpadXtractor/SketchpadXtractor')) 
@@ -55,13 +55,30 @@ function FileManagerDisplay(){
             </>
     )
 }
+
+function SampleManagerDisplay(){
+    return (
+        <>
+            <div id="sample-manager-display" className="container" style={{left:fileManagerLeftCss()}}>
+            <h3>
+                <i className="glyphicon glyphicon-file"></i>
+                SAMPLE MANAGER
+            </h3>
+            <Suspense fallback={<LoadingSpinner/>}>
+                <SampleManger  />
+            </Suspense>                        
+           </div>          
+        </>
+)
+}
+
 function SampleEditorDisplay(){
     return (
             <React.Fragment>
                
                 <div id="sample-editor-container" className="container" style={{left:fileManagerLeftCss()}}>
                     <h3>
-                        SAMPLE {'&'} PATTERN EDITOR
+                    TRACK MANAGER
                     </h3>
                     <Suspense fallback={<LoadingSpinner/>}>
                         <SampleEditor colorsArray={colorsArray} />
@@ -73,13 +90,13 @@ function SampleEditorDisplay(){
     )
 }
 
-function FavoritesDisplay(){
+function SoundManagerDisplay(){
     return(
         <React.Fragment>
                
                 <div id="favorites-container" className="container" style={{left:fileManagerLeftCss()}}>
                     <h3>
-                        Favorites
+                        SOUND MANAGER
                     </h3>
                     <Suspense fallback={<LoadingSpinner/>}>
                         <Favorites colorsArray={colorsArray} /> 
@@ -132,8 +149,9 @@ const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />}>
         <Route path="file-manager" element={<FileManagerDisplay />}></Route>
-        <Route path="sample-pattern-editor" element={<SampleEditorDisplay />}></Route>
-        <Route path="favorites" element={<FavoritesDisplay />}> </Route>
+        <Route path="sample-manager" element={<SampleManagerDisplay />}></Route>
+        <Route path="track-manager" element={<SampleEditorDisplay />}></Route>
+        <Route path="sound-manager" element={<SoundManagerDisplay />}> </Route>
         <Route path="sketchpad-xtractor" element={<XtractorDisplay />}></Route>
         <Route path="song-export" element={<SongExportDisplay />}></Route>
         <Route path='*' element={<NotFound />}></Route>

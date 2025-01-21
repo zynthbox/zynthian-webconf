@@ -1,3 +1,4 @@
+const ROOTDIR = "/home/pi/";
 export function arrayUnique(array) {
     var a = array.concat();
     for(var i=0; i<a.length; ++i) {
@@ -11,7 +12,7 @@ export function arrayUnique(array) {
 
 export function generateNewFolderChain(path,files){
     let folderChain = [];
-    let newPath = "/home/pi/";
+    let newPath = ROOTDIR;
     const pathsArray = path.split('/');
     for (var i = 0; i < pathsArray.length; i++){
         let fc = files.filter(file => file.path === newPath + pathsArray[i])[0];

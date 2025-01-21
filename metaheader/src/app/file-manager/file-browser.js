@@ -20,6 +20,7 @@ import { useLongPress } from '../helpers';
 
 import { Context } from './context/context-provider'
 
+const ROOTDIR = "/home/pi/";
 function WebconfFileBrowser(props){
 
   const { fileManagerState, fileManagerDispatch } = useContext(Context)
@@ -81,7 +82,7 @@ function WebconfFileBrowser(props){
     const previousName = previousPath.split('/')[previousPath.split('/').length - 1]
     const folderName = window.prompt(`Enter new name for "${previousName}":`,previousName);
     if (folderName !== null){
-      const fullPath = selectedFolder === null ? "/home/pi/" + folderName : previousPath.split(selectedFolder)[0] + selectedFolder + "/" + folderName;
+      const fullPath = selectedFolder === null ? ROOTDIR + folderName : previousPath.split(selectedFolder)[0] + selectedFolder + "/" + folderName;
       fileManagerDispatch({type:"RENAME_FILE",payload:{previousPath,fullPath}})
       renameFile(previousPath,fullPath)
     }
@@ -222,7 +223,7 @@ function WebconfFileBrowser(props){
       let destination = "";
       if (selectedFolder !== null){
         destination = selectedFolder + data.payload.destination.path.split(selectedFolder)[1];
-      } else destination =  data.payload.destination.path.split('/home/pi/')[1];
+      } else destination =  data.payload.destination.path.split(ROOTDIR)[1];
 
       if (df.indexOf('.') > -1){
         destination += fsep + df.split(fsep)[df.split(fsep).length - 1]
@@ -241,7 +242,7 @@ function WebconfFileBrowser(props){
     setLoadingText('Copying Files')
     setLoading(true)
 
-    console.log(previousPaths,destinationPaths)
+    // console.log(previousPaths,destinationPaths)
 
     copyPasteFile(previousPaths,destinationPaths,deleteOrigin,0)
   }
@@ -524,7 +525,7 @@ const FileBrowserHeader = (props) => {
         if (historyDropDownType === "back" && index > browseHistoryIndex) showItem = false;
         else if (historyDropDownType === "forward" && index < browseHistoryIndex) showItem = false;
         if (showItem === true){
-          let nameDisplay = h.path === "/home/pi/" ? "zynthian" : h.path.indexOf('/') > -1 ? h.path.split('/')[h.path.split('/').length - 1] : h.path;
+          let nameDisplay = h.path === ROOTDIR ? "zynthian" : h.path.indexOf('/') > -1 ? h.path.split('/')[h.path.split('/').length - 1] : h.path;
           let itemCssClass;
           if (index === browseHistoryIndex){
             itemCssClass = "active"
