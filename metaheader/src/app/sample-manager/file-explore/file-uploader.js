@@ -6,7 +6,10 @@ import { BiRename } from 'react-icons/bi';
 import { ImUpload } from 'react-icons/im';
 import { FaWindowClose } from 'react-icons/fa';
 
-import { humanFileSize } from '../helpers';
+import { humanFileSize } from '../../helpers';
+
+import { ROOTDIR } from "./helpers/settings.js";
+
 
 function FileUploader(props) {
 
@@ -77,11 +80,13 @@ function FileUploader(props) {
     if (selectedFolder !== null){
       folderPath = selectedFolder.slice(-1) === "/" ? selectedFolder : selectedFolder + "/";
     }
-    const filePath = folderPath + files[index].path.split(files[index].name)[0];
-    console.log('>>>>>>>>>>>>>>>>>>>uploadFile');
-    console.log(selectedFolder)
-    console.log(files)
-    console.log(filePath,"filePath")
+    const filePath = (ROOTDIR.startsWith('/home/pi')?ROOTDIR.substring(9):ROOTDIR)
+                    +folderPath + files[index].path.split(files[index].name)[0];
+    // const filePath = folderPath + files[index].path.split(files[index].name)[0];
+    // console.log('>>>>>>>>>>>>>>>>>>>uploadFile');
+    // console.log(selectedFolder)
+    // console.log(files)
+    // console.log(filePath,"filePath")
     const url = `http://${window.location.hostname}:3000/upload/${filePath.split(fsep).join('+++')}`
     const formData = new FormData();
     formData.append('file', files[index])
