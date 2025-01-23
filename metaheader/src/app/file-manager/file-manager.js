@@ -43,10 +43,7 @@ const FileManager = ({dir}) => {
         fileManagerDisplay = (
             <React.Fragment>
                 <TreeView />
-                <Suspense fallback={<LoadingSpinner/>}>
-                    <div>
-                        {JSON.stringify(fileManagerState)}
-                    </div>
+                <Suspense fallback={<LoadingSpinner/>}>                    
                     <WebconfFileBrowser
                         fsep={fsep}
                         refreshFileManager={getFiles}

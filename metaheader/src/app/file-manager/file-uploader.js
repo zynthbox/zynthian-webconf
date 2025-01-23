@@ -78,10 +78,10 @@ function FileUploader(props) {
       folderPath = selectedFolder.slice(-1) === "/" ? selectedFolder : selectedFolder + "/";
     }
     const filePath = folderPath + files[index].path.split(files[index].name)[0];
-    console.log('>>>>>>>>>>>>>>>>>>>uploadFile');
-    console.log(selectedFolder)
-    console.log(files)
-    console.log(filePath,"filePath")
+    // console.log('>>>>>>>>>>>>>>>>>>>uploadFile');
+    // console.log(selectedFolder)
+    // console.log(files)
+    // console.log(filePath,"filePath")
     const url = `http://${window.location.hostname}:3000/upload/${filePath.split(fsep).join('+++')}`
     const formData = new FormData();
     formData.append('file', files[index])

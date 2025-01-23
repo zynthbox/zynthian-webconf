@@ -268,8 +268,7 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage,   limits: { fieldSize: 25 * 1024 * 1024 }  }).fields([{name:'file',maxCount:100}])
 
-exports.uploadFiles = (req, res) => {
-
+exports.uploadFiles = (req, res) => {      
   upload(req, res, function (err) {   
     if (err instanceof multer.MulterError) {
       console.log(err);

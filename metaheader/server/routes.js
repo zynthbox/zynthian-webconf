@@ -3,6 +3,8 @@ var FilesController = require('./controllers/filesController.js');
 var sketchEditorController = require('./controllers/sketchEditorController.js');
 var favoritesController = require('./controllers/favoritesController.js');
 var songExportController = require('./controllers/songExportController.js');
+var trackerController = require('./controllers/trackerController.js');
+
 
 module.exports = function (app) {
     
@@ -41,4 +43,7 @@ module.exports = function (app) {
     // SONG EXPORTS
     app.get('/songexports', songExportController.getSongExports)
 
+    // Tracker
+    app.post('/tracker-info/:folder',trackerController.getTrackerInfo)
+    app.get('/play-sample/:folder',trackerController.playSample)
 };
