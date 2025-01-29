@@ -1,5 +1,6 @@
 
 const fs = require('fs');
+const openmpt = require('../lib/libopenmpt.js');
 const { exec } = require('child_process');
 const { readdirSync, rmSync } = require('fs');
 const path = require("path")
@@ -21,9 +22,25 @@ var storage = multer.diskStorage({
       }
     })
     
-    var upload = multer({ storage: storage,   limits: { fieldSize: 25 * 1024 * 1024 }  }).fields([{name:'file',maxCount:100}])
-    
-  exports.getTrackerInfo = (req,res) => {
+var upload = multer({ storage: storage,   limits: { fieldSize: 25 * 1024 * 1024 }  }).fields([{name:'file',maxCount:100}])
+
+const uploadMemory = multer({storage: multer.memoryStorage()})
+
+// try to use libopenmpt.js read samples
+// // const modFile = fs.readFileSync('./music/sample.mod');
+// // exports.getTrackerInfo = (req,res) => {
+  
+// //   openmpt().then((Module)=>{
+// //      const mod = new Module.Module(modFile);
+// //      console.log('title:',mod.get_metadata('title'));
+// //   })
+
+//   return res.status(200).json({message:'fileinfo',samples:[],path:'path'}) 
+// }
+
+
+
+ exports.getTrackerInfo = (req,res) => {
       
       const filepath = destFolder+req.params.folder;
       upload(req, res, function (err) {   
@@ -59,14 +76,14 @@ var storage = multer.diskStorage({
                     console.error(`stderr: ${stderr}`);
                     return;
                   }   
-                  // read files from samples                          
+                  // read files from destFold/firstDirectory                          
                   const files = fs.readdirSync(destFolder);  
                   let path;                
                   files.forEach(function(file) {
                     // find extract folder
                     if (fs.statSync(`${destFolder}/${file}`).isDirectory()) {
                       samples = fs.readdirSync(`${destFolder}/${file}`);  
-                      path = file;                                       
+                      path = file;                                                                                 
                     }
                   })    
                   

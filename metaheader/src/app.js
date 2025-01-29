@@ -10,6 +10,7 @@ import LoadingSpinner from './app/loading-spinner';
 import RootLayout from './layouts/RootLayout';
 import NotFound from './app/NotFound';
 
+const SketchpadManager = lazy(()=>import('./app/sketchpad-manager/SketchpadManager'))
 const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
 const SampleManger= lazy(()=>import('./app/sample-manager/SampleManager'))
 const SampleEditor = lazy(()=>import('../store/sampleEditor/SampleEditor'))
@@ -37,6 +38,9 @@ function fileManagerLeftCss(){
     return fileManagerLeftCss;
 }
 
+
+
+
 function FileManagerDisplay(){
     return (
             <>
@@ -53,6 +57,23 @@ function FileManagerDisplay(){
                 </div>
                 <div id="file-manager-overlay"></div>
             </>
+    )
+}
+
+
+function SketchpadManagerDisplay(){
+    return (
+        <>
+            <div id="sample-manager-display" className="container" style={{left:fileManagerLeftCss()}}>
+            <h3>
+                <i className="glyphicon glyphicon-file"></i>
+                SKETCHPAD MANAGER
+            </h3>
+            <Suspense fallback={<LoadingSpinner/>}>
+                <SketchpadManager  />
+            </Suspense>                        
+           </div>          
+        </>
     )
 }
 
@@ -148,6 +169,7 @@ function SongExportDisplay(){
 const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />}>
+        <Route path="sketchpad-manager" element={<SketchpadManagerDisplay />}></Route>
         <Route path="file-manager" element={<FileManagerDisplay />}></Route>
         <Route path="sample-manager" element={<SampleManagerDisplay />}></Route>
         <Route path="track-manager" element={<SampleEditorDisplay />}></Route>

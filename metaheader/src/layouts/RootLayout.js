@@ -9,8 +9,12 @@ export default function RootLayout() {
         <a href="#m" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tools <span className="caret"></span></a>
         <ul className="dropdown-menu">
             <li>
+            <NavLink to="sketchpad-manager"> Sketchpad Manager </NavLink>
+            </li>
+            <li>
             <NavLink to="file-manager"> File manager </NavLink>
             </li>
+           
             <li>
             <NavLink to="sample-manager"> Sample Manager </NavLink>              
             </li>

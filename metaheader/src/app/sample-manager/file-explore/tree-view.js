@@ -67,13 +67,14 @@ function TreeViewItem(props){
             </div>
         )
     }
-
+    let l = 8 + (item && item.level)?item.level*12 : 0
+    let p = 25 + (item && item.level)?item.level*15 : 0
     return (
         <li>
-            <span onClick={() => onItemClick(item,parentIds)} className='toggle-sub-menu' style={{ left:8 + (item.level * 12)}}>
+            <span onClick={() => onItemClick(item,parentIds)} className='toggle-sub-menu' style={{ left:l}}>
                 <i className={isToggled=== true ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'}></i>
             </span>
-            <a onClick={() => onItemClick(item,parentIds)} style={{paddingLeft:25 + (item.level * 15)}} className={item.active === true ? "active" : ""}>{item.name} </a>
+            <a onClick={() => onItemClick(item,parentIds)} style={{paddingLeft:p}} className={item.active === true ? "active" : ""}>{item.name} </a>
             {itemChildrenDisplay}
         </li>
     )

@@ -76,3 +76,7 @@
   text-align: center;
   padding-top: 25px;
 }
+#sample-manager-display .module-container .metadata {
+  max-height: 200px;
+  overflow-y: auto;
+}
