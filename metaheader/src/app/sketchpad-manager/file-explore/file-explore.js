@@ -20,10 +20,11 @@ const FileExplore = () => {
 
     
     useEffect(() => {
-        getFiles();
+        getFiles();        
     },[fileManagerState.selectedFolder])
 
     async function getFiles(){
+        
         const folder = ROOTDIR + (fileManagerState.selectedFolder !== null ? fileManagerState.selectedFolder + "/" : "")       
         
         fetch(`http://${window.location.hostname}:3000/folder/${folder.split('/').join('+++')}`, {
@@ -45,8 +46,8 @@ const FileExplore = () => {
         fileManagerDisplay = (
             <React.Fragment>
                 <TreeView />
-                <Suspense fallback={<LoadingSpinner/>}>
-                    
+                { /**
+                <Suspense fallback={<LoadingSpinner/>}>                    
                     <WebconfFileBrowser
                         fsep={fsep}
                         refreshFileManager={getFiles}
@@ -56,6 +57,7 @@ const FileExplore = () => {
                     />
                     
                 </Suspense>
+                 */}
             </React.Fragment>
         )
     }

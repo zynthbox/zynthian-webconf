@@ -30,5 +30,10 @@ export const getCurrentSketchpadFolder = (lastSelectedSketchpad,sketchpadName) =
 }
   
 export const getSampleSelectedFolder = (folder,channelIndex) => {
+  if(folder.indexOf('zynthian/')!==-1){
     return `/${folder.split('zynthian/')[1]}wav/sampleset/sample-bank.${channelIndex + 1}/`
+  }else if(folder.indexOf('home/pi/')!==-1){
+    
+    return `/${folder.split('home/pi/')[1]}wav/sampleset/sample-bank.${channelIndex + 1}/`
+  }
 }

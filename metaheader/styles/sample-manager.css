@@ -48,6 +48,14 @@
 #sample-manager-display #file-manager .chonky-chonkyRoot {
   overflow: auto;
 }
+#sample-manager-display #file-manager .file-manager-wrapper .tree-view-container {
+  width: 100%;
+}
+#sample-manager-display #sample-editor-container {
+  position: relative;
+  margin-top: 0;
+  margin-left: 0;
+}
 #sample-manager-display .module-container a {
   cursor: pointer;
 }

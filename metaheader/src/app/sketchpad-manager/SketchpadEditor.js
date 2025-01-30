@@ -22,7 +22,7 @@ const SketchpadEditor =()=> {
         }
     }
     return (
-      <div>{sketchpadinfo}</div>
+      <div>{fileManagerState.selectedFolder}</div>
     )
   
 }

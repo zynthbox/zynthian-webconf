@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from './context/context-provider'
 import { ROOTDIR } from "./helpers/settings.js";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSketchpadInfo } from '../../../../store/sampleEditor/sampleEditorSlice.js';
 
 function TreeView(props){
 
     const { fileManagerState, fileManagerDispatch } = useContext(Context)
-
+    const dispatch = useDispatch()
     function onTreeItemClick(item,parentIds){
 
         let treeItemPayload = {
@@ -21,7 +23,17 @@ function TreeView(props){
                 name:ROOTDIR
             }
         }   
-        fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})
+        if(item.isDir){
+                fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})
+            }
+        if (item.path.indexOf("sketchpad.json") > -1){                   
+            let path = item.path;
+            // patch for sampleEditor
+            if(item.path.indexOf('/home/pi/')!==-1){
+                path='/zynthian/'+item.path.split('/home/pi/')[1]
+            }         
+            dispatch(updateSketchpadInfo({filePath:path,fileName:item.name}))
+        }
     }
 
     return (
@@ -67,14 +79,19 @@ function TreeViewItem(props){
             </div>
         )
     }
-    let l = 8 + (item && item.level)?item.level*12 : 0
-    let p = 25 + (item && item.level)?item.level*15 : 0
+    let l = 8 + ((item && item.level)?item.level*12 : 0)
+    let p = 25 + ((item && item.level)?item.level*15 : 0)
+    
     return (
         <li>
-            <span onClick={() => onItemClick(item,parentIds)} className='toggle-sub-menu' style={{ left:l}}>
-                <i className={isToggled=== true ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'}></i>
-            </span>
-            <a onClick={() => onItemClick(item,parentIds)} style={{paddingLeft:p}} className={item.active === true ? "active" : ""}>{item.name} </a>
+            {item.isDir &&
+                <span onClick={() => onItemClick(item,parentIds)} className='toggle-sub-menu' style={{ left:l}}>
+                    <i className={isToggled=== true ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'}></i>
+                </span>
+            }           
+            <a onClick={() => onItemClick(item,parentIds)} style={{paddingLeft:p}} className={item.active === true ? "active" : ""}>
+                {item.name} 
+            </a>
             {itemChildrenDisplay}
         </li>
     )

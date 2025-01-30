@@ -15,7 +15,7 @@ export const getSketchpadInfo = createAsyncThunk(
         },
       }
     );
-    const res = await response.json();
+    const res = await response.json();    
     return res;
   }
 );
@@ -38,7 +38,7 @@ export const updateSketchpadInfo = createAsyncThunk(
         .split("/")
         .join("+++")}`,
       formData
-    );
+    );    
     return updatedSketchpadInfo;
   }
 );
@@ -58,28 +58,28 @@ export const getSketchpad = createAsyncThunk(
         },
       }
     );
-    const sketchpad = await response.json();
-
-    const folder =
-      lastSelectedSketchpad.split(sketchpad.name)[0] + sketchpad.name + "/";
-     
-    let samplesEndpoints = [];
-    sketchpad.tracks.forEach(function (channel, index) {
-      const url = `http://${window.location.hostname}:3000/track/${folder
-        .split("/")
-        .join("+++")}:${index + 1}`;        
-      samplesEndpoints.push(url);
-    });
-    
-    const responses = await axios.all(
-      samplesEndpoints.map((endpoint) => axios.get(endpoint))
-    );
-    responses.forEach(function (res, index) {
-      let samples = [null, null, null, null, null];
-      if (!res.data.message) samples = res.data;
-      sketchpad.tracks[index].samples = samples;
-    });
-  
+    const sketchpad = await response.json();       
+    /** no need since august. 2024
+      const folder =
+        lastSelectedSketchpad.split(sketchpad.name)[0] + sketchpad.name + "/";
+      
+      let samplesEndpoints = [];
+      sketchpad.tracks.forEach(function (channel, index) {
+        const url = `http://${window.location.hostname}:3000/track/${folder
+          .split("/")
+          .join("+++")}:${index + 1}`;        
+        samplesEndpoints.push(url);
+      });
+      
+      const responses = await axios.all(
+        samplesEndpoints.map((endpoint) => axios.get(endpoint))
+      );
+      responses.forEach(function (res, index) {
+        let samples = [null, null, null, null, null];
+        if (!res.data.message) samples = res.data;
+        sketchpad.tracks[index].samples = samples;
+      });
+    */
     return sketchpad;
   }
 );
@@ -128,8 +128,9 @@ export const uploadSamples = createAsyncThunk(
   async ({files,channelIndex,sampleIndex},{getState}) => {
     const { sketchpadInfo, sketchpad, tracks} = getState().sampleEditor;
     const folder = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name)
+    console.log('>>>>>>>>>uploadSamples>>>>folder',folder)
     const selectedFolder = getSampleSelectedFolder(folder,channelIndex)
-
+    console.log('>>>>>>>>>uploadSamples>>>>selectedFolder',selectedFolder)
     let uploadSamplesRequests = [];
     files.forEach(function(file,i){
       const formData = new FormData();
@@ -151,14 +152,15 @@ export const uploadSamples = createAsyncThunk(
     
     const newSamples = generateNewSamples(sampleIndex,sketchpad.tracks[channelIndex].samples,files)
 
-    let json = JSON.stringify(newSamples);
-    const blob = new Blob([json], { type: "application/json" });
-    const formData = new FormData();
-    formData.append("file", blob, "sample-bank.json"); // appending file
-    const uploadSamplesJsonRequest = await axios.post(
-      `http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`, 
-      formData 
-    )
+    // #deprecated
+    // let json = JSON.stringify(newSamples);
+    // const blob = new Blob([json], { type: "application/json" });
+    // const formData = new FormData();
+    // formData.append("file", blob, "sample-bank.json"); // appending file
+    // const uploadSamplesJsonRequest = await axios.post(
+    //   `http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`, 
+    //   formData 
+    // )
     return {
       samples:newSamples,
       channelIndex
@@ -181,9 +183,13 @@ export const removeSamples = createAsyncThunk(
     if (sampleIndex || sampleIndex == 0 ){
       newSamples[sampleIndex] = null
       const sample = sketchpad.tracks[channelIndex].samples[sampleIndex]
-      let sampleFilePath = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name);
+      let sampleFilePath = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name);   
+      
       sampleFilePath += `wav/sampleset/sample-bank.${channelIndex+1}/` + sample.path;
-      sampleFilePath = `/home/pi/${sampleFilePath.split('/zynthian/')[1]}`
+      if(sampleFilePath.indexOf('/zynthian/')!== -1){
+        sampleFilePath = `/home/pi/${sampleFilePath.split('/zynthian/')[1]}`
+      }      
+  
       const deleteSampleRequest = axios.post(
         `http://${window.location.hostname}:3000/delete/`,
         {fullPath:sampleFilePath}
@@ -197,7 +203,9 @@ export const removeSamples = createAsyncThunk(
         if (sample !== null){
           let sampleFilePath = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name);
           sampleFilePath += `wav/sampleset/sample-bank.${channelIndex+1}/` + sample.path;
-          sampleFilePath = `/home/pi/${sampleFilePath.split('/zynthian/')[1]}`
+          if(sampleFilePath.indexOf('/zynthian/')!== -1){
+            sampleFilePath = `/home/pi/${sampleFilePath.split('/zynthian/')[1]}`
+          }
           const deleteSampleRequest = axios.post(
             `http://${window.location.hostname}:3000/delete/`,
             {fullPath:sampleFilePath}
@@ -215,14 +223,16 @@ export const removeSamples = createAsyncThunk(
       payloadArray.push({ data: res.data });
     });
     
-    let json = JSON.stringify(newSamples);
-    const blob = new Blob([json], { type: "application/json" });
-    const formData = new FormData();
-    formData.append("file", blob, "sample-bank.json"); // appending file
-    const uploadSamplesJsonRequest = await axios.post(
-      `http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`, 
-      formData 
-    )
+    // #deprecated
+    // let json = JSON.stringify(newSamples);
+    // const blob = new Blob([json], { type: "application/json" });
+    // const formData = new FormData();
+    // formData.append("file", blob, "sample-bank.json"); // appending file
+    // const uploadSamplesJsonRequest = await axios.post(
+    //   `http://${window.location.hostname}:3000/upload/${selectedFolder.split('/').join('+++')}`, 
+    //   formData 
+    // )
+
     return {
       samples:newSamples,
       channelIndex

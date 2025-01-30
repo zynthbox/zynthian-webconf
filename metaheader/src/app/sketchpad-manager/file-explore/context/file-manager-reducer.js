@@ -1,8 +1,7 @@
 import { generateTreeFromArray } from "../helpers/tree-data-helpers";
 import { arrayUnique, generateNewFolderChain } from '../helpers/file-manager-helpers';
+import { ROOTDIR } from "../helpers/settings.js";
 
-const ffolder = "/home/pi/zynthian-my-data/samples/";
-const ROOTDIR = "/home/pi/zynthian-my-data/samples/";
 export const FileManagerInitialState = {
     loading:true,
     filesLoading:false,
@@ -11,8 +10,8 @@ export const FileManagerInitialState = {
     displayedFiles:[],
     folderChain:[{ 
         id: 'xcv', 
-        name: "zynthian", 
-        alias:ffolder , 
+        name: "Sketchpads", 
+        alias:ROOTDIR , 
         isDir: true 
     }],
     browseHistory:[{
@@ -124,9 +123,9 @@ function ProductViewReducer(state,action){
 
             displayedFiles = action.payload.map(f=>({...f,id:f.path}));            
           
-            let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder)
-
-      
+            //let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder)
+            let treeData = generateTreeFromArray(files,state.folderChain,state.selectedFolder)
+            
             return {
                 ...state,
                 files,

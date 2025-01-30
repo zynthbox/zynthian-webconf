@@ -6,6 +6,7 @@ const zynthboxConfigFolder = `/root/.config/zynthbox/zynthbox-qml.conf`;
 // for local testing
 // const zynthboxConfigFolder = `${rootFolder}sessions/zynthbox-qml.conf`;  
 
+//lastSelectedSketchpad=/zynthian/zynthian-my-data/sketchpads/my-sketchpads/Sketchpad-dong/Autosave.sketchpad.json
 function getLastSelectedSketchFolderName(){
     var ConfigIniParser = require("config-ini-parser").ConfigIniParser;
     parser = new ConfigIniParser(); //Use default delimiter

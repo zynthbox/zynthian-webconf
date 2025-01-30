@@ -30,13 +30,12 @@ function getTreeChildren(array,folderChain,selectedFolder,parentPath){
 export function generateTreeFromArray(array,folderChain,selectedFolder){
    
     let newTreeData = {
-        name:'zynthian',
+        name:'My Sketchpads',
         toggled:true,
-        path:'/home/pi',
+        path:ROOTDIR,
         active:selectedFolder === null ? true : false,
         children:getTreeChildren(array,folderChain,selectedFolder,ROOTDIR)
     }
-
     return newTreeData
 
 }

@@ -23,14 +23,19 @@ const Sample = (props) => {
     
 
     
-    useEffect(() => {       
+    useEffect(() => {               
         if (sample && sample.path){                
-            let url=null;    
-            const folder = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name)                 
+            let url=null;               
+            const folder = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name)               
+            let dir = folder.substring(folder.indexOf('zynthian-my-data'));            
+            // handle specialcase remove 'Autosave.sketchpad.json' which sketchpad.name different with name from lastSelectedSketchpad
+            dir = dir.split('/Autosave.sketchpad.json')[0]
             if(sampleSetMode=='sample-trig'){
-                url = `http://${window.location.hostname}:3000/${folder.split('/zynthian/')[1]}/wav/sampleset/sample-bank.${channelIndex +1}/${sample.path}`
+                url = `http://${window.location.hostname}:3000/${dir}/wav/sampleset/sample-bank.${channelIndex +1}/${sample.path}`
+                //url = `http://${window.location.hostname}:3000/${folder.split('/zynthian/')[1]}/wav/sampleset/sample-bank.${channelIndex +1}/${sample.path}`
             }else if(sampleSetMode=='synth' || sampleSetMode=='sample-loop'){
-                url = `http://${window.location.hostname}:3000/${folder.split('/zynthian/')[1]}/wav/${sample.path}`;
+                url = `http://${window.location.hostname}:3000/${dir}/wav/${sample.path}`;
+                //url = `http://${window.location.hostname}:3000/${folder.split('/zynthian/')[1]}/wav/${sample.path}`;
             }
            setUrl(url);         
         }else{

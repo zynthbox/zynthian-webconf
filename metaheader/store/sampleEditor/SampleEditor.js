@@ -103,7 +103,9 @@ const SampleEditor = ({colorsArray}) => {
                     <li><a onClick={() => handleLoadClick()}>Load</a></li>
                     <li><a onClick={() => dispatch(saveSketchpad())}>Save</a></li>
                     <li><a onClick={() => {handleSaveSketchpadAs()}}>Save As...</a></li>
-                    {sketchpadInfo !== null ? <li style={{float:"right"}}><a>{sketchpadInfo.lastSelectedSketchpad}</a></li>: ''}
+                    {sketchpadInfo !== null ? 
+                        <li style={{float:"right"}}>
+                        <a>{sketchpadInfo.lastSelectedSketchpad.substring(sketchpadInfo.lastSelectedSketchpad.indexOf('my-sketchpads'))}</a></li>: ''}
                 </ul>
             </div>
             <div id="sample-editor" style={sampleEditorStyle}>
