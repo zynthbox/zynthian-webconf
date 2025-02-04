@@ -47,7 +47,7 @@ module.exports = function (app) {
 
     // Tracker
     app.post('/tracker-info/:folder',trackerController.getTrackerInfo)
-    // app.get('/play-sample/:folder',trackerController.playSample)
+    app.get('/play-sample/:folder',trackerController.playSample)
 
     // fileTree
     app.get('/tree/mysketchpad', fileTreeController.getSketchpadFileTree)

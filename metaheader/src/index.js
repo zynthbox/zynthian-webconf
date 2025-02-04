@@ -7,6 +7,10 @@ import FileManagerContextProvider from './app/file-manager/context/context-provi
 import LoadingSpinner from './app/loading-spinner';
 
 const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
+const SketchpadManager = lazy(()=>import('./app/sketchpad-manager/SketchpadManager'))
+const SoundManager = lazy(()=>import('./app/sound-manager/SoundManager'))
+const SampleManger= lazy(()=>import('./app/sample-manager/SampleManager'))
+
 const SampleEditor = lazy(()=>import('../store/sampleEditor/SampleEditor'))
 const Favorites = lazy(()=>import('../store/favorites/favorites'))
 const SketchPadXtractor = lazy(()=>import('../store/sketchpadXtractor/SketchpadXtractor')) 
@@ -14,11 +18,15 @@ const SongExport = lazy(()=>import('../store/songExport/SongExport'))
 
 function MetaHeader(){
 
-    const [ showFileManager, setShowFileManager ] = useState(false)
+    const [ showFileManager, setShowFileManager ] = useState(false)    
     const [ showSampleEditor, setShowSampleEditor ] = useState(false);
     const [ showFavorites, setShowFavorites ] = useState(false)
     const [ showXtractor, setShowXtractor ] = useState(false)
     const [ showSongExport, setShowSongExport ] = useState(false)
+
+    const [ showSketchManager, setShowSketchManager ] = useState(false)
+    const [ showSampleManager, setShowSampleManager ] = useState(false)
+    const [ showSoundManager, setShowSoundManager ] = useState(false)
 
     useEffect(() => {
         if (showFileManager === true){
@@ -26,6 +34,10 @@ function MetaHeader(){
             setShowFavorites(false)
             setShowXtractor(false)
             setShowSongExport(false)
+
+            setShowSketchManager(false)
+            setShowSampleManager(false)
+            setShowSoundManager(false)
         }
     },[showFileManager])
 
@@ -35,6 +47,10 @@ function MetaHeader(){
             setShowFavorites(false)
             setShowXtractor(false)
             setShowSongExport(false)
+
+            setShowSketchManager(false)
+            setShowSampleManager(false)
+            setShowSoundManager(false)
         }
     },[showSampleEditor])
 
@@ -44,6 +60,10 @@ function MetaHeader(){
             setShowSampleEditor(false)
             setShowXtractor(false)
             setShowSongExport(false)
+
+            setShowSketchManager(false)
+            setShowSampleManager(false)
+            setShowSoundManager(false)
         }
     },[showFavorites])
 
@@ -53,6 +73,10 @@ function MetaHeader(){
             setShowSampleEditor(false)
             setShowFavorites(false)
             setShowSongExport(false)
+
+            setShowSketchManager(false)
+            setShowSampleManager(false)
+            setShowSoundManager(false)
         }
     },[showXtractor])
 
@@ -62,8 +86,53 @@ function MetaHeader(){
             setShowSampleEditor(false)
             setShowFavorites(false)
             setShowXtractor(false)
+
+            setShowSketchManager(false)
+            setShowSampleManager(false)
+            setShowSoundManager(false)
         }
     },[showSongExport])
+
+    useEffect(() => {
+        if (showSketchManager === true){
+            setShowFileManager(false)
+            setShowSampleEditor(false)
+            setShowFavorites(false)
+            setShowXtractor(false)
+            setShowSongExport(false)
+
+            setShowSampleManager(false)
+            setShowSoundManager(false)
+        }
+    },[showSketchManager])
+
+
+    useEffect(() => {
+        if (showSampleManager === true){
+            setShowFileManager(false)
+            setShowSampleEditor(false)
+            setShowFavorites(false)
+            setShowXtractor(false)
+            setShowSongExport(false)
+
+            setShowSketchManager(false)         
+            setShowSoundManager(false)
+        }
+    },[showSampleManager])
+
+    useEffect(() => {
+        if (showSoundManager === true){
+            setShowFileManager(false)
+            setShowSampleEditor(false)
+            setShowFavorites(false)
+            setShowXtractor(false)
+            setShowSongExport(false)
+
+            setShowSketchManager(false)
+            setShowSampleManager(false)
+           
+        }
+    },[showSoundManager])
 
     const colorsArray = [
         "#B23730",
@@ -173,6 +242,56 @@ function MetaHeader(){
         )        
     }
 
+    let sketchManagerDisplay;
+    if (showSketchManager === true){
+        sketchManagerDisplay = (
+            <>
+            <div id="sample-manager-display" className="container" style={{left:fileManagerLeftCss}}>
+            <h3>
+                <i className="glyphicon glyphicon-file"></i>
+                SKETCHPAD MANAGER
+            </h3>
+            <Suspense fallback={<LoadingSpinner/>}>
+                <SketchpadManager  />
+            </Suspense>                        
+           </div>          
+            </>
+        )        
+    }
+
+    let soundManagerDisplay;
+    if(showSoundManager===true){
+        soundManagerDisplay = (
+            <>
+                    <div id="sound-manager-display" className="container" style={{left:fileManagerLeftCss}}>
+                    <h3>
+                    <i className="glyphicon glyphicon-file"></i>SOUND MANAGER
+                    </h3>
+                    <Suspense fallback={<LoadingSpinner/>}>
+                        <SoundManager />
+                    </Suspense> 
+                </div>
+            </>
+        )
+    }
+
+    let sampleManagerDisplay;
+    if(showSampleManager===true){
+        sampleManagerDisplay = (
+            <>
+                <div id="sample-manager-display" className="container" style={{left:fileManagerLeftCss}}>
+                <h3>
+                    <i className="glyphicon glyphicon-file"></i>
+                    SAMPLE MANAGER
+                </h3>
+                <Suspense fallback={<LoadingSpinner/>}>
+                    <SampleManger  />
+                </Suspense>                        
+                </div>    
+            </>
+        )
+    }    
+
     return (
         <Provider store={store}>
             <React.Fragment>
@@ -182,7 +301,20 @@ function MetaHeader(){
                     <a className={showFileManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFileManager(showFileManager === true ? false : true)}>File Manager</a>
                 </li>
                 <li>
-                    <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Tracks Editor</a>
+                    <a className={showSketchManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSketchManager(showSketchManager === true ? false : true)}>Sketchpad Manager</a>
+                </li>
+                <li>
+                    <a className={showSoundManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSoundManager(showSoundManager === true ? false : true)}>Sound Manager</a>
+                </li>
+                <li>
+                    <a className={showSampleManager === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleManager(showSampleManager === true ? false : true)}>Sample Manager</a>
+                </li>
+
+                <li>
+                    -- OLD --
+                </li>
+                <li>
+                    <a className={showSampleEditor === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowSampleEditor(showSampleEditor === true ? false : true)}>Tracks Manager</a>
                 </li>
                 <li>
                     <a className={showFavorites === true ? "active" : ""} style={{cursor:"pointer"}} onClick={() => setShowFavorites(showFavorites === true ? false : true)}>Favorites</a>
@@ -195,10 +327,13 @@ function MetaHeader(){
                 </li>
             </ul>
             {fileManagerDisplay}
+            {sketchManagerDisplay}
             {sampleEditorDisplay}
             {favoritesDisplay}
             {xtractorDisplay}
-            {songExportDisplay}
+            {songExportDisplay}    
+            {soundManagerDisplay}    
+            {sampleManagerDisplay}    
         </React.Fragment>
         </Provider>
     )

@@ -1,5 +1,6 @@
 
 const fs = require('fs');
+const fsextra = require('fs-extra');
 const openmpt = require('../lib/libopenmpt.js');
 const { exec } = require('child_process');
 const { readdirSync, rmSync } = require('fs');
@@ -13,6 +14,7 @@ var storage = multer.diskStorage({
               fs.mkdirSync(destFolder,{ recursive: true });
             }
             // empty temp folder
+            // fsextra.remove(destFolder);
             readdirSync(destFolder).forEach(f => rmSync(`${destFolder}/${f}`,{recursive: true, force: true}));
             cb(null, destFolder);      
       },
@@ -55,6 +57,8 @@ const uploadMemory = multer({storage: multer.memoryStorage()})
                         
             // get tracker info           
             exec(`openmpt123 --info ${filepath}`, (error, stdout, stderr) => {
+
+              console.log(`openmpt123 --info ${filepath}`);
               if (error) {
                 console.error(`exec error: ${error}`);
                 return;
@@ -101,18 +105,19 @@ const uploadMemory = multer({storage: multer.memoryStorage()})
       if (folder.indexOf('+++') > -1) folder = folder.split('+++').join('/');
       const url = destFolder+folder;
       // send_osc 1370 /CUIA/PLAY_WAVE_FILE 
-      console.log('play samples.....',url);
-      const cmd = 'send_osc 1370 /CUIA/PLAY_WAVE_FILE '+url;
-      // exec(cmd, (error, stdout, stderr) => {
-      //   if (error) {
-      //     console.error(`exec error: ${error}`);
-      //     return;
-      //   }
-      //   if (stderr) {
-      //     console.error(`stderr: ${stderr}`);
-      //     return;
-      //   }
-      // })      
+      
+      const cmd = 'send_osc 1370 /CUIA/PLAY_WAVE_FILE "'+url+'"';
+      console.log('play samples.....',cmd);
+      exec(cmd, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`exec error: ${error}`);
+          return;
+        }
+        if (stderr) {
+          console.error(`stderr: ${stderr}`);
+          return;
+        }
+      })      
     }
     
   }

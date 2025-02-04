@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSketchpadFileTree,toggleTree } from '../../../store/sound-manager/SoundManagerSlice'; 
 import Split from 'react-split'
 import TreeView from './TreeView'
+import SoundEditor from './SoundEditor';
 const SoundManager = () => {
     const { tree } = useSelector((state) => state.soundmanager);
     const dispatch = useDispatch();
@@ -11,12 +12,12 @@ const SoundManager = () => {
     },[])
 
   return (
-            <Split className="split" sizes={[20, 80]}>  
+            <Split className="split" sizes={[40, 60]}>  
             <div className='tree-container'>
                 <TreeView data={tree}/>     
             </div> 
             <div>
-                sound detail
+            <SoundEditor/>
             </div>                                                                             
             </Split>
   )

@@ -8,6 +8,8 @@
   "proxy": "http://localhost:3000",
   "scripts": {
     "server": "nodemon server.js",
+    "watch-app-new": "webpack --config webpack.config.js --mode development --watch",
+    "build-app-new": "webpack --config webpack.config.js --mode production",
     "watch-app": "webpack --config webpack.app.config.js --mode development --watch",
     "build-app": "webpack --config webpack.app.config.js --mode production"
   },

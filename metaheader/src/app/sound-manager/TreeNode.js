@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { FaFolder, FaFolderOpen, FaFile } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { BsSoundwave } from "react-icons/bs";
+import { selectSound } from '../../../store/sound-manager/SoundManagerSlice'; 
 const TreeNode = ({ node, searchTerm}) => {
 
     const [expanded, setExpanded] = useState(false);
 
     const { expandedAll } = useSelector((state) => state.soundmanager);
 
+    const dispatch = useDispatch();
     useEffect(() => {
         setExpanded(expandedAll)
     },[expandedAll])
@@ -46,7 +48,7 @@ const TreeNode = ({ node, searchTerm}) => {
                     </a>
                 }
                 {!node.isDirectory &&
-                    <a onClick={toggleExpand} style={{ cursor: "pointer" }}>
+                    <a onClick={()=>dispatch(selectSound(node.path))} style={{ cursor: "pointer" }}>
                         <FaFile /> {highlightText(node.name, searchTerm)}                                
                     </a>
                 }

@@ -32,6 +32,9 @@ const SoundManagerSlice = createSlice({
     toggleTree: (state, action) => {      
       state.expandedAll = !state.expandedAll
     },
+    selectSound: (state, action) => {      
+      state.soundSelected = action.payload
+    },
   },
   extraReducers: (builder) => {
     // GET SKETCHPAD
@@ -53,7 +56,7 @@ const SoundManagerSlice = createSlice({
 
 
   export const {
-    toggleTree
+    toggleTree,selectSound
   } = SoundManagerSlice.actions;
   
 export default SoundManagerSlice.reducer

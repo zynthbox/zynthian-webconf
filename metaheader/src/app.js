@@ -77,6 +77,7 @@ function SketchpadManagerDisplay(){
         </>
     )
 }
+
 function SoundManagerDisplay(){
     return(
         <React.Fragment>               
