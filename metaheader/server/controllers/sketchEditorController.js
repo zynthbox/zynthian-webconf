@@ -1,4 +1,5 @@
 const fs = require('fs'); 
+const fsextra = require('fs-extra'); 
 const path = require("path")
 const rootFolder = "/home/pi/zynthian-my-data/"
 var sampleBankFolder = `${rootFolder}sketchpads/my-sketchpads/temp/wav/sampleset/sample-bank`;
@@ -28,6 +29,30 @@ exports.getSketchInfo = (req,res) => {
     const entries = new Map(sketchpad);
     const config = Object.fromEntries(entries);
     res.json(config);    
+}
+
+// create new sketchpad from template return sketchpadInfo
+exports.createsketchpad = async(req, res) =>{  
+    try {      
+      const sketchpadName = req.params.sketchpadName
+      // Copy the directory
+      const srcDir = `${__dirname}/Sketchpad-template`;
+      const destDir = `${rootFolder}sketchpads/my-sketchpads/${sketchpadName}`;
+      await fsextra.copy(srcDir, destDir);      
+      // rename sketchpad.json Sketchpad-template.sketchpad.json
+      await fsextra.rename(`${destDir}/Sketchpad-template.sketchpad.json`, `${destDir}/${sketchpadName}.sketchpad.json`);      
+      // read JSON file path change name and write back to json
+      const sketchfile = `${destDir}/${sketchpadName}.sketchpad.json`;
+      let jsonData = await fsextra.readJson(sketchfile);      
+      jsonData.name = sketchpadName;
+      await fsextra.writeJson(sketchfile, jsonData);
+      // soundset .zss rename
+      await fsextra.rename(`${destDir}/soundsets/Sketchpad-template.zss`, `${destDir}/soundsets/${sketchpadName}.zss`);
+      res.json({lastSelectedSketchpad:`${destDir}/${sketchpadName}.sketchpad.json`})
+  } catch (error) {
+      console.error('Error:', error);
+  }
+
 }
 
 exports.getSketchList = (req,res) => {

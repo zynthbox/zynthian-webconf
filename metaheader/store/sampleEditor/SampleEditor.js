@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { copyPasteSamples, copyPasteSampleSet, getSketchpad, getSketchpadInfo, saveSketchpad, updateSketchpadInfo } from './sampleEditorSlice';
+import { copyPasteSamples, copyPasteSampleSet, getSketchpad, getSketchpadInfo, saveSketchpad, updateSketchpadInfo,createSketchpad } from './sampleEditorSlice';
 import { setFilePicker } from '../filePicker/filePickerSlice';
 import Channel from './Channel';
 import FilePicker from '../filePicker/FilePicker';
@@ -33,6 +33,12 @@ const SampleEditor = ({colorsArray}) => {
         //const filePickerFolder = sketchpadInfo.lastSelectedSketchpad.split(sketchpad.name)[0];    
         const filePickerFolder = '/zynthian/zynthian-my-data/sketchpads/my-sketchpads/';                
         dispatch(setFilePicker({folder:filePickerFolder,mode:'LOAD',type:'.sketchpad.json'})) 
+    }
+
+    function handleNewSketchpad(){
+        const sketchpadName = prompt("Enter Sketch name:");
+        if (!sketchpadName) return;
+        dispatch(createSketchpad(sketchpadName)) 
     }
 
     function handleFilePickerSelection(val,channelIndex,sampleIndex){
@@ -99,7 +105,7 @@ const SampleEditor = ({colorsArray}) => {
         <React.Fragment>
             <div className='sample-editor-menu'> 
                 <ul>
-                    <li><a>New</a></li>
+                    <li><a onClick={()=> handleNewSketchpad()}>New Sketchpad</a></li>
                     <li><a onClick={() => handleLoadClick()}>Load</a></li>
                     <li><a onClick={() => dispatch(saveSketchpad())}>Save</a></li>
                     <li><a onClick={() => {handleSaveSketchpadAs()}}>Save As...</a></li>

@@ -1,0 +1,40 @@
+#sound-manager-display {
+  background: white;
+  height: auto;
+  position: fixed;
+  margin-top: 35px;
+  margin-left: -8px;
+  padding: 0;
+  z-index: 2;
+}
+#sound-manager-display > h3 {
+  margin: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: black;
+  color: white;
+  padding: 5px;
+  padding-left: 15px;
+  border-radius: 5px 5px 0 0;
+}
+#sound-manager-display .split {
+  display: flex;
+  flex-direction: row;
+}
+#sound-manager-display .gutter {
+  background-color: #eee;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+#sound-manager-display .gutter.gutter-horizontal {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+  cursor: col-resize;
+}
+#sound-manager-display .tree-container {
+  height: 600px;
+  overflow: auto;
+}
+#sound-manager-display .tree-view button {
+  margin: 3px;
+}

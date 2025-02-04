@@ -123,14 +123,32 @@ export const saveSketchpad = createAsyncThunk(
   }
 );
 
+// create new Sketchpad directory from template
+export const createSketchpad = createAsyncThunk(
+  "sampleEditor/createSketchpad",
+  async (sketchpadName) => {
+    const response = await fetch(
+      `http://${window.location.hostname}:3000/createsketchpad/${sketchpadName}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const res = await response.json();        
+    return res;
+  }
+);
+
+
+
 export const uploadSamples = createAsyncThunk(
   "sampleEditor/uploadSamples",
   async ({files,channelIndex,sampleIndex},{getState}) => {
     const { sketchpadInfo, sketchpad, tracks} = getState().sampleEditor;
-    const folder = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name)
-    console.log('>>>>>>>>>uploadSamples>>>>folder',folder)
-    const selectedFolder = getSampleSelectedFolder(folder,channelIndex)
-    console.log('>>>>>>>>>uploadSamples>>>>selectedFolder',selectedFolder)
+    const folder = getCurrentSketchpadFolder(sketchpadInfo.lastSelectedSketchpad,sketchpad.name)    
+    const selectedFolder = getSampleSelectedFolder(folder,channelIndex)    
     let uploadSamplesRequests = [];
     files.forEach(function(file,i){
       const formData = new FormData();
@@ -399,6 +417,20 @@ const sampleEditorSlice = createSlice({
       state.statusItem = "sketchpad Info";
     });
     builder.addCase(getSketchpadInfo.rejected, (state, action) => {
+      state.error = action.error.message;
+      state.status = "failed";
+    });
+    
+    // NEW SKETCHPAD
+    builder.addCase(createSketchpad.fulfilled, (state, action) => {
+      state.sketchpadInfo = action.payload;
+      state.status = "idle";
+    })
+    .addCase(createSketchpad.pending, (state) => {
+      state.status = "loading";
+      state.statusItem = "sketchpad Info";
+    })
+    .addCase(createSketchpad.rejected, (state, action) => {
       state.error = action.error.message;
       state.status = "failed";
     });

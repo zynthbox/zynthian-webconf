@@ -8,6 +8,9 @@ export default function RootLayout() {
     <Provider store={store}>
         <a href="#m" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tools <span className="caret"></span></a>
         <ul className="dropdown-menu">
+           <li>
+            <NavLink to="sound-manager"> Sound Manager </NavLink>                   
+            </li>
             <li>
             <NavLink to="sketchpad-manager"> Sketchpad Manager </NavLink>
             </li>
@@ -22,7 +25,7 @@ export default function RootLayout() {
             <NavLink to="track-manager"> Track Manager </NavLink>              
             </li>
             <li>
-            <NavLink to="sound-manager"> Sound Manager </NavLink>                   
+            <NavLink to="sound-manager-old"> Sound Manager old</NavLink>                   
             </li>
             <li>
             <NavLink to="sketchpad-xtractor"> SketchPad Xtractor </NavLink>     

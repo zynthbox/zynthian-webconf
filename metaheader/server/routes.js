@@ -4,6 +4,7 @@ var sketchEditorController = require('./controllers/sketchEditorController.js');
 var favoritesController = require('./controllers/favoritesController.js');
 var songExportController = require('./controllers/songExportController.js');
 var trackerController = require('./controllers/trackerController.js');
+var fileTreeController = require('./controllers/fileTreeController.js');
 
 
 module.exports = function (app) {
@@ -31,6 +32,7 @@ module.exports = function (app) {
     app.get('/sketchinfo/',sketchEditorController.getSketchInfo)
     app.get('/sketchlist/', sketchEditorController.getSketchList)
     app.get('/sketch/:path', sketchEditorController.getSketch)
+    app.get('/createsketchpad/:sketchpadName',sketchEditorController.createsketchpad)
     app.get('/track/:id', sketchEditorController.getTrack)
     app.post('/track/:id', sketchEditorController.updateTrack)
     app.get('/sample/:id', sketchEditorController.getSample)
@@ -46,4 +48,9 @@ module.exports = function (app) {
     // Tracker
     app.post('/tracker-info/:folder',trackerController.getTrackerInfo)
     // app.get('/play-sample/:folder',trackerController.playSample)
+
+    // fileTree
+    app.get('/tree/mysketchpad', fileTreeController.getSketchpadFileTree)
+    app.get('/tree/mysounds', fileTreeController.getMySoundsFileTree)
+
 };

@@ -11,6 +11,7 @@ import RootLayout from './layouts/RootLayout';
 import NotFound from './app/NotFound';
 
 const SketchpadManager = lazy(()=>import('./app/sketchpad-manager/SketchpadManager'))
+const SoundManager = lazy(()=>import('./app/sound-manager/SoundManager'))
 const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
 const SampleManger= lazy(()=>import('./app/sample-manager/SampleManager'))
 const SampleEditor = lazy(()=>import('../store/sampleEditor/SampleEditor'))
@@ -76,6 +77,21 @@ function SketchpadManagerDisplay(){
         </>
     )
 }
+function SoundManagerDisplay(){
+    return(
+        <React.Fragment>               
+                <div id="sound-manager-display" className="container" style={{left:fileManagerLeftCss()}}>
+                    <h3>
+                    <i className="glyphicon glyphicon-file"></i>SOUND MANAGER
+                    </h3>
+                    <Suspense fallback={<LoadingSpinner/>}>
+                        <SoundManager />
+                    </Suspense> 
+                </div>
+                
+            </React.Fragment>
+    )
+}
 
 function SampleManagerDisplay(){
     return (
@@ -111,7 +127,7 @@ function SampleEditorDisplay(){
     )
 }
 
-function SoundManagerDisplay(){
+function SoundManagerOldDisplay(){
     return(
         <React.Fragment>
                
@@ -128,6 +144,8 @@ function SoundManagerDisplay(){
             </React.Fragment>
     )
 }
+
+
 
 
 function XtractorDisplay(){
@@ -169,11 +187,12 @@ function SongExportDisplay(){
 const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />}>
+         <Route path="sound-manager" element={<SoundManagerDisplay />}> </Route>
         <Route path="sketchpad-manager" element={<SketchpadManagerDisplay />}></Route>
         <Route path="file-manager" element={<FileManagerDisplay />}></Route>
         <Route path="sample-manager" element={<SampleManagerDisplay />}></Route>
         <Route path="track-manager" element={<SampleEditorDisplay />}></Route>
-        <Route path="sound-manager" element={<SoundManagerDisplay />}> </Route>
+        <Route path="sound-manager-old" element={<SoundManagerOldDisplay />}> </Route>
         <Route path="sketchpad-xtractor" element={<XtractorDisplay />}></Route>
         <Route path="song-export" element={<SongExportDisplay />}></Route>
         <Route path='*' element={<NotFound />}></Route>
