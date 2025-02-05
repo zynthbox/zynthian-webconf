@@ -13,3 +13,4 @@ zynthian-webconf.creator*
 zynthian-webconf.cxxflags
 zynthian-webconf.files
 zynthian-webconf.includes
+.qtc_clangd
