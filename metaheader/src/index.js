@@ -263,14 +263,15 @@ function MetaHeader(){
     if(showSoundManager===true){
         soundManagerDisplay = (
             <>
-                    <div id="sound-manager-display" className="container" style={{left:fileManagerLeftCss}}>
-                    <h3>
-                    <i className="glyphicon glyphicon-file"></i>SOUND MANAGER
-                    </h3>
-                    <Suspense fallback={<LoadingSpinner/>}>
-                        <SoundManager />
-                    </Suspense> 
-                </div>
+            <div id="sample-manager-display" className="container" style={{left:fileManagerLeftCss}}>
+            <h3>
+                <i className="glyphicon glyphicon-file"></i>
+                SOUND MANAGER
+            </h3>
+            <Suspense fallback={<LoadingSpinner/>}>
+                <SoundManager  />
+            </Suspense>                        
+           </div>          
             </>
         )
     }

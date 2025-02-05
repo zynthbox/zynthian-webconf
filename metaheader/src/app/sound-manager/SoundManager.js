@@ -1,26 +1,32 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from "react-redux";
-import { getSketchpadFileTree,toggleTree } from '../../../store/sound-manager/SoundManagerSlice'; 
-import Split from 'react-split'
-import TreeView from './TreeView'
-import SoundEditor from './SoundEditor';
-const SoundManager = () => {
-    const { tree } = useSelector((state) => state.soundmanager);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getSketchpadFileTree())        
-    },[])
+import React, { useEffect,Suspense,lazy } from 'react'
+import LoadingSpinner from '../loading-spinner';
+import Split from 'react-split';
+import FileManagerContextProvider from './file-explore/context/context-provider';
+const FileExplore = lazy(()=>import('./file-explore/file-explore'))
+const SoundEditor = lazy(()=>import('./SoundEditor'))
 
-  return (
-            <Split className="split" sizes={[40, 60]}>  
-            <div className='tree-container'>
-                <TreeView data={tree}/>     
-            </div> 
-            <div>
-            <SoundEditor/>
-            </div>                                                                             
+const SoundManager =()=>{
+    return (
+        <>
+           <Split className="split" sizes={[40, 60]}>
+                <FileManagerContextProvider>
+                <div>
+                    <div id="file-manager">                    
+                   
+                    <Suspense fallback={<LoadingSpinner/>}>
+                        <FileExplore/>
+                    </Suspense>                    
+                   
+                    </div>
+                </div>
+                <div id="sample-editor-container" className="container" >                    
+                    <Suspense fallback={<LoadingSpinner/>}>
+                        <SoundEditor />
+                    </Suspense>
+                </div>
+                </FileManagerContextProvider>
             </Split>
-  )
+        </>
+    )
 }
 export default SoundManager
-

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Context } from './context/context-provider'
 import { ROOTDIR } from "./helpers/settings.js";
 import { useDispatch, useSelector } from "react-redux";
-import { updateSketchpadInfo } from '../../../../store/sampleEditor/sampleEditorSlice.js';
+import { selectSound } from '../../../../store/sound-manager/SoundManagerSlice.js';
 
 function TreeView(props){
 
@@ -26,13 +26,13 @@ function TreeView(props){
         if(item.isDir){
                 fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})
             }
-        if (item.path.indexOf("sketchpad.json") > -1){                   
+        if (item.path.indexOf(".snd") > -1 || item.path.indexOf(".wav") > -1){                   
             let path = item.path;
-            // patch for sampleEditor
+            // patch for soundEditor
             if(item.path.indexOf('/home/pi/')!==-1){
                 path='/zynthian/'+item.path.split('/home/pi/')[1]
             }         
-            dispatch(updateSketchpadInfo({filePath:path,fileName:item.name}))
+            dispatch(selectSound(path))
         }
     }
 
@@ -80,7 +80,8 @@ function TreeViewItem(props){
         )
     }
     let l = 8 + ((item && item.level)?item.level*12 : 0)
-    let p = 25 + ((item && item.level)?item.level*15 : 0)
+    // let p = 25 + ((item && item.level)?item.level*15 : 0)
+    let p = 25 + ((item && item.level)?item.level*5 : 0)
     
     return (
         <li>

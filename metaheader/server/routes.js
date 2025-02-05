@@ -5,6 +5,7 @@ var favoritesController = require('./controllers/favoritesController.js');
 var songExportController = require('./controllers/songExportController.js');
 var trackerController = require('./controllers/trackerController.js');
 var fileTreeController = require('./controllers/fileTreeController.js');
+var soundEditorController = require('./controllers/soundEditorController.js');
 
 
 module.exports = function (app) {
@@ -52,5 +53,9 @@ module.exports = function (app) {
     // fileTree
     app.get('/tree/mysketchpad', fileTreeController.getSketchpadFileTree)
     app.get('/tree/mysounds', fileTreeController.getMySoundsFileTree)
+
+    // sound editor
+    app.get('/sound/:path', soundEditorController.readSndFile)
+
 
 };

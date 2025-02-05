@@ -156,7 +156,12 @@
 								</ul>
 							</li>
 							<li id="metaheader-container" class="dropdown"></li>
-							<script src="/metaheader/metaheader-bundle.js"></script>
+							<!-- <script src="/metaheader/metaheader-bundle.js"></script> -->
+							<script>
+								var script = document.createElement("script");
+								script.src = "/metaheader/metaheader-bundle.js?v=" + new Date().getTime(); // Append timestamp
+								document.head.appendChild(script);
+							  </script>
 						{% end %}
 					</ul>
 				</div>

@@ -31,10 +31,3 @@
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
   cursor: col-resize;
 }
-#sound-manager-display .tree-container {
-  height: 600px;
-  overflow: auto;
-}
-#sound-manager-display .tree-view button {
-  margin: 3px;
-}

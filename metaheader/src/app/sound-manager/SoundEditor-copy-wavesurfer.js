@@ -3,19 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSoundInfo } from  '../../../store/sound-manager/SoundManagerSlice'; 
 import WavesurferPlayer from '@wavesurfer/react'
 
-const getCategoryName =(categoryKey)=>{
-      const categoryNameMapping = {
-        "0": "Uncategorized",
-        "1": "Drums",
-        "2": "Bass",
-        "3": "Leads",
-        "4": "Synth/Keys",
-        "5": "Strings/Pads",
-        "6": "Guitar/Plucks",
-        "99": "FX/Other",
-    }
-    return categoryNameMapping[categoryKey];   
-}
 
 const SoundEditor = () => {    
     const dispatch = useDispatch();    
@@ -24,9 +11,6 @@ const SoundEditor = () => {
     const [wavesurfer, setWavesurfer] = useState(null)
     const [isPlaying, setIsPlaying] = useState(false)
 
-   
-    
-
     const onReady = (ws) => {
       setWavesurfer(ws)
       setIsPlaying(false)
@@ -34,10 +18,6 @@ const SoundEditor = () => {
     const onPlayPause = () => {
       wavesurfer && wavesurfer.playPause()
     }
-    useEffect(() => {
-     
-      dispatch(getSoundInfo())           
-    },[soundSelected])
 
     let waveDisplay;
     if(soundSelected){
@@ -62,19 +42,15 @@ const SoundEditor = () => {
                           </>
     }
 
- 
+  //  useEffect(() => {
+  //     dispatch(getSoundInfo())           
+  //   },[soundSelected])
 
   return (                        
             <div>
                
                 {waveDisplay}                            
                 
-                {soundInfo &&
-                <>
-                <div>Category:{getCategoryName(soundInfo.category[0])}</div>
-               
-                </>
-                }
             </div>                                                                                         
   )
 }

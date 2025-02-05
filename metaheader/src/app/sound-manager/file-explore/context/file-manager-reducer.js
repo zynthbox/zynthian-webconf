@@ -10,7 +10,7 @@ export const FileManagerInitialState = {
     displayedFiles:[],
     folderChain:[{ 
         id: 'xcv', 
-        name: "Sketchpads", 
+        name: "my-sounds", 
         alias:ROOTDIR , 
         isDir: true 
     }],
@@ -122,8 +122,8 @@ function ProductViewReducer(state,action){
             // displayedFiles = arrayUnique(displayedFiles)
 
             displayedFiles = action.payload.map(f=>({...f,id:f.path}));            
-          
-            //let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder)
+                      
+            // let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder)
             let treeData = generateTreeFromArray(files,state.folderChain,state.selectedFolder)
             
             return {
