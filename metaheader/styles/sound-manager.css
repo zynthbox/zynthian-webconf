@@ -1,3 +1,12 @@
+#sound-manager-display-overlay {
+  width: 100%;
+  height: 100%;
+  background: white;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  z-index: 1;
+}
 #sound-manager-display {
   background: white;
   height: auto;
@@ -30,4 +39,55 @@
 #sound-manager-display .gutter.gutter-horizontal {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
   cursor: col-resize;
+}
+#sound-manager-display #file-manager {
+  position: static;
+  margin-top: 0;
+  margin-left: 0;
+}
+#sound-manager-display #file-manager .chonky-chonkyRoot {
+  overflow: auto;
+}
+#sound-manager-display #file-manager .file-manager-wrapper .tree-view-container {
+  width: 100%;
+}
+#sound-manager-display #favorites-container {
+  position: relative;
+  margin-top: 0;
+  margin-left: 0;
+}
+#sound-manager-display #sound-editor-container {
+  overflow: auto;
+}
+#sound-manager-display .module-container a {
+  cursor: pointer;
+}
+#sound-manager-display .module-container ul {
+  list-style-type: none;
+  /* Removes the default bullet points */
+  padding: 0;
+  /* Removes the default padding */
+  margin: 0;
+  /* Removes the default margin */
+}
+#sound-manager-display .module-container ul li {
+  background-color: #f0f0f0;
+  /* Light grey background */
+  padding: 1px;
+  margin-bottom: 5px;
+  /* Adds space between items */
+}
+#sound-manager-display .module-container .sample-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+#sound-manager-display .module-container .dropzone-container {
+  height: 100px;
+  background: #eef;
+  text-align: center;
+  padding-top: 25px;
+}
+#sound-manager-display .module-container .metadata {
+  max-height: 200px;
+  overflow-y: auto;
 }

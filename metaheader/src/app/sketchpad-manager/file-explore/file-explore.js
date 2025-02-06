@@ -46,7 +46,7 @@ const FileExplore = () => {
         fileManagerDisplay = (
             <React.Fragment>
                 <TreeView />
-                { /**
+                
                 <Suspense fallback={<LoadingSpinner/>}>                    
                     <WebconfFileBrowser
                         fsep={fsep}
@@ -57,7 +57,7 @@ const FileExplore = () => {
                     />
                     
                 </Suspense>
-                 */}
+                
             </React.Fragment>
         )
     }

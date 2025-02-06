@@ -1,0 +1,90 @@
+#sketchpad-manager-display-overlay {
+  width: 100%;
+  height: 100%;
+  background: white;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  z-index: 1;
+}
+#sketchpad-manager-display {
+  background: white;
+  height: auto;
+  position: fixed;
+  margin-top: 35px;
+  margin-left: -8px;
+  padding: 0;
+  z-index: 2;
+}
+#sketchpad-manager-display > h3 {
+  margin: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: black;
+  color: white;
+  padding: 5px;
+  padding-left: 15px;
+  border-radius: 5px 5px 0 0;
+}
+#sketchpad-manager-display .split {
+  display: flex;
+  flex-direction: row;
+}
+#sketchpad-manager-display .gutter {
+  background-color: #eee;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+#sketchpad-manager-display .gutter.gutter-horizontal {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+  cursor: col-resize;
+}
+#sketchpad-manager-display #file-manager {
+  position: static;
+  margin-top: 0;
+  margin-left: 0;
+}
+#sketchpad-manager-display #file-manager .chonky-chonkyRoot {
+  overflow: auto;
+}
+#sketchpad-manager-display #file-manager .file-manager-wrapper .tree-view-container {
+  width: 100%;
+}
+#sketchpad-manager-display #sketch-pad-xtractor-container {
+  position: relative;
+  margin-top: 0;
+  margin-left: 0;
+}
+#sketchpad-manager-display .module-container a {
+  cursor: pointer;
+}
+#sketchpad-manager-display .module-container ul {
+  list-style-type: none;
+  /* Removes the default bullet points */
+  padding: 0;
+  /* Removes the default padding */
+  margin: 0;
+  /* Removes the default margin */
+}
+#sketchpad-manager-display .module-container ul li {
+  background-color: #f0f0f0;
+  /* Light grey background */
+  padding: 1px;
+  margin-bottom: 5px;
+  /* Adds space between items */
+}
+#sketchpad-manager-display .module-container .sample-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+#sketchpad-manager-display .module-container .dropzone-container {
+  height: 100px;
+  background: #eef;
+  text-align: center;
+  padding-top: 25px;
+}
+#sketchpad-manager-display .module-container .metadata {
+  max-height: 200px;
+  overflow-y: auto;
+}

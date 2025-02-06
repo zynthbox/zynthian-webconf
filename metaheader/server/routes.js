@@ -55,7 +55,9 @@ module.exports = function (app) {
     app.get('/tree/mysounds', fileTreeController.getMySoundsFileTree)
 
     // sound editor
-    app.get('/sound/:path', soundEditorController.readSndFile)
+    app.get('/sound/:path', soundEditorController.zynthbox_snd_metadata_extractor)
 
-
+    app.get("*", (req, res) => {
+        res.sendFile('./views/index.html',{root:__dirname});
+      });
 };

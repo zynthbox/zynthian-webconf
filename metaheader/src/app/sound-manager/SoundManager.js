@@ -19,7 +19,7 @@ const SoundManager =()=>{
                    
                     </div>
                 </div>
-                <div id="sample-editor-container" className="container" >                    
+                <div id="sound-editor-container" className="container" >                    
                     <Suspense fallback={<LoadingSpinner/>}>
                         <SoundEditor />
                     </Suspense>

@@ -1,3 +1,12 @@
+#sound-manager-display-overlay{
+    width: 100%;
+    height: 100%;
+    background: white;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    z-index: 1;
+}  
 #sound-manager-display{
     background: white;
     height: auto;
@@ -33,11 +42,60 @@
         background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
         cursor: col-resize;
     }
-    // .tree-container{
-    //     height: 600px;
-    //     overflow: auto;
-    // }
-    // .tree-view button{
-    //     margin: 3px;
-    // }
+    #file-manager{
+        position:static;
+        margin-top: 0;
+        margin-left: 0;
+        .chonky-chonkyRoot{
+            overflow: auto;
+        }
+        .file-manager-wrapper 
+        {
+            .tree-view-container{
+                width: 100%;
+            }
+            
+        }
+    }
+    #favorites-container{
+        position: relative;
+        margin-top: 0;
+        margin-left: 0;
+        
+    }
+
+    #sound-editor-container{
+        overflow: auto;
+    }
+    .module-container{
+       
+        a{
+            cursor: pointer;
+        }
+        ul {
+            list-style-type: none; /* Removes the default bullet points */
+            padding: 0; /* Removes the default padding */
+            margin: 0; /* Removes the default margin */
+          }          
+        ul li {
+        background-color: #f0f0f0; /* Light grey background */
+        padding: 1px;
+        margin-bottom: 5px; /* Adds space between items */
+        }
+        .sample-container{
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .dropzone-container{
+            height: 100px;
+            background: #eef;
+            text-align: center;
+            padding-top: 25px;
+        }
+
+        .metadata{
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    }
 }

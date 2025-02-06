@@ -1,29 +1,21 @@
 const fs = require("fs");
-const wav = require("wav-decoder");
+const { exec } = require('child_process');
+exports.zynthbox_snd_metadata_extractor =(req, res)=>{
+    // python3 /zynthian/zynthbox-qml/zynthbox_snd_metadata_extractor "/zynthian/zynthian-my-data/sounds/my-sounds/EightiesMemoriestest.snd" 
+    let snd = req.params.path.split('+++').join('/');     
+    exec(`python3 /zynthian/zynthbox-qml/zynthbox_snd_metadata_extractor "${snd}"`, (error, stdout, stderr) => {
 
+        console.log(`>>>> python3 /zynthian/zynthbox-qml/zynthbox_snd_metadata_extractor "${snd}"`);
+        if (error) {
+          console.error(`exec error: ${error}`);
+          return;
+        }
+        if (stderr) {
+          console.error(`stderr: ${stderr}`);
+          return;
+        }
 
-
-// 1... wav-decoder not working
-async function readWavFile(filePath) {
-    const buffer = fs.readFileSync(filePath);
-    const decoded = await wav.decode(buffer);
-    
-    console.log("Sample Rate:", decoded.sampleRate);
-    console.log("Number of Channels:", decoded.channelData.length);
-    console.log("Audio Data:", decoded.channelData[0]); // Float32Array of first channel
-
-    return decoded;
+        const fileinfo = `${stdout}`;
+        return res.status(200).json(fileinfo)                       
+      });
 }
-
-exports.readSndFile = (req,res) => {
-    let snd = req.params.path.split('+++').join('/');
-    readWavFile(snd)
-    .then((data) => {
-        console.log(data);
-        return res.status(200).json(data) 
-        })
-    .catch((err) => {console.error("Error decoding WAV file:", err);    
-        res.json(err)
-    });    
-}
-

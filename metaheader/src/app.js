@@ -1,4 +1,4 @@
-import {createBrowserRouter, createRoutesFromElements  
+import { createHashRouter,createRoutesFromElements  
     ,Route
     , RouterProvider} from 'react-router-dom'
 import React, { useEffect, useState, lazy, Suspense } from 'react';
@@ -65,7 +65,7 @@ function FileManagerDisplay(){
 function SketchpadManagerDisplay(){
     return (
         <>
-            <div id="sample-manager-display" className="container" style={{left:fileManagerLeftCss()}}>
+            <div id="sketchpad-manager-display" className="container" style={{left:fileManagerLeftCss()}}>
             <h3>
                 <i className="glyphicon glyphicon-file"></i>
                 SKETCHPAD MANAGER
@@ -185,10 +185,10 @@ function SongExportDisplay(){
     )
 }
 
-const router = createBrowserRouter(
-    createRoutesFromElements(
+const router = createHashRouter(
+    createRoutesFromElements(     
       <Route path="/" element={<RootLayout />}>
-         <Route path="sound-manager" element={<SoundManagerDisplay />}> </Route>
+        <Route path="sound-manager" element={<SoundManagerDisplay />}> </Route>
         <Route path="sketchpad-manager" element={<SketchpadManagerDisplay />}></Route>
         <Route path="file-manager" element={<FileManagerDisplay />}></Route>
         <Route path="sample-manager" element={<SampleManagerDisplay />}></Route>
@@ -198,6 +198,7 @@ const router = createBrowserRouter(
         <Route path="song-export" element={<SongExportDisplay />}></Route>
         <Route path='*' element={<NotFound />}></Route>
      </Route>
+    
     )
   )
 
@@ -206,5 +207,6 @@ function App(){
         <RouterProvider router={router} />
     )
 }
+
 const root = ReactDOM.createRoot(document.getElementById('metaheader-container'));
 root.render(<App />);

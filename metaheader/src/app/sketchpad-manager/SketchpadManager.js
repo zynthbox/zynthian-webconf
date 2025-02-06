@@ -3,7 +3,9 @@ import LoadingSpinner from '../loading-spinner';
 import Split from 'react-split';
 import FileManagerContextProvider from './file-explore/context/context-provider';
 const FileExplore = lazy(()=>import('./file-explore/file-explore'))
-const SampleEditor = lazy(()=>import('../../../store/sampleEditor/SampleEditor'))
+// const SampleEditor = lazy(()=>import('../../../store/sampleEditor/SampleEditor'))
+const SketchpadXtractor = lazy(()=>import('../../../store/sketchpadXtractor/SketchpadXtractor'))
+
 const colorsArray = [
     "#B23730",
     "#EE514B",
@@ -30,9 +32,9 @@ const SketchpadManager =()=>{
                    
                     </div>
                 </div>
-                <div id="sample-editor-container" className="container" >                    
+                <div id="sketch-pad-xtractor-container" className="container" >                    
                     <Suspense fallback={<LoadingSpinner/>}>
-                        <SampleEditor colorsArray={colorsArray} />
+                        <SketchpadXtractor colorsArray={colorsArray} />
                     </Suspense>
                 </div>
                 </FileManagerContextProvider>
