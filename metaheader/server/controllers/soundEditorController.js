@@ -1,8 +1,8 @@
 const fs = require("fs");
 const fsextra = require('fs-extra')
 const { exec } = require('child_process');
-// const { loadMusicMetadata } = require('music-metadata');
-const {parseFile,orderTags} =require('music-metadata');
+const { loadMusicMetadata } = require('music-metadata');
+// const {parseFile,orderTags} =require('music-metadata');
 // import { parseFile,orderTags } from 'music-metadata';
 
 const categoryNameMapping = {
@@ -18,7 +18,7 @@ const categoryNameMapping = {
 
 async function getCategoryFromMetadata(filePath) {
   try {        
-    // const { parseFile,orderTags } = await loadMusicMetadata();
+    const { parseFile,orderTags } = await loadMusicMetadata();
     const metadata = await parseFile(filePath);
     if(metadata && metadata.native['ID3v2.4'])
     {
@@ -136,7 +136,7 @@ const extractTagsFromSound = async (meta,path)=>{
 exports.snd_metadata_extractor = async(req, res)=>{
   try{
     let snd = req.params.path.split('+++').join('/');     
-    // const { parseFile,orderTags } = await loadMusicMetadata();
+    const { parseFile,orderTags } = await loadMusicMetadata();
     const metadata = await parseFile(snd);
     if(metadata && metadata.native['ID3v2.4']){
       const orderedTags = orderTags(metadata.native['ID3v2.4']);  
