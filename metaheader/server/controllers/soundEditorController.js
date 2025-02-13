@@ -3,6 +3,8 @@ const fsextra = require('fs-extra')
 const { exec } = require('child_process');
 // const { loadMusicMetadata } = require('music-metadata');
 const {parseFile,orderTags} =require('music-metadata');
+// import { parseFile,orderTags } from 'music-metadata';
+
 const categoryNameMapping = {
   "0": "Uncategorized",
   "1": "Drums",

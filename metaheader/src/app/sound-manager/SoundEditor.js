@@ -35,7 +35,8 @@ const SoundEditor = () => {
     const [ urlToPlay, setUrlToPlay] = useState(null);
 
     useEffect(() => {          
-      dispatch(initFilesCategories(folderSelected))                        
+      dispatch(initFilesCategories(folderSelected))    
+      setUrlToPlay(null);                    
     },[folderSelected])
 
     useEffect(() => {                        
