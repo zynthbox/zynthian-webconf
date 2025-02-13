@@ -26,14 +26,14 @@ function TreeView(props){
         if(item.isDir){
                 fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})
             }
-        if (item.path.indexOf(".snd") > -1 || item.path.indexOf(".wav") > -1){                   
-            let path = item.path;
-            // patch for soundEditor
-            if(item.path.indexOf('/home/pi/')!==-1){
-                path='/zynthian/'+item.path.split('/home/pi/')[1]
-            }         
-            dispatch(selectSound(path))
-        }
+        // if (item.path.indexOf(".snd") > -1 || item.path.indexOf(".wav") > -1){                   
+        //     let path = item.path;
+        //     // patch for soundEditor
+        //     if(item.path.indexOf('/home/pi/')!==-1){
+        //         path='/zynthian/'+item.path.split('/home/pi/')[1]
+        //     }         
+        //     dispatch(selectSound(path))
+        // }
     }
 
     return (
@@ -80,8 +80,8 @@ function TreeViewItem(props){
         )
     }
     let l = 8 + ((item && item.level)?item.level*12 : 0)
-    // let p = 25 + ((item && item.level)?item.level*15 : 0)
-    let p = 25 + ((item && item.level)?item.level*5 : 0)
+    let p = 25 + ((item && item.level)?item.level*15 : 0)
+    // let p = 25 + ((item && item.level)?item.level*5 : 0)
     
     return (
         <li>

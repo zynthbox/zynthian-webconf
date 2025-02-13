@@ -8,10 +8,8 @@
   "proxy": "http://localhost:3000",
   "scripts": {
     "server": "nodemon server.js",
-    "watch": "webpack --config webpack.app.config.js --mode development --watch",
-    "build": "webpack --config webpack.app.config.js --mode production",
-    "watch-old": "webpack --config webpack.config.js --mode development --watch",
-    "build-old": "webpack --config webpack.config.js --mode production"
+    "watch": "webpack --config webpack.app.config.js --watch",
+    "build": "webpack --config webpack.app.prod.config.js"
   },
   "dependencies": {
     "@ramonak/react-progress-bar": "^5.0.3",
@@ -23,7 +21,7 @@
     "fs-extra": "^11.1.1",
     "mmmagic": "^0.5.3",
     "multer": "^1.4.5-lts.1",
-    "music-metadata": "^10.8.2",
+    "music-metadata": "^10.9.0",
     "ncp": "^2.0.0",
     "node-zip": "^1.1.1",
     "randomcolor": "^0.6.2",
@@ -37,7 +35,8 @@
     "react-icons": "^4.12.0",
     "react-json-editor-ajrm": "^2.5.14",
     "react-router-dom": "^6.20.1",
-    "react-split": "^2.0.14"
+    "react-split": "^2.0.14",
+    "wavesurfer.js": "^7.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
@@ -58,11 +57,13 @@
     "file-loader": "^6.2.0",
     "file-system": "^2.2.2",
     "glob": "^10.3.10",
+    "html-webpack-plugin": "^5.6.3",
     "nodemon": "^3.0.1",
     "react-dropzone": "^14.2.3",
     "react-dropzone-uploader": "^2.11.0",
     "rimraf": "^5.0.5",
     "svg-inline-loader": "^0.8.2",
+    "terser-webpack-plugin": "^5.3.11",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
   }

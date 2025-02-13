@@ -51,13 +51,75 @@
 #sound-manager-display #file-manager .file-manager-wrapper .tree-view-container {
   width: 100%;
 }
-#sound-manager-display #favorites-container {
-  position: relative;
-  margin-top: 0;
-  margin-left: 0;
-}
 #sound-manager-display #sound-editor-container {
   overflow: auto;
+}
+#sound-manager-display #sound-editor-container .layout {
+  display: grid;
+  grid-template-rows: 30px 1fr 100px;
+  height: 100%;
+}
+#sound-manager-display #sound-editor-container .body {
+  display: grid;
+  grid-template-columns: 200px auto;
+  height: 100%;
+  overflow: hidden;
+}
+#sound-manager-display #sound-editor-container .header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#sound-manager-display #sound-editor-container .footer {
+  display: flex;
+}
+#sound-manager-display #sound-editor-container .nav {
+  padding: 3px;
+}
+#sound-manager-display #sound-editor-container .content {
+  padding: 3px;
+  overflow: auto;
+  height: 100%;
+  margin-left: 15px;
+  max-height: 500px;
+}
+#sound-manager-display #sound-editor-container .scrollable {
+  padding: 3px;
+}
+#sound-manager-display #sound-editor-container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+#sound-manager-display #sound-editor-container ul.categories {
+  width: 200px;
+}
+#sound-manager-display #sound-editor-container li {
+  margin: 1px;
+}
+#sound-manager-display #sound-editor-container .nav-button {
+  display: block;
+  padding: 3px 2px;
+  background-color: #eee;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+#sound-manager-display #sound-editor-container li.selected {
+  background-color: #eef;
+}
+#sound-manager-display #sound-editor-container li:hover {
+  background-color: #eef;
+}
+#sound-manager-display #sound-editor-container .sound-meta {
+  overflow: hidden;
+  white-space: nowrap;
+}
+#sound-manager-display #sound-editor-container .sound-meta a {
+  cursor: pointer;
 }
 #sound-manager-display .module-container a {
   cursor: pointer;

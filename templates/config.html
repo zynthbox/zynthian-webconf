@@ -156,13 +156,7 @@
 									<li><a href="https://discourse.zynthian.org" target="_blank">Forum</a></li>
 								</ul>
 							</li>
-							<li id="metaheader-container" class="dropdown"></li>
-							<!-- <script src="/metaheader/metaheader-bundle.js"></script> -->
-							<script>
-								var script = document.createElement("script");
-								script.src = "/metaheader/app-bundle.js?v=" + new Date().getTime(); // Append timestamp
-								document.head.appendChild(script);
-							  </script>
+							{% include 'tools.html' %}
 						{% end %}
 					</ul>
 				</div>

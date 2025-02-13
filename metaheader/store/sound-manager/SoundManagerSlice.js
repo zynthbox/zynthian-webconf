@@ -84,25 +84,42 @@ const extractTagsFromSound =(meta,path)=>{
 
 }
 
+// export const getSoundMeta = createAsyncThunk(
+//   "soundmanager/getSoundMeta",
+//   async (arrgs,{getState}) => {      
+//     const { soundSelected } = getState().soundmanager;
+//     let path = (soundSelected.indexOf('/home/pi/')>-1) ? soundSelected.split('/home/pi/')[1] : soundSelected ;   
+//     let url = `http://${window.location.hostname}:3000/${path}`
+
+//     const response = await fetch(url);
+//     const webStream = response.body;
+//      // Parse the metadata from the web stream
+//      const metadata = await parseWebStream(webStream, 'audio/x-wav');    
+//      const orderedTags = orderTags(metadata.native['ID3v2.4']);
+//     //  console.log(orderedTags['TXXX:ZYNTHBOX_SOUND_CATEGORY'])
+//      return extractTagsFromSound(orderedTags,soundSelected);
+//   }
+// );
+
+// export const getSoundMeta = createAsyncThunk(
+//   "soundmanager/getSoundMeta",
+//   async (arrgs,{getState}) => {      
+//     const { soundSelected } = getState().soundmanager;
+//     let path = (soundSelected.indexOf('/home/pi/')>-1) ? soundSelected.split('/home/pi/')[1] : soundSelected ;   
+//     let url = `http://${window.location.hostname}:3000/${path}`
+
+//     const response = await fetch(url);
+//     const webStream = response.body;
+//      // Parse the metadata from the web stream
+//      const metadata = await parseWebStream(webStream, 'audio/x-wav');    
+//      const orderedTags = orderTags(metadata.native['ID3v2.4']);
+//     //  console.log(orderedTags['TXXX:ZYNTHBOX_SOUND_CATEGORY'])
+//      return extractTagsFromSound(orderedTags,soundSelected);
+//   }
+// );
+
 export const getSoundMeta = createAsyncThunk(
   "soundmanager/getSoundMeta",
-  async (arrgs,{getState}) => {      
-    const { soundSelected } = getState().soundmanager;
-    let path = (soundSelected.indexOf('/zynthian/')>-1) ? soundSelected.split('/zynthian/')[1] : soundSelected ;   
-    let url = `http://${window.location.hostname}:3000/${path}`
-
-    const response = await fetch(url);
-    const webStream = response.body;
-     // Parse the metadata from the web stream
-     const metadata = await parseWebStream(webStream, 'audio/x-wav');    
-     const orderedTags = orderTags(metadata.native['ID3v2.4']);
-    //  console.log(orderedTags['TXXX:ZYNTHBOX_SOUND_CATEGORY'])
-     return extractTagsFromSound(orderedTags,soundSelected);
-  }
-);
-
-export const zynthbox_snd_metadata_extractor = createAsyncThunk(
-  "soundmanager/zynthbox_snd_metadata_extractor",
   async (arrgs,{getState}) => {      
     const { soundSelected } = getState().soundmanager;    
 
@@ -118,73 +135,129 @@ export const zynthbox_snd_metadata_extractor = createAsyncThunk(
   }
 );
 
+export const initFilesCategories = createAsyncThunk(
+  "soundmanager/initFilesCategories",
+  async (arrgs,{getState}) => {      
+    const { folderSelected } = getState().soundmanager;    
+    const path = folderSelected.split("/").join("+++");   
+      const response = await fetch(`http://${window.location.hostname}:3000/sound/init/${path}`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
+      const res = await response.json();
+      return res;
+  }
+);
+
+
+
 let initialState = {
-  tree:[],
-  expandedAll:false,
+  folderSelected:'/home/pi/zynthian-my-data/sounds/my-sounds/',
+  files:[],
+  categories:[],
+  categorySelected:null,
   soundSelected:null,
   soundInfo:null,  
   status:'',
-  error:''
+  error:'',
+
+  // new file tree. not needed now
+  tree:[],
+  expandedAll:false,
+  
 }
 
 const SoundManagerSlice = createSlice({
   name: "soundmanager",
   initialState,
-  reducers: {    
-    toggleTree: (state, action) => {      
-      state.expandedAll = !state.expandedAll
+  reducers: {
+    selectFolder:(state, action) => {      
+      state.folderSelected = action.payload
+      state.files = []
+      state.categories = []
+      state.categorySelected = null
+      state.soundSelected = null
+      state.soundInfo = null
+      state.status = ''
+      state.error = ''
     },
+    selectCategory:(state, action) => {            
+      state.categorySelected = action.payload
+      state.soundSelected = null
+      state.soundInfo = null
+      state.status = ''
+      state.error = ''
+    },
+
     selectSound: (state, action) => {      
       state.soundSelected = action.payload
       state.soundInfo = null
     },
+
+    toggleTree: (state, action) => {      
+      state.expandedAll = !state.expandedAll
+    },
+
   },
   extraReducers: (builder) => {
-    // GET SKETCHPAD
-    builder.addCase(getSketchpadFileTree.fulfilled, (state, action) => {
-      state.tree = [action.payload];
+    // new tree.not now
+    // builder.addCase(getSketchpadFileTree.fulfilled, (state, action) => {
+    //   state.tree = [action.payload];
+    //   state.status = "idle";
+    // });
+    // builder.addCase(getSketchpadFileTree.pending, (state) => {
+    //   state.status = "loading";      
+    // });
+    // builder.addCase(getSketchpadFileTree.rejected, (state, action) => {
+    //   state.error = action.error.message;
+    //   state.status = "failed";
+    // });
+
+    // initFilesCategories
+    builder.addCase(initFilesCategories.fulfilled, (state, action) => {                
+      state.files = action.payload.files;     
+      state.categories =  action.payload.categories;     
       state.status = "idle";
     });
-    builder.addCase(getSketchpadFileTree.pending, (state) => {
+    builder.addCase(initFilesCategories.pending, (state) => {
       state.status = "loading";      
     });
-    builder.addCase(getSketchpadFileTree.rejected, (state, action) => {
+    builder.addCase(initFilesCategories.rejected, (state, action) => {
       state.error = action.error.message;
       state.status = "failed";
     });
 
     // getSoundInfo
     builder.addCase(getSoundMeta.fulfilled, (state, action) => {            
-      state.soundInfo = action.payload;      
-      state.status = "idle";
+      if(action.payload.isValid){
+        state.soundInfo = action.payload;      
+      }else{
+        state.soundInfo = null;
+        state.error = action.payload.erorrString   
+        state.status = action.payload.erorrString ;   
+      }
+      state.status = "idle";      
     });
     builder.addCase(getSoundMeta.pending, (state) => {
       state.status = "loading";      
     });
     builder.addCase(getSoundMeta.rejected, (state, action) => {
+      
+      state.soundInfo = null;
       state.error = action.error.message;
       state.status = "failed";
     });
     
-    //zynthbox_snd_metadata_extractor
-    builder.addCase(zynthbox_snd_metadata_extractor.fulfilled, (state, action) => {            
-      state.soundInfo = action.payload;      
-      state.status = "idle";
-    });
-    builder.addCase(zynthbox_snd_metadata_extractor.pending, (state) => {
-      state.status = "loading";      
-    });
-    builder.addCase(zynthbox_snd_metadata_extractor.rejected, (state, action) => {
-      state.error = action.error.message;
-      state.status = "failed";
-    });
 
   }
   })
 
-
-
-  export const {
-    toggleTree,selectSound } = SoundManagerSlice.actions;
+export const {
+    selectFolder,
+    selectCategory,
+    selectSound,    
+    toggleTree } = SoundManagerSlice.actions;
   
 export default SoundManagerSlice.reducer

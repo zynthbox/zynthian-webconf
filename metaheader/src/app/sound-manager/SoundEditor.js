@@ -1,79 +1,85 @@
 import React, { useEffect,useRef,useState,lazy, Suspense } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { getSoundMeta, zynthbox_snd_metadata_extractor} from  '../../../store/sound-manager/SoundManagerSlice'; 
-import WavesurferPlayer from '@wavesurfer/react'
-import LoadingSpinner from '../loading-spinner';
-const Favorites = lazy(()=>import('../../../store/favorites/favorites'))
-const colorsArray = [
-  "#B23730",
-  "#EE514B",
-  "#F77535",
-  "#F7D635",
-  "#FE68B1",
-  "#A438FF",
-  "#6491FF",
-  "#73F6EE",
-  "#65E679",
-  "#9A7136",
-];
-const getCategoryName =(categoryKey)=>{
-      const categoryNameMapping = {
-        "0": "Uncategorized",
-        "1": "Drums",
-        "2": "Bass",
-        "3": "Leads",
-        "4": "Synth/Keys",
-        "5": "Strings/Pads",
-        "6": "Guitar/Plucks",
-        "99": "FX/Other",
-    }
-    return categoryNameMapping[categoryKey];   
+import { initFilesCategories,
+  getSoundMeta,
+  selectFolder,
+  selectCategory,
+  selectSound } from  '../../../store/sound-manager/SoundManagerSlice'; 
+import WavePlayer from '../components/WavePlayer';
+import { BsFileMusic } from "react-icons/bs";
+
+function decodeBase64Audio(base64String) {    
+  let base64Data = base64String.replace(/^data:audio\/\w+;base64,/, "");
+  let byteCharacters = atob(base64Data);
+  let byteNumbers = new Uint8Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  let audioBlob = new Blob([byteNumbers], { type: "audio/wav" });
+  let audioUrl = URL.createObjectURL(audioBlob);
+  return audioUrl;
 }
 
 const SoundEditor = () => {    
     const dispatch = useDispatch();    
-    const { soundSelected , soundInfo} = useSelector((state) => state.soundmanager);
-  
-    const [wavesurfer, setWavesurfer] = useState(null)
-    const [isPlaying, setIsPlaying] = useState(false)
+    const {folderSelected
+          ,files
+          ,categories
+          ,soundSelected 
+          ,categorySelected
+          ,soundInfo
+         } = useSelector((state) => state.soundmanager);
+   
+    // private state
+    const [ filesToDisplay, setFilesToDisplay] = useState(null);
+    const [ urlToPlay, setUrlToPlay] = useState(null);
 
-    const onReady = (ws) => {
-      setWavesurfer(ws)
-      setIsPlaying(false)
-    }
-    const onPlayPause = () => {
-      wavesurfer && wavesurfer.playPause()
-    }
-    useEffect(() => {      
-      // dispatch(zynthbox_snd_metadata_extractor()) 
-      dispatch(getSoundMeta())           
+    useEffect(() => {          
+      dispatch(initFilesCategories(folderSelected))                        
+    },[folderSelected])
+
+    useEffect(() => {                        
+      setFilesToDisplay(files)         
+    },[files])
+    
+    useEffect(() => {       
+      dispatch(getSoundMeta())        
+      if(soundSelected){               
+        let path = (soundSelected.indexOf('/home/pi/')>-1) ? soundSelected.split('/home/pi/')[1] : soundSelected ;   
+        let url = `http://${window.location.hostname}:3000/${path}`
+        setUrlToPlay(url);
+      }
     },[soundSelected])
 
-    let waveDisplay;
-    if(soundSelected){
-      let path = (soundSelected.indexOf('/zynthian/')>-1) ? soundSelected.split('/zynthian/')[1] : soundSelected ;   
-      let url = `http://${window.location.hostname}:3000/${path}`
-
-      console.log(url);
-      // url = 'http://localhost:3000/zynthian-my-data/sounds/my-sounds/EightiesMemoriestest2.snd'   
-      // url = 'http://localhost:3000/zynthian-my-data/sounds/my-sounds/Rubato-Valley.wav'
-      // url = 'http://localhost:3000/zynthian-my-data/sounds/my-sounds/01 - By Purple Motion of.wav'      
-      // url = 'http://localhost:3000/zynthian-my-data/sketchpads/my-sketchpads/Sketchpad-dong//wav/sampleset/sample-bank.1/01 - By Purple Motion of.wav'
-      waveDisplay =       <> <WavesurferPlayer
-                            height={100}
-                            waveColor="violet"
-                            url={url}
-                            onReady={onReady}
-                            onPlay={() => setIsPlaying(true)}
-                            onPause={() => setIsPlaying(false)}
-                          />
-
-                          <button onClick={onPlayPause}>
-                            {isPlaying ? 'Pause' : 'Play'}
-                          </button>
-                          </>
+ 
+    const filterCategory = (catId)=>{
+      dispatch(selectCategory(catId))   
+      setUrlToPlay(null); 
+      if(catId){
+        const fList = files.filter(f=>f['catId'] == catId);
+        setFilesToDisplay(fList);
+      }else{
+        setFilesToDisplay(files);
+      }      
     }
 
+    const handleClickSound = (file)=>{
+      dispatch(selectSound(file))       
+    }
+    
+    const playSample = (i)=>{
+      if(soundInfo && soundInfo.samples){
+        const sample = soundInfo.samples[i];
+        const url = decodeBase64Audio(sample);
+        setUrlToPlay(url);
+      }      
+    }
+    
+
+    let waveDisplay;
+    if(urlToPlay){           
+      waveDisplay =  <WavePlayer audioUrl={urlToPlay} />
+    }
 
     let metaDisplay = null;
     if(soundInfo){
@@ -82,39 +88,80 @@ const SoundEditor = () => {
                         <div style={{ display: "flex", gap: "2px" }}>Category:{soundInfo.category}</div>           
                         <div style={{ display: "flex", gap: "2px" }}>
                           <div style={{ width: "16.6%", backgroundColor: "#ccc", padding: "2px" }}>Samples</div>
-                            {soundInfo.sampleSlotsData.map(s=>(
-                              <div style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>{s}</div>
+                            {soundInfo.sampleSlotsData.map((s,i)=>(
+                              <div key={i} style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>
+                                {s &&
+                                <a onClick={()=>playSample(i)}><BsFileMusic/>{s}</a>
+                                }
+                              </div>
                             ))}                  
                         </div>
                         <div style={{ display: "flex", gap: "2px" }}>
                           <div style={{ width: "16.6%", backgroundColor: "#ccc", padding: "2px" }}>Synths</div>
-                            {soundInfo.synthSlotsData.map(s=>(
-                              <div style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>{s}</div>
+                            {soundInfo.synthSlotsData.map((s,i)=>(
+                              <div key={i}  style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>{s}</div>
                             ))}                  
                         </div>
                         <div style={{ display: "flex", gap: "2px" }}>
                           <div style={{ width: "16.6%", backgroundColor: "#ccc", padding: "2px" }}>Fx</div>
-                            {soundInfo.fxSlotsData.map(s=>(
-                              <div style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>{s}</div>
+                            {soundInfo.fxSlotsData.map((s,i)=>(
+                              <div key={i} style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>{s}</div>
                             ))}                  
                         </div>
                       </div>
                     </div>
     }
- 
+    
+    let categoriesDisplay;
+    if(categories){
+      categoriesDisplay = <ul className='categories'>
+                          <li key='all' onClick={()=>filterCategory()} className='nav-button'> All {files ? ' ['+files.length+']':''} </li>
+                          {categories.map(c=>{                            
+                              const clsLi = (categorySelected==c.catId)?'nav-button selected':'nav-button'
+                              return (
+                                <li key={c.catId} className={clsLi}                                     
+                                    onClick={()=>filterCategory(c.catId)}> 
+                                    {c.catName +(c.cntFiles>0?' ['+c.cntFiles+']':'')}
+                                </li>
+                              ) 
+                          })}
+                          </ul>
+      
+    }    
 
-  return (                        
-            <div>
-               
-                {waveDisplay}                                          
-                {metaDisplay}
-                <div id="favorites-container" className="container">                   
-                    <Suspense fallback={<LoadingSpinner/>}>
-                        <Favorites colorsArray={colorsArray} /> 
-                    </Suspense>
-                </div>
+    let filesDisplay;
+    if(filesToDisplay){
+      filesDisplay =    <ul className='files'>
+                          {filesToDisplay.map(f=>{
+                              const clsLi = (soundSelected==f.path)?'selected':''
+                              return (
+                                <li key={f.path} className={clsLi} onClick={()=>handleClickSound(f.path)}> <BsFileMusic /> {f.name }</li>
+                              ) 
+                          })}
+                          </ul>
+    }
 
-            </div>                                                                                         
+    let folderDisplay;
+    folderDisplay = <select value={folderSelected} onChange={(e)=>{dispatch(selectFolder(e.target.value))}}>                        
+                        <option key='my-sounds' value="/home/pi/zynthian-my-data/sounds/my-sounds/">my-sounds</option>
+                        <option key='community-sounds' value="/home/pi/zynthian-my-data/sounds/community-sounds/">community-sounds</option>
+                     </select>
+
+  return (     
+            <div className="layout">              
+              <header className="header">          
+                {folderDisplay}</header>
+              <div className="body">               
+                <nav className="nav">{categoriesDisplay}</nav>
+                <main className="content">
+                  <div className="scrollable">
+                    {waveDisplay}
+                    {filesDisplay}
+                    </div>
+                </main>
+              </div>
+              <footer className="footer"> {metaDisplay}</footer>
+            </div>                                                                                                   
   )
 }
 export default SoundEditor

@@ -1,8 +1,19 @@
 const path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+
 module.exports = {
   entry: {app:'./src/app.js'},
-  mode: "development",
+  mode: "production",
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin({
+      terserOptions: {
+        compress: { drop_console: true }, // remove console.log
+        output: { comments: false } // remove comment
+      }
+    })]   
+  },
   module: {
     rules: [
       {
@@ -25,7 +36,7 @@ module.exports = {
             loader: 'file-loader',
             options: {
               esModule: false,
-              name:'build/bundle/[path][name].[ext]'
+              name:'bundle/[path][name].[ext]'
             },
           },
         ],
@@ -53,9 +64,9 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./server/views/index-template.html",
+      template: "../templates/tools-template.html",
       inject: "body",  // Ensure scripts are injected in the body
-      filename: path.resolve(__dirname, "server/views/index.html"),
+      filename: path.resolve(__dirname, "../templates/tools.html"),
     }),
   ],
 };

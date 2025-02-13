@@ -8,11 +8,10 @@ const SoundEditor = lazy(()=>import('./SoundEditor'))
 const SoundManager =()=>{
     return (
         <>
-           <Split className="split" sizes={[40, 60]}>
-                <FileManagerContextProvider>
+            <FileManagerContextProvider>
+            <Split className="split" sizes={[40, 60]}>                
                 <div>
-                    <div id="file-manager">                    
-                   
+                    <div id="file-manager">                                       
                     <Suspense fallback={<LoadingSpinner/>}>
                         <FileExplore/>
                     </Suspense>                    
@@ -23,9 +22,9 @@ const SoundManager =()=>{
                     <Suspense fallback={<LoadingSpinner/>}>
                         <SoundEditor />
                     </Suspense>
-                </div>
-                </FileManagerContextProvider>
+                </div>                
             </Split>
+            </FileManagerContextProvider> 
         </>
     )
 }
