@@ -8,6 +8,7 @@ const SampleManger =()=>{
     
     return (
         <>
+         
            <Split className="split">
                 <div>
                     <div id="file-manager">                    

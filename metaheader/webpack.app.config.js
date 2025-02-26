@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
   entry: {app:'./src/app.js'},
   mode: "development",
+  devtool: false,
   module: {
     rules: [
       {
@@ -48,7 +49,7 @@ module.exports = {
     filename: "bundle/[name].[contenthash].js",
     chunkFilename: "bundle/chunks/[name].[contenthash].js", 
     asyncChunks:true,    
-    clean:true,
+    clean:false,
     publicPath: '/metaheader/build/'    
   },
   plugins: [

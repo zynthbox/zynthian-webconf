@@ -1,5 +1,4 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import { parseWebStream,orderTags} from 'music-metadata';
 
 export const getSketchpadFileTree = createAsyncThunk(
   "soundmanager/getSketchpadFileTree",
@@ -84,39 +83,6 @@ const extractTagsFromSound =(meta,path)=>{
 
 }
 
-// export const getSoundMeta = createAsyncThunk(
-//   "soundmanager/getSoundMeta",
-//   async (arrgs,{getState}) => {      
-//     const { soundSelected } = getState().soundmanager;
-//     let path = (soundSelected.indexOf('/home/pi/')>-1) ? soundSelected.split('/home/pi/')[1] : soundSelected ;   
-//     let url = `http://${window.location.hostname}:3000/${path}`
-
-//     const response = await fetch(url);
-//     const webStream = response.body;
-//      // Parse the metadata from the web stream
-//      const metadata = await parseWebStream(webStream, 'audio/x-wav');    
-//      const orderedTags = orderTags(metadata.native['ID3v2.4']);
-//     //  console.log(orderedTags['TXXX:ZYNTHBOX_SOUND_CATEGORY'])
-//      return extractTagsFromSound(orderedTags,soundSelected);
-//   }
-// );
-
-// export const getSoundMeta = createAsyncThunk(
-//   "soundmanager/getSoundMeta",
-//   async (arrgs,{getState}) => {      
-//     const { soundSelected } = getState().soundmanager;
-//     let path = (soundSelected.indexOf('/home/pi/')>-1) ? soundSelected.split('/home/pi/')[1] : soundSelected ;   
-//     let url = `http://${window.location.hostname}:3000/${path}`
-
-//     const response = await fetch(url);
-//     const webStream = response.body;
-//      // Parse the metadata from the web stream
-//      const metadata = await parseWebStream(webStream, 'audio/x-wav');    
-//      const orderedTags = orderTags(metadata.native['ID3v2.4']);
-//     //  console.log(orderedTags['TXXX:ZYNTHBOX_SOUND_CATEGORY'])
-//      return extractTagsFromSound(orderedTags,soundSelected);
-//   }
-// );
 
 export const getSoundMeta = createAsyncThunk(
   "soundmanager/getSoundMeta",

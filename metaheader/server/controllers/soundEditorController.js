@@ -4,6 +4,7 @@ const { exec } = require('child_process');
 const { loadMusicMetadata } = require('music-metadata');
 // const {parseFile,orderTags} =require('music-metadata');
 // import { parseFile,orderTags } from 'music-metadata';
+const CONFIG_PLUGINS = '/zynthian/zynthbox-qml/config/plugins.json'
 
 const categoryNameMapping = {
   "0": "Uncategorized",
@@ -108,9 +109,8 @@ const extractTagsFromSound = async (meta,path)=>{
         }
           
         let snapshotObj = JSON.parse(meta['TXXX:ZYNTHBOX_SOUND_SYNTH_FX_SNAPSHOT'][0]);           
-        let layers = snapshotObj['layers'];
-        let filePlugins = '/zynthian/zynthbox-qml/config/plugins.json'
-        const pluginsNameMapping = await fsextra.readJson(filePlugins);
+        let layers = snapshotObj['layers'];        
+        const pluginsNameMapping = await fsextra.readJson(CONFIG_PLUGINS);
         
         layers.forEach((l) => {
           const s = l['engine_name'].match(/\{(.*?)\}/)[1];

@@ -59,7 +59,7 @@ module.exports = {
     filename: "bundle/[name].[contenthash].js",
     chunkFilename: "bundle/chunks/[name].[contenthash].js", 
     asyncChunks:true,    
-    clean:true,
+    clean:false,
     publicPath: '/metaheader/build/'    
   },
   plugins: [

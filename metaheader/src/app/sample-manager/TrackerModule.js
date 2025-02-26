@@ -1,7 +1,9 @@
 import React, {useCallback,useEffect,useState,useRef} from 'react'
 import {useDropzone} from 'react-dropzone'
-import axios from 'axios';;
+import axios from 'axios';
 // import {ChiptuneJsPlayer} from 'chiptune3';
+import {ChiptuneJsPlayer} from './chiptune/chiptune3.js';
+
 const TrackerModule =()=>{
 
     const [ files, setFiles] = useState(null);
@@ -13,44 +15,48 @@ const TrackerModule =()=>{
     const [meta, setMeta] = useState('');
     const playerRef = useRef(null); 
 
-    // // init player
-    // useEffect(() => {              
-    //     playerRef.current = new ChiptuneJsPlayer()
-    //     playerRef.current.onInitialized(() => {
-    //     // callback after init    
-    //   })           
-    // }, []); 
 
-  //  useEffect(() => {
-  //     if (files !== null){ handleFileChange()}
-  //    },[files])
+   useEffect(() => {
+      if (files !== null){         
+        handleFileChange()        
+      }
+     },[files])
    
-    //  const togglePause = ()=>{
-    //   playerRef.current.togglePause()
-    //   setIsPlaying(isPlaying ? false : true);
-    // }
+     const togglePause = ()=>{
+      playerRef.current.togglePause()
+      setIsPlaying(isPlaying ? false : true);
+    }
    
-    // const handleFileChange =(event)=>{          
-    //     // const file = event.target.files[0];                           
-    //     const reader = new FileReader();          
-    //     reader.onload = function(e) {
-    //       // This is where you get the ArrayBuffer
-    //       const arrayBuffer = e.target.result;              
-    //       playerRef.current.play(arrayBuffer);          
-    //     };
-    //     reader.readAsArrayBuffer(files[0]);        
-    //     playerRef.current.onMetadata((meta) => {    
-    //       console.log(meta.song);
-    //       meta.song = 'too large to display this way...'
-    //       setMeta(JSON.stringify(meta).replace(/,/g,'<br/>&nbsp;&nbsp;'))
-    //     })
-    //     setIsPlaying(true);
-    // }
+    const handleFileChange =(event)=>{          
+        
+        // const file = event.target.files[0];                           
+        const reader = new FileReader();          
+        reader.onload = function(e) {
+          // This is where you get the ArrayBuffer
+          const arrayBuffer = e.target.result;              
+          if(playerRef==null || playerRef.current==null){
+              playerRef.current = new ChiptuneJsPlayer();
+              playerRef.current.onInitialized(() => {               
+                playerRef.current.play(arrayBuffer);        
+              })           
+          }else{
+            playerRef.current.play(arrayBuffer);             
+          }
+         
+          playerRef.current.onMetadata((meta) => {    
+            console.log('>>>>>>>>>>>>>>>>meta:',meta);
+            meta.song = 'too large to display this way...'
+            setMeta(JSON.stringify(meta).replace(/,/g,'<br/>&nbsp;&nbsp;'))
+          })
+          setIsPlaying(true);                   
+        };
+        reader.readAsArrayBuffer(files[0]);    
+    }
     
     const onDrop = useCallback(acceptedFiles => {          
       setFiles(acceptedFiles);
     }, [])
-
+    
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
 
@@ -84,6 +90,8 @@ const TrackerModule =()=>{
     </ul>
   }
 
+
+
   return (
     <div className='module-container'>
       <div className="dropzone-container" {...getRootProps()} >
@@ -93,9 +101,9 @@ const TrackerModule =()=>{
             <div>
               {files &&
               <>
-              {/* <button onClick={togglePause}>
+              <button onClick={togglePause}>
                 {isPlaying ? 'Pause' : 'Play'}
-              </button> */}
+              </button>
               <button onClick={handleExtractSamples}> Extract Samples </button>
               </>
               }
@@ -110,7 +118,6 @@ const TrackerModule =()=>{
            {samplesDisplay}
       </div>
      
-       
       
     </div>
   )

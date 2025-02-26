@@ -2,8 +2,9 @@ import React, { useEffect,Suspense,lazy } from 'react'
 import LoadingSpinner from '../loading-spinner';
 import Split from 'react-split';
 import FileManagerContextProvider from './file-explore/context/context-provider';
+import SketchpadEditor from './SketchpadEditor';
 const FileExplore = lazy(()=>import('./file-explore/file-explore'))
-// const SampleEditor = lazy(()=>import('../../../store/sampleEditor/SampleEditor'))
+
 const SketchpadXtractor = lazy(()=>import('../../../store/sketchpadXtractor/SketchpadXtractor'))
 
 const colorsArray = [
@@ -33,12 +34,13 @@ const SketchpadManager =()=>{
                     </div>
                 </div>
                 <div id="sketch-pad-xtractor-container" className="container" >                    
-                    <Suspense fallback={<LoadingSpinner/>}>
-                        <SketchpadXtractor colorsArray={colorsArray} />
-                    </Suspense>
+                 <SketchpadEditor colorsArray={colorsArray}></SketchpadEditor>
+                    {/* // <Suspense fallback={<LoadingSpinner/>}>
+                    //     <SketchpadXtractor colorsArray={colorsArray} />
+                    // </Suspense> */}
                 </div>
                 </FileManagerContextProvider>
-            </Split>
+            </Split> 
         </>
     )
 }
