@@ -77,7 +77,7 @@ export const getSounds = createAsyncThunk(
 export const getPatterns = createAsyncThunk(
   "sketchpadmanager/fetchPatters",
   async (arrgs, { getState }) => {
-    const { version, sketchpad , scene } = getState().sketchpadmanager;
+    const { version, sketchpad , scene } = getState().sketchpadmanager;    
     const folderPath = `${version.split(sketchpad.name)[0]+sketchpad.name}/sequences/`
       .split("/")
       .join("+++");   
@@ -90,14 +90,14 @@ export const getPatterns = createAsyncThunk(
         },
       }
     );
-    const files = await response.json();
+    const files = await response.json();    
     let patternRequestsEndpoints = [];
     files.forEach(function(file){
-        if (file.path.indexOf('.pattern.json') > -1){
+        if (file.path.indexOf('.pattern.json') > -1 && file.path.indexOf('autosave')==-1){
             let fileName = file.path.split('/')[file.path.split('/').length - 1];
-            if (fileName.split('.')[0].indexOf(scene) > -1){
+            // if (fileName.split('.')[0].indexOf(scene) > -1){ // ignore scene
                 patternRequestsEndpoints.push( `http://${window.location.hostname}:3000/json/${file.path.split('/').join('+++')}`)
-            }
+            // }
         }
     })
     let payloadArray = [];
@@ -110,6 +110,7 @@ export const getPatterns = createAsyncThunk(
         payloadArray.push(pattern);
     });
 
+    console.log('patterns:',payloadArray)
     return payloadArray;
   }
 );
@@ -192,6 +193,9 @@ const SketchpadManagerSlice = createSlice({
     // },
     setSamples: (state, action) => {
       state.itemGroups.samples = action.payload;
+    },
+    setSketches: (state, action) => {
+      state.itemGroups.sketches = action.payload;
     },
     setClips: (state, action) => {
       state.itemGroups.clips = action.payload;
@@ -341,6 +345,7 @@ export const {
   setScene,
   setClips,
   setSamples,
+  setSketches,
   setTracks,
   setSongs,
   setPatterns,

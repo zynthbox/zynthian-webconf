@@ -18,12 +18,16 @@ import {getFolders,
   getSounds,
   setItemGroupsReady,
   setItemGroup,
-  setItem
+  setItem,
+  setSketches
 }  from  '../../../store/sketchpad-manager/SketchpadMangerSlice'; 
+import DropArea from './DropArea';
 const SketchpadEditor =(props)=> {
   const { colorsArray } = props;
   const [ urlToPlay, setUrlToPlay] = useState(null);
+  const [ detail, setDetail] = useState(null);
   const dispatch = useDispatch();    
+  const [activeFolder, setActiveFolder] = useState(null)
   const {
     status,
     error,
@@ -45,17 +49,20 @@ const SketchpadEditor =(props)=> {
 
   useEffect(() => {
     if (folder !== null) dispatch(getSketchpadVersions(folder));      
-    setUrlToPlay(null);       
+    setUrlToPlay(null);     
+    setDetail(null)  
   }, [folder]);
 
   useEffect(() => {   
     if (version !== null) dispatch(getSketchpad(version));
-    setUrlToPlay(null);         
+    setUrlToPlay(null); 
+    setDetail(null)          
   }, [version]);
   
   useEffect(() => {
    if(sketchpad) handleSceneSelection();
-   setUrlToPlay(null);       
+   setUrlToPlay(null);   
+   setDetail(null)      
   }, [sketchpad]);
 
   useEffect(() => {
@@ -70,6 +77,11 @@ const SketchpadEditor =(props)=> {
     }
   },[itemGroups])
 
+  useEffect(() => {  
+    setUrlToPlay(null);       
+    setDetail(null)  
+   }, [itemGroup]);
+  
      
   const playSample =(path,track)=>{    
     let dir = version.split('/home/pi/')[1].split('/');
@@ -77,17 +89,44 @@ const SketchpadEditor =(props)=> {
     const urlToPlay = `http://${window.location.hostname}:3000/${dir.join('/')}/wav/sampleset/sample-bank.${track +1}/${path}`    
     if(urlToPlay){     
       setUrlToPlay(urlToPlay);            
-    }
-    // console.log('play Sample:',path,track);
+    }   
+  }
+       
+  const playSketch =(path,track)=>{    
+    let dir = version.split('/home/pi/')[1].split('/');
+    dir.pop();
+    const urlToPlay = `http://${window.location.hostname}:3000/${dir.join('/')}/wav/${path}`    
+    if(urlToPlay){     
+      setUrlToPlay(urlToPlay);            
+    }   
   }
 
-  let waveDisplay;
+  let detailDisplay;
   if(urlToPlay){           
-    waveDisplay =  <WavePlayer audioUrl={urlToPlay} />
+    detailDisplay =  <WavePlayer audioUrl={urlToPlay} />    
+  }else if(detail){
+    
+    detailDisplay = <ul>      
+      <li><a>Default Note Duration: {detail.defaultNoteDuration}</a></li>
+      <li><a>Pattern Length: {detail.patternLength}</a></li>
+      <li><a>Swing: {detail.swing}</a></li>
+      <li><a>Scale: {detail.scale}</a></li>
+      <li><a>Octave: {detail.octave}</a></li>
+      <li><a>Pitch: {detail.pitch}</a></li>
+      <li><a>Step Length: {detail.stepLength}</a></li>
+      <li><a>Active Bar: {detail.activeBar}</a></li>                    
+      <li><a>Bank Length: {detail.bankLength}</a></li>
+      <li><a>Enabled: {detail.enabled === true ? "true" : "false"}</a></li>
+      <li><a>Start Note: {detail.gridModelStartNote}</a></li>
+      <li><a>End Note: {detail.gridModelEndNote}</a></li>
+      <li><a>Midi Channel: {detail.midiChannel}</a></li>                  
+                </ul>
   }
+
+  
 
   function handleSceneSelection() {
-   
+    setUrlToPlay(null);       
     // Samples 
     let newSamples = [];
     sketchpad.tracks.forEach(function (channel, index) {
@@ -100,8 +139,24 @@ const SketchpadEditor =(props)=> {
           newSamples.push(sample)
          }       
       });
-    });        
+    });   
+    
+    // Sketches
+    let sketches =[];
+    sketchpad.tracks.forEach(function (channel, index) {      
+      channel.clips.forEach(function (s, pIndex) {        
+         if(s[0].path){
+          const sketch = {...s[0]}
+          sketch.track = index
+          sketch.slot = pIndex
+          sketch.trackType = channel.trackType
+          sketches.push(sketch)
+         }       
+      });
+    }); 
+    
     dispatch(setSamples(newSamples))
+    dispatch(setSketches(sketches))
     dispatch(setTracks([]))
     dispatch(setSongs([]))
     dispatch(getPatterns())   
@@ -112,12 +167,26 @@ const SketchpadEditor =(props)=> {
   if(itemGroup){
     const items = itemGroups[itemGroup];    
     if(itemGroup=='samples'){
+         // testing drag and drop                          
+        //  itemDisplay = <>
+        //       {items.map(item=>(<div key={item.path}
+        //             draggable
+        //             onDragStart={()=>{setActiveFolder(item)}}
+        //             onDragEnd={()=>{setActiveFolder(null)}}
+        //           > 
+        //           <a onClick={()=>playSample(item.path,item.track)}>
+        //           <span>{item.path}</span>
+        //           <small>Track: {item.track + 1} | Slot: {item.slot + 1}</small>
+        //           </a> </div>))}
+        //  </>  
+
         itemDisplay = <ul>
           {items.map(item=>(<li> <a onClick={()=>playSample(item.path,item.track)}>
             <span>{item.path}</span>
             <small>Track: {item.track + 1} | Slot: {item.slot + 1}</small>
             </a> </li>))}
         </ul>
+
     }else if(itemGroup=='sounds'){     
         itemDisplay = <ul>
         {items.map(item=>(<li> <a>
@@ -125,14 +194,29 @@ const SketchpadEditor =(props)=> {
           <small>{item.engine_name}</small>
           </a> </li>))}
           </ul>
+    }else if(itemGroup=='sketches'){     
+      itemDisplay = <ul>
+                      {items.map(item=>(<li> <a onClick={()=>playSketch(item.path,item.track)}>
+                        <span>{item.path}</span>
+                        <small>Track: {item.track + 1} | Slot: {item.slot + 1}</small>
+                        </a> </li>))}
+                   </ul>
+    }else if(itemGroup=='patterns'){     
+      itemDisplay = <ul>
+                      {items.map(item=>(<li> <a onClick={()=>setDetail(item)}>                        
+                        <span>{item.name}</span>
+                        <span className='right'>Bars: <b>{item.bankLength}</b></span>                
+                        </a> </li>))}
+                   </ul>
     }else{
-      itemDisplay = <ul><li>{JSON.stringify(items)}</li></ul>
+      itemDisplay = <ul><li>{JSON.stringify(items)}</li></ul>      
     }
   }
 
 
     return (
-      <div id="sketch-pad-xtractor">
+      <div id="sketch-pad-xtractor">    
+        <div>{JSON.stringify(activeFolder)}</div>
       <div className="sketch-pad-xtractor-row">
         <div
           className="sketch-pad-xtractor-column"  
@@ -144,8 +228,11 @@ const SketchpadEditor =(props)=> {
           </h4>
           <div className='xtractor-column-container'>
             <ul>
-            {folders.map(f=>(
-               <li id={f.path} onClick={()=> dispatch(setFolder(f.path))}><a className={f.path === folder ? "active" : ""} >{f.name}</a></li>
+            {folders.map(f=>(               
+               <li id={f.path} 
+                onClick={()=> dispatch(setFolder(f.path))}>
+                <a className={f.path === folder ? "active" : ""} >{f.name}</a>
+                </li>                                
             ))}
             </ul>
           </div>
@@ -154,12 +241,13 @@ const SketchpadEditor =(props)=> {
         <div
           className="sketch-pad-xtractor-column"
           style={{ backgroundColor: colorsArray[1] }}
+          
         >
           <h4>
             <GoVersions />
             Versions
           </h4>
-          <div className='xtractor-column-container'>
+          <div className='xtractor-column-container' >
           <ul>
             {versions && versions.map(f=>{
               const fileName = f.path.split('/')[f.path.split('/').length - 1];
@@ -218,7 +306,7 @@ const SketchpadEditor =(props)=> {
             <GiMagnifyingGlass />
             Details
           </h4>
-          {waveDisplay}
+          {detailDisplay}
           {/* {sketchItemSelectedItemColumnDisplay} */}
         </div>
 

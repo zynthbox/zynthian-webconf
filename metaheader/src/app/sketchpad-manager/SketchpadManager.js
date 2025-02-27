@@ -22,7 +22,7 @@ const colorsArray = [
 const SketchpadManager =()=>{
     return (
         <>
-           <Split className="split" sizes={[20, 80]}>
+            <Split className="split" sizes={[20, 80]}>
                 <FileManagerContextProvider>
                 <div>
                     <div id="file-manager">                    
@@ -34,10 +34,7 @@ const SketchpadManager =()=>{
                     </div>
                 </div>
                 <div id="sketch-pad-xtractor-container" className="container" >                    
-                 <SketchpadEditor colorsArray={colorsArray}></SketchpadEditor>
-                    {/* // <Suspense fallback={<LoadingSpinner/>}>
-                    //     <SketchpadXtractor colorsArray={colorsArray} />
-                    // </Suspense> */}
+                 <SketchpadEditor colorsArray={colorsArray}></SketchpadEditor>                    
                 </div>
                 </FileManagerContextProvider>
             </Split> 

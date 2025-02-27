@@ -38,7 +38,11 @@ module.exports = {
           },
         ],
       },
-      {test: /\.css$/, loader: 'css-loader'},
+      // {test: /\.css$/, loader: 'css-loader'},
+      {
+        test: /\.css$/,   // Match .css files
+        use: ["style-loader", "css-loader"], // Process CSS
+      },
     ]
   },
   resolve: {
