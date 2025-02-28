@@ -183,6 +183,13 @@ const SketchpadManagerSlice = createSlice({
       state.item = null
       state.version = action.payload;
     },
+    setSketchpad: (state, action) => {      
+      state.scene = null;
+      state.itemDetails = null
+      state.itemGroup = null
+      state.item = null
+      state.sketchpad = action.payload;
+    },
     // setScene: (state, action) => {
     //     state.itemDetails = null
     //     state.itemGroup = null
@@ -343,6 +350,7 @@ export const {
   setFolder,
   setVersion,
   setScene,
+  setSketchpad,
   setClips,
   setSamples,
   setSketches,

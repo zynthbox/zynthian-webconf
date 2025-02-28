@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Context } from './context/context-provider'
 import { ROOTDIR } from "./helpers/settings.js";
 import { useDispatch, useSelector } from "react-redux";
-import { updateSketchpadInfo } from '../../../../store/sampleEditor/sampleEditorSlice.js';
+import { getSketchpadVersions } from '../../../../store/sketchpad-manager/SketchpadMangerSlice.js';
 
 function TreeView(props){
 
@@ -24,16 +24,12 @@ function TreeView(props){
             }
         }   
         if(item.isDir){
-                fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})
-            }
-        if (item.path.indexOf("sketchpad.json") > -1){                   
-            let path = item.path;
-            // patch for sampleEditor
-            if(item.path.indexOf('/home/pi/')!==-1){
-                path='/zynthian/'+item.path.split('/home/pi/')[1]
-            }         
-            dispatch(updateSketchpadInfo({filePath:path,fileName:item.name}))
-        }
+                fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})                
+                // dispatch right panel            
+                if(item.level ==4){
+                        dispatch(getSketchpadVersions(item.path));  
+                    }
+            }       
     }
 
     return (

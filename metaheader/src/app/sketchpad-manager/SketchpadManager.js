@@ -22,7 +22,7 @@ const colorsArray = [
 const SketchpadManager =()=>{
     return (
         <>
-            <Split className="split" sizes={[20, 80]}>
+            <Split className="split" sizes={[50, 50]}>
                 <FileManagerContextProvider>
                 <div>
                     <div id="file-manager">                    

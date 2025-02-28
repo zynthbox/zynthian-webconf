@@ -9,6 +9,7 @@ import {getFolders,
   getSketchpad,
   getSketchpadVersions,
   setFolder,
+  setSketchpad,
   setVersion,  
   setSamples,
   setTracks,
@@ -22,12 +23,15 @@ import {getFolders,
   setSketches
 }  from  '../../../store/sketchpad-manager/SketchpadMangerSlice'; 
 import DropArea from './DropArea';
+
+
 const SketchpadEditor =(props)=> {
   const { colorsArray } = props;
   const [ urlToPlay, setUrlToPlay] = useState(null);
   const [ detail, setDetail] = useState(null);
   const dispatch = useDispatch();    
-  const [activeFolder, setActiveFolder] = useState(null)
+  const [activeFolder, setActiveFolder] = useState(null)  
+
   const {
     status,
     error,
@@ -43,15 +47,22 @@ const SketchpadEditor =(props)=> {
     item
        } = useSelector((state) => state.sketchpadmanager);
  
-  useEffect(() => {      
-      dispatch(getFolders())
-  },[])
+  // useEffect(() => {      
+  //     dispatch(getFolders())
+  // },[])
 
   useEffect(() => {
     if (folder !== null) dispatch(getSketchpadVersions(folder));      
     setUrlToPlay(null);     
     setDetail(null)  
   }, [folder]);
+
+  useEffect(() => {      
+    setUrlToPlay(null); 
+    setDetail(null);    
+    dispatch(setSketchpad(null));          
+  },[versions])
+  
 
   useEffect(() => {   
     if (version !== null) dispatch(getSketchpad(version));
@@ -216,9 +227,9 @@ const SketchpadEditor =(props)=> {
 
     return (
       <div id="sketch-pad-xtractor">    
-        <div>{JSON.stringify(activeFolder)}</div>
+        
       <div className="sketch-pad-xtractor-row">
-        <div
+        {/* <div
           className="sketch-pad-xtractor-column"  
           style={{ backgroundColor: colorsArray[0] }}       
         >
@@ -236,7 +247,7 @@ const SketchpadEditor =(props)=> {
             ))}
             </ul>
           </div>
-        </div>
+        </div> */}
 
         <div
           className="sketch-pad-xtractor-column"
