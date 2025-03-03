@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from './context/context-provider'
-import { ROOTDIR } from "./helpers/settings.js";
 import { useDispatch, useSelector } from "react-redux";
 import { getSketchpadVersions } from '../../../../store/sketchpad-manager/SketchpadMangerSlice.js';
 
@@ -15,12 +14,12 @@ function TreeView(props){
             id:item.folder ? item.folder + item.name : null
         }
         
-        if (item.path === ROOTDIR){
+        if (item.path === props.rootDirectory){
             treeItemPayload = {
                 id:"xcv",
                 isDir:true,
-                label:ROOTDIR,
-                name:ROOTDIR
+                label:props.rootDirectory,
+                name:props.rootDirectory
             }
         }   
         if(item.isDir){

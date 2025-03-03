@@ -1,6 +1,6 @@
-import { ROOTDIR } from "./settings.js";
+// import { ROOTDIR } from "./settings.js";
 
-function getTreeChildren(array,folderChain,selectedFolder,parentPath){
+function getTreeChildren(array,folderChain,selectedFolder,parentPath,ROOTDIR){
 
     let children = [];
 
@@ -16,7 +16,7 @@ function getTreeChildren(array,folderChain,selectedFolder,parentPath){
             }
     
             if (array.filter(i => i.level > item.level).length > 0){
-                newItem.children = getTreeChildren(array.filter(i => i.level > item.level),folderChain,selectedFolder,item.path + "/")
+                newItem.children = getTreeChildren(array.filter(i => i.level > item.level),folderChain,selectedFolder,item.path + "/",ROOTDIR)
             }
     
             children.push(newItem)
@@ -27,14 +27,14 @@ function getTreeChildren(array,folderChain,selectedFolder,parentPath){
 
 }
 
-export function generateTreeFromArray(array,folderChain,selectedFolder){
+export function generateTreeFromArray(array,folderChain,selectedFolder,rootDirectory,rootName){
    
     let newTreeData = {
-        name:'My Sketchpads',
+        name:rootName,
         toggled:true,
-        path:ROOTDIR,
+        path:rootDirectory,
         active:selectedFolder === null ? true : false,
-        children:getTreeChildren(array,folderChain,selectedFolder,ROOTDIR)
+        children:getTreeChildren(array,folderChain,selectedFolder,rootDirectory,rootDirectory)
     }
     return newTreeData
 

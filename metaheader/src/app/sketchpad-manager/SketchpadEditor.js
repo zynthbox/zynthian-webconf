@@ -4,6 +4,8 @@ import WavePlayer from '../components/WavePlayer';
 import { BsFillFolderFill, BsViewList } from "react-icons/bs";
 import { GoVersions } from "react-icons/go";
 import { HiCollection } from "react-icons/hi";
+import DropTargetZone from './DropTargetZone'
+import WindowPanel from './WindowPanel';
 import { GiMagnifyingGlass } from "react-icons/gi";
 import {getFolders,
   getSketchpad,
@@ -22,16 +24,14 @@ import {getFolders,
   setItem,
   setSketches
 }  from  '../../../store/sketchpad-manager/SketchpadMangerSlice'; 
-import DropArea from './DropArea';
-
 
 const SketchpadEditor =(props)=> {
   const { colorsArray } = props;
   const [ urlToPlay, setUrlToPlay] = useState(null);
   const [ detail, setDetail] = useState(null);
   const dispatch = useDispatch();    
-  const [activeFolder, setActiveFolder] = useState(null)  
-
+  
+ 
   const {
     status,
     error,
@@ -223,11 +223,25 @@ const SketchpadEditor =(props)=> {
       itemDisplay = <ul><li>{JSON.stringify(items)}</li></ul>      
     }
   }
+  const [ files, setFiles] = useState([]);
+  let dropedFilesDisplay;
+  if(files){
+    dropedFilesDisplay = <ul>
+                    {files.map(f=>(<li key={f}>                      
+                        {f}
+                        </li>))}
+                </ul>
+  }
 
+  const handleOnDrop =(item)=>{
+    setFiles((prevFiles) => [...prevFiles, item.id]);
+  }
 
     return (
-      <div id="sketch-pad-xtractor">    
-        
+      <div id="sketch-pad-xtractor"> 
+        <WindowPanel title='Select Sounds'/> <button onClick={()=>setFiles([])}>Clear</button>
+        <DropTargetZone onDrop={handleOnDrop}/>    
+        {dropedFilesDisplay}    
       <div className="sketch-pad-xtractor-row">
         {/* <div
           className="sketch-pad-xtractor-column"  

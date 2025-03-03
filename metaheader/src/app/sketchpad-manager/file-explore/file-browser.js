@@ -7,7 +7,8 @@ import {
   FileContextMenu,
   ChonkyIconName,
   ChonkyActions,
-  defineFileAction
+  defineFileAction,
+  setChonkyDefaults
 } from "chonky";
 import FileUploader from './file-uploader';
 import FileViewer from './file-viewer';
@@ -20,7 +21,7 @@ import { useLongPress } from '../../helpers';
 
 import { Context } from './context/context-provider'
 
-import { ROOTDIR } from "./helpers/settings.js";
+
 
 function WebconfFileBrowser(props){
 
@@ -38,6 +39,8 @@ function WebconfFileBrowser(props){
   const [ viewedFile, setViewedFile ] = useState('')
 
   const fileBrowserRef = useRef(null);
+
+  const ROOTDIR = props.rootDirectory;
 
   function clearSelection(){
     if (!fileBrowserRef.current) return
@@ -451,14 +454,16 @@ function WebconfFileBrowser(props){
           {loadingDisplay}
           {fileUploaderDisplay}
           {fileViewerDisplay}
+          
           <FileBrowser
-            files={displayedFiles}
+            files={displayedFiles}           
             folderChain={folderChain}
             fileActions={myFileActions}
             onFileAction={handleAction}
             defaultFileViewActionId={ChonkyActions.EnableListView.id}
             clearSelectionOnOutsideClick={true}
             ref={fileBrowserRef}
+            disableDragAndDropProvider={true}
             disableDefaultFileActions={[
               ChonkyActions.OpenSelection.id,
               // ChonkyActions.SelectAllFiles.id
@@ -477,6 +482,7 @@ function WebconfFileBrowser(props){
               ]} 
             />
           </FileBrowser>
+          
       </div>
   )
 }

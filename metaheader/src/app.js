@@ -9,6 +9,8 @@ import FileManagerContextProvider from './app/file-manager/context/context-provi
 import LoadingSpinner from './app/loading-spinner';
 import RootLayout from './layouts/RootLayout';
 import NotFound from './app/NotFound';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 
 const SketchpadManager = lazy(()=>import('./app/sketchpad-manager/SketchpadManager'))
 const SoundManager = lazy(()=>import('./app/sound-manager/SoundManager'))
@@ -204,7 +206,9 @@ const router = createHashRouter(
 
 function App(){    
     return (
+        <DndProvider backend={HTML5Backend} >
         <RouterProvider router={router} />
+        </DndProvider>
     )
 }
 

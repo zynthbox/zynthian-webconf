@@ -1,4 +1,4 @@
-import { ROOTDIR } from "./settings.js";
+// import { ROOTDIR } from "./settings.js";
 
 export function arrayUnique(array) {
     var a = array.concat();
@@ -11,9 +11,9 @@ export function arrayUnique(array) {
     return a;
 }
 
-export function generateNewFolderChain(path,files){
-    let folderChain = [];
-    let newPath = ROOTDIR;
+export function generateNewFolderChain(path,files,rootDirectory){
+    let folderChain = [];    
+    let newPath = rootDirectory;
     const pathsArray = path.split('/');
     for (var i = 0; i < pathsArray.length; i++){
         let fc = files.filter(file => file.path === newPath + pathsArray[i])[0];

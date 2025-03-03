@@ -7,6 +7,9 @@ import { initFilesCategories,
   selectSound } from  '../../../store/sound-manager/SoundManagerSlice'; 
 import WavePlayer from '../components/WavePlayer';
 import { BsFileMusic } from "react-icons/bs";
+import { FaRegPlayCircle } from "react-icons/fa";
+
+import DraggableItem from '../sketchpad-manager/DragableItem';
 
 function decodeBase64Audio(base64String) {    
   let base64Data = base64String.replace(/^data:audio\/\w+;base64,/, "");
@@ -20,7 +23,7 @@ function decodeBase64Audio(base64String) {
   return audioUrl;
 }
 
-const SoundEditor = () => {    
+const SoundEditor = ({isDraggable}) => {    
     const dispatch = useDispatch();    
     const {folderSelected
           ,files
@@ -136,7 +139,14 @@ const SoundEditor = () => {
                           {filesToDisplay.map(f=>{
                               const clsLi = (soundSelected==f.path)?'selected':''
                               return (
-                                <li key={f.path} className={clsLi} onClick={()=>handleClickSound(f.path)}> <BsFileMusic /> {f.name }</li>
+                                <li key={f.path} className={clsLi}> <BsFileMusic />
+                                  <span onClick={()=>handleClickSound(f.path)}>
+                                  {f.name }                            
+                                  </span>
+                                  {isDraggable && 
+                                    <DraggableItem key={'dragable'+f.path} item={f.path} id={f.path}/>
+                                    }
+                                </li>
                               ) 
                           })}
                           </ul>

@@ -10,9 +10,8 @@ setChonkyDefaults({ iconComponent: ChonkyIconFA });
 
 const WebconfFileBrowser = lazy(()=>import('./file-browser'))
 const TreeView = lazy(()=>import('./tree-view'))
-import { ROOTDIR } from "./helpers/settings.js";
 
-const FileExplore = () => {
+const FileExplore = ({rootDirectory}) => {
 
     const { fileManagerState, fileManagerDispatch } = useContext(Context);
     const fsep = "/";
@@ -25,7 +24,7 @@ const FileExplore = () => {
 
     async function getFiles(){
         
-        const folder = ROOTDIR + (fileManagerState.selectedFolder !== null ? fileManagerState.selectedFolder + "/" : "")       
+        const folder = rootDirectory + (fileManagerState.selectedFolder !== null ? fileManagerState.selectedFolder + "/" : "")       
         
         fetch(`http://${window.location.hostname}:3000/folder/${folder.split('/').join('+++')}`, {
             method: 'GET',
@@ -45,7 +44,7 @@ const FileExplore = () => {
     if (fileManagerState.loading === false){
         fileManagerDisplay = (
             <React.Fragment>
-                <TreeView />
+                <TreeView rootDirectory={rootDirectory}/>
                 
                 <Suspense fallback={<LoadingSpinner/>}>                    
                     <WebconfFileBrowser
@@ -54,6 +53,7 @@ const FileExplore = () => {
                         showFileUploader={showFileUploader}
                         setShowFileUploader={setShowFileUploader}
                         getFiles={getFiles}
+                        rootDirectory={rootDirectory}
                     />
                     
                 </Suspense>

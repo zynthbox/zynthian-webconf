@@ -1,25 +1,28 @@
 import { generateTreeFromArray } from "../helpers/tree-data-helpers";
 import { arrayUnique, generateNewFolderChain } from '../helpers/file-manager-helpers';
-import { ROOTDIR } from "../helpers/settings.js";
+// import { ROOTDIR } from "../helpers/settings.js";
+
 
 export const FileManagerInitialState = {
     loading:true,
+    rootDirectory:null, // get from provider parameter
+    rootName:null,// get from provider parameter
     filesLoading:false,
     selectedFolder:null,
     files:[],
     displayedFiles:[],
     folderChain:[{ 
         id: 'xcv', 
-        name: "Sketchpads", 
-        alias:ROOTDIR , 
+        name: "root", 
+        alias:"root" , 
         isDir: true 
     }],
     browseHistory:[{
         id: "xcv",
         isDir: true,
-        label: ROOTDIR,
-        name: ROOTDIR,
-        path: ROOTDIR
+        label: 'root',
+        name: 'root',
+        path: 'root'
     }],
     browseHistoryIndex:0,
     treeData:null,
@@ -31,7 +34,9 @@ function ProductViewReducer(state,action){
         case 'SET_SELECTED_FOLDER':{
             
             let data = action.payload
-            
+            const ROOTDIR = state.rootDirectory;
+            const rootName = state.rootName;
+            // console.log('>>>>>>>>>>>>>>>>rootDirectory',state.rootDirectory);
             // console.log(data, " DATA PAYLOAD ")
 
             let dataName = data.name;
@@ -48,13 +53,12 @@ function ProductViewReducer(state,action){
             if (!idIsInChain){
                 
                 if (state.selectedFolder !== null){
-                    const shortPath = data.path.split(ROOTDIR)[1]
-                    
+                    const shortPath = data.path.split(ROOTDIR)[1]                                       
                     if (shortPath && shortPath.indexOf(state.selectedFolder) === -1){
                         selectedFolder = shortPath;
                         folderChain = [
                             ...FileManagerInitialState.folderChain,
-                            ...generateNewFolderChain(shortPath,state.files)
+                            ...generateNewFolderChain(shortPath,state.files,state.rootDirectory)
                         ]
                     } else {
                         selectedFolder = state.selectedFolder + "/" + dataName 
@@ -66,8 +70,8 @@ function ProductViewReducer(state,action){
                 }
 
             } else {
-
-              selectedFolder = dataName === ROOTDIR ? null : state.selectedFolder.split(dataName)[0] + dataName;
+                state.rootDirectory
+               selectedFolder = dataName === ROOTDIR ? null : state.selectedFolder.split(dataName)[0] + dataName;            
               const folderIndexInChain = state.folderChain.findIndex(item => item.id === data.id);
               folderChain = [...state.folderChain.slice(0,folderIndexInChain + 1)]
             
@@ -102,7 +106,8 @@ function ProductViewReducer(state,action){
         case 'SET_FILES':{            
             let files = arrayUnique(action.payload.concat(state.files))            
             let displayedFiles = [];
-            
+            const ROOTDIR = state.rootDirectory;
+
             // files.forEach(function(f,index){
             //     let displayFile = false;
             //     if (state.selectedFolder === null && f.folder === ROOTDIR) displayFile = true;
@@ -122,8 +127,8 @@ function ProductViewReducer(state,action){
             // displayedFiles = arrayUnique(displayedFiles)
 
             displayedFiles = action.payload.map(f=>({...f,id:f.path}));            
-          
-            let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder)
+            
+            let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder,ROOTDIR,state.rootName)
             // let treeData = generateTreeFromArray(files,state.folderChain,state.selectedFolder)
             
             return {
@@ -138,12 +143,12 @@ function ProductViewReducer(state,action){
         case 'RENAME_FILE':{
 
             const { previousPath, fullPath } = action.payload;
-
+            const ROOTDIR = state.rootDirectory;
             const files = state.files.filter(function( file ) {
                 return file.path.indexOf(previousPath) === -1;
             });
-
-            let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder)
+            
+            let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder,ROOTDIR,state.rootName)
 
             return {
                 ...state,
@@ -154,7 +159,7 @@ function ProductViewReducer(state,action){
         case 'DELETE_FILES':{
 
             const paths = action.payload;
-
+            const ROOTDIR = state.rootDirectory;
             const files = state.files.filter(function( file ) {
                 let keepFile = true;
                 paths.forEach(function(deletePath,index){
@@ -163,7 +168,7 @@ function ProductViewReducer(state,action){
                 return keepFile;
             });
 
-            let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder)
+            let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder,ROOTDIR,state.rootName)
 
             return {
                 ...state,
