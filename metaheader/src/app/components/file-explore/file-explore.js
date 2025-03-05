@@ -11,7 +11,7 @@ setChonkyDefaults({ iconComponent: ChonkyIconFA, disableDragAndDrop:true });
 const WebconfFileBrowser = lazy(()=>import('./file-browser'))
 const TreeView = lazy(()=>import('./tree-view'))
 
-const FileExplore = ({rootDirectory,module}) => {
+const FileExplore = ({rootDirectory,mode}) => {
 
     const { fileManagerState, fileManagerDispatch } = useContext(Context);
     const fsep = "/";
@@ -44,7 +44,7 @@ const FileExplore = ({rootDirectory,module}) => {
     if (fileManagerState.loading === false){
         fileManagerDisplay = (
             <React.Fragment>
-                <TreeView rootDirectory={rootDirectory} module={module}/>
+                <TreeView rootDirectory={rootDirectory} mode={mode}/>
                 
                 <Suspense fallback={<LoadingSpinner/>}>                    
                     <WebconfFileBrowser

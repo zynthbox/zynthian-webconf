@@ -1,19 +1,24 @@
-import React, { useEffect,Suspense,lazy } from 'react'
+import React, {Suspense,lazy } from 'react'
 import LoadingSpinner from '../loading-spinner';
 import Split from 'react-split';
-import FileManagerContextProvider from './file-explore/context/context-provider';
-const FileExplore = lazy(()=>import('./file-explore/file-explore'))
+import FileManagerContextProvider from '../components/file-explore/context/context-provider';
+const FileExplore = lazy(()=>import('../components/file-explore/file-explore'))
 const SoundEditor = lazy(()=>import('./SoundEditor'))
 
 const SoundManager =()=>{
     return (
         <>
-            <FileManagerContextProvider>
-            <Split className="split" sizes={[40, 60]}>                
+            
+            <Split className="split" sizes={[40, 60]}>    
+            <FileManagerContextProvider 
+                    rootDirectory='/home/pi/zynthian-my-data/sounds/'
+                    rootName='Sounds'
+                    >          
                 <div>
                     <div id="file-manager">                                       
                     <Suspense fallback={<LoadingSpinner/>}>
-                        <FileExplore/>
+                        <FileExplore rootDirectory='/home/pi/zynthian-my-data/sounds/' 
+                                     mode = 'sound-manager'/>
                     </Suspense>                    
                    
                     </div>
@@ -22,9 +27,10 @@ const SoundManager =()=>{
                     <Suspense fallback={<LoadingSpinner/>}>
                         <SoundEditor />
                     </Suspense>
-                </div>                
+                </div>       
+                </FileManagerContextProvider>           
             </Split>
-            </FileManagerContextProvider> 
+            
         </>
     )
 }

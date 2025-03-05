@@ -1,1 +1,0 @@
-export const ROOTDIR = "/home/pi/zynthian-my-data/sounds/";

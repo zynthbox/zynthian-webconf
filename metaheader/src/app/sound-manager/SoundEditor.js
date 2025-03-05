@@ -156,6 +156,7 @@ const SoundEditor = ({isDraggable}) => {
     folderDisplay = <select value={folderSelected} onChange={(e)=>{dispatch(selectFolder(e.target.value))}}>                        
                         <option key='my-sounds' value="/home/pi/zynthian-my-data/sounds/my-sounds/">my-sounds</option>
                         <option key='community-sounds' value="/home/pi/zynthian-my-data/sounds/community-sounds/">community-sounds</option>
+                        <option key='default-sounds' value="/home/pi/zynthian-my-data/sounds/default-sounds/">default-sounds</option>
                      </select>
 
   return (     

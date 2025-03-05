@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
 
-function DropTargetZone({onDrop,acceptType,extradata}) {
+const DropTargetZone = React.memo(({onDrop,acceptType,extradata}) => {
   const [{ isOver }, dropRef] = useDrop(() => ({
     accept: acceptType, // Accept the same type as defined in DraggableItem
     drop: (item, monitor) => {
@@ -30,6 +30,6 @@ function DropTargetZone({onDrop,acceptType,extradata}) {
       {isOver ? 'Release to drop' : 'Drag an item here'}
     </div>
   );
-}
+})
 
 export default DropTargetZone;

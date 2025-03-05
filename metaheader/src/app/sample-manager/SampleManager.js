@@ -1,9 +1,9 @@
 import React, { useEffect,Suspense,lazy } from 'react'
 import LoadingSpinner from '../loading-spinner';
 import Split from 'react-split';
-import FileManagerContextProvider from './file-explore/context/context-provider';
+import FileManagerContextProvider from '../components/file-explore/context/context-provider';
 import TrackerModule from './TrackerModule';
-const FileExplore = lazy(()=>import('./file-explore/file-explore'))
+const FileExplore = lazy(()=>import('../components/file-explore/file-explore'))
 const SampleManger =()=>{
     
     return (
@@ -12,9 +12,11 @@ const SampleManger =()=>{
            <Split className="split">
                 <div>
                     <div id="file-manager">                    
-                    <FileManagerContextProvider>
+                    <FileManagerContextProvider rootDirectory='/home/pi/zynthian-my-data/samples/'
+                    rootName='Samples'>
                     <Suspense fallback={<LoadingSpinner/>}>
-                        <FileExplore/>
+                        <FileExplore rootDirectory='/home/pi/zynthian-my-data/samples/' 
+                                     mode = 'sample-manager'/>
                     </Suspense>                    
                     </FileManagerContextProvider>
                     </div>

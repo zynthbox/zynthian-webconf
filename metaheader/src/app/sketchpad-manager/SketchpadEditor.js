@@ -211,26 +211,26 @@ const SketchpadEditor =(props)=> {
     }
   }
   const [ files, setFiles] = useState([]);
-  let dropedFilesDisplay;
-  let dummyDropField ={track:1,slot:2};
+  const [ filesTo, setFilesTo] = useState([]);
+  let dropedFilesDisplay;  
   if(files){
     dropedFilesDisplay = <ul>
                     {files.map(f=>(<li key={f}>                      
-                        {f} - Todo Track:{dummyDropField.track} Slot:{dummyDropField.slot}
+                        {f} - {filesTo}
                         </li>))}
                 </ul>
   }
 
   const handleOnDrop =(item,extradata)=>{
     setFiles((prevFiles) => [...prevFiles, item.id]);
-    console.log('drop file to :',extradata)
+    setFilesTo(extradata);    
   }
 
   
     return (
       <div id="sketch-pad-xtractor"> 
         <WindowPanel title='Select Sounds'/> <button onClick={()=>setFiles([])}>Clear</button>
-        <DropTargetZone onDrop={handleOnDrop} acceptType="DRAG_TYPE_SOUND" extradata={dummyDropField}/>    
+        <DropTargetZone onDrop={handleOnDrop} acceptType="DRAG_TYPE_SOUND" extradata={'To Track1 Slot1'}/>    
         {dropedFilesDisplay}    
       <div className="sketch-pad-xtractor-row">
         {/* <div
@@ -287,7 +287,8 @@ const SketchpadEditor =(props)=> {
             Item Groups
           </h4>
           {/* {sketchItemGroupColumnDisplay} */}
-          <div className='xtractor-column-container'>
+          
+          <div className='xtractor-column-container'>         
             <ul>
               {sketchpad && itemGroupTypes.map((igt,index)=>(
                     <li><a className={itemGroup === igt ? "active" : ""} 
@@ -320,7 +321,7 @@ const SketchpadEditor =(props)=> {
           <h4>
             <GiMagnifyingGlass />
             Details
-          </h4>
+          </h4>         
           {detailDisplay}
           {/* {sketchItemSelectedItemColumnDisplay} */}
         </div>

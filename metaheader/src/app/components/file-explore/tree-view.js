@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from './context/context-provider'
-import { ROOTDIR } from "./helpers/settings.js";
-
-function TreeView(props){
+import { useDispatch, useSelector } from "react-redux";
+import { getSketchpadVersions } from '../../../../store/sketchpad-manager/SketchpadMangerSlice.js';
+import { selectFolder } from '../../../../store/sound-manager/SoundManagerSlice';
+function TreeView({rootDirectory,mode}){
 
     const { fileManagerState, fileManagerDispatch } = useContext(Context)
-
+    const dispatch = useDispatch()
     function onTreeItemClick(item,parentIds){
 
         let treeItemPayload = {
@@ -13,15 +14,23 @@ function TreeView(props){
             id:item.folder ? item.folder + item.name : null
         }
         
-        if (item.path === ROOTDIR){
+        if (item.path === rootDirectory){
             treeItemPayload = {
                 id:"xcv",
                 isDir:true,
-                label:ROOTDIR,
-                name:ROOTDIR
+                label:rootDirectory,
+                name:rootDirectory
             }
         }   
-        fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})
+        if(item.isDir){
+                fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})                
+                // dispatch right panel                           
+                if(mode=='sketchpad-manager' && item.level == 4){
+                        dispatch(getSketchpadVersions(item.path));  
+                    }else if(mode=='sound-manager' && item.level == 3){                                                                           
+                        dispatch(selectFolder(item.path+'/'));  
+                    }
+            }       
     }
 
     return (
@@ -67,14 +76,19 @@ function TreeViewItem(props){
             </div>
         )
     }
-    let l = 8 + (item && item.level)?item.level*12 : 0
-    let p = 25 + (item && item.level)?item.level*15 : 0
+    let l = 8 + ((item && item.level)?item.level*12 : 0)
+    let p = 25 + ((item && item.level)?item.level*15 : 0)
+    
     return (
         <li>
-            <span onClick={() => onItemClick(item,parentIds)} className='toggle-sub-menu' style={{ left:l}}>
-                <i className={isToggled=== true ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'}></i>
-            </span>
-            <a onClick={() => onItemClick(item,parentIds)} style={{paddingLeft:p}} className={item.active === true ? "active" : ""}>{item.name} </a>
+            {item.isDir &&
+                <span onClick={() => onItemClick(item,parentIds)} className='toggle-sub-menu' style={{ left:l}}>
+                    <i className={isToggled=== true ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'}></i>
+                </span>
+            }           
+            <a onClick={() => onItemClick(item,parentIds)} style={{paddingLeft:p}} className={item.active === true ? "active" : ""}>
+                {item.name} 
+            </a>
             {itemChildrenDisplay}
         </li>
     )
