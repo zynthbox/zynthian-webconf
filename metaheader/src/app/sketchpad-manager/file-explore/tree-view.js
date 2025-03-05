@@ -3,7 +3,7 @@ import { Context } from './context/context-provider'
 import { useDispatch, useSelector } from "react-redux";
 import { getSketchpadVersions } from '../../../../store/sketchpad-manager/SketchpadMangerSlice.js';
 
-function TreeView(props){
+function TreeView({rootDirectory,module}){
 
     const { fileManagerState, fileManagerDispatch } = useContext(Context)
     const dispatch = useDispatch()
@@ -14,18 +14,18 @@ function TreeView(props){
             id:item.folder ? item.folder + item.name : null
         }
         
-        if (item.path === props.rootDirectory){
+        if (item.path === rootDirectory){
             treeItemPayload = {
                 id:"xcv",
                 isDir:true,
-                label:props.rootDirectory,
-                name:props.rootDirectory
+                label:rootDirectory,
+                name:rootDirectory
             }
         }   
         if(item.isDir){
                 fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})                
                 // dispatch right panel            
-                if(item.level ==4){
+                if(module=='sketchpad-manager' && item.level == 4){
                         dispatch(getSketchpadVersions(item.path));  
                     }
             }       

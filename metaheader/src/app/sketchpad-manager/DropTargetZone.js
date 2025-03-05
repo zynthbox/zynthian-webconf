@@ -1,12 +1,11 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
 
-const DRAG_TYPE_SOUND = 'DRAG_TYPE_SOUND'
-function DropTargetZone({onDrop}) {
+function DropTargetZone({onDrop,acceptType,extradata}) {
   const [{ isOver }, dropRef] = useDrop(() => ({
-    accept: DRAG_TYPE_SOUND, // Accept the same type as defined in DraggableItem
+    accept: acceptType, // Accept the same type as defined in DraggableItem
     drop: (item, monitor) => {
-      onDrop(item);
+      onDrop(item,extradata);
       // console.log('Dropped item:', item);
       // You can also update state or perform other actions here
     },

@@ -6,12 +6,12 @@ import { usePrevious } from '../../helpers'
 import { Context } from './context/context-provider';
 import ErrorModal from '../../components/error-modal';
 
-setChonkyDefaults({ iconComponent: ChonkyIconFA });
+setChonkyDefaults({ iconComponent: ChonkyIconFA, disableDragAndDrop:true });
 
 const WebconfFileBrowser = lazy(()=>import('./file-browser'))
 const TreeView = lazy(()=>import('./tree-view'))
 
-const FileExplore = ({rootDirectory}) => {
+const FileExplore = ({rootDirectory,module}) => {
 
     const { fileManagerState, fileManagerDispatch } = useContext(Context);
     const fsep = "/";
@@ -44,7 +44,7 @@ const FileExplore = ({rootDirectory}) => {
     if (fileManagerState.loading === false){
         fileManagerDisplay = (
             <React.Fragment>
-                <TreeView rootDirectory={rootDirectory}/>
+                <TreeView rootDirectory={rootDirectory} module={module}/>
                 
                 <Suspense fallback={<LoadingSpinner/>}>                    
                     <WebconfFileBrowser

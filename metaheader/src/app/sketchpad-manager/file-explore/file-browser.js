@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import {
   FileBrowser,
+  FullFileBrowser,
   FileNavbar,
   FileToolbar,
   FileList,
@@ -416,6 +417,7 @@ function WebconfFileBrowser(props){
         file={viewedFile}
         setShowFileViewer={setShowFileViewer}
         selectedFolder={selectedFolder}
+        rootDirectory ={props.rootDirectory}
       />
     )
   }
@@ -429,6 +431,7 @@ function WebconfFileBrowser(props){
                   fsep={fsep} 
                   refreshFileManager={props.refreshFileManager} 
                   setShowFileUploader={props.setShowFileUploader}
+                  rootDirectory ={props.rootDirectory}
               />
           </React.Fragment>
       )
@@ -463,7 +466,7 @@ function WebconfFileBrowser(props){
             defaultFileViewActionId={ChonkyActions.EnableListView.id}
             clearSelectionOnOutsideClick={true}
             ref={fileBrowserRef}
-            disableDragAndDropProvider={true}
+            disableDragAndDropProvider={false}
             disableDefaultFileActions={[
               ChonkyActions.OpenSelection.id,
               // ChonkyActions.SelectAllFiles.id

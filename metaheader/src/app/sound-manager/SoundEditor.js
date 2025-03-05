@@ -144,7 +144,7 @@ const SoundEditor = ({isDraggable}) => {
                                   {f.name }                            
                                   </span>
                                   {isDraggable && 
-                                    <DraggableItem key={'dragable'+f.path} item={f.path} id={f.path}/>
+                                    <DraggableItem key={'draggable'+f.path} item={f.path} id={f.path}/>
                                     }
                                 </li>
                               ) 

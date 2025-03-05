@@ -177,20 +177,7 @@ const SketchpadEditor =(props)=> {
   let itemDisplay;
   if(itemGroup){
     const items = itemGroups[itemGroup];    
-    if(itemGroup=='samples'){
-         // testing drag and drop                          
-        //  itemDisplay = <>
-        //       {items.map(item=>(<div key={item.path}
-        //             draggable
-        //             onDragStart={()=>{setActiveFolder(item)}}
-        //             onDragEnd={()=>{setActiveFolder(null)}}
-        //           > 
-        //           <a onClick={()=>playSample(item.path,item.track)}>
-        //           <span>{item.path}</span>
-        //           <small>Track: {item.track + 1} | Slot: {item.slot + 1}</small>
-        //           </a> </div>))}
-        //  </>  
-
+    if(itemGroup=='samples'){         
         itemDisplay = <ul>
           {items.map(item=>(<li> <a onClick={()=>playSample(item.path,item.track)}>
             <span>{item.path}</span>
@@ -225,22 +212,25 @@ const SketchpadEditor =(props)=> {
   }
   const [ files, setFiles] = useState([]);
   let dropedFilesDisplay;
+  let dummyDropField ={track:1,slot:2};
   if(files){
     dropedFilesDisplay = <ul>
                     {files.map(f=>(<li key={f}>                      
-                        {f}
+                        {f} - Todo Track:{dummyDropField.track} Slot:{dummyDropField.slot}
                         </li>))}
                 </ul>
   }
 
-  const handleOnDrop =(item)=>{
+  const handleOnDrop =(item,extradata)=>{
     setFiles((prevFiles) => [...prevFiles, item.id]);
+    console.log('drop file to :',extradata)
   }
 
+  
     return (
       <div id="sketch-pad-xtractor"> 
         <WindowPanel title='Select Sounds'/> <button onClick={()=>setFiles([])}>Clear</button>
-        <DropTargetZone onDrop={handleOnDrop}/>    
+        <DropTargetZone onDrop={handleOnDrop} acceptType="DRAG_TYPE_SOUND" extradata={dummyDropField}/>    
         {dropedFilesDisplay}    
       <div className="sketch-pad-xtractor-row">
         {/* <div

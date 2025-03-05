@@ -54,9 +54,7 @@ function ProductViewReducer(state,action){
                 
                 if (state.selectedFolder !== null){
                     const shortPath = data.path.split(ROOTDIR)[1]      
-                    console.log('=============');
-                    console.log('shortPath:',shortPath, 'selectedFolder:',state.selectedFolder);   
-                       
+               
                     // bugfix if shortPath=test2 and selectedFolder=test make this logic wrong 
                     // if (shortPath && shortPath.indexOf(state.selectedFolder) === -1){
                     if (shortPath && (shortPath+'/').indexOf((state.selectedFolder+'/')) === -1){

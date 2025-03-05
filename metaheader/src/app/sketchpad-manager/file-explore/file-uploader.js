@@ -8,12 +8,12 @@ import { FaWindowClose } from 'react-icons/fa';
 
 import { humanFileSize } from '../../helpers';
 
-import { ROOTDIR } from "./helpers/settings.js";
 
 
 function FileUploader(props) {
 
   const { selectedFolder, fsep } = props
+  const ROOTDIR = props.rootDirectory;
 
   // const reader = new FileReader();
 
