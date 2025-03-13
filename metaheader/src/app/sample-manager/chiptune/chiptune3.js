@@ -21,8 +21,11 @@ export class ChiptuneJsPlayer {
 			}
 			this.context = this.config.context
 			this.destination = false
+
+			console.log('>>>>>>>>>>this.config.context>>>>>>>>>>>>>',this.config.context)
 		} else {
 			this.context = new AudioContext()
+			console.log('>>>>>>>>>>create AudioContext>>>>>>>>>>>>>')
 			this.destination = this.context.destination	// output to speakers
 		}
 		delete this.config.context	// remove from config, just used here and after init not changeable
@@ -34,10 +37,17 @@ export class ChiptuneJsPlayer {
 		this.handlers = []
 
 		// worklet
+		
+		// local
+		// let baseUrl = "http://localhost:3000";
 	
-		let baseUrl = "http://localhost:3000";
+		// live TODO find correct baseUrl
+		let baseUrl = "http://zynthbox.local";
 		let url = new URL("/metaheader/src/app/sample-manager/chiptune/chiptune3.worklet.js", baseUrl);
+		console.log('>>>>>>>>>>>>>>',url)
 		// const oldurl = new URL('./chiptune3.worklet.js', import.meta.url);
+		console.log('>>>>>>>>>>>>>>this.context.audioWorklet',this.context.audioWorklet)
+
 		this.context.audioWorklet.addModule( url )
 		.then(()=>{
 			this.processNode = new AudioWorkletNode(this.context, 'libopenmpt-processor', {

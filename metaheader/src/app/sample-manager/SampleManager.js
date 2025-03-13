@@ -5,11 +5,12 @@ import FileManagerContextProvider from '../components/file-explore/context/conte
 import TrackerModule from './TrackerModule';
 import TrackerExtractor from './TrackerExtractor';
 const FileExplore = lazy(()=>import('../components/file-explore/file-explore'))
+
 const SampleManger =()=>{
     
     return (
         <>
-          {/* <TrackerExtractor></TrackerExtractor> */}
+          {/* <TrackerExtractor></TrackerExtractor> */}         
           <Split className="split">
                 <div>
                     <div id="file-manager">                    

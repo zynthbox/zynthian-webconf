@@ -4,6 +4,8 @@ const { exec } = require('child_process');
 const { loadMusicMetadata } = require('music-metadata');
 
 const CONFIG_PLUGINS = '/zynthian/zynthbox-qml/config/plugins.json'
+const CONFIG_CATEGORIES = '/zynthian/zynthbox-qml/config/snd_categories.json'
+const CONFIG_SND_STAT = ''
 
 const categoryNameMapping = {
   "0": "Uncategorized",
@@ -36,7 +38,8 @@ async function getCategoryFromMetadata(filePath) {
 exports.initFilesCategories = async (req, res)=>{
 
   let folder = req.params.path.split('+++').join('/');       
-  let files = fs.readdirSync(folder);  
+  let files = fs.readdirSync(folder); 
+  files = files.filter(file => !file.startsWith('.')) 
   const filesList = [];
   await Promise.all(
     files.map(async f=>{
@@ -47,7 +50,7 @@ exports.initFilesCategories = async (req, res)=>{
                       path:`${folder}${f}`,
                       catId
                   }
-        filesList.push(file)      
+        filesList.push(file)   
     })
   )
   // group files with catId

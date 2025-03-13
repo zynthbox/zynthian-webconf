@@ -5,15 +5,15 @@ const TerserPlugin = require("terser-webpack-plugin");
 module.exports = {
   entry: {app:'./src/app.js'},
   mode: "production",
-  optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin({
-      terserOptions: {
-        compress: { drop_console: true }, // remove console.log
-        output: { comments: false } // remove comment
-      }
-    })]   
-  },
+  // optimization: {
+  //   minimize: true,
+  //   minimizer: [new TerserPlugin({
+  //     terserOptions: {
+  //       compress: { drop_console: true }, // remove console.log
+  //       output: { comments: false } // remove comment
+  //     }
+  //   })]   
+  // },
   module: {
     rules: [
       {
@@ -59,7 +59,7 @@ module.exports = {
     filename: "bundle/[name].[contenthash].js",
     chunkFilename: "bundle/chunks/[name].[contenthash].js", 
     asyncChunks:true,    
-    clean:false,
+    clean:true,
     publicPath: '/metaheader/build/'    
   },
   plugins: [

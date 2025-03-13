@@ -9,10 +9,13 @@
   "scripts": {
     "server": "nodemon server.js",
     "watch": "webpack --config webpack.app.config.js --watch",
-    "build": "webpack --config webpack.app.prod.config.js"
+    "build": "webpack --config webpack.app.prod.config.js",
+    "css-watch": "npx @tailwindcss/cli -i ./styles/tailwind-input.css -o ./styles/tailwind-output.css --watch",
+    "css-build": "npx @tailwindcss/cli -i ./styles/tailwind-input.css -o ./styles/tailwind-output.css"
   },
   "dependencies": {
     "@ramonak/react-progress-bar": "^5.0.3",
+    "@tailwindcss/cli": "^4.0.13",
     "archiver": "0.11.0",
     "config-ini-parser": "^1.6.1",
     "cors": "^2.8.5",
@@ -38,6 +41,7 @@
     "react-router-dom": "^6.20.1",
     "react-split": "^2.0.14",
     "style-loader": "^4.0.0",
+    "tailwindcss": "^4.0.13",
     "wavesurfer.js": "^7.9.0"
   },
   "devDependencies": {

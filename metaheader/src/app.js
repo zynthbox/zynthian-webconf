@@ -67,7 +67,7 @@ function FileManagerDisplay(){
 function SketchpadManagerDisplay(){
     return (
         <>
-            <div id="sketchpad-manager-display" className="container" style={{left:fileManagerLeftCss()}}>
+            <div id="sketchpad-manager-display"  style={{left:fileManagerLeftCss()}}>
             <h3>
                 <i className="glyphicon glyphicon-file"></i>
                 SKETCHPAD MANAGER
@@ -83,7 +83,7 @@ function SketchpadManagerDisplay(){
 function SoundManagerDisplay(){
     return(
         <React.Fragment>               
-                <div id="sound-manager-display" className="container" style={{left:fileManagerLeftCss()}}>
+                <div id="sound-manager-display"  style={{left:fileManagerLeftCss()}}>
                     <h3>
                     <i className="glyphicon glyphicon-file"></i>SOUND MANAGER
                     </h3>
@@ -99,7 +99,7 @@ function SoundManagerDisplay(){
 function SampleManagerDisplay(){
     return (
         <>
-            <div id="sample-manager-display" className="container" style={{left:fileManagerLeftCss()}}>
+            <div id="sample-manager-display"  style={{left:fileManagerLeftCss()}}>
             <h3>
                 <i className="glyphicon glyphicon-file"></i>
                 SAMPLE MANAGER
@@ -116,7 +116,7 @@ function SampleEditorDisplay(){
     return (
             <React.Fragment>
                
-                <div id="sample-editor-container" className="container" style={{left:fileManagerLeftCss()}}>
+                <div id="sample-editor-container"  className="container" style={{left:fileManagerLeftCss()}}>
                     <h3>
                     TRACK MANAGER
                     </h3>

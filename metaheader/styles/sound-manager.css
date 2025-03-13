@@ -55,6 +55,7 @@
   width: 100%;
 }
 #sound-manager-display #sound-editor-container {
+  background: #fff;
   overflow: auto;
 }
 #sound-manager-display #sound-editor-container .layout {

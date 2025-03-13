@@ -8,7 +8,7 @@ const SoundEditor = lazy(()=>import('./SoundEditor'))
 const SoundManager =()=>{
     return (
         <>
-            
+        
             <Split className="split" sizes={[20, 80]}>    
             <FileManagerContextProvider 
                     rootDirectory='/home/pi/zynthian-my-data/sounds/'
@@ -23,7 +23,7 @@ const SoundManager =()=>{
                    
                     </div>
                 </div>
-                <div id="sound-editor-container" className="container" >                    
+                <div id="sound-editor-container" >                    
                     <Suspense fallback={<LoadingSpinner/>}>
                         <SoundEditor />
                     </Suspense>
