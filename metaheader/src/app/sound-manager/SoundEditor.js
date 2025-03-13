@@ -8,8 +8,8 @@ import { initFilesCategories,
 import WavePlayer from '../components/WavePlayer';
 import { BsFileMusic } from "react-icons/bs";
 import { FaRegPlayCircle } from "react-icons/fa";
+import DraggableItem from '../components/DraggableItem';
 
-import DraggableItem from '../sketchpad-manager/DragableItem';
 
 function decodeBase64Audio(base64String) {    
   let base64Data = base64String.replace(/^data:audio\/\w+;base64,/, "");
@@ -87,33 +87,89 @@ const SoundEditor = ({isDraggable}) => {
 
     let metaDisplay = null;
     if(soundInfo){
-      metaDisplay = <div className='sound-meta'> 
-                      <div style={{ display: "flex", flexDirection: "column", gap: "2px", padding: "2px" }}>    
-                        <div style={{ display: "flex", gap: "2px" }}>Category:{soundInfo.category}</div>           
-                        <div style={{ display: "flex", gap: "2px" }}>
-                          <div style={{ width: "16.6%", backgroundColor: "#ccc", padding: "2px" }}>Samples</div>
+       metaDisplay = <div class="sound-meta">
+                        <table>
+                        <caption>
+                        Category:{soundInfo.category}
+                        </caption>
+                          <tr>
+                            <td className='t_label'>Samples</td>
                             {soundInfo.sampleSlotsData.map((s,i)=>(
-                              <div key={i} style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>
+                              <td key={i}>
                                 {s &&
                                 <a onClick={()=>playSample(i)}><BsFileMusic/>{s}</a>
                                 }
-                              </div>
-                            ))}                  
-                        </div>
-                        <div style={{ display: "flex", gap: "2px" }}>
-                          <div style={{ width: "16.6%", backgroundColor: "#ccc", padding: "2px" }}>Synths</div>
+                              </td>
+                            ))}     
+                          </tr>
+                          <tr>
+                            <td className='t_label'>Synths</td>
                             {soundInfo.synthSlotsData.map((s,i)=>(
-                              <div key={i}  style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>{s}</div>
-                            ))}                  
-                        </div>
-                        <div style={{ display: "flex", gap: "2px" }}>
-                          <div style={{ width: "16.6%", backgroundColor: "#ccc", padding: "2px" }}>Fx</div>
+                              <td key={i} >{s}</td>
+                            ))}      
+                          </tr>
+                          <tr>
+                            <td className='t_label'>Fx</td>
                             {soundInfo.fxSlotsData.map((s,i)=>(
-                              <div key={i} style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>{s}</div>
-                            ))}                  
-                        </div>
+                              <td key={i} >{s}</td>
+                            ))}    
+                          </tr>
+                        </table>
                       </div>
-                    </div>
+
+      // metaDisplay = <div class="sound-meta">
+      //                 <div class="rowMeta">Category:{soundInfo.category}</div>
+      //                 <div class="rowMeta">
+      //                   <div class="columnMeta">Samples</div>
+      //                   {soundInfo.sampleSlotsData.map((s,i)=>(
+      //                         <div class="columnMeta" key={i}>
+      //                           {s &&
+      //                           <a onClick={()=>playSample(i)}><BsFileMusic/>{s}</a>
+      //                           }
+      //                         </div>
+      //                       ))}                            
+      //                 </div>
+      //                 <div class="rowMeta">
+      //                   <div class="columnMeta">Synths</div>
+      //                   {soundInfo.synthSlotsData.map((s,i)=>(
+      //                         <div key={i}  class="columnMeta">{s}</div>
+      //                       ))}   
+      //                 </div>
+      //                 <div class="rowMeta">
+      //                   <div class="columnMeta">Fx</div>
+      //                   {soundInfo.fxSlotsData.map((s,i)=>(
+      //                         <div key={i} class="columnMeta">{s}</div>
+      //                       ))}    
+      //                 </div> 
+      //               </div>
+
+      // metaDisplay = <div className='sound-meta'> 
+      //                 <div style={{ display: "flex", flexDirection: "column", gap: "2px", padding: "2px" }}>    
+      //                   <div style={{ display: "flex", gap: "2px" }}>Category:{soundInfo.category}</div>           
+      //                   <div style={{ display: "flex", gap: "2px" }}>
+      //                     <div style={{ width: "16.6%", backgroundColor: "#ccc", padding: "2px" }}>Samples</div>
+      //                       {soundInfo.sampleSlotsData.map((s,i)=>(
+      //                         <div key={i} style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>
+      //                           {s &&
+      //                           <a onClick={()=>playSample(i)}><BsFileMusic/>{s}</a>
+      //                           }
+      //                         </div>
+      //                       ))}                  
+      //                   </div>
+      //                   <div style={{ display: "flex", gap: "2px" }}>
+      //                     <div style={{ width: "16.6%", backgroundColor: "#ccc", padding: "2px" }}>Synths</div>
+      //                       {soundInfo.synthSlotsData.map((s,i)=>(
+      //                         <div key={i}  style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>{s}</div>
+      //                       ))}                  
+      //                   </div>
+      //                   <div style={{ display: "flex", gap: "2px" }}>
+      //                     <div style={{ width: "16.6%", backgroundColor: "#ccc", padding: "2px" }}>Fx</div>
+      //                       {soundInfo.fxSlotsData.map((s,i)=>(
+      //                         <div key={i} style={{ width: "16.6%", backgroundColor: "#eef", padding: "2px" }}>{s}</div>
+      //                       ))}                  
+      //                   </div>
+      //                 </div>
+      //               </div>
     }
     
     let categoriesDisplay;
@@ -139,13 +195,14 @@ const SoundEditor = ({isDraggable}) => {
                           {filesToDisplay.map(f=>{
                               const clsLi = (soundSelected==f.path)?'selected':''
                               return (
-                                <li key={f.path} className={clsLi}> <BsFileMusic />
-                                  <span onClick={()=>handleClickSound(f.path)}>
-                                  {f.name }                            
-                                  </span>
-                                  {isDraggable && 
-                                    <DraggableItem key={'draggable'+f.path} item={f.path} id={f.path}/>
-                                    }
+                                <li key={f.path} className={clsLi}> <BsFileMusic />                                  
+                                  {/* {isDraggable &&  */}
+                                    <DraggableItem key={'draggable'+f.path} item={f.path} id={f.path} type={'FILE'}>
+                                      <span onClick={()=>handleClickSound(f.path)}>
+                                                                        {f.name }                            
+                                                                        </span>
+                                      </DraggableItem>
+                                    {/* } */}
                                 </li>
                               ) 
                           })}
@@ -172,7 +229,8 @@ const SoundEditor = ({isDraggable}) => {
                     </div>
                 </main>
               </div>
-              <footer className="footer"> {metaDisplay}</footer>
+              {metaDisplay}
+              {/* <footer className="footer"> </footer> */}
             </div>                                                                                                   
   )
 }

@@ -117,12 +117,19 @@
 #sound-manager-display #sound-editor-container li:hover {
   background-color: #eef;
 }
-#sound-manager-display #sound-editor-container .sound-meta {
+#sound-manager-display #sound-editor-container .sound-meta > table {
+  border: 1px solid #eef;
+}
+#sound-manager-display #sound-editor-container .sound-meta > table td {
+  width: 200px;
   overflow: hidden;
   white-space: nowrap;
+  border: 1px solid #eef;
+  max-width: 200px;
 }
-#sound-manager-display #sound-editor-container .sound-meta a {
-  cursor: pointer;
+#sound-manager-display #sound-editor-container .sound-meta > table td.t_label {
+  width: 100px;
+  background-color: #eef;
 }
 #sound-manager-display .module-container a {
   cursor: pointer;

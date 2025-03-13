@@ -21,7 +21,7 @@ const colorsArray = [
 const SketchpadManager =()=>{
     return (
         <>
-            <Split className="split" sizes={[50, 50]}>
+            <Split className="split" sizes={[20, 80]} minSize={100}>
                
                 <FileManagerContextProvider 
                     rootDirectory='/home/pi/zynthian-my-data/sketchpads/my-sketchpads/'

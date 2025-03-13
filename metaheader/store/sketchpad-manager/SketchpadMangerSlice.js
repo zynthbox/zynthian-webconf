@@ -257,6 +257,7 @@ const SketchpadManagerSlice = createSlice({
         // }
       });      
       state.versions = newSketchVersions;
+      state.version = null;
       state.status = "idle";
     });
     builder.addCase(getSketchpadVersions.pending, (state) => {

@@ -1,11 +1,38 @@
 
 const fs = require('fs');
 const fsextra = require('fs-extra');
-const openmpt = require('../lib/libopenmpt.js');
 const { exec } = require('child_process');
 const { readdirSync, rmSync } = require('fs');
 const path = require("path")
 var multer = require('multer');
+const libopenmptModule = require('./libs/libopenmpt.js');
+
+
+// async function loadLibOpenMPT() {
+//   const libopenmptModule = await import(path.resolve(__dirname, "./libs/libopenmpt.js"));
+//   return new Promise((resolve) => {
+//       libopenmptModule({
+//           locateFile: (file) => path.resolve(__dirname, "libs", file), // Correct WASM path
+//           onRuntimeInitialized: function () {
+//               console.log(" libopenmpt.js initialized!");
+//               resolve(this);
+//           },
+//       });
+//   });
+// }
+
+exports.getTrackerInfoTest = (req,res) => {
+  // const moduleBuffer = fs.readFileSync('/home/siyuan/workspace/zynthian-webconf/metaheader/server/controllers/samples/sample.mod');
+
+  // Run and check if libopenmpt initializes
+  // loadLibOpenMPT().then(() => {
+  //   console.log("🎵 libopenmpt is ready to use!");
+  // }).catch((err) => {
+  //   console.error("❌ Error loading libopenmpt.js:", err);
+  // });
+  // return res.status(200).json({message:'fileinfo',samples:[],path:'path'}) 
+}
+
 
 const destFolder = '/home/pi/zynthian-my-data/tmp/webconf/tracker/uploads/';
 var storage = multer.diskStorage({
@@ -29,7 +56,7 @@ var upload = multer({ storage: storage,   limits: { fieldSize: 25 * 1024 * 1024 
 const uploadMemory = multer({storage: multer.memoryStorage()})
 
 // try to use libopenmpt.js read samples
-// // const modFile = fs.readFileSync('./music/sample.mod');
+// const modFile = fs.readFileSync('./music/sample.mod');
 // // exports.getTrackerInfo = (req,res) => {
   
 // //   openmpt().then((Module)=>{
@@ -39,6 +66,7 @@ const uploadMemory = multer({storage: multer.memoryStorage()})
 
 //   return res.status(200).json({message:'fileinfo',samples:[],path:'path'}) 
 // }
+
 
 
 

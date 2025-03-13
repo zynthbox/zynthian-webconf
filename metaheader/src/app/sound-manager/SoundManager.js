@@ -9,7 +9,7 @@ const SoundManager =()=>{
     return (
         <>
             
-            <Split className="split" sizes={[40, 60]}>    
+            <Split className="split" sizes={[20, 80]}>    
             <FileManagerContextProvider 
                     rootDirectory='/home/pi/zynthian-my-data/sounds/'
                     rootName='Sounds'

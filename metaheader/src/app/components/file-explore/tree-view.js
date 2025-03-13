@@ -39,6 +39,7 @@ function TreeView({rootDirectory,mode}){
                 <TreeViewItem 
                     onClick={onTreeItemClick}
                     item={fileManagerState.treeData}
+                    mode={mode}
                 />
             </ul>
         </div>
@@ -76,8 +77,18 @@ function TreeViewItem(props){
             </div>
         )
     }
-    let l = 8 + ((item && item.level)?item.level*12 : 0)
-    let p = 25 + ((item && item.level)?item.level*15 : 0)
+
+    let level = item.level;
+    if(props.mode=='sketchpad-manager'){
+        level = level-2;
+    }else if(props.mode=='sound-manager'){                                                                           
+        level = level -1;
+    }else if(props.mode =='sample-manager'){
+        level = level -1;
+    }
+    
+    let l = 8 + ((item && level)?level*12 : 0)
+    let p = 25 + ((item && level)?level*15 : 0)
     
     return (
         <li>

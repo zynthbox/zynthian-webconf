@@ -1,6 +1,7 @@
 import React, {useCallback,useEffect,useState,useRef} from 'react'
 import {useDropzone} from 'react-dropzone'
 import axios from 'axios';
+import { BsFileMusic } from "react-icons/bs";
 import {ChiptuneJsPlayer} from './chiptune/chiptune3.js';
 function formatBytes(a,b=2){if(!+a)return"0 Bytes";const c=0>b?0:b,d=Math.floor(Math.log(a)/Math.log(1024));return`${parseFloat((a/Math.pow(1024,d)).toFixed(c))} ${["Bytes","KiB","MiB","GiB","TiB","PiB","EiB","ZiB","YiB"][d]}`}
 function formatDuration(seconds) {
@@ -48,7 +49,7 @@ const TrackerModule =()=>{
           }else{
             playerRef.current.play(arrayBuffer);             
           }
-         
+        
           playerRef.current.onMetadata((meta) => {    
             console.log('>>>>>>>>>>>>>>>>meta:',meta);
                   
@@ -59,6 +60,9 @@ const TrackerModule =()=>{
             meta.type = files[0].type;
             setMeta(meta)
           })
+
+          
+          
           setIsPlaying(true);                   
         };
         reader.readAsArrayBuffer(files[0]);    
@@ -96,7 +100,10 @@ const TrackerModule =()=>{
   if(samples){
     samplesDisplay = <ul className='sample-list'>
       {samples.map((s,i)=> <li key={i}> 
-         <a onClick={()=>{handlePlaySample(s)}}>{s} </a>
+         <a>
+         <BsFileMusic/> {s} 
+         </a>
+         <a onClick={()=>{handlePlaySample(s)}}>Play on Zynthbox</a>
          </li>)}
     </ul>
   }
@@ -136,7 +143,7 @@ const TrackerModule =()=>{
             </div>
             }
 
-      <ul className='file-info'>{fileInfo}</ul>
+      {/* <ul className='file-info'>{fileInfo}</ul> */}
       <div className='sample-container'>                     
            {samplesDisplay}
       </div>

@@ -62,7 +62,7 @@ function WebconfFileBrowser(props){
     }
   }
 
-  function createFolderAction(){
+  function createFolderAction(ROOTDIR){
     const folderName = window.prompt('Enter new Folder Name:');
     if (folderName !== null){
       const fullPath = (ROOTDIR.startsWith('/home/pi')?ROOTDIR.substring(9):ROOTDIR)
@@ -83,7 +83,7 @@ function WebconfFileBrowser(props){
     props.getFiles();
   }
 
-  function renameFileAction(data){
+  function renameFileAction(data,ROOTDIR){
     const previousPath = data.state.selectedFiles[0].path;
     const previousName = previousPath.split('/')[previousPath.split('/').length - 1]
     const folderName = window.prompt(`Enter new name for "${previousName}":`,previousName);
@@ -183,7 +183,7 @@ function WebconfFileBrowser(props){
 
   }
 
-  function copyFilesAction(data){
+  function copyFilesAction(data,ROOTDIR){
     let paths = [];
     data.state.selectedFiles.forEach(function(sf,index){
       paths.push(sf.path)
@@ -191,17 +191,19 @@ function WebconfFileBrowser(props){
     setCopiedFiles(paths)
   }
 
-  function pasteFilesAction(data){
+  function pasteFilesAction(data,ROOTDIR){
     // let destination = selectedFolder + fsep;
     // if (copiedFiles.indexOf('.') > -1){
     //   destination = selectedFolder + fsep + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1];
     // }
+  
     let destinationPaths = [];
     copiedFiles.forEach(function(cf,index){
       let destination = selectedFolder + fsep;
       if (cf.indexOf('.') > -1){
         destination = (selectedFolder !== null ? selectedFolder + fsep : "") + cf.split(fsep)[cf.split(fsep).length - 1];
       }
+      destination = ROOTDIR.split('/home/pi/')[1] + destination;
       destinationPaths.push(destination)
     })
 
@@ -220,7 +222,7 @@ function WebconfFileBrowser(props){
     setDraggedFiles(paths)
   }
 
-  function endDragNDropAction(data){
+  function endDragNDropAction(data,ROOTDIR){
 
     setIsDragInsideFileBrowser(false);
 
@@ -236,6 +238,7 @@ function WebconfFileBrowser(props){
         if (destination.indexOf('undefined') > -1) destination = destination.split('undefined').join('');
       }
 
+      destination = ROOTDIR.split('/home/pi/')[1] + destination;
       destinationPaths.push(destination)
 
     })
@@ -247,7 +250,7 @@ function WebconfFileBrowser(props){
 
     setLoadingText('Copying Files')
     setLoading(true)
-
+  
     console.log(previousPaths,destinationPaths)
 
     copyPasteFile(previousPaths,destinationPaths,deleteOrigin,0)
@@ -298,16 +301,16 @@ function WebconfFileBrowser(props){
 
   const handleAction = (data) => {
     if (data.id === ChonkyActions.OpenFiles.id) openFilesAction(data)
-    if (data.id === createNewFolder.id) createFolderAction()
+    if (data.id === createNewFolder.id) createFolderAction(ROOTDIR)
     if (data.id === editFiles.id) alert("Edit Folder Action");
-    if (data.id === renameFiles.id) renameFileAction(data)
+    if (data.id === renameFiles.id) renameFileAction(data,ROOTDIR)
     if (data.id === ChonkyActions.UploadFiles.id) props.setShowFileUploader(true)
     if (data.id === ChonkyActions.DownloadFiles.id) downloadFilesAction(data)
     if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
-    if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data);
-    if (data.id === pasteFiles.id) pasteFilesAction(data)
+    if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data,ROOTDIR);
+    if (data.id === pasteFiles.id) pasteFilesAction(data,ROOTDIR)
     if (data.id === ChonkyActions.StartDragNDrop.id) startDragNDropAction(data)
-    if (data.id === ChonkyActions.EndDragNDrop.id) endDragNDropAction(data)
+    if (data.id === ChonkyActions.EndDragNDrop.id) endDragNDropAction(data,ROOTDIR)
    
     // if (data.id === selectFiles.id) selectAllFiles()
   };
@@ -450,7 +453,7 @@ function WebconfFileBrowser(props){
 
   return (
       <div 
-        style={{ height: window.innerHeight - 170, position:"relative"}} 
+        style={{ height: window.innerHeight - 170, position:"relative",background:"#efefef"}} 
         onDragOver={onFileUploaderDragOver} 
         onDragLeave={() => onFileUploaderDragLeave()}
         >

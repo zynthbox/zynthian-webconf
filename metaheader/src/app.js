@@ -206,7 +206,7 @@ const router = createHashRouter(
 
 function App(){    
     return (
-        <DndProvider backend={HTML5Backend} context={window}>
+        <DndProvider backend={HTML5Backend}>
         <RouterProvider router={router} />
         </DndProvider>
     )

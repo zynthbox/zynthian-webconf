@@ -80,6 +80,7 @@
 #sample-manager-display .module-container .sample-container {
   max-height: 400px;
   overflow-y: auto;
+  border-top: 1px solid #eef;
 }
 #sample-manager-display .module-container .dropzone-container {
   height: 100px;
@@ -88,6 +89,7 @@
   padding-top: 25px;
 }
 #sample-manager-display .module-container .metadata {
-  max-height: 200px;
+  max-height: 250px;
+  padding: 10px;
   overflow-y: auto;
 }

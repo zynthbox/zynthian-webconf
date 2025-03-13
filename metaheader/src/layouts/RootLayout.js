@@ -2,8 +2,9 @@ import React from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { store } from '../../store/store'
 import { Provider } from 'react-redux'
+import Toolbar from '../app/components/Toolbar'
 
-// @deprecated use HashRouter instead. see app.js
+
 export default function RootLayout() {
   return (
     <Provider store={store}>
@@ -38,7 +39,8 @@ export default function RootLayout() {
             <li>
             <NavLink to="song-export"> Song Export </NavLink>    
             </li>
-        </ul>             
+        </ul>      
+        <Toolbar />       
         <Outlet />      
     </Provider>
   )

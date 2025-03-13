@@ -148,13 +148,27 @@
             //     transform: scale(0.98);
             // }
           
-            .sound-meta{
-                overflow: hidden;
-                white-space: nowrap;
-                a{
-                    cursor: pointer;
+            .sound-meta{                                
+              
+                >table{
+                    border: 1px solid #eef;                   
+                    td{
+                        width: 200px;
+                        overflow: hidden;
+                       
+                        white-space: nowrap;
+                        border: 1px solid #eef;
+                        max-width: 200px;
+                    }
+                    td.t_label{
+                        width: 100px;                       
+                        background-color: #eef;
+                    }
                 }
+              
             }
+            
+
     }
     .module-container{
        

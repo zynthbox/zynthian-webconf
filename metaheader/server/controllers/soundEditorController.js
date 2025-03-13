@@ -2,8 +2,7 @@ const fs = require("fs");
 const fsextra = require('fs-extra')
 const { exec } = require('child_process');
 const { loadMusicMetadata } = require('music-metadata');
-// const {parseFile,orderTags} =require('music-metadata');
-// import { parseFile,orderTags } from 'music-metadata';
+
 const CONFIG_PLUGINS = '/zynthian/zynthbox-qml/config/plugins.json'
 
 const categoryNameMapping = {

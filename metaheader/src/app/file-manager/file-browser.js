@@ -190,6 +190,7 @@ function WebconfFileBrowser(props){
     // if (copiedFiles.indexOf('.') > -1){
     //   destination = selectedFolder + fsep + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1];
     // }
+  
     let destinationPaths = [];
     copiedFiles.forEach(function(cf,index){
       let destination = selectedFolder + fsep;
@@ -198,7 +199,7 @@ function WebconfFileBrowser(props){
       }
       destinationPaths.push(destination)
     })
-
+   
     copyPasteFiles(copiedFiles,destinationPaths)
   }
 
@@ -242,7 +243,7 @@ function WebconfFileBrowser(props){
     setLoadingText('Copying Files')
     setLoading(true)
 
-    // console.log(previousPaths,destinationPaths)
+    console.log(previousPaths,destinationPaths)
 
     copyPasteFile(previousPaths,destinationPaths,deleteOrigin,0)
   }

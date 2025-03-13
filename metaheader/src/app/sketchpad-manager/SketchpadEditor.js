@@ -4,8 +4,7 @@ import WavePlayer from '../components/WavePlayer';
 import { BsFillFolderFill, BsViewList } from "react-icons/bs";
 import { GoVersions } from "react-icons/go";
 import { HiCollection } from "react-icons/hi";
-import DropTargetZone from './DropTargetZone'
-import WindowPanel from './WindowPanel';
+
 import { GiMagnifyingGlass } from "react-icons/gi";
 import {getFolders,
   getSketchpad,
@@ -24,6 +23,7 @@ import {getFolders,
   setItem,
   setSketches
 }  from  '../../../store/sketchpad-manager/SketchpadMangerSlice'; 
+import DraggableItem from '../components/DraggableItem';
 
 const SketchpadEditor =(props)=> {
   const { colorsArray } = props;
@@ -117,7 +117,7 @@ const SketchpadEditor =(props)=> {
     detailDisplay =  <WavePlayer audioUrl={urlToPlay} />    
   }else if(detail){
     
-    detailDisplay = <ul>      
+    detailDisplay = <ul className='detail'>      
       <li><a>Default Note Duration: {detail.defaultNoteDuration}</a></li>
       <li><a>Pattern Length: {detail.patternLength}</a></li>
       <li><a>Swing: {detail.swing}</a></li>
@@ -173,65 +173,74 @@ const SketchpadEditor =(props)=> {
     dispatch(getPatterns())   
     dispatch(getSounds(version))
   }
-
+  
+ 
   let itemDisplay;
-  if(itemGroup){
-    const items = itemGroups[itemGroup];    
-    if(itemGroup=='samples'){         
+  if(itemGroup && version){
+    const items = itemGroups[itemGroup];
+    let dir = version.split('/home/pi/')[1].split('/');
+    dir.pop();    
+    if(itemGroup=='samples'){              
         itemDisplay = <ul>
-          {items.map(item=>(<li> <a onClick={()=>playSample(item.path,item.track)}>
-            <span>{item.path}</span>
-            <small>Track: {item.track + 1} | Slot: {item.slot + 1}</small>
-            </a> </li>))}
+          {items.map((item,index)=>(                     
+          <li key={index}> 
+            
+            <a onClick={()=>playSample(item.path,item.track)}>
+            <DraggableItem 
+                  id={`${itemGroup}_${dir.join('/')}/wav/sampleset/sample-bank.${item.track +1}/${item.path}` } 
+                  type='SAMPLE'
+                  extraInfo={{track:item.track,slot:item.slot}}
+                  > <span>{item.path}</span>          
+            <small>Track: {item.track + 1} | Slot: {item.slot + 1}</small>   
+            </DraggableItem>        
+            </a>
+           
+            </li>
+            ))}
         </ul>
 
     }else if(itemGroup=='sounds'){     
         itemDisplay = <ul>
-        {items.map(item=>(<li> <a>
+        {items.map((item,index)=>(<li key={index}> <a>
+          <DraggableItem id={`${itemGroup}_${item.preset_name}` } 
+                                       type='SOUND'>  
           <span>{item.preset_name}</span>
           <small>{item.engine_name}</small>
+          </DraggableItem> 
           </a> </li>))}
           </ul>
     }else if(itemGroup=='sketches'){     
       itemDisplay = <ul>
-                      {items.map(item=>(<li> <a onClick={()=>playSketch(item.path,item.track)}>
+                      {items.map((item,index)=>(                      
+                        <li key={index}>                        
+                        <a onClick={()=>playSketch(item.path,item.track)}>    
+                        <DraggableItem id={`${itemGroup}_${dir.join('/')}/wav/${item.path}` } 
+                                       type='SKETCH'>                       
                         <span>{item.path}</span>
-                        <small>Track: {item.track + 1} | Slot: {item.slot + 1}</small>
-                        </a> </li>))}
+                        <small>Track: {item.track + 1} | Slot: {item.slot + 1}</small>    
+                        </DraggableItem>                    
+                        </a> 
+                        
+                        </li>))}
                    </ul>
     }else if(itemGroup=='patterns'){     
       itemDisplay = <ul>
-                      {items.map(item=>(<li> <a onClick={()=>setDetail(item)}>                        
+                      {items.map(item=>(<li key={item.name}> <a onClick={()=>setDetail(item)}> 
+                      <DraggableItem id={`${itemGroup}_${item.name}` } 
+                                       type='PATTERN'>                         
                         <span>{item.name}</span>
-                        <span className='right'>Bars: <b>{item.bankLength}</b></span>                
+                        <span className='right'>Bars: <b>{item.bankLength}</b></span>      
+                        </DraggableItem>           
                         </a> </li>))}
                    </ul>
     }else{
       itemDisplay = <ul><li>{JSON.stringify(items)}</li></ul>      
     }
   }
-  const [ files, setFiles] = useState([]);
-  const [ filesTo, setFilesTo] = useState([]);
-  let dropedFilesDisplay;  
-  if(files){
-    dropedFilesDisplay = <ul>
-                    {files.map(f=>(<li key={f}>                      
-                        {f} - {filesTo}
-                        </li>))}
-                </ul>
-  }
-
-  const handleOnDrop =(item,extradata)=>{
-    setFiles((prevFiles) => [...prevFiles, item.id]);
-    setFilesTo(extradata);    
-  }
-
+ 
   
     return (
-      <div id="sketch-pad-xtractor"> 
-        <WindowPanel title='Select Sounds'/> <button onClick={()=>setFiles([])}>Clear</button>
-        <DropTargetZone onDrop={handleOnDrop} acceptType="DRAG_TYPE_SOUND" extradata={'To Track1 Slot1'}/>    
-        {dropedFilesDisplay}    
+      <div id="sketch-pad-xtractor">        
       <div className="sketch-pad-xtractor-row">
         {/* <div
           className="sketch-pad-xtractor-column"  
@@ -268,7 +277,12 @@ const SketchpadEditor =(props)=> {
               const fileName = f.path.split('/')[f.path.split('/').length - 1];
               const folderName = f.path.split(fileName)[0];
                return (<li id={f.path} onClick={()=> dispatch(setVersion(f.path))}>
-                        <a className={f.path === version ? "active" : ""}>{fileName}</a></li>)
+                        <a className={f.path === version ? "active" : ""}>
+                        <DraggableItem id={`SKETCHPAD_${f.path}`} type='SKETCHPAD'> 
+                          <span>{fileName}</span>
+                        </DraggableItem>
+                          </a>
+                        </li>)
                 }
                )}
             </ul>
@@ -291,10 +305,13 @@ const SketchpadEditor =(props)=> {
           <div className='xtractor-column-container'>         
             <ul>
               {sketchpad && itemGroupTypes.map((igt,index)=>(
-                    <li><a className={itemGroup === igt ? "active" : ""} 
+                    
+                    <li key={index}><a className={itemGroup === igt ? "active" : ""} 
                     onClick={() => dispatch(setItemGroup(igt))}>
+                      <DraggableItem key={index} id={`${igt}`} type={igt.toUpperCase()}>
                       {igt.toUpperCase()} ({itemGroups[igt] !== null ? itemGroups[igt].length: 0})
-                      </a></li>
+                      </DraggableItem>
+                      </a></li>                      
                 ))}
               </ul>
         </div>

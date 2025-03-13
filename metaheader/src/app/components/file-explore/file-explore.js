@@ -45,8 +45,8 @@ const FileExplore = ({rootDirectory,mode}) => {
         fileManagerDisplay = (
             <React.Fragment>
                 <TreeView rootDirectory={rootDirectory} mode={mode}/>
-                
-                <Suspense fallback={<LoadingSpinner/>}>                    
+                {mode!=='sketchpad-manager' && mode!=='sound-manager' &&
+                <Suspense fallback={<LoadingSpinner/>}>                     
                     <WebconfFileBrowser
                         fsep={fsep}
                         refreshFileManager={getFiles}
@@ -57,7 +57,7 @@ const FileExplore = ({rootDirectory,mode}) => {
                     />
                     
                 </Suspense>
-                
+                }
             </React.Fragment>
         )
     }
