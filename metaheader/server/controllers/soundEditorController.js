@@ -34,8 +34,71 @@ async function getCategoryFromMetadata(filePath) {
   }
 }
 
-
 exports.initFilesCategories = async (req, res)=>{
+
+  let folder = req.params.path.split('+++').join('/');   
+  let stat;
+  const filesList = [];
+  try {
+      stat = await fsextra.readJson(folder+'.stat.json');      
+      const cats = Object.keys(stat);
+      cats.map( catId =>{
+        const files = stat[catId].files;        
+        const fileskeys = Object.keys(files);        
+        fileskeys.map(f=>{
+              const file ={
+                name:f,
+                folder,
+                path:`${folder}${f}`,
+                catId
+            }
+            filesList.push(file)   
+        })
+      })
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      console.error("File not found:", folder+'.stat.json');
+      // file not existing...
+    }
+    console.error("Error reading JSON file:", error);
+    // throw error; // Rethrow if it's a different error
+  } 
+  
+  // group files with catId
+
+  const groupedFiles = filesList.reduce((acc, item) => {    
+    // Initialize the category array if it doesn't exist
+    if (!acc[item.catId]) {
+      acc[item.catId] = [];
+    }
+    acc[item.catId].push(item);    
+    return acc;
+  }, {});
+
+  // init categories with cnt of files
+  const catList = [];
+  Object.keys(categoryNameMapping).map(k=>{
+    let cat;
+    if(groupedFiles[k]){
+        c ={
+          catId:k,
+          catName:categoryNameMapping[k],
+          cntFiles:groupedFiles[k].length
+        }
+    }else{
+       c ={
+        catId:k,
+        catName:categoryNameMapping[k],
+        cntFiles:0
+      }
+    }
+    catList.push(c);
+  })
+  return res.status(200).json({files:filesList,categories:catList})    
+}
+
+
+exports.initFilesCategories_ = async (req, res)=>{
 
   let folder = req.params.path.split('+++').join('/');       
   let files = fs.readdirSync(folder); 
@@ -114,14 +177,22 @@ const extractTagsFromSound = async (meta,path)=>{
         let layers = snapshotObj['layers'];        
         const pluginsNameMapping = await fsextra.readJson(CONFIG_PLUGINS);
         
-        layers.forEach((l) => {
-          const s = l['engine_name'].match(/\{(.*?)\}/)[1];
-          const key = s.split('_name')[0]          
+        layers.forEach((l) => {          
+          let mapping;
+          if(l['engine_name'].indexOf('_name')>0)
+          {          
+            const s = l['engine_name'].match(/\{(.*?)\}/)[1];          
+            const key = s.split('_name')[0]   
+            mapping = pluginsNameMapping[key].name       
+          }else{
+            mapping = l['engine_name']
+          }
+          
           if(l['engine_type'] == 'MIDI Synth'){  
-              synthSlotsData[l['slot_index']] = pluginsNameMapping[key].name +'>'+(l['preset_name']?l['preset_name']:'None')            
+              synthSlotsData[l['slot_index']] = mapping +'>'+(l['preset_name']?l['preset_name']:'None')            
           }
           if(l['engine_type'] == 'Audio Effect'){            
-              fxSlotsData[l['slot_index']]  = pluginsNameMapping[key].name +'>'+(l['preset_name']?l['preset_name']:'None')            
+              fxSlotsData[l['slot_index']]  = mapping +'>'+(l['preset_name']?l['preset_name']:'None')            
           }
         });
   

@@ -1,4 +1,4 @@
-import React, {Suspense,lazy } from 'react'
+import React, {useEffect,Suspense,lazy } from 'react'
 import LoadingSpinner from '../loading-spinner';
 import Split from 'react-split';
 import FileManagerContextProvider from '../components/file-explore/context/context-provider';
@@ -6,9 +6,15 @@ const FileExplore = lazy(()=>import('../components/file-explore/file-explore'))
 const SoundEditor = lazy(()=>import('./SoundEditor'))
 
 const SoundManager =()=>{
+    useEffect(() => {
+        const path = window.location.pathname;
+        const hash = window.location.hash;    
+        if (path !== "/" && path !== "") {
+          window.location.replace(window.location.origin + "/#/" + hash.replace(/^#\/?/, ""));
+        }
+      }, []);
     return (
-        <>
-        
+        <>        
             <Split className="split" sizes={[20, 80]}>    
             <FileManagerContextProvider 
                     rootDirectory='/home/pi/zynthian-my-data/sounds/'
