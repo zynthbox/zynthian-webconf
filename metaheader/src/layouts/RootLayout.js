@@ -6,15 +6,6 @@ import Toolbar from '../app/components/Toolbar'
 
 
 export default function RootLayout() {
-
-  useEffect(() => {
-    const path = window.location.pathname;
-    const hash = window.location.hash;    
-    if (path !== "/" && path !== "") {
-      window.location.replace(window.location.origin + "/#/" + hash.replace(/^#\/?/, ""));
-    }
-  }, []);
-
   const location = useLocation();
   const showToolbarRoutes = ["/sound-manager", "/sketchpad-manager", "/file-manager", "/sample-manager"]; 
   return (

@@ -19,7 +19,18 @@ const colorsArray = [
     "#9A7136",
 ];
 const SketchpadManager =()=>{
-    
+    useEffect(() => {
+        const path = window.location.pathname;
+        const hash = window.location.hash;          
+        if (path !== "/" && path !== "") {
+          window.location.replace(window.location.origin + "/#/" + hash.replace(/^#\/?/, ""));
+        }
+
+        // clear content-section
+        document.querySelectorAll('.content-section').forEach(element => {
+            element.innerHTML = ''; // Clear the content
+          });
+      }, []);
 
     return (
         <>          
