@@ -45,12 +45,18 @@ exports.initFilesCategories = async (req, res)=>{
       cats.map( catId =>{
         const files = stat[catId].files;        
         const fileskeys = Object.keys(files);        
-        fileskeys.map(f=>{
+        fileskeys.map(f=>{   
+              const fxSlotsData = files[f]['fxSlotsData'];         
+              const sampleSlotsData	= files[f]['sampleSlotsData']; 
+              const synthSlotsData = files[f]['synthSlotsData']; 
               const file ={
                 name:f,
                 folder,
                 path:`${folder}${f}`,
-                catId
+                catId,
+                fxSlotsData,
+                sampleSlotsData,
+                synthSlotsData              
             }
             filesList.push(file)   
         })
@@ -77,6 +83,7 @@ exports.initFilesCategories = async (req, res)=>{
 
   // init categories with cnt of files
   const catList = [];
+  const categoryNameMapping = await fsextra.readJson(CONFIG_CATEGORIES);
   Object.keys(categoryNameMapping).map(k=>{
     let cat;
     if(groupedFiles[k]){
@@ -92,7 +99,7 @@ exports.initFilesCategories = async (req, res)=>{
         cntFiles:0
       }
     }
-    catList.push(c);
+    if(k!='*') catList.push(c);
   })
   return res.status(200).json({files:filesList,categories:catList})    
 }

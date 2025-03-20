@@ -1,11 +1,22 @@
-import React from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import React, { useEffect} from 'react'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { store } from '../../store/store'
 import { Provider } from 'react-redux'
 import Toolbar from '../app/components/Toolbar'
 
 
 export default function RootLayout() {
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    const hash = window.location.hash;    
+    if (path !== "/" && path !== "") {
+      window.location.replace(window.location.origin + "/#/" + hash.replace(/^#\/?/, ""));
+    }
+  }, []);
+
+  const location = useLocation();
+  const showToolbarRoutes = ["/sound-manager", "/sketchpad-manager", "/file-manager", "/sample-manager"]; 
   return (
     <Provider store={store}>
         <a href="#m" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tools <span className="caret"></span></a>
@@ -40,7 +51,7 @@ export default function RootLayout() {
             <NavLink to="song-export"> Song Export </NavLink>    
             </li>
         </ul>      
-        <Toolbar />       
+        {showToolbarRoutes.includes(location.pathname) && <Toolbar />}
         <Outlet />      
     </Provider>
   )

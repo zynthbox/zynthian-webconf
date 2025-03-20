@@ -2,43 +2,33 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 
 function DraggableItem({ id, type, extraInfo, children}) {
-  const [{ isDragging }, dragRef] = useDrag(() => {
-    
-    // console.log('>>>>>>>>>>>>useDrag id',id,'type:',type);
+  const [{ isDragging }, dragRef] = useDrag(() => {       
     return ({
     type: type, // Define a drag type
-    item: { id, type,extraInfo },
+    item: { id,type,extraInfo},
     collect: (monitor) => ({
       isDragging: monitor.isDragging()
     }),
     })
-}
+  }
   ,[id]);
-  // const [{ isDragging }, dragRef] = useDrag(() => ({
-  //   type: type, // Define a drag type
-  //   item: { id, type,extraInfo },
-  //   collect: (monitor) => ({
-  //     isDragging: monitor.isDragging()
-  //   }),
-  // }));
+
 
   return (
-    <span
+    <span     
       ref={dragRef}
       type={type}
       id={id}
       style={{
-        opacity: isDragging ? 0.5 : 1,
-        padding: '2px 3px',
-        // backgroundColor: 'lightblue',
+        opacity: isDragging ? 0.5 : 1,      
         cursor: 'move',
-        width: 'fit-content',
-        margin:'3px'
+        width: 'fit-content',      
       }}
-    >      
-     {children}
+    >          
+    {children}
     </span>
   );
 }
 
-export default DraggableItem;
+export default React.memo(DraggableItem);
+// export default DraggableItem;

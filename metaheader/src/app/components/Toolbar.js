@@ -38,7 +38,7 @@ const Toolbar = () => {
     };
 
     return (
-      <div style={styles.toolbar}>
+      <div style={styles.toolbar} >
         <button onClick={togglePanel} style={styles.button}>
           Current Sketchpad
         </button>

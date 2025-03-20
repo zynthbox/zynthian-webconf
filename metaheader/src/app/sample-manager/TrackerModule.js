@@ -101,7 +101,7 @@ const TrackerModule =()=>{
     samplesDisplay = <ul className='sample-list'>
       {samples.map((s,i)=> <li key={i}> 
          <a>
-         <BsFileMusic/> {s} 
+         <BsFileMusic className='tw:inline'/> {s} 
          </a>
          <a onClick={()=>{handlePlaySample(s)}}>Play on Zynthbox</a>
          </li>)}

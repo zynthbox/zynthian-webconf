@@ -7,18 +7,17 @@ import TrackerExtractor from './TrackerExtractor';
 const FileExplore = lazy(()=>import('../components/file-explore/file-explore'))
 
 const SampleManger =()=>{
-    useEffect(() => {
-        const path = window.location.pathname;
-        const hash = window.location.hash;    
-        if (path !== "/" && path !== "") {
-          window.location.replace(window.location.origin + "/#/" + hash.replace(/^#\/?/, ""));
-        }
-      }, []);
+  
       
     return (
         <>
           {/* <TrackerExtractor></TrackerExtractor> */}         
-          <Split className="split">
+          <Split className="split"
+          sizes={[50, 50]}
+          minSize={[600,300]}
+          expandToMin={true}
+          gutterSize={5}
+          >
                 <div>
                     <div id="file-manager">                    
                     <FileManagerContextProvider rootDirectory='/home/pi/zynthian-my-data/samples/'

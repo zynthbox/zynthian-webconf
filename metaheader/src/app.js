@@ -67,7 +67,7 @@ function FileManagerDisplay(){
 function SketchpadManagerDisplay(){
     return (
         <>
-            <div id="sketchpad-manager-display"  style={{left:fileManagerLeftCss()}}>
+            <div id="sketchpad-manager-display"  style={{left:fileManagerLeftCss()}} >
             <h3>
                 <i className="glyphicon glyphicon-file"></i>
                 SKETCHPAD MANAGER

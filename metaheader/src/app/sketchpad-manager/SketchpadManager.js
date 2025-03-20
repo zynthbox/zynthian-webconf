@@ -19,18 +19,16 @@ const colorsArray = [
     "#9A7136",
 ];
 const SketchpadManager =()=>{
-    useEffect(() => {
-        const path = window.location.pathname;
-        const hash = window.location.hash;    
-        if (path !== "/" && path !== "") {
-          window.location.replace(window.location.origin + "/#/" + hash.replace(/^#\/?/, ""));
-        }
-      }, []);
+    
 
     return (
-        <>
-          
-            <Split className="split" sizes={[20, 80]} minSize={100}>
+        <>          
+            <Split className="split" 
+                sizes={[20, 80]}
+                minSize={[250,500]}
+                expandToMin={true}
+                gutterSize={5}
+            >
                
                 <FileManagerContextProvider 
                     rootDirectory='/home/pi/zynthian-my-data/sketchpads/my-sketchpads/'

@@ -6,16 +6,16 @@ const FileExplore = lazy(()=>import('../components/file-explore/file-explore'))
 const SoundEditor = lazy(()=>import('./SoundEditor'))
 
 const SoundManager =()=>{
-    useEffect(() => {
-        const path = window.location.pathname;
-        const hash = window.location.hash;    
-        if (path !== "/" && path !== "") {
-          window.location.replace(window.location.origin + "/#/" + hash.replace(/^#\/?/, ""));
-        }
-      }, []);
+   
     return (
         <>        
-            <Split className="split" sizes={[20, 80]}>    
+            <Split 
+            className="split" 
+            sizes={[20, 80]}
+            minSize={[250,500]}
+            expandToMin={true}
+            gutterSize={5}
+            >    
             <FileManagerContextProvider 
                     rootDirectory='/home/pi/zynthian-my-data/sounds/'
                     rootName='Sounds'
