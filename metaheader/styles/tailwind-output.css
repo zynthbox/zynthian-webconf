@@ -2,6 +2,7 @@
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
+    --tw-color-amber-300: oklch(0.879 0.169 91.605);
     --tw-color-gray-200: oklch(0.928 0.006 264.531);
     --tw-color-gray-300: oklch(0.872 0.01 258.338);
     --tw-spacing: 0.25rem;
@@ -151,6 +152,24 @@
   }
 }
 @layer utilities {
+  .tw\:container {
+    width: 100%;
+    @media (width >= 40rem) {
+      max-width: 40rem;
+    }
+    @media (width >= 48rem) {
+      max-width: 48rem;
+    }
+    @media (width >= 64rem) {
+      max-width: 64rem;
+    }
+    @media (width >= 80rem) {
+      max-width: 80rem;
+    }
+    @media (width >= 96rem) {
+      max-width: 96rem;
+    }
+  }
   .tw\:m-2 {
     margin: calc(var(--tw-spacing) * 2);
   }
@@ -159,6 +178,9 @@
   }
   .tw\:mx-3 {
     margin-inline: calc(var(--tw-spacing) * 3);
+  }
+  .tw\:mt-7 {
+    margin-top: calc(var(--tw-spacing) * 7);
   }
   .tw\:ml-2 {
     margin-left: calc(var(--tw-spacing) * 2);
@@ -224,8 +246,14 @@
   .tw\:bg-\[\#eef\] {
     background-color: #eef;
   }
+  .tw\:bg-amber-300 {
+    background-color: var(--tw-color-amber-300);
+  }
   .tw\:p-2 {
     padding: calc(var(--tw-spacing) * 2);
+  }
+  .tw\:pl-0 {
+    padding-left: calc(var(--tw-spacing) * 0);
   }
   .tw\:pl-2 {
     padding-left: calc(var(--tw-spacing) * 2);

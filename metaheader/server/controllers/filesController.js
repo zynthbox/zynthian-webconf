@@ -213,12 +213,14 @@ exports.copyPaste = (req,res) => {
 
   try {
 
-    // console.log(fs.existsSync(destinationPath), "DESTINATION PATH IS EXISTS ")
+    console.log(fs.existsSync(parentFolder + destinationPath), "DESTINATION PATH IS EXISTS ")
+    const fullDestinationPath = parentFolder + destinationPath;
+
 
     if (fs.statSync(previousPath).isDirectory()) {
-      copyFolderRecursiveSync(previousPath, parentFolder + destinationPath)
+      copyFolderRecursiveSync(previousPath, fullDestinationPath)
     } else {
-      fs.copyFileSync(previousPath, parentFolder + destinationPath)
+      fs.copyFileSync(previousPath, fullDestinationPath)
     }
 
     if (deleteOrigin === true){
@@ -238,8 +240,9 @@ exports.copyPaste = (req,res) => {
       }
 
     } else {
-      const dirList = getAllFiles(rootFolder,[])
-      res.json(dirList)
+      // const dirList = getAllFiles(rootFolder,[])
+      // res.json(dirList)
+      res.status(200).json({message:"copyPaste successfull!"})
     }
   } catch(err) {
     console.error(err)

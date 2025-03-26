@@ -243,7 +243,7 @@ function WebconfFileBrowser(props){
     setLoadingText('Copying Files')
     setLoading(true)
 
-    console.log(previousPaths,destinationPaths)
+    // console.log(previousPaths,destinationPaths)
 
     copyPasteFile(previousPaths,destinationPaths,deleteOrigin,0)
   }

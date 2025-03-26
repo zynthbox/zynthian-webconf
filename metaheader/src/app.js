@@ -11,6 +11,7 @@ import RootLayout from './layouts/RootLayout';
 import NotFound from './app/NotFound';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
+import { io } from "socket.io-client";
 
 const SketchpadManager = lazy(()=>import('./app/sketchpad-manager/SketchpadManager'))
 const SoundManager = lazy(()=>import('./app/sound-manager/SoundManager'))
@@ -199,12 +200,24 @@ const router = createHashRouter(
         <Route path="sketchpad-xtractor" element={<XtractorDisplay />}></Route>
         <Route path="song-export" element={<SongExportDisplay />}></Route>
         <Route path='*' element={<NotFound />}></Route>
-     </Route>
-    
-    )
+     </Route>    
+    ),
+    {
+        basename: "/", // This ensures it always starts with `/#/`
+      }
   )
 
 function App(){    
+    useEffect(() => {                             
+        const socket = io();
+        // Listen for messages from the server
+        socket.on("message", (msg) => {
+            const li = document.createElement("li");
+            li.textContent = msg;
+            document.getElementById("messages").appendChild(li);
+        });     
+      },[])
+
     return (
         <DndProvider backend={HTML5Backend}>
         <RouterProvider router={router} />

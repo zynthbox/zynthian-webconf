@@ -55,9 +55,9 @@ const SoundEditor = () => {
       setFilesToDisplay(files)         
     },[files])
     
-    useEffect(() => {       
-      // dispatch(getSoundMeta())        
-      if(soundSelected){               
+    useEffect(() => {                  
+      if(soundSelected){        
+        dispatch(getSoundMeta())             
         let path = (soundSelected.indexOf('/home/pi/')>-1) ? soundSelected.split('/home/pi/')[1] : soundSelected ;   
         let url = `http://${window.location.hostname}:3000/${path}`
         setUrlToPlay(url);
@@ -78,6 +78,7 @@ const SoundEditor = () => {
     }
 
     const handleClickSound = (file)=>{
+      console.log('handleClickSound>>>>>>>>>>>>>',file)
       dispatch(selectSound(file))            
       const fileInfo = files.filter(f=>f.path==file)[0];      
       const info ={...fileInfo,samples:[]}          
@@ -99,32 +100,36 @@ const SoundEditor = () => {
     }
 
     let metaDisplay = null;
-    if(soundInfoToDisplay){
+    if(soundInfo){
        metaDisplay = <div className="sound-meta">
                         <table className='tw:table-auto tw:border-1 tw:border-gray-200 tw:p-2 tw:m-2'>
                         <caption className='tw:font-bold'>
-                         {soundInfoToDisplay.name}
+                         {soundSelected.split("/").pop()}
                         </caption>
+                        <tbody>
                           <tr>
                             <td className='tw:bg-[#eee]'><span className='tw:p-2 tw:m-2 tw:font-bold'>Samples</span></td>
-                            {soundInfoToDisplay.sampleSlotsData.map((s,i)=>(
-                              <td key={i}>                                
-                                {s} 
+                            {soundInfo.sampleSlotsData.map((s,i)=>(
+                              <td key={i}>     
+                                {s &&                           
+                                <a className='tw:pl-0' onClick={()=>playSample(i)}><BsFileMusic className='tw:inline' />{s} </a>
+                                }
                               </td>
                             ))}     
                           </tr>
                           <tr>
                             <td className='tw:bg-[#eee]'><span className='tw:p-2 tw:m-2 tw:font-bold'>Synths</span></td>
-                            {soundInfoToDisplay.synthSlotsData.map((s,i)=>(
+                            {soundInfo.synthSlotsData.map((s,i)=>(
                               <td key={i} >{s}</td>
                             ))}      
                           </tr>
                           <tr>
                             <td className='tw:bg-[#eee]'><span className='tw:p-2 tw:m-2 tw:font-bold'>Fx</span></td>
-                            {soundInfoToDisplay.fxSlotsData.map((s,i)=>(
+                            {soundInfo.fxSlotsData.map((s,i)=>(
                               <td key={i} >{s}</td>
                             ))}    
                           </tr>
+                          </tbody>
                         </table>
                       </div>
      
@@ -194,9 +199,8 @@ const SoundEditor = () => {
 
     let folderDisplay;
     folderDisplay = <select value={folderSelected} onChange={(e)=>{dispatch(selectFolder(e.target.value))}}>                        
-                        <option key='my-sounds' value="/home/pi/zynthian-my-data/sounds/my-sounds/">my-sounds</option>
-                        <option key='community-sounds' value="/home/pi/zynthian-my-data/sounds/community-sounds/">community-sounds</option>
-                        <option key='default-sounds' value="/home/pi/zynthian-my-data/sounds/default-sounds/">default-sounds</option>
+                        <option key='my-sounds' value="/zynthian/zynthian-my-data/sounds/my-sounds/">my-sounds</option>
+                        <option key='community-sounds' value="/zynthian/zynthian-my-data/sounds/community-sounds/">community-sounds</option>                      
                      </select>
 
   return (  

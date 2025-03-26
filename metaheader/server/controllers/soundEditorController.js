@@ -1,11 +1,13 @@
 const fs = require("fs");
 const fsextra = require('fs-extra')
+const path = require('path');
 const { exec } = require('child_process');
 const { loadMusicMetadata } = require('music-metadata');
 
+const CONFIG_SOUNDS_INDEX_PATH = '/zynthian/zynthian-my-data/sounds/categories/'
 const CONFIG_PLUGINS = '/zynthian/zynthbox-qml/config/plugins.json'
 const CONFIG_CATEGORIES = '/zynthian/zynthbox-qml/config/snd_categories.json'
-const CONFIG_SND_STAT = ''
+
 
 const categoryNameMapping = {
   "0": "Uncategorized",
@@ -34,7 +36,95 @@ async function getCategoryFromMetadata(filePath) {
   }
 }
 
+async function scanSymlinks(dir, results = []) {
+  try {
+      const entries = await fs.promises.readdir(dir, { withFileTypes: true });            
+      for (const entry of entries) {          
+          const fullPath = path.join(dir, entry.name);          
+          if (entry.isSymbolicLink()) {
+              try {
+                  // const realPath = await fs.promises.realpath(fullPath);
+                 
+                  results.push({
+                      symlinkPath: fullPath,                                            
+                      linkContent: await fs.promises.readlink(fullPath),                     
+                  });
+                  
+                  // Optionally follow symlinks to directories
+                  // const stats = await fs.promises.stat(realPath);
+                  // if (stats.isDirectory()) {
+                  //     await scanSymlinks(realPath, results);
+                  // }
+              } catch (err) {
+                  console.error(`Error processing symlink ${fullPath}:`, err.message);
+              }
+          } else if (entry.isDirectory()) {
+              await scanSymlinks(fullPath, results);
+          }
+      }
+  } catch (err) {
+      if (err.code !== 'ENOTDIR') {  // Ignore non-directory errors
+          console.error(`Error scanning directory ${dir}:`, err.message);
+      }
+  }
+  return results;
+}
+
+
 exports.initFilesCategories = async (req, res)=>{
+
+  const symlinks = await scanSymlinks(CONFIG_SOUNDS_INDEX_PATH);  
+  let folder = req.params.path.split('+++').join('/');     
+  const files = symlinks.filter(s => s.linkContent.startsWith(folder));
+  const filesList = [];
+  files.map(f=>{
+        const catId = f.symlinkPath.split('/')[5];
+        const file ={
+                      name:f.linkContent.split(folder)[1],
+                      folder,
+                      path:f.linkContent,
+                      catId
+                  }
+        filesList.push(file)   
+    })
+   
+  // group files with catId
+  const groupedFiles = filesList.reduce((acc, item) => {    
+    // Initialize the category array if it doesn't exist
+    if (!acc[item.catId]) {
+      acc[item.catId] = [];
+    }
+    acc[item.catId].push(item);    
+    return acc;
+  }, {});
+
+  // init categories with cnt of files
+  const catList = [];
+  const categoryNameMapping = await fsextra.readJson(CONFIG_CATEGORIES);
+  Object.keys(categoryNameMapping).map(k=>{
+    let cat;
+    if(groupedFiles[k]){
+        c ={
+          catId:k,
+          catName:categoryNameMapping[k],
+          cntFiles:groupedFiles[k].length
+        }
+    }else{
+       c ={
+        catId:k,
+        catName:categoryNameMapping[k],
+        cntFiles:0
+      }
+    }
+    if(k!='*') catList.push(c);
+  })
+  return res.status(200).json({files:filesList,categories:catList})    
+}
+
+/**
+  * @deprecated
+  */
+exports.initFilesCategories_statJson = async (req, res)=>{
 
   let folder = req.params.path.split('+++').join('/');   
   let stat;
@@ -104,8 +194,10 @@ exports.initFilesCategories = async (req, res)=>{
   return res.status(200).json({files:filesList,categories:catList})    
 }
 
-
-exports.initFilesCategories_ = async (req, res)=>{
+/**
+ * @deprecated
+ */
+exports.initFilesCategories_realSndFiles = async (req, res)=>{
 
   let folder = req.params.path.split('+++').join('/');       
   let files = fs.readdirSync(folder); 

@@ -61,20 +61,32 @@
 </head>
 
 <body>		
-    <header id="header">
+    <header id="header">		
 		<div class="navbar navbar-fixed-top" role="navigation">
 			<div class="container">		
                 <div class="navbar-collapse ">
                 <ul class="nav navbar-nav">			
-                        <li id="metaheader-container" class="dropdown"></li>
-                       
-                
+                        <li id="metaheader-container" class="dropdown"></li>					               
                 </ul>
-            </div>
+            	</div>
+
+				<div class="tw:container">
+					<h1 class="tw:bg-amber-300 tw:mt-7 ">FIFO Messages</h1>
+					<ul id="messages"></ul>
+				</div>
+
             </div>
             </div>
             </header>
 		
-<script defer src="/metaheader/build/bundle/app.9ec6dc9668948cfb6762.js"></script></body>
+			<!-- <script>
+				const socket = io();
+				socket.on("message", (msg) => {
+					const li = document.createElement("li");
+					li.textContent = msg;
+					document.getElementById("messages").appendChild(li);
+				});
+			</script> -->
+<script defer src="/metaheader/build/bundle/app.5c2694875ce7b26183bf.js"></script></body>
 
 </html>

@@ -120,7 +120,7 @@ export const initFilesCategories = createAsyncThunk(
 
 
 let initialState = {
-  folderSelected:'/home/pi/zynthian-my-data/sounds/my-sounds/',
+  folderSelected:'/zynthian/zynthian-my-data/sounds/my-sounds/',
   files:[],
   categories:[],
   categorySelected:null,
@@ -158,8 +158,7 @@ const SoundManagerSlice = createSlice({
     },
 
     selectSound: (state, action) => {      
-      state.soundSelected = action.payload
-      state.soundInfo = null
+      state.soundSelected = action.payload      
     },
 
     toggleTree: (state, action) => {      

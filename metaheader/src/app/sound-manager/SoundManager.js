@@ -6,18 +6,18 @@ const FileExplore = lazy(()=>import('../components/file-explore/file-explore'))
 const SoundEditor = lazy(()=>import('./SoundEditor'))
 
 const SoundManager =()=>{
-    useEffect(() => {
-        const path = window.location.pathname;
-        const hash = window.location.hash;          
-        if (path !== "/" && path !== "") {
-          window.location.replace(window.location.origin + "/#/" + hash.replace(/^#\/?/, ""));
-        }
+    // useEffect(() => {
+    //     const path = window.location.pathname;
+    //     const hash = window.location.hash;          
+    //     if (path !== "/" && path !== "") {
+    //       window.location.replace(window.location.origin + "/#/" + hash.replace(/^#\/?/, ""));
+    //     }
 
-        // clear content-section
-        document.querySelectorAll('.content-section').forEach(element => {
-            element.innerHTML = ''; // Clear the content
-          });
-      }, []);
+    //     // clear content-section
+    //     document.querySelectorAll('.content-section').forEach(element => {
+    //         element.innerHTML = ''; // Clear the content
+    //       });
+    //   }, []);
     return (
         <>        
             <Split 
@@ -28,13 +28,13 @@ const SoundManager =()=>{
             gutterSize={5}
             >    
             <FileManagerContextProvider 
-                    rootDirectory='/home/pi/zynthian-my-data/sounds/'
+                    rootDirectory='/zynthian/zynthian-my-data/sounds/'
                     rootName='Sounds'
                     >          
                 <div>
                     <div id="file-manager">                                       
                     <Suspense fallback={<LoadingSpinner/>}>
-                        <FileExplore rootDirectory='/home/pi/zynthian-my-data/sounds/' 
+                        <FileExplore rootDirectory='/zynthian/zynthian-my-data/sounds/' 
                                      mode = 'sound-manager'/>
                     </Suspense>                    
                    
