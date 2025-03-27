@@ -1,3 +1,4 @@
+
 import { createHashRouter,createRoutesFromElements  
     ,Route
     , RouterProvider} from 'react-router-dom'
@@ -12,6 +13,7 @@ import NotFound from './app/NotFound';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { io } from "socket.io-client";
+import { ToastContainer, toast } from 'react-toastify';
 
 const SketchpadManager = lazy(()=>import('./app/sketchpad-manager/SketchpadManager'))
 const SoundManager = lazy(()=>import('./app/sound-manager/SoundManager'))
@@ -211,16 +213,19 @@ function App(){
     useEffect(() => {                             
         const socket = io();
         // Listen for messages from the server
-        socket.on("message", (msg) => {
-            const li = document.createElement("li");
-            li.textContent = msg;
-            document.getElementById("messages").appendChild(li);
-        });     
+        socket.on("fifoChanged", (msg) => {            
+            toast(msg);
+        });  
+        
+        return ()=>{
+            socket.off("fifoChanged")
+        }
       },[])
 
     return (
         <DndProvider backend={HTML5Backend}>
         <RouterProvider router={router} />
+        <ToastContainer />
         </DndProvider>
     )
 }

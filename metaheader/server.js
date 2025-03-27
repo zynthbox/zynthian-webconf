@@ -6,8 +6,9 @@ const { Server } = require("socket.io");
 const app = express()
 const port = 3000
 
-const FIFO_PATH = "/tmp/my_fifo"; // Path to FIFO file
-const { execSync } = require("child_process");
+const FIFO_READ_FROM = '/tmp/webconf-reads-from-this-fifo'
+// const FIFO_PATH = "/tmp/my_fifo"; // Path to FIFO file
+// const { execSync } = require("child_process");
 // Ensure FIFO file exists
 // try {
 //   execSync(`mkfifo ${FIFO_PATH}`);
@@ -58,14 +59,12 @@ io.on("connection", (socket) => {
 
 // Watch FIFO File
 function watchFIFO() {
-  fs.open(FIFO_PATH, "r", (err, fd) => {
+  fs.open(FIFO_READ_FROM, "r", (err, fd) => {
       if (err) {
           console.error("Error opening FIFO:", err);
           setTimeout(watchFIFO, 1000); // Retry after 1 sec if error
           return;
       }
-
-      console.log("Watching FIFO...");
 
       const buffer = Buffer.alloc(1024);
 
@@ -80,7 +79,7 @@ function watchFIFO() {
                   console.log("FIFO Received:", message);
 
                   // Send data to WebSocket clients
-                  io.emit("message", message);
+                  io.emit("fifoChanged", message);
 
                   readLoop(); // Continue reading
               } else {

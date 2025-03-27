@@ -9,10 +9,11 @@ import WavePlayer from '../components/WavePlayer';
 import { BsFileMusic } from "react-icons/bs";
 import { FaRegPlayCircle } from "react-icons/fa";
 import DraggableItem from '../components/DraggableItem';
+import PaginationWithEllipsis from '../components/PaginationWithEllipsis';
 
 
 
-const itemsPerPage = 2; // Number of items per page
+const itemsPerPage = 20; // Number of items per page
 
 function decodeBase64Audio(base64String) {    
   let base64Data = base64String.replace(/^data:audio\/\w+;base64,/, "");
@@ -43,7 +44,6 @@ const SoundEditor = () => {
     // private state
     const [ filesToDisplay, setFilesToDisplay] = useState(null);
     const [ urlToPlay, setUrlToPlay] = useState(null);
-    const [ soundInfoToDisplay, setSoundInfoToDisplay] = useState(null);
 
     useEffect(() => {          
       dispatch(initFilesCategories(folderSelected))    
@@ -182,7 +182,7 @@ const SoundEditor = () => {
     
     let filesDisplay=null;
     if(paginatedData){
-      filesDisplay =    <ul className='files'>
+      filesDisplay =    <ul className='files tw:mt-2'>
                           {paginatedData.map((f,index)=>                                                          
                                 <li key={index} className={(soundSelected==f.path)?'selected':''}>                                                                                                      
                                       <span onClick={()=>handleClickSound(f.path)}>
@@ -219,24 +219,11 @@ const SoundEditor = () => {
                   <nav className="nav">{categoriesDisplay}</nav>
                 </div>
                 <div className="tw:sm:col-span-9 tw:p-2 tw:m-2 tw:sm:flex">
-                    <div className="tw:pl-2 tw:ml-2 tw:flex-2 tw:flex tw:flex-col tw:justify-between">                                        
+                    <div className="tw:pl-2 tw:ml-2 tw:flex-2 tw:flex tw:flex-col tw:justify-between ">                                        
                     {filesDisplay}
-
-                    {totalPages>1 && 
-                      <div className='tw:flex tw:m-2 tw:p-2 tw:gap-2'>
-                        <button disabled={currentPage === 1} onClick={() => goToPage(currentPage - 1)}>Prev</button>                
-                        {Array.from({ length: totalPages }, (_, index) => (                
-                          <button                
-                            key={index + 1}                
-                            onClick={() => goToPage(index + 1)}                
-                            disabled={currentPage === index + 1}   
-                            className={currentPage === index + 1 ?' tw:underline tw:bg-[#eef] tw:p-2 tw:m2':' tw:p-2'}             
-                          >                
-                            {index + 1}                
-                          </button>                
-                        ))}                
-                        <button disabled={currentPage === totalPages} onClick={() => goToPage(currentPage + 1)}>Next</button>                
-                      </div>
+                  
+                    {totalPages>1 &&                    
+                      <PaginationWithEllipsis totalPages={totalPages} onPageChange={(page) => goToPage(page)} />
                     }
 
                     </div>
