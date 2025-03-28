@@ -2,7 +2,6 @@
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
-    --tw-color-blue-500: oklch(0.623 0.214 259.815);
     --tw-color-gray-100: oklch(0.967 0.003 264.542);
     --tw-color-gray-200: oklch(0.928 0.006 264.531);
     --tw-color-gray-300: oklch(0.872 0.01 258.338);
@@ -204,9 +203,6 @@
   .tw\:justify-between {
     justify-content: space-between;
   }
-  .tw\:justify-center {
-    justify-content: center;
-  }
   .tw\:justify-start {
     justify-content: flex-start;
   }
@@ -238,10 +234,6 @@
     border-top-style: var(--tw-border-style);
     border-top-width: 1px;
   }
-  .tw\:border-t-2 {
-    border-top-style: var(--tw-border-style);
-    border-top-width: 2px;
-  }
   .tw\:border-r-1 {
     border-right-style: var(--tw-border-style);
     border-right-width: 1px;
@@ -261,12 +253,6 @@
   }
   .tw\:bg-\[\#eef\] {
     background-color: #eef;
-  }
-  .tw\:bg-\[\#efefef\] {
-    background-color: #efefef;
-  }
-  .tw\:bg-blue-500 {
-    background-color: var(--tw-color-blue-500);
   }
   .tw\:bg-white {
     background-color: var(--tw-color-white);

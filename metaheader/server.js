@@ -7,12 +7,14 @@ const app = express()
 const port = 3000
 
 const FIFO_READ_FROM = '/tmp/webconf-reads-from-this-fifo'
+const FIFO_WRITES_TO = '/tmp/webconf-writes-to-this-fifo'
 // const FIFO_PATH = "/tmp/my_fifo"; // Path to FIFO file
-// const { execSync } = require("child_process");
+const { execSync } = require("child_process");
 // Ensure FIFO file exists
 // try {
-//   execSync(`mkfifo ${FIFO_PATH}`);
-//   console.log(`FIFO file created at ${FIFO_PATH}`);
+//   execSync(`mkfifo ${FIFO_READ_FROM}`);
+//   execSync(`mkfifo ${FIFO_WRITES_TO}`);
+//   console.log(`FIFO file created at ${FIFO_READ_FROM}`);
 // } catch (err) {
 //   if (!err.message.includes("File exists")) {
 //       console.error("Error creating FIFO:", err);
