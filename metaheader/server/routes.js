@@ -28,6 +28,7 @@ module.exports = function (app) {
     app.post('/copypaste',FilesController.copyPaste)
     app.post('/upload/:folder',FilesController.uploadFiles)
     app.post('/download',FilesController.downloadFiles)
+    app.post('/writeToFIFO',FilesController.writeToFIFO)
 
     // SAMPLE EDITOR
     app.get('/sketchinfo/',sketchEditorController.getSketchInfo)

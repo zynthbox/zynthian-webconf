@@ -1,11 +1,11 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 
-function DraggableItem({ id, type, extraInfo, children}) {
+function DraggableItem({ id, type, children}) {
   const [{ isDragging }, dragRef] = useDrag(() => {       
     return ({
     type: type, // Define a drag type
-    item: { id,type,extraInfo},
+    item: { id,type},
     collect: (monitor) => ({
       isDragging: monitor.isDragging()
     }),

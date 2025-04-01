@@ -44,6 +44,7 @@
     "react-resizable": "^3.0.5",
     "react-router-dom": "^6.20.1",
     "react-split": "^2.0.14",
+    "react-tabs": "^6.1.0",
     "react-toastify": "^11.0.5",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",

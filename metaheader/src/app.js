@@ -12,8 +12,8 @@ import RootLayout from './layouts/RootLayout';
 import NotFound from './app/NotFound';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import { io } from "socket.io-client";
-import { ToastContainer, toast } from 'react-toastify';
+// import { io } from "socket.io-client";
+// import { ToastContainer, toast } from 'react-toastify';
 
 const SketchpadManager = lazy(()=>import('./app/sketchpad-manager/SketchpadManager'))
 const SoundManager = lazy(()=>import('./app/sound-manager/SoundManager'))
@@ -210,22 +210,24 @@ const router = createHashRouter(
   )
 
 function App(){    
-    useEffect(() => {                             
-        const socket = io();
-        // Listen for messages from the server
-        socket.on("fifoChanged", (msg) => {            
-            toast(msg);
-        });  
+
+    // socket pull msg later with click...
+    // useEffect(() => {                             
+    //     const socket = io();
+    //     // Listen for messages from the server
+    //     socket.on("fifoChanged", (msg) => {            
+    //         toast(msg);
+    //     });  
         
-        return ()=>{
-            socket.off("fifoChanged")
-        }
-      },[])
+    //     return ()=>{
+    //         socket.off("fifoChanged")
+    //     }
+    //   },[])
 
     return (
         <DndProvider backend={HTML5Backend}>
         <RouterProvider router={router} />
-        <ToastContainer />
+        {/* <ToastContainer /> */}
         </DndProvider>
     )
 }

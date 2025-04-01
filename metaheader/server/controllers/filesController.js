@@ -374,3 +374,33 @@ exports.downloadFiles = (req,res) => {
 }
 
 /* /DOWNLOAD FILES */
+
+
+
+exports.writeToFIFO = (req,res) => {
+  const { msg } = req.body;
+  try {
+    const FIFO_WRITES_TO = '/tmp/webconf-writes-to-this-fifo'
+
+    const writeStream = fs.createWriteStream(FIFO_WRITES_TO);
+    const message = msg+'\n';
+    writeStream.write(message, (err) => {
+        if (err) {
+            console.error('Error writing to FIFO:', err);
+        } else {
+            console.log('Message written to FIFO');
+        }
+        writeStream.end();
+    });
+
+    writeStream.on('finish', () => {
+        console.log('Write stream closed');
+    });
+
+    return res.status(200).json({message:msg+" writeToFIFO successfull!"})
+  } catch(err) {
+    console.error(err)
+    res.json({error:err})
+  }
+
+}

@@ -2,15 +2,21 @@
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
+    --tw-color-blue-500: oklch(0.623 0.214 259.815);
     --tw-color-gray-100: oklch(0.967 0.003 264.542);
     --tw-color-gray-200: oklch(0.928 0.006 264.531);
     --tw-color-gray-300: oklch(0.872 0.01 258.338);
     --tw-color-gray-500: oklch(0.551 0.027 264.364);
     --tw-color-white: #fff;
     --tw-spacing: 0.25rem;
+    --tw-text-sm: 0.875rem;
+    --tw-text-sm--line-height: calc(1.25 / 0.875);
+    --tw-font-weight-medium: 500;
     --tw-font-weight-bold: 700;
     --tw-radius-lg: 0.5rem;
     --tw-radius-xl: 0.75rem;
+    --tw-default-transition-duration: 150ms;
+    --tw-default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 @layer base {
@@ -155,6 +161,27 @@
   }
 }
 @layer utilities {
+  .tw\:col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+  .tw\:container {
+    width: 100%;
+    @media (width >= 40rem) {
+      max-width: 40rem;
+    }
+    @media (width >= 48rem) {
+      max-width: 48rem;
+    }
+    @media (width >= 64rem) {
+      max-width: 64rem;
+    }
+    @media (width >= 80rem) {
+      max-width: 80rem;
+    }
+    @media (width >= 96rem) {
+      max-width: 96rem;
+    }
+  }
   .tw\:m-2 {
     margin: calc(var(--tw-spacing) * 2);
   }
@@ -163,6 +190,9 @@
   }
   .tw\:mx-3 {
     margin-inline: calc(var(--tw-spacing) * 3);
+  }
+  .tw\:mx-auto {
+    margin-inline: auto;
   }
   .tw\:mt-2 {
     margin-top: calc(var(--tw-spacing) * 2);
@@ -188,11 +218,20 @@
   .tw\:min-h-\[300px\] {
     min-height: 300px;
   }
+  .tw\:w-full {
+    width: 100%;
+  }
+  .tw\:flex-1 {
+    flex: 1;
+  }
   .tw\:flex-2 {
     flex: 2;
   }
   .tw\:table-auto {
     table-layout: auto;
+  }
+  .tw\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
   }
   .tw\:flex-col {
     flex-direction: column;
@@ -208,6 +247,9 @@
   }
   .tw\:gap-2 {
     gap: calc(var(--tw-spacing) * 2);
+  }
+  .tw\:gap-4 {
+    gap: calc(var(--tw-spacing) * 4);
   }
   .tw\:space-x-2 {
     :where(& > :not(:last-child)) {
@@ -238,15 +280,33 @@
     border-right-style: var(--tw-border-style);
     border-right-width: 1px;
   }
+  .tw\:border-b {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 1px;
+  }
   .tw\:border-b-1 {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
+  }
+  .tw\:border-b-4 {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 4px;
+  }
+  .tw\:border-b-\[1px\] {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 1px;
+  }
+  .tw\:border-blue-500 {
+    border-color: var(--tw-color-blue-500);
   }
   .tw\:border-gray-200 {
     border-color: var(--tw-color-gray-200);
   }
   .tw\:border-gray-300 {
     border-color: var(--tw-color-gray-300);
+  }
+  .tw\:border-transparent {
+    border-color: transparent;
   }
   .tw\:bg-\[\#eee\] {
     background-color: #eee;
@@ -260,6 +320,9 @@
   .tw\:p-2 {
     padding: calc(var(--tw-spacing) * 2);
   }
+  .tw\:p-4 {
+    padding: calc(var(--tw-spacing) * 4);
+  }
   .tw\:px-2 {
     padding-inline: calc(var(--tw-spacing) * 2);
   }
@@ -269,15 +332,32 @@
   .tw\:py-1 {
     padding-block: calc(var(--tw-spacing) * 1);
   }
+  .tw\:py-2 {
+    padding-block: calc(var(--tw-spacing) * 2);
+  }
   .tw\:pl-0 {
     padding-left: calc(var(--tw-spacing) * 0);
   }
   .tw\:pl-2 {
     padding-left: calc(var(--tw-spacing) * 2);
   }
+  .tw\:text-center {
+    text-align: center;
+  }
+  .tw\:text-sm {
+    font-size: var(--tw-text-sm);
+    line-height: var(--tw-leading, var(--tw-text-sm--line-height));
+  }
   .tw\:font-bold {
     --tw-font-weight: var(--tw-font-weight-bold);
     font-weight: var(--tw-font-weight-bold);
+  }
+  .tw\:font-medium {
+    --tw-font-weight: var(--tw-font-weight-medium);
+    font-weight: var(--tw-font-weight-medium);
+  }
+  .tw\:text-blue-500 {
+    color: var(--tw-color-blue-500);
   }
   .tw\:text-gray-500 {
     color: var(--tw-color-gray-500);
@@ -292,9 +372,18 @@
     --tw-shadow: 0 1px var(--tw-shadow-color, rgb(0 0 0 / 0.05));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
+  .tw\:shadow-md {
+    --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
   .tw\:shadow-sm {
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .tw\:transition-all {
+    transition-property: all;
+    transition-timing-function: var(--tw-ease, var(--tw-default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--tw-default-transition-duration));
   }
   .tw\:hover\:bg-gray-100 {
     &:hover {

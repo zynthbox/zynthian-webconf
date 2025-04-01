@@ -3,12 +3,14 @@ import ReactDOM from "react-dom";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import DropTargetZone from "./DropTargetZone";
+import Sktechpad from "./Sktechpad";
+
 const Toolbar = () => {
     const [showPanel, setShowPanel] = useState(false);
     const [size, setSize] = useState({ width: 800, height: 600 });
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-  
+    const [position, setPosition] = useState({ x: 0, y: 0 });  
     const [ files, setFiles] = useState([]);
+   
     
     let dropedFilesDisplay;  
     if(files){
@@ -57,17 +59,24 @@ const Toolbar = () => {
               >
                 <div className="window">
                   <div className="window-header">
-                    <span>Sketchpad</span>
+                    <span>Current Sketchpad</span>
                     <button onClick={() =>  setShowPanel(false)}>×</button>
                   </div>
-                  <div className="window-content">                                      
-                       <DropTargetZone onDrop={handleDrop}>
+                  <div className="window-content">                                                           
+                    <div className="tw:flex">
+                      <DropTargetZone onDrop={handleDrop}>
                         Drag stuff here
-                      </DropTargetZone>
+                      </DropTargetZone>    
+                      <div style={styles.displayContainer}>
+                      {dropedFilesDisplay}
+                    </div>
+                  </div>                                        
                   </div>
-                  <div style={styles.displayContainer}>
-                    {dropedFilesDisplay}
-                  </div>
+                  <Sktechpad></Sktechpad>
+                  
+
+                 
+                 
                 </div>
               </ResizableBox>
             </div>
@@ -101,7 +110,7 @@ const Toolbar = () => {
       cursor: 'pointer',
     },
     displayContainer:{
-      height:'300px',
+      height:'200px',
       overflow:'auto',
     }
   };
