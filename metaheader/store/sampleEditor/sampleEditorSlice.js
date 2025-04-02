@@ -28,17 +28,19 @@ export const updateSketchpadInfo = createAsyncThunk(
       ...sketchpadInfo,
       lastSelectedSketchpad: filePath,
     };
-    let json = JSON.stringify(updatedSketchpadInfo);
-    const blob = new Blob([json], { type: "application/json" });
-    const formData = new FormData();
-    const sketchpadInfoFolder = "/zynthian-my-data/";
-    formData.append("file", blob, ".cache.json"); // appending file
-    const res = await axios.post(
-      `http://${window.location.hostname}:3000/upload/${sketchpadInfoFolder
-        .split("/")
-        .join("+++")}`,
-      formData
-    );    
+
+    // need to confirm this...
+    //let json = JSON.stringify(updatedSketchpadInfo);
+    // const blob = new Blob([json], { type: "application/json" });
+    // const formData = new FormData();
+    // const sketchpadInfoFolder = "/zynthian-my-data/";
+    // formData.append("file", blob, ".cache.json"); // appending file
+    // const res = await axios.post(
+    //   `http://${window.location.hostname}:3000/upload/${sketchpadInfoFolder
+    //     .split("/")
+    //     .join("+++")}`,
+    //   formData
+    // );    
     return updatedSketchpadInfo;
   }
 );

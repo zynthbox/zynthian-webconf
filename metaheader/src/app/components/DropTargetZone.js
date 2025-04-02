@@ -18,8 +18,8 @@ const DropTargetZone = ({onDrop,accept,children}) => {
     <div
       ref={dropRef}
       style={{
-        height: '200px',
-        width: '300px',
+        height: '150px',
+        width: '200px',
         border: '2px dashed gray',
         backgroundColor: isOver ? 'lightgreen' : 'white',
         display: 'flex',

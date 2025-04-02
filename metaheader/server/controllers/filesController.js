@@ -6,8 +6,12 @@ var rimraf = require("rimraf");
 var multer = require('multer');
 
 // const rootFolder = "./"
-const rootFolder = "/home/pi/zynthian-my-data/"
-const parentFolder = "/home/pi"
+// const rootFolder = "/home/pi/zynthian-my-data/"
+// const parentFolder = "/home/pi"
+
+const rootFolder = "/zynthian/zynthian-my-data/"
+const parentFolder = "/zynthian"
+
 
 const excludedFolders = [
   "sf2",

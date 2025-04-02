@@ -95,7 +95,7 @@ const SketchpadEditor =(props)=> {
   
      
   const playSample =(path,track)=>{    
-    let dir = version.split('/home/pi/')[1].split('/');
+    let dir = version.split('/zynthian/')[1].split('/');
     dir.pop();
     const urlToPlay = `http://${window.location.hostname}:3000/${dir.join('/')}/wav/sampleset/sample-bank.${track +1}/${path}`    
     if(urlToPlay){     
@@ -104,7 +104,7 @@ const SketchpadEditor =(props)=> {
   }
        
   const playSketch =(path,track)=>{    
-    let dir = version.split('/home/pi/')[1].split('/');
+    let dir = version.split('/zynthian/')[1].split('/');
     dir.pop();
     const urlToPlay = `http://${window.location.hostname}:3000/${dir.join('/')}/wav/${path}`    
     if(urlToPlay){     
@@ -178,7 +178,7 @@ const SketchpadEditor =(props)=> {
   let itemDisplay;
   if(itemGroup && version){
     const items = itemGroups[itemGroup];
-    let dir = version.split('/home/pi/')[1].split('/');
+    let dir = version.split('/zynthian/')[1].split('/');
     dir.pop();    
     if(itemGroup=='samples'){              
         itemDisplay = <ul>
@@ -278,7 +278,7 @@ const SketchpadEditor =(props)=> {
               const folderName = f.path.split(fileName)[0];
                return (<li id={f.path} onClick={()=> dispatch(setVersion(f.path))}>
                         <a className={f.path === version ? "active" : ""}>
-                        <DraggableItem id={`SKETCHPAD_${f.path}`} type='SKETCHPAD'> 
+                        <DraggableItem id={`${f.path}`} type='SKETCHPAD'> 
                           <span>{fileName}</span>
                         </DraggableItem>
                           </a>

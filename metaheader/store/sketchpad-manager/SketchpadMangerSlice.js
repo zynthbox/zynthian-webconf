@@ -250,6 +250,7 @@ const SketchpadManagerSlice = createSlice({
     // VERSIONS
     builder.addCase(getSketchpadVersions.fulfilled, (state, action) => {
       let newSketchVersions = [];
+      console.log('>>>>>>>>>>>>versions:',action.payload)
       action.payload.forEach(function (sv, index) {
         // if (sv.path.indexOf(state.folder.path) > -1) {
           if (sv.path.indexOf("sketchpad.json") > -1 && sv.path.indexOf("Autosave")==-1)

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDrop } from 'react-dnd';
 const acceptTypes = ['FILE','SKETCHPAD','SAMPLE','SKETCH','SOUND','PATTERN','SOUNDS','SAMPLES','PATTERNS','SKETCHES','TRACKS','SONGS']
-const DropTargetField = ({onDrop,extraInfo,accept,children}) => {
+const DropTargetField = ({onDrop,extraInfo,accept,width=90, height=25, children}) => {
   const [droppedText, setDroppedText] = useState(null);
-  
+ 
   useEffect(() => {
     setDroppedText(null)
   }, [extraInfo]);
@@ -27,10 +27,10 @@ const DropTargetField = ({onDrop,extraInfo,accept,children}) => {
     <div
       ref={dropRef}
       style={{
-        height: '25px',
-        width: '120px',
+        height: height+'px',
+        width: width+'px',
         border: '1px dashed gray',
-        backgroundColor: isOver ? 'lightgreen' : 'white',
+        backgroundColor: (isOver)? 'lightgreen' : 'white',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

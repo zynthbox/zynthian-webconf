@@ -24,8 +24,9 @@ function TreeView({rootDirectory,mode}){
         }   
         if(item.isDir){
                 fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})                       
-                // dispatch right panel                           
-                if(mode=='sketchpad-manager' && item.level == 4){
+                // dispatch right panel                          
+                 
+                if(mode=='sketchpad-manager' && item.level == 3){
                         dispatch(getSketchpadVersions(item.path));  
                     }else if(mode=='sound-manager' && item.level == 2){                                                                                             
                         dispatch(selectFolder(item.path+'/'));  

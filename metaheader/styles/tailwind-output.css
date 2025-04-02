@@ -215,6 +215,9 @@
   .tw\:inline {
     display: inline;
   }
+  .tw\:inline-block {
+    display: inline-block;
+  }
   .tw\:min-h-\[300px\] {
     min-height: 300px;
   }
@@ -314,6 +317,9 @@
   .tw\:bg-\[\#eef\] {
     background-color: #eef;
   }
+  .tw\:bg-blue-500 {
+    background-color: var(--tw-color-blue-500);
+  }
   .tw\:bg-white {
     background-color: var(--tw-color-white);
   }
@@ -328,6 +334,9 @@
   }
   .tw\:px-3 {
     padding-inline: calc(var(--tw-spacing) * 3);
+  }
+  .tw\:px-4 {
+    padding-inline: calc(var(--tw-spacing) * 4);
   }
   .tw\:py-1 {
     padding-block: calc(var(--tw-spacing) * 1);

@@ -4,10 +4,13 @@ import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import DropTargetZone from "./DropTargetZone";
 import Sktechpad from "./Sktechpad";
-
+import { updateSketchpadInfo } from '../../../store/sampleEditor/sampleEditorSlice';
+import { useDispatch, useSelector } from "react-redux";
+import "react-resizable/css/styles.css";
 const Toolbar = () => {
+    const dispatch = useDispatch()
     const [showPanel, setShowPanel] = useState(false);
-    const [size, setSize] = useState({ width: 800, height: 600 });
+    const [size, setSize] = useState({ width: 1000, height: 500 });
     const [position, setPosition] = useState({ x: 0, y: 0 });  
     const [ files, setFiles] = useState([]);
    
@@ -36,7 +39,13 @@ const Toolbar = () => {
       console.log(`Item  dropped!`,item);
     
       setFiles((prevFiles) => ['['+prevFiles.length+']'+item.id,...prevFiles]);       
-      
+      if(item.type=='SKETCHPAD')
+      {          
+        const filePath = item.id; 
+        const fileName = filePath.split('/')[filePath.split('/').length - 1].split('.sketchpad.json')[0]            
+        console.log(filePath);
+        dispatch(updateSketchpadInfo({filePath:filePath,fileName:fileName}))
+      }
     };
 
     return (
@@ -63,16 +72,17 @@ const Toolbar = () => {
                     <button onClick={() =>  setShowPanel(false)}>×</button>
                   </div>
                   <div className="window-content">                                                           
-                    <div className="tw:flex">
+                    {/* <div className="tw:flex">
                       <DropTargetZone onDrop={handleDrop}>
                         Drag stuff here
                       </DropTargetZone>    
                       <div style={styles.displayContainer}>
                       {dropedFilesDisplay}
                     </div>
-                  </div>                                        
-                  </div>
+                  </div>                                         */}
                   <Sktechpad></Sktechpad>
+                  </div>
+                  
                   
 
                  

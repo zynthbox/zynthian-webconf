@@ -42,13 +42,13 @@ const SketchpadManager =()=>{
             >
                
                 <FileManagerContextProvider 
-                    rootDirectory='/home/pi/zynthian-my-data/sketchpads/my-sketchpads/'
+                    rootDirectory='/zynthian/zynthian-my-data/sketchpads/my-sketchpads/'
                     rootName='My Sketchpads'
                     >               
                 <div>
                     <div id="file-manager">                                       
                     <Suspense fallback={<LoadingSpinner/>}>
-                        <FileExplore rootDirectory='/home/pi/zynthian-my-data/sketchpads/my-sketchpads/' 
+                        <FileExplore rootDirectory='/zynthian/zynthian-my-data/sketchpads/my-sketchpads/' 
                                      mode = 'sketchpad-manager'
                         />
                     </Suspense>                                       

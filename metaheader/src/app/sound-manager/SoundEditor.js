@@ -186,7 +186,7 @@ const SoundEditor = () => {
                           {paginatedData.map((f,index)=>                                                          
                                 <li key={index} className={(soundSelected==f.path)?'selected':''}>                                                                                                      
                                       <span onClick={()=>handleClickSound(f.path)}>
-                                        <DraggableItem id={f.path} type={'FILE'}>
+                                        <DraggableItem id={f.path} type={'SOUND'}>
                                           <BsFileMusic className='tw:inline tw:mx-1' />{f.name }
                                         </DraggableItem>                             
                                         {/* <BsFileMusic className='inline' />  {f.name } */}
