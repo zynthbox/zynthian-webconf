@@ -11,7 +11,7 @@ const DropTargetField = ({onDrop,extraInfo,accept,width=90, height=25, children}
   const [{ isOver }, dropRef] = useDrop(() => ({
     accept: acceptTypes, // Accept the same type as defined in DraggableItem
     drop: (item, monitor) => {
-      onDrop(item,extraInfo);
+      onDrop(item,accept,extraInfo);
       if(item.type == 'FILE'){
         setDroppedText(item.id.split('/').pop());
       }

@@ -80,9 +80,8 @@ const SoundEditor = () => {
     const handleClickSound = (file)=>{
       console.log('handleClickSound>>>>>>>>>>>>>',file)
       dispatch(selectSound(file))            
-      const fileInfo = files.filter(f=>f.path==file)[0];      
-      const info ={...fileInfo,samples:[]}          
-      setSoundInfoToDisplay(info);
+      // const fileInfo = files.filter(f=>f.path==file)[0];      
+      // const info ={...fileInfo,samples:[]}                
     }
     
     const playSample = (i)=>{
@@ -108,6 +107,12 @@ const SoundEditor = () => {
                         </caption>
                         <tbody>
                           <tr>
+                            <td className='tw:bg-[#eee]'><span className='tw:p-2 tw:m-2 tw:font-bold'>Synths</span></td>
+                            {soundInfo.synthSlotsData.map((s,i)=>(
+                              <td key={i} >{s}</td>
+                            ))}      
+                          </tr>
+                          <tr>
                             <td className='tw:bg-[#eee]'><span className='tw:p-2 tw:m-2 tw:font-bold'>Samples</span></td>
                             {soundInfo.sampleSlotsData.map((s,i)=>(
                               <td key={i}>     
@@ -116,13 +121,7 @@ const SoundEditor = () => {
                                 }
                               </td>
                             ))}     
-                          </tr>
-                          <tr>
-                            <td className='tw:bg-[#eee]'><span className='tw:p-2 tw:m-2 tw:font-bold'>Synths</span></td>
-                            {soundInfo.synthSlotsData.map((s,i)=>(
-                              <td key={i} >{s}</td>
-                            ))}      
-                          </tr>
+                          </tr>                          
                           <tr>
                             <td className='tw:bg-[#eee]'><span className='tw:p-2 tw:m-2 tw:font-bold'>Fx</span></td>
                             {soundInfo.fxSlotsData.map((s,i)=>(

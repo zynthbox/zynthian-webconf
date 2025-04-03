@@ -2,6 +2,9 @@
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
+    --tw-color-amber-300: oklch(0.879 0.169 91.605);
+    --tw-color-green-300: oklch(0.871 0.15 154.449);
+    --tw-color-green-500: oklch(0.723 0.219 149.579);
     --tw-color-blue-500: oklch(0.623 0.214 259.815);
     --tw-color-gray-100: oklch(0.967 0.003 264.542);
     --tw-color-gray-200: oklch(0.928 0.006 264.531);
@@ -15,6 +18,7 @@
     --tw-font-weight-bold: 700;
     --tw-radius-lg: 0.5rem;
     --tw-radius-xl: 0.75rem;
+    --tw-animate-spin: spin 1s linear infinite;
     --tw-default-transition-duration: 150ms;
     --tw-default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -233,6 +237,9 @@
   .tw\:table-auto {
     table-layout: auto;
   }
+  .tw\:animate-spin {
+    animation: var(--tw-animate-spin);
+  }
   .tw\:grid-cols-12 {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
@@ -275,6 +282,10 @@
     border-style: var(--tw-border-style);
     border-width: 1px;
   }
+  .tw\:border-2 {
+    border-style: var(--tw-border-style);
+    border-width: 2px;
+  }
   .tw\:border-t-1 {
     border-top-style: var(--tw-border-style);
     border-top-width: 1px;
@@ -298,6 +309,9 @@
   .tw\:border-b-\[1px\] {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
+  }
+  .tw\:border-amber-300 {
+    border-color: var(--tw-color-amber-300);
   }
   .tw\:border-blue-500 {
     border-color: var(--tw-color-blue-500);
@@ -365,14 +379,26 @@
     --tw-font-weight: var(--tw-font-weight-medium);
     font-weight: var(--tw-font-weight-medium);
   }
+  .tw\:text-\[\#0078d7\] {
+    color: #0078d7;
+  }
   .tw\:text-blue-500 {
     color: var(--tw-color-blue-500);
   }
   .tw\:text-gray-500 {
     color: var(--tw-color-gray-500);
   }
+  .tw\:text-green-300 {
+    color: var(--tw-color-green-300);
+  }
+  .tw\:text-green-500 {
+    color: var(--tw-color-green-500);
+  }
   .tw\:text-white {
     color: var(--tw-color-white);
+  }
+  .tw\:lowercase {
+    text-transform: lowercase;
   }
   .tw\:underline {
     text-decoration-line: underline;
@@ -517,4 +543,9 @@
   syntax: "*";
   inherits: false;
   initial-value: 0 0 #0000;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

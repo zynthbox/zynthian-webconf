@@ -2,14 +2,14 @@ const express = require('express')
 const path = require("path")
 const fs = require('fs');
 var cors = require('cors');
-// const { Server } = require("socket.io");
+const { Server } = require("socket.io");
 const app = express()
 const port = 3000
 
 const FIFO_READ_FROM = '/tmp/webconf-reads-from-this-fifo'
 const FIFO_WRITES_TO = '/tmp/webconf-writes-to-this-fifo'
 
-// const { execSync } = require("child_process");
+const { execSync } = require("child_process");
 // Ensure FIFO file exists
 // try {
 //   execSync(`mkfifo ${FIFO_READ_FROM}`);
@@ -47,51 +47,54 @@ app.use(function(req, res, next) {
 
 var routes = require('./server/routes.js')(app);
 
-const server = app.listen(port, () => {
+
+const server = app.listen(port,() => {
   console.log(`webconf metaheader file-browser app-server listening on port ${port}`)
 })
 
-// Attach Socket.IO to the Express app's HTTP server
-// const io = new Server(server);
+// Attach Socket.IO and enable CORS
+const io = new Server(server,{
+  cors: {
+      origin: "*", // Allow all domains to connect (change this for more security)
+  },
+});
 
 // WebSocket Connection
-// io.on("connection", (socket) => {
-//   console.log("Client connected");
-// });
+io.on("connection", (socket) => {
+  console.log("Client connected");
+});
 
 // // Watch FIFO File
-// function watchFIFO() {
-//   fs.open(FIFO_READ_FROM, "r", (err, fd) => {
-//       if (err) {
-//           console.error("Error opening FIFO:", err);
-//           setTimeout(watchFIFO, 1000); // Retry after 1 sec if error
-//           return;
-//       }
+function watchFIFO() {
+  fs.open(FIFO_READ_FROM, "r", (err, fd) => {
+      if (err) {
+          console.error("Error opening FIFO:", err);
+          setTimeout(watchFIFO, 1000); // Retry after 1 sec if error
+          return;
+      }
 
-//       const buffer = Buffer.alloc(1024);
+      const buffer = Buffer.alloc(1024);
 
-//       function readLoop() {
-//           fs.read(fd, buffer, 0, buffer.length, null, (err, bytesRead) => {
-//               if (err) {
-//                   console.error("Read error:", err);
-//                   return;
-//               }
-//               if (bytesRead > 0) {
-//                   const message = buffer.toString("utf8", 0, bytesRead).trim();
-//                   console.log("FIFO Received:", message);
+      function readLoop() {
+          fs.read(fd, buffer, 0, buffer.length, null, (err, bytesRead) => {
+              if (err) {
+                  console.error("Read error:", err);
+                  return;
+              }
+              if (bytesRead > 0) {
+                  const message = buffer.toString("utf8", 0, bytesRead).trim();
+                  console.log("FIFO Received>>>>>>>>>>>>>>>>:", message);                 
+                  // Send data to WebSocket clients
+                  io.emit("fifoChanged", message);
+                  readLoop(); // Continue reading
+              } else {
+                  setTimeout(readLoop, 100); // Poll again if no data
+              }
+          });
+      }
 
-//                   // Send data to WebSocket clients
-//                   io.emit("fifoChanged", message);
+      readLoop();
+  });
+}
 
-//                   readLoop(); // Continue reading
-//               } else {
-//                   setTimeout(readLoop, 100); // Poll again if no data
-//               }
-//           });
-//       }
-
-//       readLoop();
-//   });
-// }
-
-// watchFIFO();
+watchFIFO();

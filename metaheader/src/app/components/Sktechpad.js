@@ -4,17 +4,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSketchpad, getSketchpadInfo, saveSketchpad, updateSketchpadInfo } from '../../../store/sampleEditor/sampleEditorSlice';
 import DropTargetField from './DropTargetField';
 import { FaSync } from "react-icons/fa";
+import { io } from "socket.io-client";
 function TruncatedText(text, maxLength = 20) {
     const truncated = text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
     return <span title={text}>{truncated}</span>;
   }
 
+const socket = io(`${window.location.protocol}//${window.location.hostname}:3000`);
+// console.log('>>>>>>>>>>>create socket:',`${window.location.protocol}//${window.location.hostname}:3000`);
+// console.log('>>>>>>>>>>>create socket:',socket);
 function Sktechpad() {
     const { sketchpadInfo, sketchpad, pendingFiles } = useSelector((state) => state.sampleEditor);
     const dispatch = useDispatch()
     const [activeTrack, setActiveTrack] = useState(1);
+    const [loading, setLoading] = useState(false);
     const [reload, setReload] = useState(false);
+    const [message,setMessage] = useState('');
     const tracker = [1,2,3,4,5,6,7,8,9,10];
+
+    // socket pull msg later with click...
+    useEffect(() => {                                     
+        // Listen for messages from the server
+        socket.on("fifoChanged", (msg) => {            
+            setMessage(msg);
+            setLoading(false);
+            dispatch(getSketchpadInfo());
+        });          
+        return ()=>{
+            socket.off("fifoChanged")
+        }
+      },[])
 
     useEffect(() => {
         dispatch(getSketchpadInfo())
@@ -30,9 +49,14 @@ function Sktechpad() {
         }
     },[sketchpadInfo])
 
-    async function handleDrop(item, extraInfo) {
+    async function handleDrop(item, accept,extraInfo) {        
         console.log(`Item  dropped`,item, extraInfo);
-        
+        console.log('accept:',accept)
+        if(item.type !== accept)
+        {
+            setMessage('Please drop a '+accept);            
+            return;
+        }
         let command;
         if(item.type=='SKETCHPAD'){   
             // const filePath = item.id; 
@@ -51,6 +75,8 @@ function Sktechpad() {
                 },
                 body:JSON.stringify({msg:JSON.stringify(command)})
             });
+        setMessage(null);
+        setLoading(true);
       };
 
     let track = null, samples = null, synths=null, fxs=null,mode=null;
@@ -72,8 +98,11 @@ function Sktechpad() {
     }
 
   return (
-                <div className="tw:w-full tw:mx-auto tw:p-4">
-                    <button className="tw:px-4 tw:py-2 tw:rounded-lg tw:inline-block" onClick={() => setReload(!reload)}><FaSync /></button>
+                <div className="tw:w-full tw:mx-auto tw:p-4">                    
+                    <button className="tw:px-4 tw:py-2 tw:rounded-lg tw:inline-block" onClick={() => setReload(!reload)}>
+                        <FaSync className={loading?'tw:animate-spin tw:text-[#0078d7]':''}/>
+                    </button>
+                    <span className='tw:text-[#0078d7] tw:lowercase'>{message}</span>
                     {sketchpadInfo && 
                        
                          <DropTargetField onDrop={handleDrop} accept='SKETCHPAD' width={600} height={50}>
