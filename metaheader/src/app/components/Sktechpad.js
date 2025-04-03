@@ -25,10 +25,13 @@ function Sktechpad() {
     // socket pull msg later with click...
     useEffect(() => {                                     
         // Listen for messages from the server
-        socket.on("fifoChanged", (msg) => {            
-            setMessage(msg);
-            setLoading(false);
-            dispatch(getSketchpadInfo());
+        socket.on("fifoChanged", (msg) => {   
+            if(loading){setMessage(msg);} 
+            if(msg.includes("messageType")){
+                setLoading(false);                
+                setMessage('done.');
+                dispatch(getSketchpadInfo());
+            }
         });          
         return ()=>{
             socket.off("fifoChanged")
