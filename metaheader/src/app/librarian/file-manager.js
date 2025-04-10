@@ -55,7 +55,7 @@ const FileManager = ({rootDirectory,mode}) => {
                           mode={mode} 
                           treeData={fileManagerState.treeData}
                           />
-                {mode!=='sketchpad-manager' && mode!=='sound-manager' &&
+               
                 <Suspense fallback={<LoadingSpinner/>}>                     
                     <WebconfFileBrowser
                         fsep={fsep}
@@ -67,7 +67,7 @@ const FileManager = ({rootDirectory,mode}) => {
                     />
                     
                 </Suspense>
-                }
+               
             </React.Fragment>
         )
     }

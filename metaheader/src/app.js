@@ -12,12 +12,17 @@ import RootLayout from './layouts/RootLayout';
 import NotFound from './app/NotFound';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
+import FileManagerContainer from './app/file-manager/file-manager-container';
+import LibrarianManagerContainer from './app/librarian/librarian-manager-container';
+import { fileManagerLeftCss } from './app/helpers';
+import XtractorManagerContainer from './app/xtractor/xtractor-manager-container';
+
 // import { io } from "socket.io-client";
 // import { ToastContainer, toast } from 'react-toastify';
 
 const SketchpadManager = lazy(()=>import('./app/sketchpad-manager/SketchpadManager'))
 const SoundManager = lazy(()=>import('./app/sound-manager/SoundManager'))
-const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
+// const FileManager = lazy(()=>import('./app/file-manager/file-manager'))
 const SampleManger= lazy(()=>import('./app/sample-manager/SampleManager'))
 const SampleEditor = lazy(()=>import('../store/sampleEditor/SampleEditor'))
 const Favorites = lazy(()=>import('../store/favorites/favorites'))
@@ -35,15 +40,6 @@ const colorsArray = [
     "#65E679",
     "#9A7136",
 ];
-function fileManagerLeftCss(){
-    let fileManagerLeftCss = 0;
-    const containerElement = document.getElementsByClassName('container')[0];
-    if (containerElement && containerElement !== null){
-        fileManagerLeftCss = (window.innerWidth - containerElement.offsetWidth) / 2
-    }
-    return fileManagerLeftCss;
-}
-
 
 
 
@@ -55,11 +51,23 @@ function FileManagerDisplay(){
                     <i className="glyphicon glyphicon-file"></i>
                     FILE MANAGER
                 </h3>
-                <FileManagerContextProvider>
-                    <Suspense fallback={<LoadingSpinner/>}>
-                        <FileManager/>
-                    </Suspense>
-                </FileManagerContextProvider>
+                <FileManagerContainer></FileManagerContainer>
+                </div>
+                <div id="file-manager-overlay"></div>
+            </>
+    )
+}
+
+function LibrarianManagerDisplay(){
+    return (
+            <>
+                <div id="file-manager" className="container" style={{left:fileManagerLeftCss()}}> 
+                {/* <div id="file-manager2" className="tw:container tw:bg-white tw:w-screen tw:fixed  tw:top-[48px] tw:left-[20px] tw:mt-2 tw:mx-auto tw:p-0 tw:z-10" > */}
+                <h3 className='tw:uppercase'>
+                 <i className="glyphicon glyphicon-file"></i>
+                    Librarian
+                </h3>
+                <LibrarianManagerContainer></LibrarianManagerContainer>
                 </div>
                 <div id="file-manager-overlay"></div>
             </>
@@ -193,6 +201,8 @@ function SongExportDisplay(){
 const router = createHashRouter(
     createRoutesFromElements(     
       <Route path="/" element={<RootLayout />}>
+        <Route path="librarian" element={<LibrarianManagerContainer />}> </Route> 
+        <Route path="xtractor" element={<XtractorManagerContainer />}> </Route>        
         <Route path="sound-manager" element={<SoundManagerDisplay />}> </Route>
         <Route path="sketchpad-manager" element={<SketchpadManagerDisplay />}></Route>
         <Route path="file-manager" element={<FileManagerDisplay />}></Route>

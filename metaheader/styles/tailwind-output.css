@@ -3,8 +3,6 @@
 @layer theme {
   :root, :host {
     --tw-color-amber-300: oklch(0.879 0.169 91.605);
-    --tw-color-green-300: oklch(0.871 0.15 154.449);
-    --tw-color-green-500: oklch(0.723 0.219 149.579);
     --tw-color-blue-500: oklch(0.623 0.214 259.815);
     --tw-color-gray-100: oklch(0.967 0.003 264.542);
     --tw-color-gray-200: oklch(0.928 0.006 264.531);
@@ -14,6 +12,10 @@
     --tw-spacing: 0.25rem;
     --tw-text-sm: 0.875rem;
     --tw-text-sm--line-height: calc(1.25 / 0.875);
+    --tw-text-3xl: 1.875rem;
+    --tw-text-3xl--line-height: calc(2.25 / 1.875);
+    --tw-text-5xl: 3rem;
+    --tw-text-5xl--line-height: 1;
     --tw-font-weight-medium: 500;
     --tw-font-weight-bold: 700;
     --tw-radius-lg: 0.5rem;
@@ -165,8 +167,23 @@
   }
 }
 @layer utilities {
+  .tw\:fixed {
+    position: fixed;
+  }
+  .tw\:top-\[48px\] {
+    top: 48px;
+  }
+  .tw\:left-\[20px\] {
+    left: 20px;
+  }
+  .tw\:z-10 {
+    z-index: 10;
+  }
   .tw\:col-span-2 {
     grid-column: span 2 / span 2;
+  }
+  .tw\:col-span-10 {
+    grid-column: span 10 / span 10;
   }
   .tw\:container {
     width: 100%;
@@ -228,6 +245,9 @@
   .tw\:w-full {
     width: 100%;
   }
+  .tw\:w-screen {
+    width: 100vw;
+  }
   .tw\:flex-1 {
     flex: 1;
   }
@@ -251,6 +271,9 @@
   }
   .tw\:justify-between {
     justify-content: space-between;
+  }
+  .tw\:justify-center {
+    justify-content: center;
   }
   .tw\:justify-start {
     justify-content: flex-start;
@@ -282,10 +305,6 @@
     border-style: var(--tw-border-style);
     border-width: 1px;
   }
-  .tw\:border-2 {
-    border-style: var(--tw-border-style);
-    border-width: 2px;
-  }
   .tw\:border-t-1 {
     border-top-style: var(--tw-border-style);
     border-top-width: 1px;
@@ -302,6 +321,10 @@
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
   }
+  .tw\:border-b-2 {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 2px;
+  }
   .tw\:border-b-4 {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 4px;
@@ -310,8 +333,8 @@
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
   }
-  .tw\:border-amber-300 {
-    border-color: var(--tw-color-amber-300);
+  .tw\:border-\[\#09f\] {
+    border-color: #09f;
   }
   .tw\:border-blue-500 {
     border-color: var(--tw-color-blue-500);
@@ -331,11 +354,11 @@
   .tw\:bg-\[\#eef\] {
     background-color: #eef;
   }
-  .tw\:bg-blue-500 {
-    background-color: var(--tw-color-blue-500);
-  }
   .tw\:bg-white {
     background-color: var(--tw-color-white);
+  }
+  .tw\:p-0 {
+    padding: calc(var(--tw-spacing) * 0);
   }
   .tw\:p-2 {
     padding: calc(var(--tw-spacing) * 2);
@@ -358,6 +381,9 @@
   .tw\:py-2 {
     padding-block: calc(var(--tw-spacing) * 2);
   }
+  .tw\:pt-5 {
+    padding-top: calc(var(--tw-spacing) * 5);
+  }
   .tw\:pl-0 {
     padding-left: calc(var(--tw-spacing) * 0);
   }
@@ -366,6 +392,14 @@
   }
   .tw\:text-center {
     text-align: center;
+  }
+  .tw\:text-3xl {
+    font-size: var(--tw-text-3xl);
+    line-height: var(--tw-leading, var(--tw-text-3xl--line-height));
+  }
+  .tw\:text-5xl {
+    font-size: var(--tw-text-5xl);
+    line-height: var(--tw-leading, var(--tw-text-5xl--line-height));
   }
   .tw\:text-sm {
     font-size: var(--tw-text-sm);
@@ -388,17 +422,14 @@
   .tw\:text-gray-500 {
     color: var(--tw-color-gray-500);
   }
-  .tw\:text-green-300 {
-    color: var(--tw-color-green-300);
-  }
-  .tw\:text-green-500 {
-    color: var(--tw-color-green-500);
-  }
   .tw\:text-white {
     color: var(--tw-color-white);
   }
   .tw\:lowercase {
     text-transform: lowercase;
+  }
+  .tw\:uppercase {
+    text-transform: uppercase;
   }
   .tw\:underline {
     text-decoration-line: underline;
@@ -424,6 +455,13 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--tw-color-gray-100);
+      }
+    }
+  }
+  .tw\:hover\:underline {
+    &:hover {
+      @media (hover: hover) {
+        text-decoration-line: underline;
       }
     }
   }
@@ -460,6 +498,17 @@
   .tw\:sm\:grid-cols-12 {
     @media (width >= 40rem) {
       grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+  }
+}
+.shadcnButton {
+  cursor: pointer;
+  padding-inline: calc(var(--tw-spacing) * 5);
+  padding-block: calc(var(--tw-spacing) * 2);
+  font-size: 16px;
+  &:hover {
+    @media (hover: hover) {
+      color: var(--tw-color-amber-300);
     }
   }
 }

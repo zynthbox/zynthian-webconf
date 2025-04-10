@@ -7,7 +7,7 @@ import Toolbar from '../app/components/Toolbar'
 
 export default function RootLayout() {
   const location = useLocation();
-  const showToolbarRoutes = ["/sound-manager", "/sketchpad-manager", "/file-manager", "/sample-manager"]; 
+  const showToolbarRoutes = ["/sound-manager", "/sketchpad-manager", "/file-manager", "/sample-manager",'/librarian','/xtractor']; 
   return (
     <Provider store={store}>
         <a href="#m" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tools <span className="caret"></span></a>
@@ -16,17 +16,23 @@ export default function RootLayout() {
             <NavLink to="file-manager"> File manager </NavLink>
             </li>
             <li>
-            <NavLink to="sketchpad-manager"> Sketchpad Manager </NavLink>
+            <NavLink to="librarian"> Librarian </NavLink>
             </li>
-            
+            <li>
+            <NavLink to="xtractor"> Xtractor </NavLink>
+            </li>
+         
+            <li>
+             -- OLD --
+            </li>
+            <li>
+            <NavLink to="sketchpad-manager"> Sketchpad Manager </NavLink>
+            </li>            
            <li>
             <NavLink to="sound-manager"> Sound Manager </NavLink>                   
             </li>                      
             <li>
             <NavLink to="sample-manager"> Sample Manager </NavLink>              
-            </li>
-            <li>
-             -- OLD --
             </li>
             <li>
             <NavLink to="track-manager"> Track Manager </NavLink>              

@@ -7,27 +7,49 @@ import { ImUpload } from 'react-icons/im';
 import { FaWindowClose } from 'react-icons/fa';
 
 import { humanFileSize } from '../helpers';
+import { DIRECTORIES } from '../components/globalState';
 
+
+
+const isAllowedToUpload =(files, rootDirectory)=>{  
+    const dir = DIRECTORIES.filter(d=>d.rootDirectory==rootDirectory).pop();    
+    if(dir && dir.allowedUploadTypes)
+    {
+      for (let file of files) {
+        const fileName = file.name;
+        const fileExt = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();        
+        if (!dir.allowedUploadTypes.includes(fileExt.toLowerCase())) {
+          alert(`Current directory does not support: ${fileExt}, only ${dir.allowedUploadTypes}`);          
+          return false;
+        }
+      }
+    } 
+    return true;
+}
 
 
 function FileUploader(props) {
 
-  const { selectedFolder, fsep } = props
-  const ROOTDIR = props.rootDirectory;
+  const { selectedFolder, fsep ,rootDirectory} = props
+  const ROOTDIR = rootDirectory;
 
   // const reader = new FileReader();
-
   const onDrop = useCallback(acceptedFiles => {
     // Do something with the files
     let newUploadProgressData = [];
     for (var i in acceptedFiles){
       if (uploadProgressData !== null) newUploadProgressData[i] = uploadProgressData[i];
       else newUploadProgressData[i] = 0;
+    }    
+    const typeCheck = isAllowedToUpload(acceptedFiles,rootDirectory)    
+    if(typeCheck)
+    {
+      setUploadProgressData(newUploadProgressData);
+      setFiles(acceptedFiles)
+    }else{
+      console.log('>>>>>>>>>>>>>>wrong type')
+      setFiles(null)
     }
-
-    setUploadProgressData(newUploadProgressData);
-    setFiles(acceptedFiles)
-
     // reader.readAsDataURL(acceptedFiles[0]);
   }, []);
 
@@ -80,15 +102,19 @@ function FileUploader(props) {
     if (selectedFolder !== null){
       folderPath = selectedFolder.slice(-1) === "/" ? selectedFolder : selectedFolder + "/";
     }
-    const filePath = (ROOTDIR.startsWith('/home/pi')?ROOTDIR.substring(9):ROOTDIR)
-                    +folderPath + files[index].path.split(files[index].name)[0];
-  
+
+    // const filePath = (ROOTDIR.startsWith('/home/pi')?ROOTDIR.substring(9):ROOTDIR)
+    //                 +folderPath + files[index].path.split(files[index].name)[0];
+    const filePath = ROOTDIR + folderPath;
+
+    // console.log('>>>>>>>>>>>>>>>>>>>uploadFile');
+    // console.log(selectedFolder)
+    // console.log(files)
+    // console.log(filePath,"filePath")
     const url = `http://${window.location.hostname}:3000/upload/${filePath.split(fsep).join('+++')}`
     const formData = new FormData();
-    
-    formData.append('file', files[index])
-    formData.append('rootDirectory',props.rootDirectory)
-    
+    formData.append('file', files[index])  
+    // console.log('>>>>>>>>>>>>>>>>file:',files[index])
     const config = {
       onUploadProgress: progressEvent => {
         const newUploadProgressData = [
@@ -155,10 +181,11 @@ function FileUploader(props) {
 
   } else {
 
+    const dir = DIRECTORIES.filter(d=>d.rootDirectory==rootDirectory).pop();    
     dropZoneDisplay = (
       <div className="dropzone-container" {...getRootProps()}>
         <input {...getInputProps()} name="file" />
-        {isDragActive ? <p>Drop the files here ...</p> : <p>Drag 'n' drop some files here, or click to select files</p>}
+        {isDragActive ? <p>Drop the files{dir.allowedUploadTypes?'['+dir.allowedUploadTypes+']':''} here ...</p> : <p>Drag 'n' drop some files {dir.allowedUploadTypes?'['+dir.allowedUploadTypes+']':''} here, or click to select files</p>}
       </div>
     )
 

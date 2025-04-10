@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from './context/context-provider'
 import { useDispatch, useSelector } from "react-redux";
-import { getSketchpadVersions } from '../../../../store/sketchpad-manager/SketchpadMangerSlice.js';
-import { selectFolder } from '../../../../store/sound-manager/SoundManagerSlice';
+import { getSketchpadVersions } from '../../../store/sketchpad-manager/SketchpadMangerSlice.js';
+import { selectFolder } from '../../../store/sound-manager/SoundManagerSlice';
 function TreeView({rootDirectory,mode}){
-
+    
     const { fileManagerState, fileManagerDispatch } = useContext(Context)
     const dispatch = useDispatch()
     function onTreeItemClick(item,parentIds){
@@ -25,15 +25,15 @@ function TreeView({rootDirectory,mode}){
         if(item.isDir){
                 fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})                       
                 // dispatch right panel                          
-                 
-                if(mode=='sketchpad-manager' && item.level == 3){
+                 console.log(">>>>>>>>>>>>>>>>>",item,mode)
+                if(mode=='Sketchpads' && item.level == 3){
                         dispatch(getSketchpadVersions(item.path));  
-                    }else if(mode=='sound-manager' && item.level == 2){                                                                                             
+                    }else if(mode=='Sounds' && item.level == 2){                                                                                             
                         dispatch(selectFolder(item.path+'/'));  
                     }
             }       
     }
-    console.log('>>>>>>>>>>>>treeview:',fileManagerState.treeData)
+    
     return (
         <div className='tree-view-container'>
             <ul>

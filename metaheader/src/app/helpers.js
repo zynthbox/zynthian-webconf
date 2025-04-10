@@ -1,4 +1,4 @@
-import { useCallback, useRef,useEffect, useState } from "react";
+import React,{ useCallback, useRef,useEffect, useState } from "react";
 
 
 export function getFormData(object,fileName) {
@@ -140,3 +140,13 @@ export function millisToMinutesAndSeconds(time) {
   const timestamp = minutes + ":" + seconds;
   return timestamp;
 }
+
+export function fileManagerLeftCss(){
+  let fileManagerLeftCss = 0;
+  const containerElement = document.getElementsByClassName('container')[0];
+  if (containerElement && containerElement !== null){
+      fileManagerLeftCss = (window.innerWidth - containerElement.offsetWidth) / 2
+  }
+  return fileManagerLeftCss;
+}
+

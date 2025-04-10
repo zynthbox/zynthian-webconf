@@ -143,7 +143,7 @@ const TrackerModule =()=>{
             </div>
             }
 
-      {/* <ul className='file-info'>{fileInfo}</ul> */}
+      <ul className='file-info'>{fileInfo}</ul>
       <div className='sample-container'>                     
            {samplesDisplay}
       </div>

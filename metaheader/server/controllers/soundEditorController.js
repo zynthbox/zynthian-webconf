@@ -88,6 +88,8 @@ exports.initFilesCategories = async (req, res)=>{
         filesList.push(file)   
     })
    
+  // sort
+  filesList.sort((a, b) => a.name.localeCompare(b.name));
   // group files with catId
   const groupedFiles = filesList.reduce((acc, item) => {    
     // Initialize the category array if it doesn't exist

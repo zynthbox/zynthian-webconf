@@ -23,14 +23,21 @@ import { useLongPress } from '../helpers';
 import { Context } from './context/context-provider'
 import { useDrag, useDrop } from 'react-dnd';
 import PaginationWithEllipsis from '../components/PaginationWithEllipsis';
+import { isDraggingOverlayRef } from '../components/globalState';
+
 
 const DraggableOverlay = ({ file, rect }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'FILE',
     item: { file },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
+    // collect: (monitor) => ({
+    //   isDragging: monitor.isDragging(),
+    // }),
+    collect: (monitor) => {
+      const isDraggingNow = monitor.isDragging();
+      isDraggingOverlayRef.current = isDraggingNow; // 🔥
+      return { isDragging: isDraggingNow };
+    },
   }));
 
   // Only show the overlay and block pointer events when actually dragging
@@ -499,7 +506,12 @@ function WebconfFileBrowser(props){
 
   let hideMaskTimeout;
 
-  function onFileUploaderDragOver(){
+  function onFileUploaderDragOver(event){
+    if (isDraggingOverlayRef.current) {             
+      return;
+    }
+    event.preventDefault(); // Needed to allow drop
+  
     if (isDragInsideFileBrowser === false){
       clearTimeout(hideMaskTimeout)
       props.setShowFileUploader(true)
@@ -507,7 +519,10 @@ function WebconfFileBrowser(props){
   }
 
   function onFileUploaderDragLeave(){
-    hideMaskTimeout = setTimeout(() => {
+    if (isDraggingOverlayRef.current) {         
+      return;
+    }
+    hideMaskTimeout = setTimeout(() => {      
       props.setShowFileUploader(false)
     }, 10);
   }

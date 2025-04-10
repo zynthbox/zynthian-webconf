@@ -5,10 +5,33 @@ import { getSketchpad, getSketchpadInfo, saveSketchpad, updateSketchpadInfo } fr
 import DropTargetField from './DropTargetField';
 import { FaSync } from "react-icons/fa";
 import { io } from "socket.io-client";
+
 function TruncatedText(text, maxLength = 20) {
     const truncated = text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
     return <span title={text}>{truncated}</span>;
   }
+
+function isTimeToReload(str) {
+    const regex = /\{.*?\}/s; // Match a JSON-like object inside `{}` (single JSON object)
+    const match = str.match(regex); // Find JSON pattern
+    if (match) {
+        try {
+            const jsonObject = JSON.parse(match[0]); // Convert JSON string to object
+            // { "messageType": "success", "category": "sketchpad", "command": "save" }
+            if(jsonObject.category == 'sketchpad' && 
+                jsonObject.command == 'save' &&
+                jsonObject.messageType =='success'
+            ){
+                return true;
+            }else{
+                return false;
+            }            
+        } catch (error) {
+            return false;
+        }
+    }
+    return false;
+}
 
 const socket = io(`${window.location.protocol}//${window.location.hostname}:3000`);
 // console.log('>>>>>>>>>>>create socket:',`${window.location.protocol}//${window.location.hostname}:3000`);
@@ -23,20 +46,24 @@ function Sktechpad() {
     const tracker = [1,2,3,4,5,6,7,8,9,10];
 
     // socket pull msg later with click...
-    useEffect(() => {                                     
+    useEffect(() => {                
         // Listen for messages from the server
-        socket.on("fifoChanged", (msg) => {   
-            if(loading){setMessage(msg);} 
-            if(msg.includes("messageType")){
-                setLoading(false);                
-                setMessage('done.');
-                dispatch(getSketchpadInfo());
-            }
-        });          
+        if(loading){
+            socket.on("fifoChanged", (msg) => {                   
+                setMessage(msg);                
+                // get this msg start reload { "messageType": "success", "category": "sketchpad", "command": "save" }
+                const reload = isTimeToReload(msg);
+                if(reload){                    
+                    setLoading(false);                
+                    setMessage('done.');
+                    dispatch(getSketchpadInfo());
+                }
+            });
+        }          
         return ()=>{
             socket.off("fifoChanged")
         }
-      },[])
+      },[loading])
 
     useEffect(() => {
         dispatch(getSketchpadInfo())
@@ -54,13 +81,14 @@ function Sktechpad() {
 
     async function handleDrop(item, accept,extraInfo) {        
         console.log(`Item  dropped`,item, extraInfo);
-        console.log('accept:',accept)
+        console.log('accept:',accept)        
         if(item.type !== accept)
         {
             setMessage('Please drop a '+accept);            
             return;
         }
         let command;
+        setLoading(true);
         if(item.type=='SKETCHPAD'){   
             // const filePath = item.id; 
             // const fileName = filePath.split('/')[filePath.split('/').length - 1].split('.sketchpad.json')[0]                        
@@ -77,9 +105,8 @@ function Sktechpad() {
                     'Content-Type': 'application/json',
                 },
                 body:JSON.stringify({msg:JSON.stringify(command)})
-            });
-        setMessage(null);
-        setLoading(true);
+            });        
+        
       };
 
     let track = null, samples = null, synths=null, fxs=null,mode=null;

@@ -74,25 +74,30 @@ exports.getFilesInFolder = (req,res) => {
   if (!folder) folder = "/"
   else if (folder.indexOf('+++') > -1) folder = folder.split('+++').join('/');
 
-  fs.readdir(folder, (err, files) => {
+  fs.readdir(folder,{ withFileTypes: true }, (err, files) => {
     if (err){
       console.log(err);
       res.json(err)
     } else {
       const filesList = [];
-      files.forEach(file => {
-        var stats = fs.statSync(`${folder}${file}`)
-        const f = {
-          size:stats.size,
-          modDate:stats.ctimeMs,
-          name:file,
-          folder,
-          path:`${folder}${file}`,
-          isDir:fs.statSync(folder + file).isDirectory(),
-          level:folder.match(/\//g).length - 2
+      files.forEach(file => {     
+        const isHidden = file.name.startsWith('.');
+        const isSymlink = file.isSymbolicLink?.();
+        if (!isHidden && !isSymlink) {
+          var stats = fs.statSync(`${folder}${file.name}`)        
+          const f = {
+            size:stats.size,
+            modDate:stats.ctimeMs,
+            name:file.name,
+            folder,
+            path:`${folder}${file.name}`,
+            isDir:fs.statSync(folder + file.name).isDirectory(),
+            level:folder.match(/\//g).length - 2
+          }
+          if (f.isDir === true) f.count = fs.readdirSync(folder + file.name).length
+          filesList.push(f)
         }
-        if (f.isDir === true) f.count = fs.readdirSync(folder + file).length
-        filesList.push(f)
+       
       })
       res.json(filesList)
     }
@@ -127,10 +132,12 @@ exports.renameFile = (req,res) => {
 
 exports.createFolder = (req,res) => {
   const { fullPath } = req.body;
-
+  console.log('>>>>>>>>>>>>>>>createFolder:',fullPath)
   try {
-    if (!fs.existsSync(parentFolder + "/" + fullPath)) {
-      fs.mkdirSync(parentFolder + "/" +  fullPath)
+    // if (!fs.existsSync(parentFolder + "/" + fullPath)) {
+    //   fs.mkdirSync(parentFolder + "/" +  fullPath)
+    if (!fs.existsSync(fullPath)) {
+      fs.mkdirSync(fullPath)
       res.status(200).json({message:'Folder created!'})
     } else {
       res.json({message:'Folder already exists!'})
@@ -212,14 +219,14 @@ exports.copyPaste = (req,res) => {
 
   const { previousPath, destinationPath,deleteOrigin, newName } = req.body;
 
-  console.log(previousPath, " PREVIOUS PATH")
-  console.log(destinationPath, " DESTINATION PATH")
+  // console.log(previousPath, " PREVIOUS PATH")
+  // console.log(destinationPath, " DESTINATION PATH")
 
   try {
 
-    console.log(fs.existsSync(parentFolder + destinationPath), "DESTINATION PATH IS EXISTS ")
+    // console.log(fs.existsSync(parentFolder + destinationPath), "DESTINATION PATH IS EXISTS ")
     const fullDestinationPath = parentFolder + destinationPath;
-
+    
 
     if (fs.statSync(previousPath).isDirectory()) {
       copyFolderRecursiveSync(previousPath, fullDestinationPath)
@@ -259,30 +266,71 @@ exports.copyPaste = (req,res) => {
 
 /* UPLOAD FILES */
 
+const getAvailableFileName = (dir, base, ext, count = 0) => {
+  const name = count === 0 ? `${base}${ext}` : `${base}(${count})${ext}`;
+  const fullPath = path.join(dir, name);
+  if (!fs.existsSync(fullPath)) {
+    return name;
+  }
+  return getAvailableFileName(dir, base, ext, count + 1);
+};
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-      const selectedFolder = req.params.folder.split('+++').join('/');
-      const folderChainArray = selectedFolder.split('/');
-      let fc = ""
-      for (var i in folderChainArray){
-        if (i < folderChainArray.length - 1){
-          var currentFolder = folderChainArray[i];
-          fc +=  currentFolder + "/"
-          fs.mkdirSync( parentFolder + "/" + fc, {recursive:true})  
-        }
-      }
-      cb(null, parentFolder)
+      const selectedFolder = req.params.folder.split('+++').join('/');    
+      cb(null, selectedFolder)
   },
-  filename: function (req, file, cb) {
-    const selectedFolder = req.params.folder.split('+++').join('/');
-    cb(null, selectedFolder + file.originalname )
+  filename: function (req, file, cb) {   
+    // cb(null, file.originalname); 
+    const ext = path.extname(file.originalname);
+    const base = path.basename(file.originalname, ext);
+    const dir = req.params.folder.split('+++').join('/');   
+    const finalName = getAvailableFileName(dir, base, ext);
+    cb(null, finalName);
   }
 })
 
-var upload = multer({ storage: storage,   limits: { fieldSize: 25 * 1024 * 1024 }  }).fields([{name:'file',maxCount:100}])
+// old code 
+// var storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//       const selectedFolder = req.params.folder.split('+++').join('/');
+//       const folderChainArray = selectedFolder.split('/');
+//       let fc = ""
+//       for (var i in folderChainArray){
+//         if (i < folderChainArray.length - 1){
+//           var currentFolder = folderChainArray[i];
+//           fc +=  currentFolder + "/"
+//           fs.mkdirSync( parentFolder + "/" + fc, {recursive:true})  
+//         }
+//       }
+//       cb(null, parentFolder)
+//   },
+//   filename: function (req, file, cb) {
+//     const selectedFolder = req.params.folder.split('+++').join('/');
+//     cb(null, selectedFolder + file.originalname )
+//   }
+// })
 
-exports.uploadFiles = (req, res) => {      
-  upload(req, res, function (err) {   
+const  fileFilter = (req, file, cb) => {
+  console.log('>>>>>>>>>>>>>>>>>>>filesController fileFilter do filetype check ',file); // See if anything is there
+  console.log('>>>>>>>>>>>>>>>>>>>req.params:',req.params); //  { folder: '+++zynthian+++zynthian-my-data+++sketchpads++++++' }  
+                                                            // req.params.folder.split('+++').join('/');
+  /** TODO: server side file type check. according foldername to define allowed types. DIRECTORIES */
+  cb(null, true);
+  // For example, get allowed types from request header, query or body
+  // const allowed = req.allowedTypes; // fallback
+  // if (allowed.includes(file.mimetype)) {
+  //   cb(null, true);
+  // } else {
+  //   cb(new Error(`File type ${file.mimetype} not allowed`), false);
+  // }  
+};
+
+var upload = multer({ storage: storage, fileFilter, limits: { fieldSize: 25 * 1024 * 1024 }  }).fields([{name:'file',maxCount:100}])
+
+exports.uploadFiles = (req, res) => {   
+  upload(req, res, function (err) {    
+    // console.log('>>>>>>>>>>>req.files:',req.files)
     if (err instanceof multer.MulterError) {
       console.log(err);
         return res.status(500).json(err)
@@ -364,15 +412,23 @@ exports.downloadFiles = (req,res) => {
     });
 
   } else {
+    
+    // var file = fs.readFileSync(filePath, 'binary');
+    // var stats = fs.statSync(filePath)
+    // res.setHeader('Content-Length', stats.size);
+    // // res.setHeader('Content-Type', 'audio/mpeg');
+    // console.log(filePath)
+    // res.setHeader('Content-Disposition', 'attachment; filename='+filePath.split("/")[filePath.split("/").length - 1]);
+    // res.write(file, 'binary');
+    // res.end();
 
-    var file = fs.readFileSync(filePath, 'binary');
-    var stats = fs.statSync(filePath)
+    //For large files, avoid readFileSync
+    const fileStream = fs.createReadStream(filePath);
+    const stats = fs.statSync(filePath);
     res.setHeader('Content-Length', stats.size);
-    // res.setHeader('Content-Type', 'audio/mpeg');
-    res.setHeader('Content-Disposition', 'attachment; filename='+filePath.split("/")[filePath.split("/").length - 1]);
-    res.write(file, 'binary');
-    res.end();
-
+    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader('Content-Disposition', `attachment; filename="${path.basename(filePath)}"`);
+    fileStream.pipe(res);
   }
 
 }

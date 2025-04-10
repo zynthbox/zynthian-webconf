@@ -54,43 +54,43 @@
 #sound-manager-display #file-manager .file-manager-wrapper .tree-view-container {
   width: 100%;
 }
-#sound-manager-display #sound-editor-container {
+#sound-editor-container {
   background: #fff;
   overflow: auto;
 }
-#sound-manager-display #sound-editor-container .layout {
+#sound-editor-container .layout {
   display: grid;
   grid-template-rows: 30px 1fr 100px;
   height: 100%;
 }
-#sound-manager-display #sound-editor-container .body {
+#sound-editor-container .body {
   display: grid;
   grid-template-columns: 200px auto;
   height: 100%;
   overflow: hidden;
 }
-#sound-manager-display #sound-editor-container .header {
+#sound-editor-container .header {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-#sound-manager-display #sound-editor-container .footer {
+#sound-editor-container .footer {
   display: flex;
 }
-#sound-manager-display #sound-editor-container .nav {
+#sound-editor-container .nav {
   padding: 3px;
 }
-#sound-manager-display #sound-editor-container .content {
+#sound-editor-container .content {
   padding: 3px;
   overflow: auto;
   height: 100%;
   margin-left: 15px;
   max-height: 500px;
 }
-#sound-manager-display #sound-editor-container .scrollable {
+#sound-editor-container .scrollable {
   padding: 3px;
 }
-#sound-manager-display #sound-editor-container ul {
+#sound-editor-container ul {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -98,13 +98,13 @@
   flex-direction: column;
   cursor: pointer;
 }
-#sound-manager-display #sound-editor-container ul.categories {
+#sound-editor-container ul.categories {
   width: 200px;
 }
-#sound-manager-display #sound-editor-container li {
+#sound-editor-container li {
   margin: 1px;
 }
-#sound-manager-display #sound-editor-container .nav-button {
+#sound-editor-container .nav-button {
   display: block;
   padding: 3px 2px;
   background-color: #eee;
@@ -112,55 +112,24 @@
   border-radius: 3px;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
-#sound-manager-display #sound-editor-container li.selected {
+#sound-editor-container li.selected {
+  background-color: #eef !important;
+  font-weight: bold;
+}
+#sound-editor-container li:hover {
   background-color: #eef;
 }
-#sound-manager-display #sound-editor-container li:hover {
-  background-color: #eef;
-}
-#sound-manager-display #sound-editor-container .sound-meta > table {
+#sound-editor-container .sound-meta > table {
   border: 1px solid #eef;
 }
-#sound-manager-display #sound-editor-container .sound-meta > table td {
+#sound-editor-container .sound-meta > table td {
   width: 200px;
   overflow: hidden;
   white-space: nowrap;
   border: 1px solid #eef;
   max-width: 200px;
 }
-#sound-manager-display #sound-editor-container .sound-meta > table td.t_label {
+#sound-editor-container .sound-meta > table td.t_label {
   width: 100px;
   background-color: #eef;
-}
-#sound-manager-display .module-container a {
-  cursor: pointer;
-}
-#sound-manager-display .module-container ul {
-  list-style-type: none;
-  /* Removes the default bullet points */
-  padding: 0;
-  /* Removes the default padding */
-  margin: 0;
-  /* Removes the default margin */
-}
-#sound-manager-display .module-container ul li {
-  background-color: #f0f0f0;
-  /* Light grey background */
-  padding: 1px;
-  margin-bottom: 5px;
-  /* Adds space between items */
-}
-#sound-manager-display .module-container .sample-container {
-  max-height: 400px;
-  overflow-y: auto;
-}
-#sound-manager-display .module-container .dropzone-container {
-  height: 100px;
-  background: #eef;
-  text-align: center;
-  padding-top: 25px;
-}
-#sound-manager-display .module-container .metadata {
-  max-height: 200px;
-  overflow-y: auto;
 }

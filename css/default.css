@@ -9,6 +9,10 @@ input[type="checkbox"] {
   width: 20px;
   vertical-align: text-top;
 }
+input{
+  border:1px solid;
+  padding: 3px;
+}
 .modal-header button {
   width: auto;
 }

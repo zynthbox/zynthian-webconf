@@ -2,7 +2,6 @@ import { generateTreeFromArray } from "../helpers/tree-data-helpers";
 import { arrayUnique, generateNewFolderChain } from '../helpers/file-manager-helpers';
 // import { ROOTDIR } from "../helpers/settings.js";
 
-
 export const FileManagerInitialState = {
     loading:true,
     rootDirectory:null, // get from provider parameter
@@ -72,8 +71,7 @@ function ProductViewReducer(state,action){
                     folderChain = [...state.folderChain,data];
                 }
 
-            } else {
-                state.rootDirectory
+            } else {                
                selectedFolder = dataName === ROOTDIR ? null : state.selectedFolder.split(dataName)[0] + dataName;            
               const folderIndexInChain = state.folderChain.findIndex(item => item.id === data.id);
               folderChain = [...state.folderChain.slice(0,folderIndexInChain + 1)]
@@ -106,7 +104,8 @@ function ProductViewReducer(state,action){
                 browseHistoryIndex
             }
         }
-        case 'SET_FILES':{            
+        case 'SET_FILES':{        
+            console.log('>>>>>>>>>>>>>>>SET_FILES')    
             let files = arrayUnique(action.payload.concat(state.files))            
             let displayedFiles = [];
             const ROOTDIR = state.rootDirectory;
@@ -133,7 +132,7 @@ function ProductViewReducer(state,action){
             
             let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder,ROOTDIR,state.rootName)
             // let treeData = generateTreeFromArray(files,state.folderChain,state.selectedFolder)
-            
+            console.log('>>>>>>>>>>>>>treeData from Reducer component:',treeData)
             return {
                 ...state,
                 files,
@@ -172,7 +171,7 @@ function ProductViewReducer(state,action){
             });
 
             let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder,ROOTDIR,state.rootName)
-
+            
             return {
                 ...state,
                 files,

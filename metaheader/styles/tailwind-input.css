@@ -1,3 +1,8 @@
 @import "tailwindcss" prefix(tw);
  
 @plugin 'tailwindcss-animate';
+
+.shadcnButton{
+    @apply  tw:py-2 tw:px-5 tw:cursor-pointer tw:text-[16px]  tw:hover:text-amber-300 ;
+}
+

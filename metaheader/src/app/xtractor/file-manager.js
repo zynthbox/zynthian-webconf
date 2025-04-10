@@ -1,16 +1,13 @@
 import React, { useState, useEffect, Suspense, lazy, useContext } from 'react'
-import { setChonkyDefaults } from 'chonky';
-import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 import LoadingSpinner from '../loading-spinner'
-import { usePrevious } from '../helpers'
 import { Context } from './context/context-provider';
 import ErrorModal from '../components/error-modal';
 import TreeView from './tree-view';
 
 
-setChonkyDefaults({ iconComponent: ChonkyIconFA, disableDragAndDrop:true });
+// setChonkyDefaults({ iconComponent: ChonkyIconFA, disableDragAndDrop:true });
 
-const WebconfFileBrowser = lazy(()=>import('./file-browser'))
+// const WebconfFileBrowser = lazy(()=>import('./file-browser'))
 // const TreeView = lazy(()=>import('./tree-view'))
 
 const FileManager = ({rootDirectory,mode}) => {
@@ -55,7 +52,7 @@ const FileManager = ({rootDirectory,mode}) => {
                           mode={mode} 
                           treeData={fileManagerState.treeData}
                           />
-                {mode!=='sketchpad-manager' && mode!=='sound-manager' &&
+                {/* {mode!=='sketchpad-manager' && mode!=='sound-manager' &&
                 <Suspense fallback={<LoadingSpinner/>}>                     
                     <WebconfFileBrowser
                         fsep={fsep}
@@ -67,7 +64,7 @@ const FileManager = ({rootDirectory,mode}) => {
                     />
                     
                 </Suspense>
-                }
+                } */}
             </React.Fragment>
         )
     }

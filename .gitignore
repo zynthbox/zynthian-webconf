@@ -5,6 +5,7 @@ zynthian_envars.sh
 /.idea/
 node_modules/
 bundle/
+src/app/file-manager-old
 react-dev-test.html
 
 # Ignore some editor files

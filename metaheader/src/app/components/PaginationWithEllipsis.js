@@ -52,14 +52,14 @@ export default function PaginationWithEllipsis({ totalPages, onPageChange }) {
           <button
             key={index}
             onClick={() => handlePageChange(page)}
-            className={`tw:px-3 tw:py-1 tw:rounded-lg tw:border tw:shadow-sm ${
+            className={`tw:text-5xl tw:px-3 tw:py-1 tw:rounded-lg tw:border tw:shadow-sm ${
               page === currentPage
-                ? "tw:bg-[#eef] tw:text-white"
+                ? "tw:bg-[#eef] tw:text-white "
                 : "tw:bg-white tw:hover:bg-gray-100"
             }`}
           >
-            {page}
-          </button>
+            {page} 
+          </button> 
         ) : (
           <span key={index} className="tw:px-2 tw:py-1 tw:text-gray-500">
             {page}

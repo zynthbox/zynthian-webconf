@@ -11,16 +11,17 @@ const FIFO_WRITES_TO = '/tmp/webconf-writes-to-this-fifo'
 
 const { execSync } = require("child_process");
 // Ensure FIFO file exists
-// try {
-//   execSync(`mkfifo ${FIFO_READ_FROM}`);
-//   execSync(`mkfifo ${FIFO_WRITES_TO}`);
-//   console.log(`FIFO file created at ${FIFO_READ_FROM}`);
-// } catch (err) {
-//   if (!err.message.includes("File exists")) {
-//       console.error("Error creating FIFO:", err);
-//       process.exit(1);
-//   }
-// }
+try {
+    execSync(`mkfifo ${FIFO_READ_FROM}`);
+    execSync(`mkfifo ${FIFO_WRITES_TO}`);
+    console.log(`FIFO file created at ${FIFO_READ_FROM}`);
+    console.log(`FIFO file created at ${FIFO_WRITES_TO}`);
+} catch (err) {
+  if (!err.message.includes("File exists")) {
+      console.error("Error creating FIFO:", err);
+      process.exit(1);
+  }
+}
 
 
 // const rootFolder = "./"

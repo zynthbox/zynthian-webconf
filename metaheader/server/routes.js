@@ -6,6 +6,7 @@ var songExportController = require('./controllers/songExportController.js');
 var trackerController = require('./controllers/trackerController.js');
 var fileTreeController = require('./controllers/fileTreeController.js');
 var soundEditorController = require('./controllers/soundEditorController.js');
+const fileTypeCheck = require('./middleware/fileTypeCheck.js');
 
 
 module.exports = function (app) {
@@ -26,7 +27,8 @@ module.exports = function (app) {
     app.post('/createfolder',FilesController.createFolder)
     app.post('/delete',FilesController.deleteFiles)
     app.post('/copypaste',FilesController.copyPaste)
-    app.post('/upload/:folder',FilesController.uploadFiles)
+    app.post('/upload/:folder', FilesController.uploadFiles)
+    // app.post('/upload/:folder',FilesController.uploadFiles)
     app.post('/download',FilesController.downloadFiles)
     app.post('/writeToFIFO',FilesController.writeToFIFO)
 
