@@ -216,6 +216,32 @@ function copyFolderRecursiveSync( source, target ) {
   }
 }
 
+// function safeCopyFile(previousPath, fullDestinationPath) {
+//   const dir = path.dirname(fullDestinationPath);
+//   const ext = path.extname(fullDestinationPath);
+//   const baseName = path.basename(fullDestinationPath, ext);
+
+//   let finalPath = fullDestinationPath;
+
+//   if (fs.existsSync(fullDestinationPath)) {
+//     finalPath = dir+'/'+ getAvailableFileName(dir, baseName, ext);   
+//   }
+
+//   fs.copyFileSync(previousPath, finalPath);
+//   return finalPath; 
+// }
+
+function getAvailableFilePath(fullDestinationPath){
+  const dir = path.dirname(fullDestinationPath);
+  const ext = path.extname(fullDestinationPath);
+  const baseName = path.basename(fullDestinationPath, ext);
+  let finalPath = fullDestinationPath;
+  if (fs.existsSync(fullDestinationPath)) {
+    finalPath = dir+'/'+ getAvailableFileName(dir, baseName, ext);   
+  }
+  return finalPath; 
+}
+
 exports.copyPaste = (req,res) => {
 
   const { previousPath, destinationPath,deleteOrigin, newName } = req.body;
@@ -227,12 +253,13 @@ exports.copyPaste = (req,res) => {
 
     // console.log(fs.existsSync(parentFolder + destinationPath), "DESTINATION PATH IS EXISTS ")
     const fullDestinationPath = parentFolder + destinationPath;
-    
-
+ 
     if (fs.statSync(previousPath).isDirectory()) {
+      console.log('>>>>>>>>>>>>>getAvailableFilePath',getAvailableFilePath(fullDestinationPath))
       copyFolderRecursiveSync(previousPath, fullDestinationPath)
-    } else {
-      fs.copyFileSync(previousPath, fullDestinationPath)
+    } else {      
+      const dpath = getAvailableFilePath(fullDestinationPath);    
+      fs.copyFileSync(previousPath, dpath)      
     }
 
     if (deleteOrigin === true){
@@ -266,6 +293,7 @@ exports.copyPaste = (req,res) => {
 /* /COPY FILES / FOLDERS */
 
 /* UPLOAD FILES */
+
 
 const getAvailableFileName = (dir, base, ext, count = 0) => {
   const name = count === 0 ? `${base}${ext}` : `${base}(${count})${ext}`;
