@@ -6,8 +6,6 @@ var songExportController = require('./controllers/songExportController.js');
 var trackerController = require('./controllers/trackerController.js');
 var fileTreeController = require('./controllers/fileTreeController.js');
 var soundEditorController = require('./controllers/soundEditorController.js');
-const fileTypeCheck = require('./middleware/fileTypeCheck.js');
-
 
 module.exports = function (app) {
     

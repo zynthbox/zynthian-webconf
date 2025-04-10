@@ -180,6 +180,7 @@ exports.deleteFiles = (req,res) => {
 
 function copyFileSync( source, target ) {
 
+  console.log('>>>>>>>>>>>>>>>>copyFileSync target:',target)
   var targetFile = target;
 
   // If target is a directory, a new file with the same name will be created
