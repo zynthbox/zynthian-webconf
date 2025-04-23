@@ -395,13 +395,18 @@ exports.uploadFiles = (req, res) => {
               fs.unlinkSync(file.path);
               return res.status(200).json({message:"Upload successfull!"})
             });
+          }else{
+            return res.status(200).json({message:"Upload successfull!"})
           }
     }else if(file.path.startsWith(SOUNDS_DIR)){
       // do write to FIFO to process sound symlink      
       fnProcessSound(file.path)
+      return res.status(200).json({message:"Upload successfull!"})
+    }else{
+      return res.status(200).json({message:"Upload successfull!"})
     }
     
-    return res.status(200).json({message:"Upload successfull!"})
+    
 
   })
 }
