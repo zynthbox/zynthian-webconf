@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { getSketchpad, getSketchpadInfo, saveSketchpad, updateSketchpadInfo } from '../../../store/sampleEditor/sampleEditorSlice';
@@ -11,21 +11,41 @@ function TruncatedText(text, maxLength = 20) {
     return <span title={text}>{truncated}</span>;
   }
 
-function isTimeToReload(str) {
+// function getSketchpadCommand(str) {
+//     const regex = /\{.*?\}/s; // Match a JSON-like object inside `{}` (single JSON object)
+//     const match = str.match(regex); // Find JSON pattern
+//     if (match) {
+//         try {
+//             const jsonObject = JSON.parse(match[0]); // Convert JSON string to object
+//             // { "messageType": "success", "category": "sketchpad", "command": "save" }            
+//                 if(jsonObject.category == 'sketchpad' && 
+//                         jsonObject.command == 'save'                        
+//                     ){
+//                         return jsonObject;
+//                     }else{
+//                         return false;
+//                     }                            
+//         } catch (error) {
+//             return false;
+//         }
+//     }
+//     return false;
+// }
+
+function getCommandCallback(str,command) {
     const regex = /\{.*?\}/s; // Match a JSON-like object inside `{}` (single JSON object)
     const match = str.match(regex); // Find JSON pattern
-    if (match) {
+    if (match && command) {
         try {
             const jsonObject = JSON.parse(match[0]); // Convert JSON string to object
-            // { "messageType": "success", "category": "sketchpad", "command": "save" }
-            if(jsonObject.category == 'sketchpad' && 
-                jsonObject.command == 'save' &&
-                jsonObject.messageType =='success'
-            ){
-                return true;
-            }else{
-                return false;
-            }            
+            // { "messageType": "success", "category": "sketchpad", "command": "save" }            
+                if(jsonObject.category == command.category && 
+                        jsonObject.command == command.command                        
+                    ){
+                        return jsonObject;
+                    }else{
+                        return false;
+                    }                            
         } catch (error) {
             return false;
         }
@@ -42,28 +62,52 @@ function Sktechpad() {
     const [activeTrack, setActiveTrack] = useState(1);
     const [loading, setLoading] = useState(false);
     const [reload, setReload] = useState(false);
+    const [currentCommand,setCurrentCommand] = useState(null);
+    const currentCommandRef = useRef(currentCommand);
     const [message,setMessage] = useState('');
     const tracker = [1,2,3,4,5,6,7,8,9,10];
+
+    useEffect(() => {
+        currentCommandRef.current = currentCommand;
+    }, [currentCommand]);
 
     // socket pull msg later with click...
     useEffect(() => {                
         // Listen for messages from the server
-        if(loading){
-            socket.on("fifoChanged", (msg) => {                   
-                setMessage(msg);                
-                // get this msg start reload { "messageType": "success", "category": "sketchpad", "command": "save" }
-                const reload = isTimeToReload(msg);
-                if(reload){                    
-                    setLoading(false);                
-                    setMessage('done.');
-                    dispatch(getSketchpadInfo());
+
+            // socket wait for two msg. first command execution. secondly sketchpad save success then stop loading do reload page
+            socket.on("fifoChanged", (msg) => {                        
+                // setMessage(msg);   
+                setMessage(prev => prev + '\n' + msg);      
+                const current = currentCommandRef.current; // <== get the latest value                     
+                if(current.messageType == undefined){ // first test if command succeed
+                    let callback = getCommandCallback(msg,current)
+                    if(callback && callback.messageType !== undefined){
+                        setCurrentCommand(callback);                       
+                    }    
+                }else{                  
+                    if(current.messageType!='success'){
+                        // stop loading command failed
+                        setLoading(false)
+                        // setMessage('Failed. please try again later');
+                        setMessage(prev => prev + '\n' + 'Failed. please try again later');  
+                    }else{
+                        // secondly check if sketchpad saved succeed
+                        let callback = getCommandCallback(msg,{"category": "sketchpad", "command": "save" })                        
+                        if(callback && callback.messageType == 'success'){                            
+                            setLoading(false)
+                            setMessage(prev => prev + '\n done');     
+                            dispatch(getSketchpadInfo());
+                        }
+                    } 
                 }
-            });
-        }          
+            });                            
+           
         return ()=>{
             socket.off("fifoChanged")
         }
-      },[loading])
+      },[])
+
 
     useEffect(() => {
         dispatch(getSketchpadInfo())
@@ -94,10 +138,16 @@ function Sktechpad() {
             // const fileName = filePath.split('/')[filePath.split('/').length - 1].split('.sketchpad.json')[0]                        
             // dispatch(updateSketchpadInfo({filePath:filePath,fileName:fileName}))            
             command = { "category": "sketchpad", "command": "load", "params": [item.id] }     
+            setCurrentCommand(command);
         }
         if(item.type=='SOUND'){                       
             command = { "category": "track", "command": "loadSound", "trackIndex": extraInfo, "params": [item.id] }                                
-        }        
+            setCurrentCommand(command);
+        } 
+        if(item.type=='SAMPLE'){                                   
+            command = { "category": "track", "command": "loadIntoSlot", "trackIndex": (extraInfo.track-1),"slotType":'sample',"slotIndex":extraInfo.slot, "params": [item.id] }                                            
+            setCurrentCommand(command);
+        }         
          // here write to fifo        
         const response = await fetch(`http://${window.location.hostname}:3000/writeToFIFO`, {
                 method: 'POST',
@@ -132,7 +182,8 @@ function Sktechpad() {
                     <button className="tw:px-4 tw:py-2 tw:rounded-lg tw:inline-block" onClick={() => setReload(!reload)}>
                         <FaSync className={loading?'tw:animate-spin tw:text-[#0078d7]':''}/>
                     </button>
-                    <span className='tw:text-[#0078d7] tw:lowercase'>{message}</span>
+                    <span className='tw:text-[#0078d7]'>{message}</span>
+                    <span className='tw:text-red-300 tw:flex'>{JSON.stringify(currentCommand)}</span>
                     {sketchpadInfo && 
                        
                          <DropTargetField onDrop={handleDrop} accept='SKETCHPAD' width={600} height={50}>
@@ -181,7 +232,7 @@ function Sktechpad() {
                                             const extraInfo = {track:activeTrack, type:'sample',slot:index}                                            
                                             return (                                           
                                                 <div key={index} className="tw:col-span-2 tw:border-b-[1px] tw:border-gray-300">                                                   
-                                                    <DropTargetField onDrop={handleDrop} accept='FILE' extraInfo={extraInfo}>
+                                                    <DropTargetField onDrop={handleDrop} accept='SAMPLE' extraInfo={extraInfo} width={150}>
                                                     {s && TruncatedText(s,10)}
                                                     </DropTargetField>
                                                 </div>

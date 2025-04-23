@@ -39,8 +39,8 @@ async function getCategoryFromMetadata(filePath) {
 async function scanSymlinks(dir, results = []) {
   try {
       const entries = await fs.promises.readdir(dir, { withFileTypes: true });            
-      for (const entry of entries) {          
-          const fullPath = path.join(dir, entry.name);          
+      for (const entry of entries) {             
+          const fullPath = path.join(dir, entry.name);                 
           if (entry.isSymbolicLink()) {
               try {
                   // const realPath = await fs.promises.realpath(fullPath);

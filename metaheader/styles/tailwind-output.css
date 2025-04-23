@@ -2,6 +2,7 @@
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
+    --tw-color-red-300: oklch(0.808 0.114 19.571);
     --tw-color-amber-300: oklch(0.879 0.169 91.605);
     --tw-color-blue-500: oklch(0.623 0.214 259.815);
     --tw-color-gray-100: oklch(0.967 0.003 264.542);
@@ -422,11 +423,11 @@
   .tw\:text-gray-500 {
     color: var(--tw-color-gray-500);
   }
+  .tw\:text-red-300 {
+    color: var(--tw-color-red-300);
+  }
   .tw\:text-white {
     color: var(--tw-color-white);
-  }
-  .tw\:lowercase {
-    text-transform: lowercase;
   }
   .tw\:uppercase {
     text-transform: uppercase;

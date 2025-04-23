@@ -7,7 +7,7 @@ import Toolbar from '../app/components/Toolbar'
 
 export default function RootLayout() {
   const location = useLocation();
-  const showToolbarRoutes = ["/sound-manager", "/sketchpad-manager", "/file-manager", "/sample-manager",'/librarian','/xtractor']; 
+  const showToolbarRoutes = ["/sound-manager", "/sketchpad-manager",  "/sample-manager",'/xtractor']; 
   return (
     <Provider store={store}>
         <a href="#m" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tools <span className="caret"></span></a>

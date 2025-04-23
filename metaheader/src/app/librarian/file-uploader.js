@@ -9,7 +9,7 @@ import { FaWindowClose } from 'react-icons/fa';
 import { humanFileSize } from '../helpers';
 import { DIRECTORIES } from '../components/globalState';
 
-
+const ROOTDIR_SOUNDFONTS = '/zynthian/zynthian-my-data/soundfonts/';
 
 const isAllowedToUpload =(files, rootDirectory)=>{  
     const dir = DIRECTORIES.filter(d=>d.rootDirectory==rootDirectory).pop();    
@@ -40,7 +40,7 @@ function FileUploader(props) {
     for (var i in acceptedFiles){
       if (uploadProgressData !== null) newUploadProgressData[i] = uploadProgressData[i];
       else newUploadProgressData[i] = 0;
-    }    
+    }        
     const typeCheck = isAllowedToUpload(acceptedFiles,rootDirectory)    
     if(typeCheck)
     {

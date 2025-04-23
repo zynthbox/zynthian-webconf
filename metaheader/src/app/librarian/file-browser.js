@@ -103,43 +103,44 @@ function WebconfFileBrowser(props){
 
   const fileListContainerRef = useRef();
   const [itemRects, setItemRects] = useState([]);
-  const [droppedFiles, setDroppedFiles] = useState([]);
+  // const [droppedFiles, setDroppedFiles] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      const container = fileListContainerRef.current;
-      if (!container) return;
+  // drag and drop overlay
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     const container = fileListContainerRef.current;
+  //     if (!container) return;
   
-      const containerRect = container.getBoundingClientRect();
-      const nodes = container.querySelectorAll('[data-chonky-file-id]'); // Query for the file rows
+  //     const containerRect = container.getBoundingClientRect();
+  //     const nodes = container.querySelectorAll('[data-chonky-file-id]'); // Query for the file rows
   
-      if (!nodes || nodes.length === 0) return;
+  //     if (!nodes || nodes.length === 0) return;
   
-      const newRects = Array.from(nodes).map((node) => {
-        const iconNode = node.querySelector('[data-icon]'); // Target the icon element within the file row
-        if (!iconNode) return null;
+  //     const newRects = Array.from(nodes).map((node) => {
+  //       const iconNode = node.querySelector('[data-icon]'); // Target the icon element within the file row
+  //       if (!iconNode) return null;
   
-        const fileRect = iconNode.getBoundingClientRect(); // Get bounding box of the icon
-        const id = node.getAttribute('data-chonky-file-id');
-        return {
-          id,
-          rect: {
-            top: fileRect.top - containerRect.top,
-            left: fileRect.left - containerRect.left,
-            width: fileRect.width,
-            height: fileRect.height, // Use the icon's height
-          },
-        };
-      }).filter(Boolean); // Remove null entries if any file rows have no icon
+  //       const fileRect = iconNode.getBoundingClientRect(); // Get bounding box of the icon
+  //       const id = node.getAttribute('data-chonky-file-id');
+  //       return {
+  //         id,
+  //         rect: {
+  //           top: fileRect.top - containerRect.top,
+  //           left: fileRect.left - containerRect.left,
+  //           width: fileRect.width,
+  //           height: fileRect.height, // Use the icon's height
+  //         },
+  //       };
+  //     }).filter(Boolean); // Remove null entries if any file rows have no icon
         
-      setItemRects(newRects);
-    }, 100); // Give time for DOM to render
+  //     setItemRects(newRects);
+  //   }, 100); // Give time for DOM to render
   
-    return () => clearTimeout(timeout);
-  }, [displayedFiles,currentPage]); 
+  //   return () => clearTimeout(timeout);
+  // }, [displayedFiles,currentPage]); 
 
 
   const handleDrop = (file) => {
@@ -578,7 +579,7 @@ function WebconfFileBrowser(props){
   return (
       <div 
         ref={fileListContainerRef} 
-        style={{ height: window.innerHeight - 180, position:"relative",background:"#efefef"}} 
+        style={{ height: window.innerHeight - 170, position:"relative",background:"#efefef"}} 
         onDragOver={onFileUploaderDragOver} 
         onDragLeave={() => onFileUploaderDragLeave()}
         >
@@ -621,12 +622,12 @@ function WebconfFileBrowser(props){
           </FileBrowser>
 
           {/* Drag overlays */}
-              {itemRects.map(({ id, rect }) => {                
+              {/* {itemRects.map(({ id, rect }) => {                
               const file = paginatedData.find(f => f.id === id);              
               return file ? (
                 <DraggableOverlay key={id} file={file} rect={rect}/>
               ) : null;
-            })}
+            })} */}
           {/* </div> */}
 
 

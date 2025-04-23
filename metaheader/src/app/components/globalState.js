@@ -1,9 +1,9 @@
 export const isDraggingOverlayRef = { current: false };
 export const DIRECTORIES = [
     {'rootName':'Sketchpads','rootDirectory':'/zynthian/zynthian-my-data/sketchpads/'},
-    {'rootName':'Sounds','rootDirectory':'/zynthian/zynthian-my-data/sounds/','allowedUploadTypes':'.snd'},
+    {'rootName':'Sounds','rootDirectory':'/zynthian/zynthian-my-data/sounds/','allowedUploadTypes':['.snd']},
     {'rootName':'Samples','rootDirectory':'/zynthian/zynthian-my-data/samples/'},
-    {'rootName':'Soundfonts','rootDirectory':'/zynthian/zynthian-my-data/soundfonts/'},
+    {'rootName':'Soundfonts','rootDirectory':'/zynthian/zynthian-my-data/soundfonts/','allowedUploadTypes':['.sf3','.sf2']},
     {'rootName':'Sketches','rootDirectory':'/zynthian/zynthian-my-data/sketches/'},                 
 ]
 export const colorsArray = [

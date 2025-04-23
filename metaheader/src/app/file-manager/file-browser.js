@@ -566,7 +566,7 @@ function WebconfFileBrowser(props){
   return (
       <div 
         ref={fileListContainerRef} 
-        style={{ height: window.innerHeight - 180, position:"relative",background:"#efefef"}} 
+        style={{ height: window.innerHeight - 170, position:"relative",background:"#efefef"}} 
         onDragOver={onFileUploaderDragOver} 
         onDragLeave={() => onFileUploaderDragLeave()}
         >

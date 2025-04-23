@@ -4,6 +4,7 @@ const path = require("path")
 // var zipFolder = require('zip-folder');
 var rimraf = require("rimraf");
 var multer = require('multer');
+const { exec } = require('child_process');
 
 // const rootFolder = "./"
 // const rootFolder = "/home/pi/zynthian-my-data/"
@@ -12,6 +13,8 @@ var multer = require('multer');
 const rootFolder = "/zynthian/zynthian-my-data/"
 const parentFolder = "/zynthian"
 
+const SOUNDS_DIR = '/zynthian/zynthian-my-data/sounds/';
+const SOUNDFONTS_DIR = '/zynthian/zynthian-my-data/soundfonts/';
 
 const excludedFolders = [
   "sf2",
@@ -160,6 +163,11 @@ const deleteFiles = (req,res) => {
       rimraf.sync(fullPath);
     } else {
       fs.unlinkSync(fullPath)
+
+      // TODO : process sounds
+      // if(fullPath.startsWith(SOUNDS_DIR)){
+      //   fnProcessSound(fullPath);
+      // }
     }
     // const dirList = getAllFiles(rootFolder,[])
     res.status(200).json({message:"Delete successfull!"})
@@ -253,13 +261,17 @@ exports.copyPaste = (req,res) => {
 
     // console.log(fs.existsSync(parentFolder + destinationPath), "DESTINATION PATH IS EXISTS ")
     const fullDestinationPath = parentFolder + destinationPath;
- 
-    if (fs.statSync(previousPath).isDirectory()) {
-      console.log('>>>>>>>>>>>>>getAvailableFilePath',getAvailableFilePath(fullDestinationPath))
+    if (fs.statSync(previousPath).isDirectory()) {      
       copyFolderRecursiveSync(previousPath, fullDestinationPath)
     } else {      
       const dpath = getAvailableFilePath(fullDestinationPath);    
-      fs.copyFileSync(previousPath, dpath)      
+      fs.copyFileSync(previousPath, dpath)   
+      
+      // if sound directory do process sound 
+      if(dpath.startsWith(SOUNDS_DIR)){
+        fnProcessSound(dpath)
+      };
+      
     }
 
     if (deleteOrigin === true){
@@ -309,8 +321,7 @@ var storage = multer.diskStorage({
       const selectedFolder = req.params.folder.split('+++').join('/');    
       cb(null, selectedFolder)
   },
-  filename: function (req, file, cb) {   
-    // cb(null, file.originalname); 
+  filename: function (req, file, cb) {       
     const ext = path.extname(file.originalname);
     const base = path.basename(file.originalname, ext);
     const dir = req.params.folder.split('+++').join('/');   
@@ -359,7 +370,7 @@ var upload = multer({ storage: storage, fileFilter, limits: { fieldSize: 25 * 10
 
 exports.uploadFiles = (req, res) => {   
   upload(req, res, function (err) {    
-    // console.log('>>>>>>>>>>>req.files:',req.files)
+
     if (err instanceof multer.MulterError) {
       console.log(err);
         return res.status(500).json(err)
@@ -367,7 +378,32 @@ exports.uploadFiles = (req, res) => {
       console.log(err);
         return res.status(500).json(err)
     }
+
+    const file = req.files?.file?.[0];
+    if(file.path.startsWith(SOUNDFONTS_DIR)){
+          // do convert .sf2 to .sf3
+          const ext = path.extname(file.originalname).toLowerCase();    
+          if (ext === '.sf2') {      
+            const sf3Path = path.join(
+              path.dirname(file.path),
+              path.basename(file.path, path.extname(file.path)) + '.sf3'
+            );        
+            exec(`sf3convert -z "${file.path}"  "${sf3Path}"`, (err, stdout, stderr) => {
+              if (err) {
+                console.error('Conversion error:', stderr);
+                return res.status(500).send('Failed to convert file');
+              }        
+              fs.unlinkSync(file.path);
+              return res.status(200).json({message:"Upload successfull!"})
+            });
+          }
+    }else if(file.path.startsWith(SOUNDS_DIR)){
+      // do write to FIFO to process sound symlink      
+      fnProcessSound(file.path)
+    }
+    
     return res.status(200).json({message:"Upload successfull!"})
+
   })
 }
 
@@ -462,29 +498,52 @@ exports.downloadFiles = (req,res) => {
 
 }
 
+
+
 /* /DOWNLOAD FILES */
+function fnProcessSound(filePath){
+  const msg= { "category": "sounds", "command": "process", "params": [filePath] }    
+  fnWriteMsgToFIFO(JSON.stringify(msg));
+}
 
+function fnWriteMsgToFIFO(msg){
+  const FIFO_WRITES_TO = '/tmp/webconf-writes-to-this-fifo'
+  const writeStream = fs.createWriteStream(FIFO_WRITES_TO);
+  const message = msg+'\n';
+  writeStream.write(message, (err) => {
+      if (err) {
+          console.error('Error writing to FIFO:', err);
+      } else {
+          console.log('Message written to FIFO',message);
+      }
+      writeStream.end();
+  });
 
+  writeStream.on('finish', () => {
+      console.log('Write stream closed');
+  });
+}
 
 exports.writeToFIFO = (req,res) => {
   const { msg } = req.body;
   try {
-    const FIFO_WRITES_TO = '/tmp/webconf-writes-to-this-fifo'
+    fnWriteMsgToFIFO(msg);
 
-    const writeStream = fs.createWriteStream(FIFO_WRITES_TO);
-    const message = msg+'\n';
-    writeStream.write(message, (err) => {
-        if (err) {
-            console.error('Error writing to FIFO:', err);
-        } else {
-            console.log('Message written to FIFO');
-        }
-        writeStream.end();
-    });
+    // const FIFO_WRITES_TO = '/tmp/webconf-writes-to-this-fifo'
+    // const writeStream = fs.createWriteStream(FIFO_WRITES_TO);
+    // const message = msg+'\n';
+    // writeStream.write(message, (err) => {
+    //     if (err) {
+    //         console.error('Error writing to FIFO:', err);
+    //     } else {
+    //         console.log('Message written to FIFO');
+    //     }
+    //     writeStream.end();
+    // });
 
-    writeStream.on('finish', () => {
-        console.log('Write stream closed');
-    });
+    // writeStream.on('finish', () => {
+    //     console.log('Write stream closed');
+    // });
 
     return res.status(200).json({message:msg+" writeToFIFO successfull!"})
   } catch(err) {
