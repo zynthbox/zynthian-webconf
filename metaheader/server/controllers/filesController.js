@@ -163,11 +163,10 @@ const deleteFiles = (req,res) => {
       rimraf.sync(fullPath);
     } else {
       fs.unlinkSync(fullPath)
-
-      // TODO : process sounds
-      // if(fullPath.startsWith(SOUNDS_DIR)){
-      //   fnProcessSound(fullPath);
-      // }
+      //process sounds
+      if(fullPath.startsWith(SOUNDS_DIR)){
+        fnProcessSound(fullPath);
+      }
     }
     // const dirList = getAllFiles(rootFolder,[])
     res.status(200).json({message:"Delete successfull!"})
