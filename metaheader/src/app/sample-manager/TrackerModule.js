@@ -2,6 +2,8 @@ import React, {useCallback,useEffect,useState,useRef} from 'react'
 import {useDropzone} from 'react-dropzone'
 import axios from 'axios';
 import { BsFileMusic } from "react-icons/bs";
+import { FaPlay } from "react-icons/fa";
+import { FaPause } from "react-icons/fa";
 import {ChiptuneJsPlayer} from './chiptune/chiptune3.js';
 function formatBytes(a,b=2){if(!+a)return"0 Bytes";const c=0>b?0:b,d=Math.floor(Math.log(a)/Math.log(1024));return`${parseFloat((a/Math.pow(1024,d)).toFixed(c))} ${["Bytes","KiB","MiB","GiB","TiB","PiB","EiB","ZiB","YiB"][d]}`}
 function formatDuration(seconds) {
@@ -82,6 +84,12 @@ const TrackerModule =()=>{
         })
     }
 
+    const handleStopSample =(s)=>{          
+      const url = `http://${window.location.hostname}:3000/stop-sample`
+      axios.get(url).then(res => { 
+      })
+  }
+
   const handleExtractSamples =()=>{
       const url = `http://${window.location.hostname}:3000/tracker-info/${files[0].name}`
       const formData = new FormData();        
@@ -103,7 +111,8 @@ const TrackerModule =()=>{
          <a>
          <BsFileMusic className='tw:inline'/> {s} 
          </a>
-         <a onClick={()=>{handlePlaySample(s)}}>Play on Zynthbox</a>
+         <a onClick={()=>{handlePlaySample(s)}}><FaPlay className='tw:inline-block'/></a>
+         <a onClick={()=>{handleStopSample(s)}}><FaPause className='tw:inline-block'/></a>
          </li>)}
     </ul>
   }
@@ -119,10 +128,10 @@ const TrackerModule =()=>{
             <div>
               {files &&
               <>
-              <button onClick={togglePause}>
+              <button onClick={togglePause} className='shadcnButton'>
                 {isPlaying ? 'Pause' : 'Play'}
               </button>
-              <button onClick={handleExtractSamples}> Extract Samples </button>
+              <button onClick={handleExtractSamples} className='shadcnButton'> Extract Samples </button>
               </>
               }
       </div>
@@ -143,7 +152,7 @@ const TrackerModule =()=>{
             </div>
             }
 
-      <ul className='file-info'>{fileInfo}</ul>
+      <div className='file-info tw:p-3 tw:m-3' style={{'font-family': 'monospace','white-space': 'pre'}}>{fileInfo}</div>
       <div className='sample-container'>                     
            {samplesDisplay}
       </div>

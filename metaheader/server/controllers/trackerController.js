@@ -6,7 +6,7 @@ const { readdirSync, rmSync } = require('fs');
 const path = require("path")
 var multer = require('multer');
 const libopenmptModule = require('./libs/libopenmpt.js');
-
+var filesController = require('./filesController.js');
 
 // async function loadLibOpenMPT() {
 //   const libopenmptModule = await import(path.resolve(__dirname, "./libs/libopenmpt.js"));
@@ -34,7 +34,7 @@ exports.getTrackerInfoTest = (req,res) => {
 }
 
 
-const destFolder = '/home/pi/zynthian-my-data/tmp/webconf/tracker/uploads/';
+const destFolder = '/zynthian/zynthian-my-data/tmp/webconf/tracker/uploads/';
 var storage = multer.diskStorage({
       destination: function (req, file, cb) {            
             if (!fs.existsSync(destFolder)) {
@@ -127,7 +127,25 @@ const uploadMemory = multer({storage: multer.memoryStorage()})
           })              
   }
 
-  exports.playSample = (req,res)=>{
+ // write to fifo
+  exports.playSample = (req,res)=>{    
+      folder = req.params.folder;     
+      if (folder.indexOf('+++') > -1) folder = folder.split('+++').join('/');
+      const url = destFolder+folder;
+      const msg= {"category":"cuia","command":"PLAY_WAVE_FILE","params":[url]}
+      filesController.fnWriteMsgToFIFO(JSON.stringify(msg));      
+      console.log('play samples.....',msg);
+      return res.status(200).json(msg)            
+  }
+  exports.stopSample = (req,res)=>{    
+    const msg= {"category":"cuia","command":"STOP_WAVE_FILE"}
+    filesController.fnWriteMsgToFIFO(JSON.stringify(msg));      
+    console.log('stop sample.....',msg);
+    return res.status(200).json(msg)            
+  }
+
+  // deprecated
+  exports.playSample_ = (req,res)=>{
     if (req.params.folder){
       folder = req.params.folder;     
       if (folder.indexOf('+++') > -1) folder = folder.split('+++').join('/');

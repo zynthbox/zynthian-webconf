@@ -50,6 +50,7 @@ module.exports = function (app) {
     // Tracker
     app.post('/tracker-info/:folder',trackerController.getTrackerInfo)
     app.get('/play-sample/:folder',trackerController.playSample)
+    app.get('/stop-sample',trackerController.stopSample)
     app.get('/tracker',trackerController.getTrackerInfoTest)
 
     // fileTree

@@ -192,8 +192,9 @@
   /* Adds space between items */
 }
 #sketchpad-manager-display .module-container .sample-container {
-  max-height: 400px;
+  max-height: 300px;
   overflow-y: auto;
+  max-width: 500px;
 }
 #sketchpad-manager-display .module-container .dropzone-container {
   height: 100px;

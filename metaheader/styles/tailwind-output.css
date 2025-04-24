@@ -207,6 +207,9 @@
   .tw\:m-2 {
     margin: calc(var(--tw-spacing) * 2);
   }
+  .tw\:m-3 {
+    margin: calc(var(--tw-spacing) * 3);
+  }
   .tw\:mx-1 {
     margin-inline: calc(var(--tw-spacing) * 1);
   }
@@ -364,6 +367,9 @@
   .tw\:p-2 {
     padding: calc(var(--tw-spacing) * 2);
   }
+  .tw\:p-3 {
+    padding: calc(var(--tw-spacing) * 3);
+  }
   .tw\:p-4 {
     padding: calc(var(--tw-spacing) * 4);
   }
@@ -390,6 +396,9 @@
   }
   .tw\:pl-2 {
     padding-left: calc(var(--tw-spacing) * 2);
+  }
+  .tw\:pl-3 {
+    padding-left: calc(var(--tw-spacing) * 3);
   }
   .tw\:text-center {
     text-align: center;

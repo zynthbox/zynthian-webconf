@@ -509,8 +509,8 @@ function fnProcessSound(filePath){
   const msg= { "category": "sounds", "command": "process", "params": [filePath] }    
   fnWriteMsgToFIFO(JSON.stringify(msg));
 }
-
-function fnWriteMsgToFIFO(msg){
+exports.fnWriteMsgToFIFO = (msg)=>{
+// function fnWriteMsgToFIFO(msg){
   const FIFO_WRITES_TO = '/tmp/webconf-writes-to-this-fifo'
   const writeStream = fs.createWriteStream(FIFO_WRITES_TO);
   const message = msg+'\n';
