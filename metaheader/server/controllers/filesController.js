@@ -507,7 +507,7 @@ exports.downloadFiles = (req,res) => {
 /* /DOWNLOAD FILES */
 function fnProcessSound(filePath){
   const msg= { "category": "sounds", "command": "process", "params": [filePath] }    
-  fnWriteMsgToFIFO(JSON.stringify(msg));
+  exports.fnWriteMsgToFIFO(JSON.stringify(msg));
 }
 exports.fnWriteMsgToFIFO = (msg)=>{
 // function fnWriteMsgToFIFO(msg){
