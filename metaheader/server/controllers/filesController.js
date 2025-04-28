@@ -387,7 +387,7 @@ exports.uploadFiles = (req, res) => {
               path.dirname(file.path),
               path.basename(file.path, path.extname(file.path)) + '.sf3'
             );        
-            exec(`sf3convert -z "${file.path}"  "${sf3Path}"`, (err, stdout, stderr) => {
+            exec(`sf3convert -zq 0.6 "${file.path}"  "${sf3Path}"`, (err, stdout, stderr) => {
               if (err) {
                 console.error('Conversion error:', stderr);
                 return res.status(500).send('Failed to convert file');
