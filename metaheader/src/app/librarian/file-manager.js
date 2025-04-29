@@ -19,6 +19,7 @@ const FileManager = ({rootDirectory,mode}) => {
     const fsep = "/";
     const [ showFileUploader, setShowFileUploader ] = useState(false);
 
+    const [sf3convertQuality,setSf3convertQuality] = useState(0.6);
     // useEffect(() => {
     //     getFiles();        
     // },[rootDirectory])
@@ -54,6 +55,8 @@ const FileManager = ({rootDirectory,mode}) => {
                           rootDirectory={rootDirectory} 
                           mode={mode} 
                           treeData={fileManagerState.treeData}
+                          sf3convertQuality={sf3convertQuality}
+                          setSf3convertQuality={setSf3convertQuality}
                           />
                
                 <Suspense fallback={<LoadingSpinner/>}>                     
@@ -64,6 +67,7 @@ const FileManager = ({rootDirectory,mode}) => {
                         setShowFileUploader={setShowFileUploader}
                         getFiles={getFiles}
                         rootDirectory={rootDirectory}
+                        sf3convertQuality={sf3convertQuality}
                     />
                     
                 </Suspense>

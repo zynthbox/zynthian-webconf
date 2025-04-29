@@ -547,6 +547,7 @@ function WebconfFileBrowser(props){
                   refreshFileManager={props.refreshFileManager} 
                   setShowFileUploader={props.setShowFileUploader}
                   rootDirectory ={props.rootDirectory}
+                  sf3convertQuality={props.sf3convertQuality}
               />
           </React.Fragment>
       )

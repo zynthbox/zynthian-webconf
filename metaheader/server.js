@@ -5,9 +5,16 @@ var cors = require('cors');
 const { Server } = require("socket.io");
 const app = express()
 const port = 3000
+const https = require('https');
 
 const FIFO_READ_FROM = '/tmp/webconf-reads-from-this-fifo'
 const FIFO_WRITES_TO = '/tmp/webconf-writes-to-this-fifo'
+
+// Load SSL key and certificate
+// const options = {
+//   key: fs.readFileSync('path/to/key.pem'),
+//   cert: fs.readFileSync('path/to/cert.pem')
+// };
 
 const { execSync } = require("child_process");
 // Ensure FIFO file exists
@@ -36,6 +43,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(express.static('/home/pi/')); 
+app.use('/tmp',express.static('/zynthian/zynthian-my-data/tmp/webconf/tracker/uploads/')); 
 
 app.use(function(req, res, next) {
   if (!req.user) {
@@ -52,6 +60,11 @@ var routes = require('./server/routes.js')(app);
 const server = app.listen(port,() => {
   console.log(`webconf metaheader file-browser app-server listening on port ${port}`)
 })
+
+// Instead of app.listen, use https.createServer
+// const server = https.createServer(options, app).listen(port, () => {
+//   console.log(`webconf metaheader file-browser app-server (HTTPS) listening on port ${port}`);
+// });
 
 // Attach Socket.IO and enable CORS
 const io = new Server(server,{

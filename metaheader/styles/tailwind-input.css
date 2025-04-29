@@ -6,3 +6,6 @@
     @apply  tw:py-2 tw:px-5 tw:cursor-pointer tw:text-[16px]  tw:hover:text-amber-300 ;
 }
 
+.shadcnSelect{
+    @apply tw:w-full tw:rounded-md tw:border tw:px-3 tw:py-2 tw:text-2xl tw:shadow-sm tw:focus:outline-none 
+}

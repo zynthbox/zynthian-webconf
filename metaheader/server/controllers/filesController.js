@@ -377,9 +377,11 @@ exports.uploadFiles = (req, res) => {
       console.log(err);
         return res.status(500).json(err)
     }
-
+    
     const file = req.files?.file?.[0];
     if(file.path.startsWith(SOUNDFONTS_DIR)){
+
+         const sf3convertQuality = req.query.sf3convertQuality?req.query.sf3convertQuality:0.6;     
           // do convert .sf2 to .sf3
           const ext = path.extname(file.originalname).toLowerCase();    
           if (ext === '.sf2') {      
@@ -387,7 +389,7 @@ exports.uploadFiles = (req, res) => {
               path.dirname(file.path),
               path.basename(file.path, path.extname(file.path)) + '.sf3'
             );        
-            exec(`sf3convert -zq 0.6 "${file.path}"  "${sf3Path}"`, (err, stdout, stderr) => {
+            exec(`sf3convert -zq ${sf3convertQuality} "${file.path}"  "${sf3Path}"`, (err, stdout, stderr) => {
               if (err) {
                 console.error('Conversion error:', stderr);
                 return res.status(500).send('Failed to convert file');

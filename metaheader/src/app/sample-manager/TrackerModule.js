@@ -5,6 +5,7 @@ import { BsFileMusic } from "react-icons/bs";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
 import {ChiptuneJsPlayer} from './chiptune/chiptune3.js';
+import WavePlayer from '../components/WavePlayer.js';
 function formatBytes(a,b=2){if(!+a)return"0 Bytes";const c=0>b?0:b,d=Math.floor(Math.log(a)/Math.log(1024));return`${parseFloat((a/Math.pow(1024,d)).toFixed(c))} ${["Bytes","KiB","MiB","GiB","TiB","PiB","EiB","ZiB","YiB"][d]}`}
 function formatDuration(seconds) {
   const roundedSeconds = Math.round(seconds);
@@ -21,6 +22,9 @@ const TrackerModule =()=>{
 
     const [isPlaying, setIsPlaying] = useState(false);
     const [meta, setMeta] = useState('');
+
+    const [urlToPlay,setUrlToPlay] = useState(null);
+
     const playerRef = useRef(null); 
 
 
@@ -76,7 +80,11 @@ const TrackerModule =()=>{
     
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
-
+    
+    const handlePlayWave =(s)=>{            
+      let url = `http://${window.location.hostname}:3000/tmp/${path+'/'+s}`
+      setUrlToPlay(url);      
+    }
 
     const handlePlaySample =(s)=>{          
         const url = `http://${window.location.hostname}:3000/play-sample/${path+'+++'+s}`
@@ -108,13 +116,18 @@ const TrackerModule =()=>{
   if(samples){
     samplesDisplay = <ul className='sample-list'>
       {samples.map((s,i)=> <li key={i}> 
-         <a>
+         <a onClick={()=>{handlePlayWave(s)}}>
          <BsFileMusic className='tw:inline'/> {s} 
          </a>
          <a onClick={()=>{handlePlaySample(s)}}><FaPlay className='tw:inline-block'/></a>
          <a onClick={()=>{handleStopSample(s)}}><FaPause className='tw:inline-block'/></a>
          </li>)}
     </ul>
+  }
+
+  let waveDisplay;
+  if(urlToPlay){           
+    waveDisplay =  <WavePlayer audioUrl={urlToPlay} />
   }
 
 
@@ -151,8 +164,14 @@ const TrackerModule =()=>{
                
             </div>
             }
-
-      <div className='file-info tw:p-3 tw:m-3' style={{'font-family': 'monospace','white-space': 'pre'}}>{fileInfo}</div>
+      <div className='tw:flex'>
+        <div className='file-info tw:p-3 tw:m-3' style={{'font-family': 'monospace','white-space': 'pre'}}>
+          {fileInfo}       
+        </div>
+        <div>
+        {waveDisplay}
+        </div>      
+      </div>     
       <div className='sample-container'>                     
            {samplesDisplay}
       </div>

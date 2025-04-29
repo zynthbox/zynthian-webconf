@@ -30,7 +30,7 @@ const isAllowedToUpload =(files, rootDirectory)=>{
 
 function FileUploader(props) {
 
-  const { selectedFolder, fsep ,rootDirectory} = props
+  const { selectedFolder, fsep ,rootDirectory,sf3convertQuality} = props
   const ROOTDIR = rootDirectory;
 
   // const reader = new FileReader();
@@ -115,6 +115,7 @@ function FileUploader(props) {
     const formData = new FormData();
     formData.append('file', files[index])  
     // console.log('>>>>>>>>>>>>>>>>file:',files[index])
+
     const config = {
       onUploadProgress: progressEvent => {
         const newUploadProgressData = [
@@ -123,7 +124,8 @@ function FileUploader(props) {
           ...uploadProgressData.slice(index + 1, uploadProgressData.length)
         ]
         setUploadProgressData(newUploadProgressData)
-      }
+      },
+      params: { sf3convertQuality: sf3convertQuality },
     }
 
     axios.post(url, formData, config ).then(res => {

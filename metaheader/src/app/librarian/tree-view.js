@@ -3,7 +3,7 @@ import { Context } from './context/context-provider'
 import { useDispatch, useSelector } from "react-redux";
 // import { getSketchpadVersions } from '../../../store/sketchpad-manager/SketchpadMangerSlice.js';
 // import { selectFolder } from '../../../store/sound-manager/SoundManagerSlice';
-function TreeView({rootDirectory,mode}){
+function TreeView({rootDirectory,mode,sf3convertQuality,setSf3convertQuality}){
     
     const { fileManagerState, fileManagerDispatch } = useContext(Context)
     const dispatch = useDispatch()
@@ -23,26 +23,43 @@ function TreeView({rootDirectory,mode}){
             }
         }   
         if(item.isDir){
-                fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})                       
-                // dispatch right panel                          
-                 
-                // if(mode=='sketchpad-manager' && item.level == 3){
-                //         dispatch(getSketchpadVersions(item.path));  
-                //     }else if(mode=='sound-manager' && item.level == 2){                                                                                             
-                //         dispatch(selectFolder(item.path+'/'));  
-                //     }
+                fileManagerDispatch({type:'SET_SELECTED_FOLDER',payload:treeItemPayload})                                     
             }       
+    }
+
+    const handleChange = (e) => {
+        setSf3convertQuality(e.target.value);
+      };
+
+    let sf3convertQualityDisplay = null;
+    if(rootDirectory==='/zynthian/zynthian-my-data/soundfonts/'){
+        const options = Array.from({ length: 10 }, (_, i) => (0.1 * (i + 1)).toFixed(1));
+        sf3convertQualityDisplay =  (
+                                <div className='tw:flex-none tw:p-2 tw:m-2'>                               
+                                    <select value={sf3convertQuality} onChange={handleChange} className='shadcnSelect'>
+                                    {options.map((opt) => (
+                                    <option key={opt} value={opt}>
+                                        {opt}
+                                    </option>
+                                    ))}
+                                    </select>
+                                    <span>*.sf2 will be automatically converted to SF3 format during uploading with this quality.</span>
+                                </div>
+                                )
     }
     
     return (
-        <div className='tree-view-container'>
-            <ul>
+        <div className='tree-view-container'>   
+            <div className='tw:flex tw:flex-col tw:h-full'>
+            <ul className='tw:grow'>
                 <TreeViewItem 
                     onClick={onTreeItemClick}
                     item={fileManagerState.treeData}
                     mode={mode}
                 />
             </ul>
+            {sf3convertQualityDisplay}      
+            </div>                          
         </div>
     )
 }
