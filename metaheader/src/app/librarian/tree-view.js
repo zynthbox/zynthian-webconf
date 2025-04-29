@@ -33,7 +33,7 @@ function TreeView({rootDirectory,mode,sf3convertQuality,setSf3convertQuality}){
 
     let sf3convertQualityDisplay = null;
     if(rootDirectory==='/zynthian/zynthian-my-data/soundfonts/'){
-        const options = Array.from({ length: 10 }, (_, i) => (0.1 * (i + 1)).toFixed(1));
+        const options = Array.from({ length: 11 }, (_, i) => (0.1 * (i + 1)).toFixed(1));
         sf3convertQualityDisplay =  (
                                 <div className='tw:flex-none tw:p-2 tw:m-2'>                               
                                     <select value={sf3convertQuality} onChange={handleChange} className='shadcnSelect'>
@@ -43,7 +43,9 @@ function TreeView({rootDirectory,mode,sf3convertQuality,setSf3convertQuality}){
                                     </option>
                                     ))}
                                     </select>
-                                    <span>*.sf2 will be automatically converted to SF3 format during uploading with this quality.</span>
+                                    <span>*.sf2 will be automatically converted to SF3 format during uploading with this quality.
+                                        choose 1.1 will skip the convert
+                                    </span>
                                 </div>
                                 )
     }

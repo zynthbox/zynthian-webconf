@@ -382,6 +382,7 @@ exports.uploadFiles = (req, res) => {
     if(file.path.startsWith(SOUNDFONTS_DIR)){
 
          const sf3convertQuality = req.query.sf3convertQuality?req.query.sf3convertQuality:0.6;     
+         if(sf3convertQuality=='1.1') return res.status(200).json({message:"Upload successfull!"})
           // do convert .sf2 to .sf3
           const ext = path.extname(file.originalname).toLowerCase();    
           if (ext === '.sf2') {      
