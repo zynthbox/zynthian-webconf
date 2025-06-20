@@ -126,6 +126,7 @@ def make_app():
     term_manager = SingleTermManager(shell_command=['./zynbash.sh'])
 
     return tornado.web.Application([
+        ("/docs", tornado.web.RedirectHandler, {"url": "/docs/"}),
         (r"/docs/(.*)", tornado.web.StaticFileHandler, {'path': '/usr/share/zynthbox-docs/', "default_filename": "index.html"}),
         (r'/$', DashboardHandler),
         #(r'/()$', tornado.web.StaticFileHandler, {'path': 'html', "default_filename": "index.html"}),
