@@ -105,7 +105,8 @@ function FileUploader(props) {
 
     // const filePath = (ROOTDIR.startsWith('/home/pi')?ROOTDIR.substring(9):ROOTDIR)
     //                 +folderPath + files[index].path.split(files[index].name)[0];
-    const filePath = ROOTDIR + folderPath;
+  
+    const filePath = ROOTDIR + folderPath + files[index].path.split(files[index].name)[0];
 
     // console.log('>>>>>>>>>>>>>>>>>>>uploadFile');
     // console.log(selectedFolder)

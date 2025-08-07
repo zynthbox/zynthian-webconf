@@ -62,7 +62,7 @@
 
 	<!-- Preload some images for avoiding problems when rebooting -->
 	<link rel="preload" href="/img/loading.gif" as="image">
-	<link rel="preload" href="/img/logo/zynthian_logo_black_trans_320.png" as="image">
+	<link rel="preload" href="/img/logo/zynthbox_logo_black_trans_320.png" as="image">
 </head>
 
 <body>
@@ -78,23 +78,24 @@
 					</button>
 					<h1>
 						<a class="navbar-brand" href="/" title="Start">
-							<img src="/img/logo/zynthian_logo_black_trans_320.png">
+							<img src="/img/logo/zynthbox_logo_black_trans_320.png">
 						</a>
 					</h1>
 				</div>
 				<div class="navbar-collapse">
 					<ul class="nav navbar-nav">
 					{% if current_user is not None %}
-
+							<!--
 							<li class="dropdown {% if request.uri[0:9]=="/lib-" %}active{% end %}">
 								<a href="#menu-lib" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Library <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li {% if request.uri=="/lib-snapshot" %}class="active"{% end %}><a href="/lib-snapshot">Snapshots</a></li>
 									<li {% if request.uri=="/lib-captures" %}class="active"{% end %}><a href="/lib-captures">Captures</a></li>
-									<!--<li {% if request.uri=="/lib-soundfont" %}class="active"{% end %}><a href="/lib-soundfont">Soundfonts</a></li>-->
+									<li {% if request.uri=="/lib-soundfont" %}class="active"{% end %}><a href="/lib-soundfont">Soundfonts</a></li>
 									<li {% if request.uri=="/lib-presets" %}class="active"{% end %}><a href="/lib-presets">Presets &amp; Soundfonts</a></li>
 								</ul>
 							</li>
+							-->
 							<li class="dropdown {% if request.uri[0:8]=="/hw-" %}active{% end %}">
 								<a href="#menu-hw" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hardware <span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -104,16 +105,18 @@
 									<li {% if request.uri=="/hw-wiring" %}class="active"{% end %}><a href="/hw-wiring">Wiring</a></li>
 								</ul>
 							</li>
+							<!--
 							<li class="dropdown {% if request.uri[0:8]=="/sw-" %}active{% end %}">
 								<a href="#menu-hw" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Software <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li {% if request.uri=="/sw-jalv-lv2" %}class="active"{% end %}><a href="/sw-jalv-lv2">LV2-Plugins</a></li>
-									<!--li {% if request.uri=="/sw-jucy-vst3" %}class="active"{% end %}><a href="/sw-jucy-vst3">VST3-Plugins</a></li-->
+									li {% if request.uri=="/sw-jucy-vst3" %}class="active"{% end %}><a href="/sw-jucy-vst3">VST3-Plugins</a></li>
 									<li {% if request.uri=="/sw-pìanoteq" %}class="active"{% end %}><a href="/sw-pianoteq">Pianoteq</a></li>
 									<li {% if request.uri=="/sw-update" %}class="active"{% end %}><a href="/sw-update">Update</a></li>
 									<li {% if request.uri=="/sw-repos" %}class="active"{% end %}><a href="/sw-repos">Repositories</a></li>
 								</ul>
 							</li>
+							
 							<li class="dropdown {% if request.uri[0:8]=="/ui-" %}active{% end %}">
 								<a href="#menu-ui" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Interface <span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -132,10 +135,11 @@
 									{% try %}{% if 'novnc1_uri' in info %}
 									<li><a href="{{ info['novnc1_uri'] }}" target="_blank">VNC-Engines</a></li>
 									{% end %}{% except %}{% end %}
-									<li {% if request.uri=="/zynterm" %}class="active"{% end %}><a href="/zynterm">Terminal</a></li>
+									
 
 								</ul>
 							</li>
+							-->
 							<li class="dropdown {% if request.uri[0:9]=="/sys-" %}active{% end %}">
 								<a href="#menu-sys" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">System <span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -145,10 +149,12 @@
 									<li {% if request.uri=="/sys-reboot" %}class="active"{% end %}><a href="/sys-reboot">Reboot</a></li>
 									<li {% if request.uri=="/sys-poweroff" %}class="active"{% end %}><a href="/sys-poweroff">Power Off</a></li>
 									<li><a href="/logout">Logout</a></li>
+									<li><hr></li>
+									<li {% if request.uri=="/zynterm" %}class="active"{% end %}><a href="/zynterm">Terminal</a></li>
 								</ul>
 							</li>
 							<li class="dropdown">
-								<a href="#m" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Help <span class="caret"></span></a>
+								<a href="#m" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Docs <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="/docs" target="_blank">Zynthbox Manual</a></li>
 									<!--<li><a href="http://wiki.zynthian.org/index.php/Zynthian_UI_Users_Guide" target="_blank">User Interface</a></li>

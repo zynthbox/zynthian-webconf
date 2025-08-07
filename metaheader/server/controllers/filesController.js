@@ -316,10 +316,18 @@ const getAvailableFileName = (dir, base, ext, count = 0) => {
 };
 
 var storage = multer.diskStorage({
+
   destination: function (req, file, cb) {
-      const selectedFolder = req.params.folder.split('+++').join('/');    
-      cb(null, selectedFolder)
-  },
+          const selectedFolder = req.params.folder.split('+++').join('/');         
+          const fullPath = selectedFolder;
+          try {
+            fs.mkdirSync(fullPath, { recursive: true });  // Creates all directories if not exist
+            cb(null, fullPath);  // Save uploaded file in the created folder
+          } catch (err) {
+            console.error("Error creating directory:", err);
+            cb(err, null);
+          }
+      },
   filename: function (req, file, cb) {       
     const ext = path.extname(file.originalname);
     const base = path.basename(file.originalname, ext);

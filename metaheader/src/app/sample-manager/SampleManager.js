@@ -21,8 +21,8 @@ const SampleManger =()=>{
       
     return (
         <>
-          {/* <TrackerExtractor></TrackerExtractor>          */}
-          <Split className="split"
+          <TrackerExtractor></TrackerExtractor>         
+          {/* <Split className="split"
           sizes={[50, 50]}
           minSize={[600,300]}
           expandToMin={true}
@@ -42,7 +42,7 @@ const SampleManger =()=>{
                 <div>
                     <TrackerModule/>
                 </div>
-            </Split>
+            </Split> */}
         </>
     )
 }

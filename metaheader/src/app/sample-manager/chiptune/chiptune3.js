@@ -25,7 +25,7 @@ export class ChiptuneJsPlayer {
 			console.log('>>>>>>>>>>this.config.context>>>>>>>>>>>>>',this.config.context)
 		} else {
 			this.context = new AudioContext()
-			console.log('>>>>>>>>>>create AudioContext>>>>>>>>>>>>>')
+			console.log('>>>>>>>>>>create AudioContext>>>>>>>>>>>>>',this.context.audioWorklet)
 			this.destination = this.context.destination	// output to speakers
 		}
 		delete this.config.context	// remove from config, just used here and after init not changeable
@@ -37,12 +37,14 @@ export class ChiptuneJsPlayer {
 		this.handlers = []
 
 		// worklet
+		let baseUrl;
+		if(window.location.hostname=='localhost'){
+			baseUrl =  `http://${window.location.hostname}:3000`
+		}else{
+			baseUrl =  `http://${window.location.hostname}`
+		}
 		
-		// local
-		// let baseUrl = "http://localhost:3000";
 	
-		// live TODO find correct baseUrl
-		let baseUrl = "http://zynthbox.local";
 		let url = new URL("/metaheader/src/app/sample-manager/chiptune/chiptune3.worklet.js", baseUrl);
 		console.log('>>>>>>>>>>>>>>',url)
 		// const oldurl = new URL('./chiptune3.worklet.js', import.meta.url);

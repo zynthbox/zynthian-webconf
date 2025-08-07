@@ -43,6 +43,7 @@ function TrackerExtractor() {
 
         const arrayBuffer = await file.arrayBuffer();
         const modData = new Uint8Array(arrayBuffer);
+        console.log('>>>>>>>>>>>openmptModule',openmptModule);
         const modInstance = new openmptModule.Module(modData);
         setModPlayer(modInstance);
 
