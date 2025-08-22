@@ -106,7 +106,8 @@ function WebconfFileBrowser(props){
   // const [droppedFiles, setDroppedFiles] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(50);
+  // const itemsPerPage = 50;
 
   // drag and drop overlay
   // useEffect(() => {
@@ -479,7 +480,7 @@ function WebconfFileBrowser(props){
   const selectFiles = defineFileAction({
     id:"select_files",
     button:{
-      name:"Select Files",
+      name:"Select Files", 
       toolbar: false,
       contextMenu:true,
       icon:ChonkyIconName.selectAllFiles
@@ -564,6 +565,10 @@ function WebconfFileBrowser(props){
     )
   }
 
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1); // reset to first page
+  };
    // Calculate total pages
    const totalPages = Math.ceil(displayedFiles.length / itemsPerPage);
 
@@ -615,11 +620,22 @@ function WebconfFileBrowser(props){
                 ChonkyActions.SelectAllFiles.id
               ]} 
             />
-
-            {totalPages>1 &&                    
-                      <PaginationWithEllipsis totalPages={totalPages} onPageChange={(page) => goToPage(page)} />
+          <div className="tw:flex tw:items-center tw:justify-between tw:space-x-2 tw:gap-2 tw:border-t tw:border-gray-300 tw:mt-1">             
+            <div style={{ display: "flex" }}>
+                <div className='tw:whitespace-nowrap'>Items per Page : </div>
+                <select value={itemsPerPage} onChange={handleItemsPerPageChange}>
+                  {[10, 20, 50, 100, 500, 1000].map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            {totalPages>1 &&                         
+                      <PaginationWithEllipsis totalPages={totalPages} onPageChange={(page) => goToPage(page)} />                                 
                     }
-
+             
+          </div>
           </FileBrowser>
 
           {/* Drag overlays */}
@@ -666,7 +682,7 @@ const FileBrowserHeader = (props) => {
       if(matchingElement) matchingElement.innerText = "More..."
       var xpath = "//span[text()='Select all files']";
       var matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-      if(matchingElement) matchingElement.innerText = "Select Files"
+      if(matchingElement) matchingElement.innerText = "Select All"
     }, 10);
   },[])
   

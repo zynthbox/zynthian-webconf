@@ -7,6 +7,7 @@ import TrackerModule from '../sample-manager/TrackerModule';
 const SketchpadEditor = lazy(()=>import('../sketchpad-manager/SketchpadEditor'))
 const SoundEditor = lazy(()=>import('../sound-manager/SoundEditor'))
 const FileManager = lazy(()=>import('./file-manager'))
+import { Helmet } from 'react-helmet';
 function XtractorManagerContainer() {
     const [ rootDirectory, setRootDirectory ] = useState('/zynthian/zynthian-my-data/sketchpads/')
     const [ rootName, setRootName ] = useState('Sketchpads')
@@ -20,6 +21,9 @@ function XtractorManagerContainer() {
 
   return (
     <>
+        <Helmet>
+              <title>Zynthbox - Xtractor - {rootName}</title>        
+          </Helmet>
           <div id="sketchpad-manager-display" > 
           {/* <div id="file-manager2" className="tw:container tw:bg-white tw:w-screen tw:fixed  tw:top-[48px] tw:left-[20px] tw:mt-2 tw:mx-auto tw:p-0 tw:z-10" > */}
           <h3 className='tw:uppercase tw:flex tw:justify-between'>           

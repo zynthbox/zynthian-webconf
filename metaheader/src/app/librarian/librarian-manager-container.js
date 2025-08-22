@@ -3,7 +3,7 @@ import FileManagerContextProvider from './context/context-provider'
 import LoadingSpinner from '../loading-spinner'
 import { DIRECTORIES } from '../components/globalState'
 import { fileManagerLeftCss } from '../helpers'
-
+import { Helmet } from 'react-helmet';
 const FileManager = lazy(()=>import('./file-manager'))
 function LibrarianManagerContainer() {
     const [ rootDirectory, setRootDirectory ] = useState('/zynthian/zynthian-my-data/sketchpads/')
@@ -18,6 +18,9 @@ function LibrarianManagerContainer() {
 
   return (
     <>
+          <Helmet>
+              <title>Zynthbox - Librarian - {rootName}</title>        
+          </Helmet>
           <div id="file-manager" className="container" style={{left:fileManagerLeftCss()}}> 
           {/* <div id="file-manager2" className="tw:container tw:bg-white tw:w-screen tw:fixed  tw:top-[48px] tw:left-[20px] tw:mt-2 tw:mx-auto tw:p-0 tw:z-10" > */}
           <h3 className='tw:uppercase tw:flex tw:justify-between'>           

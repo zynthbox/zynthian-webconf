@@ -222,6 +222,9 @@
   .tw\:mx-auto {
     margin-inline: auto;
   }
+  .tw\:mt-1 {
+    margin-top: calc(var(--tw-spacing) * 1);
+  }
   .tw\:mt-2 {
     margin-top: calc(var(--tw-spacing) * 2);
   }
@@ -320,6 +323,10 @@
   .tw\:border-1 {
     border-style: var(--tw-border-style);
     border-width: 1px;
+  }
+  .tw\:border-t {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 1px;
   }
   .tw\:border-t-1 {
     border-top-style: var(--tw-border-style);
@@ -431,6 +438,9 @@
   .tw\:font-medium {
     --tw-font-weight: var(--tw-font-weight-medium);
     font-weight: var(--tw-font-weight-medium);
+  }
+  .tw\:whitespace-nowrap {
+    white-space: nowrap;
   }
   .tw\:text-\[\#0078d7\] {
     color: #0078d7;

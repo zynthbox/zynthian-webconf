@@ -97,7 +97,7 @@ function watchFIFO() {
               }
               if (bytesRead > 0) {
                   const message = buffer.toString("utf8", 0, bytesRead).trim();
-                  console.log("FIFO Received>>>>>>>>>>>>>>>>:", message);                 
+                  //console.log("FIFO Received>>>>>>>>>>>>>>>>:", message);                 
                   // Send data to WebSocket clients
                   io.emit("fifoChanged", message);
                   readLoop(); // Continue reading

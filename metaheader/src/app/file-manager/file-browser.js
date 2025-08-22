@@ -569,7 +569,7 @@ function WebconfFileBrowser(props){
         style={{ height: window.innerHeight - 170, position:"relative",background:"#efefef"}} 
         onDragOver={onFileUploaderDragOver} 
         onDragLeave={() => onFileUploaderDragLeave()}
-        >
+        >          
           {loadingDisplay}
           {fileUploaderDisplay}
           {fileViewerDisplay}
@@ -652,7 +652,7 @@ const FileBrowserHeader = (props) => {
       if(matchingElement) matchingElement.innerText = "More..."
       var xpath = "//span[text()='Select all files']";
       var matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-      if(matchingElement) matchingElement.innerText = "Select Files"
+      if(matchingElement) matchingElement.innerText = "Select All"
     }, 10);
   },[])
   

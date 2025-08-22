@@ -359,8 +359,8 @@ var storage = multer.diskStorage({
 // })
 
 const  fileFilter = (req, file, cb) => {
-  console.log('>>>>>>>>>>>>>>>>>>>filesController fileFilter do filetype check ',file); // See if anything is there
-  console.log('>>>>>>>>>>>>>>>>>>>req.params:',req.params); //  { folder: '+++zynthian+++zynthian-my-data+++sketchpads++++++' }  
+  //console.log('>>>>>>>>>>>>>>>>>>>filesController fileFilter do filetype check ',file); // See if anything is there
+  //console.log('>>>>>>>>>>>>>>>>>>>req.params:',req.params); //  { folder: '+++zynthian+++zynthian-my-data+++sketchpads++++++' }  
                                                             // req.params.folder.split('+++').join('/');
   /** TODO: server side file type check. according foldername to define allowed types. DIRECTORIES */
   cb(null, true);
