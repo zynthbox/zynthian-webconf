@@ -99,7 +99,8 @@ function WebconfFileBrowser(props){
   const [droppedFiles, setDroppedFiles] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(50);
+  // const itemsPerPage = 50;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -550,6 +551,10 @@ function WebconfFileBrowser(props){
     )
   }
 
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1); // reset to first page
+  };
    // Calculate total pages
    const totalPages = Math.ceil(displayedFiles.length / itemsPerPage);
 
@@ -602,9 +607,22 @@ function WebconfFileBrowser(props){
               ]} 
             />
 
-            {totalPages>1 &&                    
-                      <PaginationWithEllipsis totalPages={totalPages} onPageChange={(page) => goToPage(page)} />
+        <div className="tw:flex tw:items-center tw:justify-between tw:space-x-2 tw:gap-2 tw:border-t tw:border-gray-300 tw:mt-1">             
+            <div style={{ display: "flex" }}>
+                <div className='tw:whitespace-nowrap'>Items per Page : </div>
+                <select value={itemsPerPage} onChange={handleItemsPerPageChange}>
+                  {[10, 20, 50, 100, 500, 1000].map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            {totalPages>1 &&                         
+                      <PaginationWithEllipsis totalPages={totalPages} onPageChange={(page) => goToPage(page)} />                                 
                     }
+             
+          </div>
 
           </FileBrowser>
 
