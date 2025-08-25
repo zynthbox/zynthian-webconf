@@ -6,16 +6,18 @@ import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { Provider } from 'react-redux';
 import { store } from '../store/store'
 import ReactDOM from 'react-dom/client';
-import FileManagerContextProvider from './app/file-manager/context/context-provider';
+// import FileManagerContextProvider from './app/file-manager/context/context-provider';
 import LoadingSpinner from './app/loading-spinner';
 import RootLayout from './layouts/RootLayout';
 import NotFound from './app/NotFound';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import FileManagerContainer from './app/file-manager/file-manager-container';
+// import FileManagerContainer from './app/file-manager/file-manager-container';
 import LibrarianManagerContainer from './app/librarian/librarian-manager-container';
 import { fileManagerLeftCss } from './app/helpers';
 import XtractorManagerContainer from './app/xtractor/xtractor-manager-container';
+import ResourcesManagerContainer from './app/librarian/resources-manager-container';
+import FileManagerContainerNew from './app/librarian/file-manager-container';
 
 // import { io } from "socket.io-client";
 // import { ToastContainer, toast } from 'react-toastify';
@@ -51,28 +53,28 @@ function FileManagerDisplay(){
                     <i className="glyphicon glyphicon-file"></i>
                     FILE MANAGER
                 </h3>
-                <FileManagerContainer></FileManagerContainer>
+                <FileManagerContainerNew></FileManagerContainerNew>
                 </div>
                 <div id="file-manager-overlay"></div>
             </>
     )
 }
 
-function LibrarianManagerDisplay(){
-    return (
-            <>
-                <div id="file-manager" className="container" style={{left:fileManagerLeftCss()}}> 
-                {/* <div id="file-manager2" className="tw:container tw:bg-white tw:w-screen tw:fixed  tw:top-[48px] tw:left-[20px] tw:mt-2 tw:mx-auto tw:p-0 tw:z-10" > */}
-                <h3 className='tw:uppercase'>
-                 <i className="glyphicon glyphicon-file"></i>
-                    Librarian
-                </h3>
-                <LibrarianManagerContainer></LibrarianManagerContainer>
-                </div>
-                <div id="file-manager-overlay"></div>
-            </>
-    )
-}
+// function LibrarianManagerDisplay(){
+//     return (
+//             <>
+//                 <div id="file-manager" className="container" style={{left:fileManagerLeftCss()}}> 
+//                 {/* <div id="file-manager2" className="tw:container tw:bg-white tw:w-screen tw:fixed  tw:top-[48px] tw:left-[20px] tw:mt-2 tw:mx-auto tw:p-0 tw:z-10" > */}
+//                 <h3 className='tw:uppercase'>
+//                  <i className="glyphicon glyphicon-file"></i>
+//                     Librarian
+//                 </h3>
+//                 <LibrarianManagerContainer></LibrarianManagerContainer>
+//                 </div>
+//                 <div id="file-manager-overlay"></div>
+//             </>
+//     )
+// }
 
 
 function SketchpadManagerDisplay(){
@@ -202,6 +204,7 @@ const router = createHashRouter(
     createRoutesFromElements(     
       <Route path="/" element={<RootLayout />}>
         <Route path="librarian" element={<LibrarianManagerContainer />}> </Route> 
+        <Route path="resources" element={<ResourcesManagerContainer />}> </Route>         
         <Route path="xtractor" element={<XtractorManagerContainer />}> </Route>        
         <Route path="sound-manager" element={<SoundManagerDisplay />}> </Route>
         <Route path="sketchpad-manager" element={<SketchpadManagerDisplay />}></Route>

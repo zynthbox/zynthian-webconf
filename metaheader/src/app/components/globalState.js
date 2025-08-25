@@ -8,6 +8,10 @@ export const DIRECTORIES = [
     {'rootName':'FX Chains','rootDirectory':'/zynthian/zynthian-my-data/samples/'},
             
 ]
+export const RESOURCES = [
+    {'rootName':'Themes','rootDirectory':'/zynthian/zynthian-my-data/sketchpads/'},
+    {'rootName':'Mods','rootDirectory':'/zynthian/zynthian-my-data/sketches/'},                    
+]
 export const colorsArray = [
     "#B23730",
     "#EE514B",

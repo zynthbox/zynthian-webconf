@@ -13,17 +13,19 @@ const ROOTDIR_SOUNDFONTS = '/zynthian/zynthian-my-data/soundfonts/';
 
 const isAllowedToUpload =(files, rootDirectory)=>{  
     const dir = DIRECTORIES.filter(d=>d.rootDirectory==rootDirectory).pop();    
-    if(dir && dir.allowedUploadTypes)
-    {
-      for (let file of files) {
-        const fileName = file.name;
-        const fileExt = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();        
-        if (!dir.allowedUploadTypes.includes(fileExt.toLowerCase())) {
-          alert(`Current directory does not support: ${fileExt}, only ${dir.allowedUploadTypes}`);          
-          return false;
+    if (typeof dir != "undefined") {
+      if(dir && dir.allowedUploadTypes)
+      {
+        for (let file of files) {
+          const fileName = file.name;
+          const fileExt = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();        
+          if (!dir.allowedUploadTypes.includes(fileExt.toLowerCase())) {
+            alert(`Current directory does not support: ${fileExt}, only ${dir.allowedUploadTypes}`);          
+            return false;
+          }
         }
-      }
-    } 
+      } 
+    }
     return true;
 }
 
@@ -185,10 +187,11 @@ function FileUploader(props) {
   } else {
 
     const dir = DIRECTORIES.filter(d=>d.rootDirectory==rootDirectory).pop();    
+    const dropText = (dir!=undefined && dir.allowedUploadTypes)?'['+dir.allowedUploadTypes+']':'';
     dropZoneDisplay = (
       <div className="dropzone-container" {...getRootProps()}>
         <input {...getInputProps()} name="file" />
-        {isDragActive ? <p>Drop the files{dir.allowedUploadTypes?'['+dir.allowedUploadTypes+']':''} here ...</p> : <p>Drag 'n' drop some files {dir.allowedUploadTypes?'['+dir.allowedUploadTypes+']':''} here, or click to select files</p>}
+        {isDragActive ? <p>Drop the files{dropText} here ...</p> : <p>Drag 'n' drop some files {dropText} here, or click to select files</p>}
       </div>
     )
 

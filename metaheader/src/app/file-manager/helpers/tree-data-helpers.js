@@ -1,4 +1,3 @@
-// import { ROOTDIR } from "./settings.js";
 
 function getTreeChildren(array,folderChain,selectedFolder,parentPath,ROOTDIR){
 

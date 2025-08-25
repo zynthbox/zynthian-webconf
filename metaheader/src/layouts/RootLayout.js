@@ -19,6 +19,9 @@ export default function RootLayout() {
             <NavLink to="librarian"> Librarian </NavLink>
             </li>
             <li>
+            <NavLink to="resources"> Resources </NavLink>
+            </li>
+            <li>
             <NavLink to="xtractor"> Xtractor </NavLink>
             </li>
          

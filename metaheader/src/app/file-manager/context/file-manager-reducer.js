@@ -1,7 +1,5 @@
 import { generateTreeFromArray } from "../helpers/tree-data-helpers";
 import { arrayUnique, generateNewFolderChain } from '../helpers/file-manager-helpers';
-// import { ROOTDIR } from "../helpers/settings.js";
-
 
 
 export const FileManagerInitialState = {

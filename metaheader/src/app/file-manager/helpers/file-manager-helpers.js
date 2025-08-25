@@ -1,4 +1,3 @@
-// import { ROOTDIR } from "./settings.js";
 
 export function arrayUnique(array) {
     var a = array.concat();
