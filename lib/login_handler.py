@@ -36,26 +36,33 @@ from collections import OrderedDict
 class LoginHandler(tornado.web.RequestHandler):
 
     def get(self, errors=None):
-        self.render("config.html", info={}, body="login_block.html", title="Login", config=None, errors=errors)
+         # Automatically log in the user
+        self.set_secure_cookie("user", "root")
+        self.redirect("/")
+
+        # self.render("config.html", info={}, body="login_block.html", title="Login", config=None, errors=errors)
 
     def post(self):
-        input_passwd = self.get_argument("PASSWORD")
-        try:
-            input_passwd = self.get_argument("PASSWORD")
-            user_passwd_enc = spwd.getspnam("root")[1]
-            input_passwd_enc = crypt.crypt(input_passwd, user_passwd_enc)
-            logging.debug("PASSWD: %s <=> %s" % (input_passwd_enc, user_passwd_enc))
-            if input_passwd_enc == user_passwd_enc:
-                self.set_secure_cookie("user", "root")
-                if self.get_argument("next", ""):
-                    self.redirect(self.get_argument("next"))
-                else:
-                    self.redirect("/")
-            else:
-                self.get({"PASSWORD": "Incorrect Password"})
-        except Exception as e:
-            logging.error(e)
-            self.get({"PASSWORD": "Authentication Failure"})
+        # Automatically log in the user on POST as well
+        self.set_secure_cookie("user", "root")
+        self.redirect("/")        
+        # input_passwd = self.get_argument("PASSWORD")
+        # try:
+        #     input_passwd = self.get_argument("PASSWORD")
+        #     user_passwd_enc = spwd.getspnam("root")[1]
+        #     input_passwd_enc = crypt.crypt(input_passwd, user_passwd_enc)
+        #     logging.debug("PASSWD: %s <=> %s" % (input_passwd_enc, user_passwd_enc))
+        #     if input_passwd_enc == user_passwd_enc:
+        #         self.set_secure_cookie("user", "root")
+        #         if self.get_argument("next", ""):
+        #             self.redirect(self.get_argument("next"))
+        #         else:
+        #             self.redirect("/")
+        #     else:
+        #         self.get({"PASSWORD": "Incorrect Password"})
+        # except Exception as e:
+        #     logging.error(e)
+        #     self.get({"PASSWORD": "Authentication Failure"})
 
 
 class LogoutHandler(tornado.web.RequestHandler):
