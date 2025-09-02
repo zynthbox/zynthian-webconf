@@ -130,27 +130,27 @@ class DashboardHandler(ZynthianBasicHandler):
                     ['PROFILE', {
                         'title': 'Profile',
                         'value': os.path.basename(os.environ.get('ZYNTHIAN_SCRIPT_MIDI_PROFILE',"")),
-                        'url': "/ui-midi-options"
+                        'url': "#" #"/ui-midi-options"
                     }],
                     ['FINE_TUNING', {
                         'title': 'Fine Tuning',
                         'value': "{} Hz".format(os.environ.get('ZYNTHIAN_MIDI_FINE_TUNING',"440")),
-                        'url': "/ui-midi-options"
+                        'url': "#" #"/ui-midi-options"
                     }],
                     ['MASTER_CHANNEL', {
                         'title': 'Master Channel',
                         'value': self.get_midi_master_chan(),
-                        'url': "/ui-midi-options"
+                        'url': "#" #"/ui-midi-options"
                     }],
                     ['SINGLE_ACTIVE_CHANNEL', {
                         'title': 'Single Active Channel',
                         'value': self.bool2onoff(os.environ.get('ZYNTHIAN_MIDI_SINGLE_ACTIVE_CHANNEL','0')),
-                        'url': "/ui-midi-options"
+                        'url': "#" #"/ui-midi-options"
                     }],
                     ['ZS3_SUBSNAPSHOTS', {
                         'title': 'ZS3 SubSnapShots',
                         'value': self.bool2onoff(os.environ.get('ZYNTHIAN_MIDI_PROG_CHANGE_ZS3','1')),
-                        'url': "/ui-midi-options"
+                        'url': "#" #"/ui-midi-options"
                     }]
                 ])
             }],
@@ -195,27 +195,27 @@ class DashboardHandler(ZynthianBasicHandler):
                     ['SNAPSHOTS', {
                         'title': 'Snapshots',
                         'value': str(self.get_num_of_files(os.environ.get('ZYNTHIAN_MY_DATA_DIR')+"/snapshots")),
-                        'url': "/lib-snapshot"
+                        'url': "#" #"/lib-snapshot"
                     }],
                     ['USER_PRESETS', {
                         'title': 'User Presets',
                         'value': str(self.get_num_of_presets(os.environ.get('ZYNTHIAN_MY_DATA_DIR')+"/presets")),
-                        'url': "/lib-presets"
+                        'url': "#" #"/lib-presets"
                     }],
                     ['USER_SOUNDFONTS', {
                         'title': 'User Soundfonts',
                         'value': str(self.get_num_of_files(os.environ.get('ZYNTHIAN_MY_DATA_DIR')+"/soundfonts")),
-                        'url': "/lib-soundfont"
+                        'url': "#" #"/lib-soundfont"
                     }],
                     ['AUDIO_CAPTURES', {
                         'title': 'Audio Captures',
                         'value': str(self.get_num_of_files(os.environ.get('ZYNTHIAN_MY_DATA_DIR')+"/capture","*.wav")),
-                        'url': "/lib-captures"
+                        'url': "#" #"/lib-captures"
                     }],
                     ['MIDI_CAPTURES', {
                         'title': 'MIDI Captures',
                         'value': str(self.get_num_of_files(os.environ.get('ZYNTHIAN_MY_DATA_DIR')+"/capture","*.mid")),
-                        'url': "/lib-captures"
+                        'url': "#" #"/lib-captures"
                     }]
                 ])
             }],
@@ -237,16 +237,16 @@ class DashboardHandler(ZynthianBasicHandler):
                         'value': self.get_ip(),
                         'url': "/sys-wifi"
                     }],
-                    ['RTPMIDI', {
-                        'title': 'RTP-MIDI',
-                        'value': self.bool2onoff(self.is_service_active("jackrtpmidid")),
-                        'url': "/ui-midi-options"
-                    }],
-                    ['QMIDINET', {
-                        'title': 'QMidiNet',
-                        'value': self.bool2onoff(self.is_service_active("qmidinet")),
-                        'url': "/ui-midi-options"
-                    }]
+                    # ['RTPMIDI', {
+                    #     'title': 'RTP-MIDI',
+                    #     'value': self.bool2onoff(self.is_service_active("jackrtpmidid")),
+                    #     'url': "/ui-midi-options"
+                    # }],
+                    # ['QMIDINET', {
+                    #     'title': 'QMidiNet',
+                    #     'value': self.bool2onoff(self.is_service_active("qmidinet")),
+                    #     'url': "/ui-midi-options"
+                    # }]
                 ])
             }]
         ])
