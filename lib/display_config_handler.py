@@ -49,7 +49,7 @@ class DisplayConfigHandler(ZynthianConfigHandler):
             'DISPLAY_WIDTH': '1024',
             'DISPLAY_HEIGHT': '600',
             'FRAMEBUFFER': '/dev/fb0',
-            'DISPLAY_KERNEL_OPTIONS': 'video=HDMI-A-2:1024x600M@60,rotate=180'
+            'DISPLAY_KERNEL_OPTIONS': 'video=HDMI-A-2:1024x600M@60,rotate=0 fbcon=rotate:2'
         }],
         ['ZynScreen 3.5 (v1)', {
             'DISPLAY_CONFIG': 'dtoverlay=piscreen2r-notouch,rotate=270\n'+
