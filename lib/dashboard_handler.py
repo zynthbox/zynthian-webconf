@@ -230,12 +230,12 @@ class DashboardHandler(ZynthianBasicHandler):
                     ['WIFI', {
                         'title': 'Wifi',
                         'value': zynconf.get_current_wifi_mode(),
-                        'url': "/sys-wifi"
+                        'url': "#" #"/sys-wifi"
                     }],
                     ['IP', {
                         'title': 'IP',
                         'value': self.get_ip(),
-                        'url': "/sys-wifi"
+                        'url': "#" #"/sys-wifi"
                     }],
                     # ['RTPMIDI', {
                     #     'title': 'RTP-MIDI',
