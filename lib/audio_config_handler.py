@@ -207,15 +207,20 @@ except Exception as err:
     rbpi_device_name = None
     logging.error(err)
 
-if rbpi_device_name=="Headphones":
-    soundcard_presets['RBPi Headphones']['JACKD_OPTIONS'] = soundcard_presets['RBPi Headphones']['JACKD_OPTIONS'].replace("#DEVNAME#","Headphones")
-    soundcard_presets['RBPi HDMI']['JACKD_OPTIONS'] = soundcard_presets['RBPi HDMI']['JACKD_OPTIONS'].replace("#DEVNAME#","b1")
-elif rbpi_device_name=="ALSA":
-    soundcard_presets['RBPi Headphones']['JACKD_OPTIONS'] = soundcard_presets['RBPi Headphones']['JACKD_OPTIONS'].replace("#DEVNAME#","ALSA")
-    soundcard_presets['RBPi HDMI']['JACKD_OPTIONS'] = soundcard_presets['RBPi HDMI']['JACKD_OPTIONS'].replace("#DEVNAME#","ALSA")
+if os.environ.get('ZYNTHIAN_KIT_VERSION') == "Raspberry Pi 5":
+    soundcard_presets['RBPi Headphones']['JACKD_OPTIONS'] = soundcard_presets['RBPi Headphones']['JACKD_OPTIONS'].replace("#DEVNAME#","vc4hdmi0")
+    soundcard_presets['RBPi HDMI']['JACKD_OPTIONS'] = soundcard_presets['RBPi HDMI']['JACKD_OPTIONS'].replace("#DEVNAME#","vc4hdmi0")
 else:
-    del soundcard_presets['RBPi Headphones']
-    del soundcard_presets['RBPi HDMI']
+    if rbpi_device_name=="Headphones":
+        soundcard_presets['RBPi Headphones']['JACKD_OPTIONS'] = soundcard_presets['RBPi Headphones']['JACKD_OPTIONS'].replace("#DEVNAME#","Headphones")
+        soundcard_presets['RBPi HDMI']['JACKD_OPTIONS'] = soundcard_presets['RBPi HDMI']['JACKD_OPTIONS'].replace("#DEVNAME#","b1")
+    elif rbpi_device_name=="ALSA":
+        soundcard_presets['RBPi Headphones']['JACKD_OPTIONS'] = soundcard_presets['RBPi Headphones']['JACKD_OPTIONS'].replace("#DEVNAME#","ALSA")
+        soundcard_presets['RBPi HDMI']['JACKD_OPTIONS'] = soundcard_presets['RBPi HDMI']['JACKD_OPTIONS'].replace("#DEVNAME#","ALSA")
+    else:
+        del soundcard_presets['RBPi Headphones']
+        del soundcard_presets['RBPi HDMI']
+
 
 #------------------------------------------------------------------------------
 # Audio Configuration Class
