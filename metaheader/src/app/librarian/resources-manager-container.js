@@ -27,7 +27,7 @@ function ResourcesManagerContainer() {
              <span><i className="glyphicon glyphicon-file"></i>Resources</span>
              <span> 
                     {dirs.map(m=>(
-                      <button key={m.rootName} className={ m.rootName==rootName?'shadcnButton tw:border-b-2 tw:border-[#09f] ':'shadcnButton' } 
+                      <button key={m.rootName} className={ m.rootName==rootName?'shadcnButton shadcnButtonActive':'shadcnButton' } 
                       onClick={()=>handleOnClick(m)}>
                         {m.rootName}
                       </button>

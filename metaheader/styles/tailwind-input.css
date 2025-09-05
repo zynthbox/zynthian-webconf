@@ -1,9 +1,24 @@
-@import "tailwindcss" prefix(tw);
+/* @import "tailwindcss" prefix(tw); */
  
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme) prefix(tw);
+/* @import "tailwindcss/preflight.css" layer(base) prefix(tw); */
+@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
+
 @plugin 'tailwindcss-animate';
 
 .shadcnButton{
-    @apply  tw:py-2 tw:px-5 tw:cursor-pointer tw:text-[16px]  tw:hover:text-amber-300 ;
+    letter-spacing: inherit;
+    border-radius: 0;
+    opacity: 1;
+    padding: 0;
+    border: 0 solid;     
+    background-color: transparent;   
+    @apply  tw:py-2 tw:px-5 tw:cursor-pointer tw:text-[16px]  tw:hover:text-amber-300 ;   
+}
+
+.shadcnButtonActive{    
+    @apply tw:border-b-2 tw:border-[#09f];   
 }
 
 .shadcnSelect{
