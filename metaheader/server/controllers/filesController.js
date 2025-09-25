@@ -14,7 +14,7 @@ const rootFolder = "/zynthian/zynthian-my-data/"
 const parentFolder = "/zynthian"
 
 const SOUNDS_DIR = '/zynthian/zynthian-my-data/sounds/';
-const SOUNDFONTS_DIR = '/zynthian/zynthian-my-data/soundfonts/';
+const SOUNDFONTS_DIR = '/zynthian/zynthian-my-data/soundfonts/sf2/';
 
 const excludedFolders = [
   "sf2",
@@ -399,10 +399,25 @@ exports.uploadFiles = (req, res) => {
               path.basename(file.path, path.extname(file.path)) + '.sf3'
             );        
             exec(`sf3convert -zq ${sf3convertQuality} "${file.path}"  "${sf3Path}"`, (err, stdout, stderr) => {
+              
               if (err) {
-                console.error('Conversion error:', stderr);
-                return res.status(500).send('Failed to convert file');
-              }        
+                console.error('Conversion error:', stderr+':'+file.path);
+                // Optionally delete the .sf2 file even if conversion fails
+                try {
+                  fs.unlinkSync(file.path);
+                } catch (e) {
+                  console.warn("Failed to delete original .sf2:", e);
+                }
+                // Don't stop the upload — just respond with success
+                return res.status(200).json({ 
+                  message: "Upload successful, but conversion failed",
+                  conversionError: stderr+':'+file.path
+                });
+              }
+              // if (err) {
+              //   console.error('Conversion error:', stderr);
+              //   return res.status(500).send('Failed to convert file');
+              // }        
               fs.unlinkSync(file.path);
               return res.status(200).json({message:"Upload successfull!"})
             });

@@ -5,7 +5,7 @@ var cors = require('cors');
 const { Server } = require("socket.io");
 const app = express()
 const port = 3000
-const https = require('https');
+// const https = require('https');
 
 const FIFO_READ_FROM = '/tmp/webconf-reads-from-this-fifo'
 const FIFO_WRITES_TO = '/tmp/webconf-writes-to-this-fifo'

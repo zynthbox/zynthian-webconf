@@ -7,12 +7,13 @@ import { ImUpload } from 'react-icons/im';
 import { FaWindowClose } from 'react-icons/fa';
 
 import { humanFileSize } from '../helpers';
-import { DIRECTORIES } from '../components/globalState';
+import { DIR_UPLOAD_CONSTRAINTS } from '../components/globalState';
 
 const ROOTDIR_SOUNDFONTS = '/zynthian/zynthian-my-data/soundfonts/';
 
-const isAllowedToUpload =(files, rootDirectory)=>{  
-    const dir = DIRECTORIES.filter(d=>d.rootDirectory==rootDirectory).pop();    
+const isAllowedToUpload =(files, rootDirectory,selectedFolder)=>{  
+    const dir = DIR_UPLOAD_CONSTRAINTS.filter(d=>d.rootDirectory==(rootDirectory+selectedFolder+'/')).pop();   
+   
     if (typeof dir != "undefined") {
       if(dir && dir.allowedUploadTypes)
       {
@@ -43,7 +44,7 @@ function FileUploader(props) {
       if (uploadProgressData !== null) newUploadProgressData[i] = uploadProgressData[i];
       else newUploadProgressData[i] = 0;
     }        
-    const typeCheck = isAllowedToUpload(acceptedFiles,rootDirectory)    
+    const typeCheck = isAllowedToUpload(acceptedFiles,rootDirectory,selectedFolder)    
     if(typeCheck)
     {
       setUploadProgressData(newUploadProgressData);
@@ -186,7 +187,7 @@ function FileUploader(props) {
 
   } else {
 
-    const dir = DIRECTORIES.filter(d=>d.rootDirectory==rootDirectory).pop();    
+    const dir = DIR_UPLOAD_CONSTRAINTS.filter(d=>d.rootDirectory==rootDirectory).pop();    
     const dropText = (dir!=undefined && dir.allowedUploadTypes)?'['+dir.allowedUploadTypes+']':'';
     dropZoneDisplay = (
       <div className="dropzone-container" {...getRootProps()}>
