@@ -50,6 +50,16 @@ class WiringConfigHandler(ZynthianConfigHandler):
             'ZYNTHIAN_WIRING_ZYNTOF_CONFIG': "",
             'ZYNTHIAN_WIRING_LAYOUT_CUSTOM_PROFILE': 'Z2_V4'
         }],
+        ["Z2_V5", {
+            'ZYNTHIAN_WIRING_ENCODER_A': "",
+            'ZYNTHIAN_WIRING_ENCODER_B': "",
+            'ZYNTHIAN_WIRING_SWITCHES': "",
+            'ZYNTHIAN_WIRING_MCP23017_INTA_PIN': "",
+            'ZYNTHIAN_WIRING_MCP23017_INTB_PIN': "",
+            'ZYNTHIAN_WIRING_ZYNAPTIK_CONFIG': "",
+            'ZYNTHIAN_WIRING_ZYNTOF_CONFIG': "",
+            'ZYNTHIAN_WIRING_LAYOUT_CUSTOM_PROFILE': 'Z2_V5'
+        }],
         ["DUMMIES", {
             'ZYNTHIAN_WIRING_ENCODER_A': "0,0,0,0",
             'ZYNTHIAN_WIRING_ENCODER_B': "0,0,0,0",

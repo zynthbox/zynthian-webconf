@@ -42,6 +42,7 @@ class KitConfigHandler(ZynthianConfigHandler):
 
     kit_options = [
         'Z2_V4',
+        'Z2_V5',
         'Custom'
     ]
 
@@ -80,8 +81,10 @@ class KitConfigHandler(ZynthianConfigHandler):
                 soundcard_name = "Z2 ADAC"
                 display_name = "Z2 Display"
                 wiring_layout = "Z2_V4"
-                wiring_layout_custom_profile = "Z2_V4"
-                ui_font_size = "16"
+            elif kit_version in ("Z2_V5"):
+                soundcard_name = "Z2 ADAC"
+                display_name = "Waveshare 1280x800 LCD DSI"
+                wiring_layout = "Z2_V5"
 
             pconfig['SOUNDCARD_NAME']=[soundcard_name]
             for k,v in soundcard_presets[soundcard_name].items():

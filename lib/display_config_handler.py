@@ -348,6 +348,14 @@ class DisplayConfigHandler(ZynthianConfigHandler):
             'DISPLAY_HEIGHT': '',
             'FRAMEBUFFER': '/dev/fb0'
         }],
+        ['Waveshare 1280x800 LCD DSI', {
+            'DISPLAY_CONFIG':
+                'dtoverlay=vc4-kms-v3d\n'+
+                'dtoverlay=vc4-kms-dsi-waveshare-panel,8_0_inch',
+            'DISPLAY_WIDTH': '1280',
+            'DISPLAY_HEIGHT': '800',
+            'FRAMEBUFFER': '/dev/fb0'
+        }],
         ['Custom Device', {
             'DISPLAY_CONFIG': 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '',
