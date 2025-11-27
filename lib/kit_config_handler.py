@@ -41,7 +41,7 @@ from lib.wiring_config_handler import WiringConfigHandler
 class KitConfigHandler(ZynthianConfigHandler):
 
     kit_options = [
-        'Z1_V1',
+        'Z2_V4',
         'Custom'
     ]
 
@@ -52,7 +52,7 @@ class KitConfigHandler(ZynthianConfigHandler):
             ['ZYNTHIAN_KIT_VERSION', {
                 'type': 'select',
                 'title': 'Kit',
-                'value': os.environ.get('ZYNTHIAN_KIT_VERSION', 'Z1_V1'),
+                'value': os.environ.get('ZYNTHIAN_KIT_VERSION', 'Z2_V4'),
                 'options': self.kit_options
             }]
         ])
@@ -76,11 +76,11 @@ class KitConfigHandler(ZynthianConfigHandler):
     def configure_kit(self, pconfig):
         kit_version = pconfig['ZYNTHIAN_KIT_VERSION'][0]
         if kit_version!="Custom":
-            if kit_version in ("Z1_V1"):
-                soundcard_name = "Z1 ADAC"
-                display_name = "Z1 Display"
-                wiring_layout = "Z1_V1"
-                wiring_layout_custom_profile = "Z1_V1"
+            if kit_version in ("Z2_V4"):
+                soundcard_name = "Z2 ADAC"
+                display_name = "Z2 Display"
+                wiring_layout = "Z2_V4"
+                wiring_layout_custom_profile = "Z2_V4"
                 ui_font_size = "16"
 
             pconfig['SOUNDCARD_NAME']=[soundcard_name]

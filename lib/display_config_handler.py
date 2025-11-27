@@ -36,7 +36,7 @@ from lib.zynthian_config_handler import ZynthianConfigHandler
 class DisplayConfigHandler(ZynthianConfigHandler):
 
     display_presets=OrderedDict([
-        ['Z1 Display', {
+        ['Z2 Display', {
             'DISPLAY_CONFIG': 
                 'hdmi_force_hotplug:0=0\n'+
                 'hdmi_force_hotplug:1=1\n'+
@@ -45,7 +45,7 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'hdmi_mode:1=87\n'+
                 'hdmi_cvt:1 1024 600 60 6 0 0 0\n'+
                 'dtoverlay=vc4-kms-v3d\n'+
-                'dtoverlay=goodix_z1',
+                'dtoverlay=goodix_z2',
             'DISPLAY_WIDTH': '1024',
             'DISPLAY_HEIGHT': '600',
             'FRAMEBUFFER': '/dev/fb0',
