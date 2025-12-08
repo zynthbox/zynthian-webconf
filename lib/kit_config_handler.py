@@ -28,6 +28,7 @@ import logging
 import tornado.web
 from collections import OrderedDict
 from subprocess import check_output, call
+from pathlib import Path
 
 from lib.zynthian_config_handler import ZynthianConfigHandler
 from lib.audio_config_handler import soundcard_presets
@@ -41,19 +42,26 @@ from lib.wiring_config_handler import WiringConfigHandler
 class KitConfigHandler(ZynthianConfigHandler):
 
     kit_options = [
+        'AUTO_DETECT',
         'Z2_V4',
         'Z2_V5',
         'Custom'
     ]
+    forced_kit_version_file = Path("/zynthian/config/.forced_kit_version")
 
     @tornado.web.authenticated
     def get(self, errors=None):
+        if self.forced_kit_version_file.exists():
+            with open(self.forced_kit_version_file, "r") as f:
+                kit_version = f.read().strip()
+        else:
+            kit_version = "AUTO_DETECT"
 
         config=OrderedDict([
             ['ZYNTHIAN_KIT_VERSION', {
                 'type': 'select',
                 'title': 'Kit',
-                'value': os.environ.get('ZYNTHIAN_KIT_VERSION', 'Z2_V4'),
+                'value': kit_version,
                 'options': self.kit_options
             }]
         ])
@@ -64,10 +72,14 @@ class KitConfigHandler(ZynthianConfigHandler):
     @tornado.web.authenticated
     def post(self):
         postedConfig = tornado.escape.recursive_unicode(self.request.arguments)
-        current_kit_version = os.environ.get('ZYNTHIAN_KIT_VERSION')
+        if self.forced_kit_version_file.exists():
+            with open(self.forced_kit_version_file, "r") as f:
+                current_kit_version = f.read().strip()
+        else:
+            current_kit_version = "AUTO_DETECT"
 
         errors={}
-        if postedConfig['ZYNTHIAN_KIT_VERSION'][0]!=current_kit_version:
+        if postedConfig['ZYNTHIAN_KIT_VERSION'][0] != current_kit_version:
             errors = self.configure_kit(postedConfig)
             self.reboot_flag = True
 
@@ -76,30 +88,35 @@ class KitConfigHandler(ZynthianConfigHandler):
 
     def configure_kit(self, pconfig):
         kit_version = pconfig['ZYNTHIAN_KIT_VERSION'][0]
-        if kit_version!="Custom":
-            if kit_version in ("Z2_V4"):
-                soundcard_name = "Z2 ADAC"
-                display_name = "Z2 Display"
-                wiring_layout = "Z2_V4"
-            elif kit_version in ("Z2_V5"):
-                soundcard_name = "Z2 ADAC"
-                display_name = "Waveshare 1280x800 LCD DSI"
-                wiring_layout = "Z2_V5"
+        if kit_version == "AUTO_DETECT":
+            # If auto detect is selected, delete forced_kit_version_file
+            self.forced_kit_version_file.unlink(missing_ok=True)
+        else:
+            # Otherwise write forced kit to forced_kit_version_file
+            with open(self.forced_kit_version_file, "w") as f:
+                f.write(kit_version)
 
-            pconfig['SOUNDCARD_NAME']=[soundcard_name]
-            for k,v in soundcard_presets[soundcard_name].items():
-                pconfig[k]=[v]
+            # if kit_version in ("Z2_V4"):
+            #     soundcard_name = "Z2 ADAC"
+            #     display_name = "Z2 Display"
+            #     wiring_layout = "Z2_V4"
+            # elif kit_version in ("Z2_V5"):
+            #     soundcard_name = "Z2 ADAC"
+            #     display_name = "Waveshare 1280x800 LCD DSI"
+            #     wiring_layout = "Z2_V5"
+            #
+            # pconfig['SOUNDCARD_NAME']=[soundcard_name]
+            # for k,v in soundcard_presets[soundcard_name].items():
+            #     pconfig[k]=[v]
+            #
+            # pconfig['DISPLAY_NAME']=[display_name]
+            # for k,v in DisplayConfigHandler.display_presets[display_name].items():
+            #     pconfig[k]=[v]
+            #
+            # pconfig['ZYNTHIAN_WIRING_LAYOUT']=[wiring_layout]
+            # for k,v in WiringConfigHandler.wiring_presets[wiring_layout].items():
+            #     pconfig[k]=[v]
 
-            pconfig['DISPLAY_NAME']=[display_name]
-            for k,v in DisplayConfigHandler.display_presets[display_name].items():
-                pconfig[k]=[v]
-
-            pconfig['ZYNTHIAN_WIRING_LAYOUT']=[wiring_layout]
-            for k,v in WiringConfigHandler.wiring_presets[wiring_layout].items():
-                pconfig[k]=[v]
-
-        errors = self.update_config(pconfig)
-        DisplayConfigHandler.delete_fb_splash()
-        WiringConfigHandler.rebuild_zyncoder()
-        
-        return errors
+        # errors = self.update_config(pconfig)
+        # DisplayConfigHandler.delete_fb_splash()
+        # WiringConfigHandler.rebuild_zyncoder()
