@@ -39,39 +39,12 @@ from lib.zynthian_config_handler import ZynthianConfigHandler
 
 class WiringConfigHandler(ZynthianConfigHandler):
 
-    wiring_presets=OrderedDict([
-        ["Z2_V4", {
-            'ZYNTHIAN_WIRING_ENCODER_A': "",
-            'ZYNTHIAN_WIRING_ENCODER_B': "",
-            'ZYNTHIAN_WIRING_SWITCHES': "",
-            'ZYNTHIAN_WIRING_MCP23017_INTA_PIN': "",
-            'ZYNTHIAN_WIRING_MCP23017_INTB_PIN': "",
-            'ZYNTHIAN_WIRING_ZYNAPTIK_CONFIG': "",
-            'ZYNTHIAN_WIRING_ZYNTOF_CONFIG': "",
-            'ZYNTHIAN_WIRING_LAYOUT_CUSTOM_PROFILE': 'Z2_V4'
-        }],
-        ["Z2_V5", {
-            'ZYNTHIAN_WIRING_ENCODER_A': "",
-            'ZYNTHIAN_WIRING_ENCODER_B': "",
-            'ZYNTHIAN_WIRING_SWITCHES': "",
-            'ZYNTHIAN_WIRING_MCP23017_INTA_PIN': "",
-            'ZYNTHIAN_WIRING_MCP23017_INTB_PIN': "",
-            'ZYNTHIAN_WIRING_ZYNAPTIK_CONFIG': "",
-            'ZYNTHIAN_WIRING_ZYNTOF_CONFIG': "",
-            'ZYNTHIAN_WIRING_LAYOUT_CUSTOM_PROFILE': 'Z2_V5'
-        }],
-        ["DUMMIES", {
-            'ZYNTHIAN_WIRING_ENCODER_A': "0,0,0,0",
-            'ZYNTHIAN_WIRING_ENCODER_B': "0,0,0,0",
-            'ZYNTHIAN_WIRING_SWITCHES': "0,0,0,0",
-            'ZYNTHIAN_WIRING_MCP23017_INTA_PIN': "",
-            'ZYNTHIAN_WIRING_MCP23017_INTB_PIN': "",
-            'ZYNTHIAN_WIRING_ZYNAPTIK_CONFIG': "",
-            'ZYNTHIAN_WIRING_ZYNTOF_CONFIG': ""
-        }],
-        ["CUSTOM", {
-        }]
-    ])
+    wiring_presets=[
+        "AUTO_DETECT",
+        "Z2_V4",
+        "Z2_V5",
+        "DUMMIES"
+    ]
 
     @tornado.web.authenticated
     def get(self, errors=None):
@@ -87,309 +60,13 @@ class WiringConfigHandler(ZynthianConfigHandler):
         else:
             custom_options_disabled = False
 
-        config['ZYNTHIAN_WIRING_LAYOUT'] = {
+        config['FORCED_ZYNTHIAN_WIRING_LAYOUT'] = {
             'type': 'select',
             'title': 'Wiring Layout',
-            'value': os.environ.get('ZYNTHIAN_WIRING_LAYOUT'),
-            'options': list(self.wiring_presets.keys()),
-            'presets': self.wiring_presets,
+            'value': os.environ.get('FORCED_ZYNTHIAN_WIRING_LAYOUT', 'AUTO_DETECT'),
+            'options': self.wiring_presets,
             'disabled': custom_options_disabled
         }
-        config['ZYNTHIAN_WIRING_ENCODER_A'] = {
-            'type': 'text',
-            'title': "Encoders A-pins",
-            'value': os.environ.get('ZYNTHIAN_WIRING_ENCODER_A'),
-            'advanced': True,
-            'disabled': custom_options_disabled
-        }
-        config['ZYNTHIAN_WIRING_ENCODER_B'] = {
-            'type': 'text',
-            'title': "Encoders B-pins",
-            'value': os.environ.get('ZYNTHIAN_WIRING_ENCODER_B'),
-            'advanced': True,
-            'disabled': custom_options_disabled
-        }
-        config['ZYNTHIAN_WIRING_SWITCHES'] = {
-            'type': 'text',
-            'title': "Switches Pins",
-            'value': os.environ.get('ZYNTHIAN_WIRING_SWITCHES'),
-            'advanced': True,
-            'disabled': custom_options_disabled
-        }
-        # Calculate Num of Custom Switches
-        try:
-            n_extra_switches = min(4,max(0, len(os.environ.get('ZYNTHIAN_WIRING_SWITCHES').split(",")) - 4))
-        except:
-            n_extra_switches = 0
-
-        config['ZYNTHIAN_WIRING_MCP23017_INTA_PIN'] = {
-            'type': 'select',
-            'title': "MCP23017 INT-A Pin",
-            'value': os.environ.get('ZYNTHIAN_WIRING_MCP23017_INTA_PIN'),
-            'options': ['' ,'0', '2', '3', '4', '5', '6', '7', '25', '27'],
-            'option_labels': {
-                '': 'Default', 
-                '0': 'WPi-GPIO 0 (pin 11)',
-                '2': 'WPi-GPIO 2 (pin 13)',
-                '3': 'WPi-GPIO 3 (pin 15)',
-                '4': 'WPi-GPIO 4 (pin 16)',
-                '5': 'WPi-GPIO 5 (pin 18)',
-                '6': 'WPi-GPIO 6 (pin 22)',
-                '7': 'WPi-GPIO 7 (pin 7)',
-                '25': 'WPi-GPIO 25 (pin 37)',
-                '27': 'WPi-GPIO 27 (pin 36)'
-            },
-            'advanced': True,
-            'disabled': custom_options_disabled
-        }
-        config['ZYNTHIAN_WIRING_MCP23017_INTB_PIN'] = {
-            'type': 'select',
-            'title': "MCP23017 INT-B Pin",
-            'value': os.environ.get('ZYNTHIAN_WIRING_MCP23017_INTB_PIN'),
-            'options': ['' ,'0', '2', '3', '4', '5', '6', '7', '25', '27'],
-            'option_labels': {
-                '': 'Default', 
-                '0': 'WPi-GPIO 0 (pin 11)',
-                '2': 'WPi-GPIO 2 (pin 13)',
-                '3': 'WPi-GPIO 3 (pin 15)',
-                '4': 'WPi-GPIO 4 (pin 16)',
-                '5': 'WPi-GPIO 5 (pin 18)',
-                '6': 'WPi-GPIO 6 (pin 22)',
-                '7': 'WPi-GPIO 7 (pin 7)',
-                '25': 'WPi-GPIO 25 (pin 37)',
-                '27': 'WPi-GPIO 27 (pin 36)'
-            },
-            'advanced': True,
-            'disabled': custom_options_disabled
-        }
-
-        # Zynaptik Config
-        zynaptik_config = os.environ.get('ZYNTHIAN_WIRING_ZYNAPTIK_CONFIG',"")
-        config['ZYNTHIAN_WIRING_ZYNAPTIK_CONFIG'] = {
-            'type': 'select',
-            'title': "Zynaptik Config",
-            'value': zynaptik_config,
-            'options': ["", "Custom 16xDIO", "Custom 4xAD", "Custom 4xDA", "Custom 16xDIO + 4xAD", "Custom 16xDIO + 4xDA", "Custom 4xAD + 4xDA", "Custom 16xDIO + 4xAD + 4xDA", "Zynaptik-2 (16xDIO + 4xAD + 4xDA)"],
-            'advanced': True,
-            'refresh_on_change': True
-        }
-        if "16xDIO" in zynaptik_config:
-            n_zynaptik_switches = 16
-        else:
-            n_zynaptik_switches = 0
-
-
-        zyntof_config = os.environ.get('ZYNTHIAN_WIRING_ZYNTOF_CONFIG',"")
-        config['ZYNTHIAN_WIRING_ZYNTOF_CONFIG'] = {
-            'type': 'select',
-            'title': "Num. of Distance Sensors",
-            'value': zyntof_config,
-            'options': ["", "1", "2", "3", "4"],
-            'option_labels': {
-                '': '0',
-                '1': '1',
-                '2': '2',
-                '3': '3',
-                '4': '4'
-            },
-            'advanced': True,
-            'refresh_on_change': True
-        }
-
-        # Customizable Switches
-        config['_SECTION_CUSTOM_SWITCHES_'] = {
-            'type': 'html',
-            'content': "<h3>Customizable Switches</h3>"
-        }
-        n_custom_switches = n_extra_switches + n_zynaptik_switches
-        cvgate_in = []
-        cvgate_out = []
-        for i in range(0, n_custom_switches):
-            base_name = 'ZYNTHIAN_WIRING_CUSTOM_SWITCH_{:02d}'.format(i+1)
-
-            if i<n_extra_switches:
-                title = 'Extra Switch-{} Action'.format(i+1)
-            else:
-                title = 'Zynaptik Switch-{} Action'.format(i+1-n_extra_switches)
-
-            action_type = os.environ.get(base_name)
-            cvchan = int(os.environ.get(base_name + '__CV_CHAN', 1))
-            if action_type=="CVGATE_IN":
-                cvgate_in.append(cvchan)
-            elif action_type=="CVGATE_OUT":
-                cvgate_out.append(cvchan)
-
-            config[base_name] = {
-                'type': 'select',
-                'title': title,
-                'value': action_type,
-                'options': CustomSwitchActionType,
-                'refresh_on_change': True
-            }
-            config[base_name + '__UI_SHORT'] = {
-                'enabling_options': 'UI_ACTION',
-                'type': 'select',
-                'title': 'Short-push',
-                'value': os.environ.get(base_name + '__UI_SHORT'),
-                'options': CustomUiAction
-            }
-            config[base_name + '__UI_BOLD'] = {
-                'enabling_options': 'UI_ACTION',
-                'type': 'select',
-                'title': 'Bold-push',
-                'value': os.environ.get(base_name + '__UI_BOLD'),
-                'options': CustomUiAction
-            }
-            config[base_name + '__UI_LONG'] = {
-                'enabling_options': 'UI_ACTION',
-                'type': 'select',
-                'title': 'Long-push',
-                'value': os.environ.get(base_name + '__UI_LONG'),
-                'options': CustomUiAction
-            }
-            config[base_name + '__MIDI_CHAN'] = {
-                'enabling_options': 'MIDI_CC MIDI_NOTE MIDI_PROG_CHANGE CVGATE_IN CVGATE_OUT',
-                'type': 'select',
-                'title': 'MIDI Channel',
-                'value': os.environ.get(base_name + '__MIDI_CHAN'),
-                'options': ["Active"] + [str(j) for j in range(1,17)]
-            }
-            config[base_name + '__MIDI_NUM'] = {
-                'enabling_options': 'MIDI_CC MIDI_NOTE MIDI_PROG_CHANGE',
-                'type': 'select',
-                'title': 'MIDI Number',
-                'value': os.environ.get(base_name + '__MIDI_NUM'),
-                'options': [str(j) for j in range(0,128)]
-            }
-            config[base_name + '__MIDI_VAL'] = {
-                'enabling_options': 'MIDI_CC MIDI_NOTE CVGATE_IN',
-                'type': 'select',
-                'title': 'MIDI Value',
-                'value': os.environ.get(base_name + '__MIDI_VAL', 127),
-                'options': [str(j) for j in range(0,128)]
-            }
-            config[base_name + '__CV_CHAN'] = {
-                'enabling_options': 'CVGATE_IN CVGATE_OUT',
-                'type': 'select',
-                'title': 'CV Channel',
-                'value': str(cvchan),
-                'options': ['0', '1', '2', '3'],
-                'option_labels': {
-                    '0': '1',
-                    '1': '2',
-                    '2': '3',
-                    '3': '4'
-                },
-                'refresh_on_change': True
-            }
-
-        # Zynaptik ADC input
-        if "4xAD" in zynaptik_config:
-            config['_SECTION_ZYNAPTIK_AD_'] = {
-                'type': 'html',
-                'content': "<h3>Zynaptik Analog Input</h3>"
-            }
-            for i in range(0, 4):
-                base_name = 'ZYNTHIAN_WIRING_ZYNAPTIK_AD{:02d}'.format(i+1)
-                if i in cvgate_in:
-                    config['_ZYNAPTIK_AD{:02d}_'.format(i+1)] = {
-                        'type': 'html',
-                        'content': "<label>AD-{} Action</label>: Reserved for CV/Gate<br>".format(i+1)
-                    }
-                    config[base_name] = {
-                        'type': 'hidden',
-                        'value': "CVGATE_IN",
-                    }
-                else:
-                    config[base_name] = {
-                        'type': 'select',
-                        'title': 'AD-{} Action'.format(i+1),
-                        'value': os.environ.get(base_name),
-                        'options': ZynSensorActionType
-                    }
-                    config[base_name + '__MIDI_CHAN'] = {
-                        'enabling_options': 'MIDI_CC MIDI_PITCH_BEND MIDI_CHAN_PRESS',
-                        'type': 'select',
-                        'title': 'Channel',
-                        'value': os.environ.get(base_name + '__MIDI_CHAN'),
-                        'options': ["Active"] + [str(j) for j in range(1,17)]
-                    }
-                    config[base_name + '__MIDI_NUM'] = {
-                        'enabling_options': 'MIDI_CC',
-                        'type': 'select',
-                        'title': 'Number',
-                        'value': os.environ.get(base_name + '__MIDI_NUM'),
-                        'options': [str(j) for j in range(0,128)]
-                    }
-
-        # Zynaptik DAC output
-        if "4xDA" in zynaptik_config:
-            config['_SECTION_ZYNAPTIK_DA_'] = {
-                'type': 'html',
-                'content': "<h3>Zynaptik Analog Output</h3>"
-            }
-            for i in range(0, 4):
-                base_name = 'ZYNTHIAN_WIRING_ZYNAPTIK_DA{:02d}'.format(i+1)
-                if i in cvgate_out:
-                    config['_ZYNAPTIK_DA{:02d}_'.format(i+1)] = {
-                        'type': 'html',
-                        'content': "<label>DA-{} Action</label>: Reserved for CV/Gate<br>".format(i+1)
-                    }
-                    config[base_name] = {
-                        'type': 'hidden',
-                        'value': "CVGATE_OUT"
-                    }
-                else:
-                    config[base_name] = {
-                        'type': 'select',
-                        'title': 'DA-{} Action'.format(i+1),
-                        'value': os.environ.get(base_name),
-                        'options': ZynSensorActionType
-                    }
-                    config[base_name + '__MIDI_CHAN'] = {
-                        'enabling_options': 'MIDI_CC MIDI_PITCH_BEND MIDI_CHAN_PRESS',
-                        'type': 'select',
-                        'title': 'Channel',
-                        'value': os.environ.get(base_name + '__MIDI_CHAN'),
-                        'options': ["Active"] + [str(j) for j in range(1,17)]
-                    }
-                    config[base_name + '__MIDI_NUM'] = {
-                        'enabling_options': 'MIDI_CC',
-                        'type': 'select',
-                        'title': 'Number',
-                        'value': os.environ.get(base_name + '__MIDI_NUM'),
-                        'options': [str(j) for j in range(0,128)]
-                    }
-
-        # Zyntof input (Distance Sensor)
-        if zyntof_config:
-            n_zyntofs = int(zyntof_config)
-            config['_SECTION_ZYNTOF_'] = {
-                'type': 'html',
-                'content': "<h3>Distance Sensors</h3>"
-            }
-            for i in range(0, n_zyntofs):
-                base_name = 'ZYNTHIAN_WIRING_ZYNTOF{:02d}'.format(i+1)
-                config[base_name] = {
-                    'type': 'select',
-                    'title': 'TOF-{} Action'.format(i+1),
-                    'value': os.environ.get(base_name),
-                    'options': ZynSensorActionType
-                }
-                config[base_name + '__MIDI_CHAN'] = {
-                    'enabling_options': 'MIDI_CC MIDI_PITCH_BEND MIDI_CHAN_PRESS',
-                    'type': 'select',
-                    'title': 'Channel',
-                    'value': os.environ.get(base_name + '__MIDI_CHAN'),
-                    'options': ["Active"] + [str(j) for j in range(1,17)]
-                }
-                config[base_name + '__MIDI_NUM'] = {
-                    'enabling_options': 'MIDI_CC',
-                    'type': 'select',
-                    'title': 'Number',
-                    'value': os.environ.get(base_name + '__MIDI_NUM'),
-                    'options': [str(j) for j in range(0,128)]
-                }
 
         super().get("Wiring", config, errors)
 
@@ -398,23 +75,14 @@ class WiringConfigHandler(ZynthianConfigHandler):
     def post(self):
         command = self.get_argument('_command', '')
         logging.info("COMMAND = {}".format(command))
+        postedConfig = tornado.escape.recursive_unicode(self.request.arguments)
         if command=='REFRESH':
             errors = None
-            self.config_env(tornado.escape.recursive_unicode(self.request.arguments))
+            self.config_env(postedConfig)
         else:
-            errors = self.update_config(tornado.escape.recursive_unicode(self.request.arguments))
-            self.rebuild_zyncoder()
+            errors = self.update_config(postedConfig)
             if not self.reboot_flag:
                 self.restart_ui_flag = True
 
         self.get(errors)
-
-
-    @classmethod
-    def rebuild_zyncoder(cls):
-        try:
-            cmd="cd %s/zyncoder/build;cmake ..;make" % os.environ.get('ZYNTHIAN_DIR')
-            check_output(cmd, shell=True)
-        except Exception as e:
-            logging.error("Rebuilding Zyncoder Library: %s" % e)
 
