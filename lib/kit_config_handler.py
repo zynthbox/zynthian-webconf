@@ -48,21 +48,14 @@ class KitConfigHandler(ZynthianConfigHandler):
         'Z2_V5',
         'Custom'
     ]
-    forced_kit_version_file = Path("/zynthian/config/.forced_kit_version")
 
     @tornado.web.authenticated
     def get(self, errors=None):
-        if self.forced_kit_version_file.exists():
-            with open(self.forced_kit_version_file, "r") as f:
-                kit_version = f.read().strip()
-        else:
-            kit_version = "AUTO_DETECT"
-
         config=OrderedDict([
-            ['ZYNTHIAN_KIT_VERSION', {
+            ['FORCED_ZYNTHIAN_KIT_VERSION', {
                 'type': 'select',
                 'title': 'Kit',
-                'value': kit_version,
+                'value': os.environ.get("FORCED_ZYNTHIAN_KIT_VERSION", "AUTO_DETECT"),
                 'options': self.kit_options
             }]
         ])
@@ -73,26 +66,15 @@ class KitConfigHandler(ZynthianConfigHandler):
     @tornado.web.authenticated
     def post(self):
         postedConfig = tornado.escape.recursive_unicode(self.request.arguments)
-        if self.forced_kit_version_file.exists():
-            with open(self.forced_kit_version_file, "r") as f:
-                current_kit_version = f.read().strip()
-        else:
-            current_kit_version = "AUTO_DETECT"
-
         errors={}
-        if postedConfig['ZYNTHIAN_KIT_VERSION'][0] != current_kit_version:
-            errors = self.configure_kit(postedConfig)
-            self.reboot_flag = True
-
+        errors = self.configure_kit(postedConfig)
+        self.reboot_flag = True
         self.get(errors)
 
 
     def configure_kit(self, pconfig):
         errors = None
-        kit_version = pconfig['ZYNTHIAN_KIT_VERSION'][0]
-
-        # Reset forced kit version. This file will be written at the end of this method
-        self.forced_kit_version_file.unlink(missing_ok=True)
+        kit_version = pconfig['FORCED_ZYNTHIAN_KIT_VERSION'][0]
 
         # If Custom kit is selected, populate users env with the current kit defaults
         if kit_version == "Custom":
@@ -122,8 +104,6 @@ class KitConfigHandler(ZynthianConfigHandler):
                             pconfig[k]=[v]
                     else:
                         logging.error(f"Display {display_name} not found")
-
-                    errors = self.update_config(pconfig)
         else:
             # If any other kit is selected, back up existing users env and remove to reset overridden values
             user_envars_file = Path("/zynthian/config/zynthian_envars.user.sh")
@@ -131,12 +111,6 @@ class KitConfigHandler(ZynthianConfigHandler):
                 # Back up user envars file if it exists and has some content
                 user_envars_file.rename(f"/zynthian/config/zynthian_envars_{datetime.now().strftime('%Y%m%dT%H%M%S')}.user.sh")
 
-        if not kit_version == "AUTO_DETECT":
-            # Write forced kit to forced_kit_version_file if kit version is not set to AUTO_DETECT
-            with open(self.forced_kit_version_file, "w") as f:
-                f.write(kit_version)
-
-        # Set selected kit version to envars
-        os.environ["ZYNTHIAN_KIT_VERSION"] = kit_version
+        errors = self.update_config(pconfig)
 
         return errors
