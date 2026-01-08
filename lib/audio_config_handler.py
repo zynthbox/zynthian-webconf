@@ -240,14 +240,14 @@ class AudioConfigHandler(ZynthianConfigHandler):
 
         config=OrderedDict()
 
-        if os.environ.get('ZYNTHIAN_KIT_VERSION')!='Custom':
+        if os.environ.get('ZYNTHIAN_KIT_VERSION') == 'Custom' or os.environ.get('FORCED_ZYNTHIAN_KIT_VERSION') == 'Custom':
+            custom_options_disabled = False
+        else:
             custom_options_disabled = True
             config['ZYNTHIAN_MESSAGE'] = {
                 'type': 'html',
                 'content': "<div class='alert alert-warning'>Some config options are disabled. You may want to <a href='/hw-kit'>choose Custom Kit</a> for enabling all options.</div>"
             }
-        else:
-            custom_options_disabled = False
 
         scpresets = copy.copy(soundcard_presets)
         if os.environ.get('ZYNTHIAN_DISABLE_RBPI_AUDIO','0')=='1':

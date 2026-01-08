@@ -369,14 +369,16 @@ class DisplayConfigHandler(ZynthianConfigHandler):
 
         config=OrderedDict()
 
-        if os.environ.get('ZYNTHIAN_KIT_VERSION')!='Custom':
+        # If either of the follwing envars is set to CUSTOM, it means that the kit is already set to custom or will be set to Custom on next reboot
+        # Hence enable custom options for either case
+        if os.environ.get('ZYNTHIAN_KIT_VERSION') == 'Custom' or os.environ.get('FORCED_ZYNTHIAN_KIT_VERSION') == 'Custom':
+            custom_options_disabled = False
+        else:
             custom_options_disabled = True
             config['ZYNTHIAN_MESSAGE'] = {
                 'type': 'html',
                 'content': "<div class='alert alert-warning'>Some config options are disabled. You may want to <a href='/hw-kit'>choose Custom Kit</a> for enabling all options.</div>"
             }
-        else:
-            custom_options_disabled = False
 
         display_names = list(self.display_presets.keys())
         config['DISPLAY_NAME'] = {
