@@ -427,6 +427,15 @@ class DisplayConfigHandler(ZynthianConfigHandler):
             'advanced': True,
             'disabled': custom_options_disabled
         }
+        config['XRANDR_ROTATE'] = {
+            'type': 'select',
+            'title': "Display Rotation",
+            'value': os.environ.get('XRANDR_ROTATE', 'normal'),
+            'options': ["normal", "inverted"],
+            'option_labels': {"normal": "Normal", "inverted": "Inverted"},
+            'advanced': True,
+            'disabled': custom_options_disabled
+        }
 
         super().get("Display", config, errors)
 
