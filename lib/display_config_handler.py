@@ -49,7 +49,8 @@ class DisplayConfigHandler(ZynthianConfigHandler):
             'DISPLAY_WIDTH': '1024',
             'DISPLAY_HEIGHT': '600',
             'FRAMEBUFFER': '/dev/fb0',
-            'DISPLAY_KERNEL_OPTIONS': 'video=HDMI-A-2:1024x600M@60,rotate=0 fbcon=rotate:2'
+            'DISPLAY_KERNEL_OPTIONS': 'video=HDMI-A-2:1024x600M@60,rotate=0 fbcon=rotate:2',
+            'XRANDR_ROTATE': 'inverted'
         }],
         ['ZynScreen 3.5 (v1)', {
             'DISPLAY_CONFIG': 'dtoverlay=piscreen2r-notouch,rotate=270\n'+
@@ -57,7 +58,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '480',
             'DISPLAY_HEIGHT': '320',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['PiScreen 3.5 (v2)', {
             'DISPLAY_CONFIG': 'dtoverlay=piscreen2r-notouch,rotate=270\n'+
@@ -65,42 +68,54 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '480',
             'DISPLAY_HEIGHT': '320',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['PiScreen 3.5 (v1)', {
             'DISPLAY_CONFIG': 'dtoverlay=piscreen,speed=16000000,rotate=90\n'+
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '480',
             'DISPLAY_HEIGHT': '320',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['PiTFT 2.8 Resistive', {
             'DISPLAY_CONFIG': 'dtoverlay=pitft28-resistive,rotate=90,speed=32000000,fps=20\n'+
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '320',
             'DISPLAY_HEIGHT': '240',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['PiTFT 2.8 Capacitive', {
             'DISPLAY_CONFIG': 'dtoverlay=pitft28-capacitive,rotate=90,speed=32000000,fps=20\n'+
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '320',
             'DISPLAY_HEIGHT': '240',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['PiTFT 3.5 Resistive', {
             'DISPLAY_CONFIG': 'dtoverlay=pitft35-resistive,rotate=90,speed=32000000,fps=20\n'+
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '480',
             'DISPLAY_HEIGHT': '320',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['RPi-Display 2.8', {
             'DISPLAY_CONFIG': 'dtoverlay=rpi-display,speed=32000000,rotate=270\n'+
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '320',
             'DISPLAY_HEIGHT': '240',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 3.2B', {
             'DISPLAY_CONFIG':
@@ -109,7 +124,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '320',
             'DISPLAY_HEIGHT': '240',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 3.2C', {
             'DISPLAY_CONFIG':
@@ -118,7 +135,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '320',
             'DISPLAY_HEIGHT': '240',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 3.5A', {
             'DISPLAY_CONFIG':
@@ -127,7 +146,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '480',
             'DISPLAY_HEIGHT': '320',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 3.5B', {
             'DISPLAY_CONFIG': 
@@ -136,7 +157,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '480',
             'DISPLAY_HEIGHT': '320',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 3.5B V2', {
             'DISPLAY_CONFIG': 
@@ -145,7 +168,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '480',
             'DISPLAY_HEIGHT': '320',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 3.5C', {
             'DISPLAY_CONFIG':
@@ -154,7 +179,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '480',
             'DISPLAY_HEIGHT': '320',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 4A GPIO-only', {
             'DISPLAY_CONFIG': 
@@ -163,7 +190,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '480',
             'DISPLAY_HEIGHT': '320',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 4c GPIO-only', {
             'DISPLAY_CONFIG': 
@@ -172,7 +201,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '480',
             'DISPLAY_HEIGHT': '320',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 4 HDMI+GPIO', {
             'DISPLAY_CONFIG':
@@ -186,7 +217,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '800',
             'DISPLAY_HEIGHT': '480',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 4.3 HDMI+GPIO', {
             'DISPLAY_CONFIG': 
@@ -200,7 +233,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '800',
             'DISPLAY_HEIGHT': '480',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 5 HDMI+GPIO', {
             'DISPLAY_CONFIG':
@@ -214,7 +249,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '800',
             'DISPLAY_HEIGHT': '480',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 5 HDMI+USB', {
             'DISPLAY_CONFIG': 
@@ -227,7 +264,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '800',
             'DISPLAY_HEIGHT': '480',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 7 HDMI+GPIO 1024x600', {
             'DISPLAY_CONFIG':
@@ -241,7 +280,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '1024',
             'DISPLAY_HEIGHT': '600',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 7 HDMI+GPIO 800x480', {
             'DISPLAY_CONFIG':
@@ -255,7 +296,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '800',
             'DISPLAY_HEIGHT': '480',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 7 HDMI+USB 1024x600', {
             'DISPLAY_CONFIG':
@@ -268,7 +311,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '1024',
             'DISPLAY_HEIGHT': '600',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['WaveShare 7 HDMI+USB 800x480', {
             'DISPLAY_CONFIG':
@@ -281,21 +326,27 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '800',
             'DISPLAY_HEIGHT': '480',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['Sainsmart 1.8', {
             'DISPLAY_CONFIG': 'dtoverlay=sainsmart18,rotate=90\n'+
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '160',
             'DISPLAY_HEIGHT': '128',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['MHS35 480x320', {
             'DISPLAY_CONFIG': 'dtoverlay=mhs35,rotate=90\n'+
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '480',
             'DISPLAY_HEIGHT': '320',
-            'FRAMEBUFFER': '/dev/fb1'
+            'FRAMEBUFFER': '/dev/fb1',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['MPI5008 800x480', {
             'DISPLAY_CONFIG': 
@@ -315,7 +366,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '800',
             'DISPLAY_HEIGHT': '480',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['Pi 7 Touchscreen Display 800x480', {
             'DISPLAY_CONFIG':
@@ -324,20 +377,26 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '800',
             'DISPLAY_HEIGHT': '480',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['MIPI DSI 800x480', {
             'DISPLAY_CONFIG': '',
             'DISPLAY_WIDTH': '800',
             'DISPLAY_HEIGHT': '480',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['Generic HDMI Display', {
             'DISPLAY_CONFIG': 'disable_overscan=1\n'+
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '',
             'DISPLAY_HEIGHT': '',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['Generic 4k HDMI Display', {
             'DISPLAY_CONFIG':
@@ -346,7 +405,9 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '',
             'DISPLAY_HEIGHT': '',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['Waveshare 1280x800 LCD DSI', {
             'DISPLAY_CONFIG':
@@ -354,13 +415,17 @@ class DisplayConfigHandler(ZynthianConfigHandler):
                 'dtoverlay=vc4-kms-dsi-waveshare-panel,8_0_inch',
             'DISPLAY_WIDTH': '1280',
             'DISPLAY_HEIGHT': '800',
-            'FRAMEBUFFER': '/dev/fb0'
+            'FRAMEBUFFER': '/dev/fb0',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }],
         ['Custom Device', {
             'DISPLAY_CONFIG': 'dtoverlay=vc4-fkms-v3d',
             'DISPLAY_WIDTH': '',
             'DISPLAY_HEIGHT': '',
-            'FRAMEBUFFER': ''
+            'FRAMEBUFFER': '',
+            'DISPLAY_KERNEL_OPTIONS': '',
+            'XRANDR_ROTATE': 'normal'
         }]
     ])
 
