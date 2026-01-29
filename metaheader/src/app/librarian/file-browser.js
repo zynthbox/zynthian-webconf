@@ -454,6 +454,8 @@ function WebconfFileBrowser(props){
     button: {
       name: "Edit",
       contextMenu: true,
+      toolbar:true,
+      group: "Actions",
       icon: ChonkyIconName.archive
     }
   });
@@ -463,6 +465,8 @@ function WebconfFileBrowser(props){
     button: {
       name: "Rename",
       contextMenu: true,
+      toolbar:true,
+      group: "Actions",
       icon: ChonkyIconName.code
     }
   });
@@ -472,6 +476,8 @@ function WebconfFileBrowser(props){
     button: {
       name: "Cut",
       contextMenu: true,    
+      toolbar:true,
+      group: "Actions",
       icon: ChonkyIconName.placeholder  
     }
   });
@@ -481,6 +487,8 @@ function WebconfFileBrowser(props){
     button:{
       name:"Paste",
       contextMenu: true,
+      toolbar:true,
+      group: "Actions",
       icon: ChonkyIconName.paste
     }
   })
@@ -490,7 +498,7 @@ function WebconfFileBrowser(props){
     button:{
       name:"Upload",
       toolbar: true,
-      contextMenu:false,
+      contextMenu:false,      
       icon:ChonkyIconName.upload
     }
   })
@@ -500,7 +508,7 @@ function WebconfFileBrowser(props){
     button:{
       name:"Download",
       toolbar: true,
-      contextMenu:true,
+      contextMenu:false,
       icon:ChonkyIconName.download
     }
   })
@@ -517,11 +525,11 @@ function WebconfFileBrowser(props){
 
   
   const myFileActions = [
-    createNewFolder,
-    editFiles,
-    renameFiles,   
+    createNewFolder,    
     uploadFiles,
     downloadFiles,
+    editFiles,
+    renameFiles,   
     cutFiles,    
     ChonkyActions.CopyFiles,
     // selectFiles,
