@@ -11,6 +11,7 @@ import {
   defineFileAction,
   setChonkyDefaults
 } from "chonky";
+import { usePrevious } from '../helpers'
 import FileUploader from './file-uploader';
 import FileViewer from './file-viewer';
 import { IoArrowBack, IoArrowForward, IoRefresh } from 'react-icons/io5';
@@ -105,8 +106,12 @@ function WebconfFileBrowser(props){
   const [itemRects, setItemRects] = useState([]);
   // const [droppedFiles, setDroppedFiles] = useState([]);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);  
   const [itemsPerPage, setItemsPerPage] = useState(50);
+  
+  useEffect(() => {    
+    setCurrentPage(1);
+  }, [selectedFolder]);
   // const itemsPerPage = 50;
 
   // drag and drop overlay
@@ -142,7 +147,6 @@ function WebconfFileBrowser(props){
   
   //   return () => clearTimeout(timeout);
   // }, [displayedFiles,currentPage]); 
-
 
   const handleDrop = (file) => {
     setDroppedFiles((prev) => [...prev, file]);
@@ -448,6 +452,15 @@ function WebconfFileBrowser(props){
     }
   });
 
+  const cutFiles = defineFileAction({
+    id: "cut_files",
+    button: {
+      name: "Cut",
+      contextMenu: true,    
+      icon: ChonkyIconName.placeholder  
+    }
+  });
+
   const pasteFiles = defineFileAction({
     id: "paste_files",
     button:{
@@ -491,15 +504,16 @@ function WebconfFileBrowser(props){
   const myFileActions = [
     createNewFolder,
     editFiles,
-    renameFiles,
+    renameFiles,   
     uploadFiles,
     downloadFiles,
-    // selectFiles,
-    ChonkyActions.DeleteFiles,
+    cutFiles,    
     ChonkyActions.CopyFiles,
+    // selectFiles,
+    ChonkyActions.DeleteFiles,   
     ChonkyActions.StartDragNDrop,
     ChonkyActions.EndDragNDrop,
-    pasteFiles 
+    pasteFiles,    
   ];
 
 

@@ -8,7 +8,7 @@ import ErrorModal from '../components/error-modal';
 import TreeView from './tree-view';
 
 
-setChonkyDefaults({ iconComponent: ChonkyIconFA, disableDragAndDrop:true });
+setChonkyDefaults({ iconComponent: ChonkyIconFA, disableDragAndDrop:false });
 
 const WebconfFileBrowser = lazy(()=>import('./file-browser'))
 // const TreeView = lazy(()=>import('./tree-view'))
@@ -38,7 +38,7 @@ const FileManager = ({rootDirectory,mode}) => {
                 'Content-Type': 'application/json',
             },
         }).then(async function(response){
-            const res = await response.json();            
+            const res = await response.json();                      
             if (!res.errno) {                             
                 fileManagerDispatch({type:'SET_FILES',payload:res})
             }
