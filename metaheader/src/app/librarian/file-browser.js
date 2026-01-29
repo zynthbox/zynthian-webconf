@@ -89,7 +89,8 @@ function WebconfFileBrowser(props){
   const { displayedFiles , selectedFolder, folderChain, ffolder } = fileManagerState;
 
   const { fsep  } = props;
-  const [ copiedFiles, setCopiedFiles ] = useState('')
+  const [ isCuttingFiles, setIsCuttingFiles ] = useState(false)
+  const [ copiedFiles, setCopiedFiles ] = useState('')  
   const [ draggedFiles, setDraggedFiles ] = useState('')
   const [ isDragInsideFileBrowser, setIsDragInsideFileBrowser ] = useState(false);
   const [ loading, setLoading ] = useState(false)
@@ -299,14 +300,25 @@ function WebconfFileBrowser(props){
       paths.push(sf.path)
     })
     setCopiedFiles(paths)
+    setIsCuttingFiles(false);
   }
+
+  function cutFilesAction(data,ROOTDIR){        
+    let paths = [];
+    data.state.selectedFiles.forEach(function(sf,index){
+      paths.push(sf.path)
+    })
+    setCopiedFiles(paths)
+    setIsCuttingFiles(true);
+  }
+
 
   function pasteFilesAction(data,ROOTDIR){
     // let destination = selectedFolder + fsep;
     // if (copiedFiles.indexOf('.') > -1){
     //   destination = selectedFolder + fsep + copiedFiles.split(fsep)[copiedFiles.split(fsep).length - 1];
     // }
-  
+    
     let destinationPaths = [];
     copiedFiles.forEach(function(cf,index){
       let destination = selectedFolder + fsep;
@@ -318,8 +330,10 @@ function WebconfFileBrowser(props){
       destinationPaths.push(destination)
     })
 
-    copyPasteFiles(copiedFiles,destinationPaths)
+    copyPasteFiles(copiedFiles,destinationPaths,isCuttingFiles)
   }
+
+  
 
   function startDragNDropAction(data){
 
@@ -418,6 +432,7 @@ function WebconfFileBrowser(props){
     if (data.id === ChonkyActions.DeleteFiles.id) deleteFilesAction(data);
     if (data.id === ChonkyActions.CopyFiles.id) copyFilesAction(data,ROOTDIR);
     if (data.id === pasteFiles.id) pasteFilesAction(data,ROOTDIR)
+    if (data.id === cutFiles.id) cutFilesAction(data,ROOTDIR)
     if (data.id === ChonkyActions.StartDragNDrop.id) startDragNDropAction(data)
     if (data.id === ChonkyActions.EndDragNDrop.id) endDragNDropAction(data,ROOTDIR)
    
