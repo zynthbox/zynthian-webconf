@@ -132,8 +132,15 @@ function ProductViewReducer(state,action){
             // });
             // displayedFiles = arrayUnique(displayedFiles)
 
-            displayedFiles = action.payload.map(f=>({...f,id:f.path}));            
-            
+            displayedFiles = action.payload.map(f=>({...f,id:f.path}));     
+            displayedFiles.sort((a, b) => {
+                if (a.isDir && !b.isDir) return -1;
+                if (!a.isDir && b.isDir) return 1;              
+                return a.name.localeCompare(b.name, undefined, {
+                  numeric: true,
+                  sensitivity: 'base'
+                });
+              });                  
             let treeData = generateTreeFromArray(files.filter(file => file.isDir === true),state.folderChain,state.selectedFolder,ROOTDIR,state.rootName)
             // let treeData = generateTreeFromArray(files,state.folderChain,state.selectedFolder)  
            
