@@ -23,9 +23,7 @@
 #********************************************************************
 
 import os
-import crypt
 import logging
-import spwd
 import tornado.web
 from collections import OrderedDict
 

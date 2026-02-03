@@ -26,7 +26,7 @@ import os
 import re
 import logging
 import tornado.web
-from crypt import crypt
+# from crypt import crypt
 from collections import OrderedDict
 from subprocess import check_output
 
@@ -48,21 +48,21 @@ class SecurityConfigHandler(ZynthianConfigHandler):
     def get(self, errors=None):
         #Get Hostname
         config=OrderedDict([
-            ['CURRENT_PASSWORD', {
-                'type': 'password',
-                'title': 'Current password',
-                'value': '*'
-            }],
-            ['PASSWORD', {
-                'type': 'password',
-                'title': 'Password',
-                'value': '*'
-            }],
-            ['REPEAT_PASSWORD', {
-                'type': 'password',
-                'title': 'Repeat password',
-                'value': '*'
-            }],
+            # ['CURRENT_PASSWORD', {
+            #     'type': 'password',
+            #     'title': 'Current password',
+            #     'value': '*'
+            # }],
+            # ['PASSWORD', {
+            #     'type': 'password',
+            #     'title': 'Password',
+            #     'value': '*'
+            # }],
+            # ['REPEAT_PASSWORD', {
+            #     'type': 'password',
+            #     'title': 'Repeat password',
+            #     'value': '*'
+            # }],
             ['HOSTNAME', {
                 'type': 'text',
                 'title': 'Hostname',
@@ -101,38 +101,38 @@ class SecurityConfigHandler(ZynthianConfigHandler):
 
     def update_system_config(self, config):
         #Update Password
-        current_passwd = self.get_argument("CURRENT_PASSWORD")
-        try:
-            root_crypt = check_output("getent shadow root", shell=True).decode("utf-8").split(':')[1]
-            rcparts = root_crypt.split('$')
-            current_crypt = crypt(current_passwd, "$%s$%s" % (rcparts[1], rcparts[2]))
-
-            logging.debug("PASSWD: %s <=> %s" % (root_crypt, current_crypt))
-            if current_crypt != root_crypt:
-                return {'CURRENT_PASSWORD': "Current password is not correct"}
-        except:
-            return {'CURRENT_PASSWORD': "Current password is not correct"}
-
-        if len(config['PASSWORD'][0])>0:
-            if len(config['PASSWORD'][0])<6:
-                return { 'PASSWORD': "Password must have at least 6 characters" }
-            if config['PASSWORD'][0]!=config['REPEAT_PASSWORD'][0]:
-                return { 'REPEAT_PASSWORD': "Passwords does not match!" }
-            try:
-                check_output(['usermod', '-p', crypt(config['PASSWORD'][0]), 'root'])
-            except Exception as e:
-                logging.error("Can't set new password! => {}".format(e))
-                return { 'REPEAT_PASSWORD': "Can't set new password!" }
-            try:
-                check_output("echo \"{}\" | vncpasswd -f > /root/.vnc/passwd; chmod go-r /root/.vnc/passwd".format(config['PASSWORD'][0]), shell=True)
-            except Exception as e:
-                logging.error("Can't set new password for VNC Server! => {}".format(e))
-                return { 'REPEAT_PASSWORD': "Can't set new password for VNC Server!" }
-            try:
-                self.update_hostapd_conf("wpa_passphrase", config['PASSWORD'][0])
-            except Exception as e:
-                logging.error("Can't set new password for WIFI HotSpot! => {}".format(e))
-                return { 'REPEAT_PASSWORD': "Can't set new password for WIFI HotSpot!" }
+        # current_passwd = self.get_argument("CURRENT_PASSWORD")
+        # try:
+        #     root_crypt = check_output("getent shadow root", shell=True).decode("utf-8").split(':')[1]
+        #     rcparts = root_crypt.split('$')
+        #     current_crypt = crypt(current_passwd, "$%s$%s" % (rcparts[1], rcparts[2]))
+        #
+        #     logging.debug("PASSWD: %s <=> %s" % (root_crypt, current_crypt))
+        #     if current_crypt != root_crypt:
+        #         return {'CURRENT_PASSWORD': "Current password is not correct"}
+        # except:
+        #     return {'CURRENT_PASSWORD': "Current password is not correct"}
+        #
+        # if len(config['PASSWORD'][0])>0:
+        #     if len(config['PASSWORD'][0])<6:
+        #         return { 'PASSWORD': "Password must have at least 6 characters" }
+        #     if config['PASSWORD'][0]!=config['REPEAT_PASSWORD'][0]:
+        #         return { 'REPEAT_PASSWORD': "Passwords does not match!" }
+        #     try:
+        #         check_output(['usermod', '-p', crypt(config['PASSWORD'][0]), 'root'])
+        #     except Exception as e:
+        #         logging.error("Can't set new password! => {}".format(e))
+        #         return { 'REPEAT_PASSWORD': "Can't set new password!" }
+        #     try:
+        #         check_output("echo \"{}\" | vncpasswd -f > /root/.vnc/passwd; chmod go-r /root/.vnc/passwd".format(config['PASSWORD'][0]), shell=True)
+        #     except Exception as e:
+        #         logging.error("Can't set new password for VNC Server! => {}".format(e))
+        #         return { 'REPEAT_PASSWORD': "Can't set new password for VNC Server!" }
+        #     try:
+        #         self.update_hostapd_conf("wpa_passphrase", config['PASSWORD'][0])
+        #     except Exception as e:
+        #         logging.error("Can't set new password for WIFI HotSpot! => {}".format(e))
+        #         return { 'REPEAT_PASSWORD': "Can't set new password for WIFI HotSpot!" }
 
         #Update Hostname
         newHostname = config['HOSTNAME'][0]

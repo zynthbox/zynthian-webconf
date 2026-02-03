@@ -25,7 +25,7 @@
 import os
 import re
 import sys
-import liblo
+import pyliblo3 as liblo
 import logging
 import tornado.web
 from subprocess import check_output
