@@ -25,7 +25,11 @@
 import os
 import re
 import sys
-import pyliblo3 as liblo
+# Try importing liblo by both old and new import names
+try:
+    import liblo
+except ImportError:
+    import pyliblo3 as liblo
 import logging
 import tornado.web
 from subprocess import check_output
