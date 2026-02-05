@@ -25,7 +25,16 @@ import { Context } from './context/context-provider'
 import { useDrag, useDrop } from 'react-dnd';
 import PaginationWithEllipsis from '../components/PaginationWithEllipsis';
 import { isDraggingOverlayRef } from '../components/globalState';
+import { ChonkyIconFA } from 'chonky-icon-fontawesome';
+import { FaCut } from 'react-icons/fa'; // Importiere das gewünschte React Icon
 
+const MyCustomIcon = (props) => {
+  const { icon } = props;
+  if (icon === 'cut') return <FaCut style={{ fontSize: '1.1em' }} />;
+  return <ChonkyIconFA {...props} />;
+};
+
+setChonkyDefaults({ iconComponent: MyCustomIcon }); 
 
 const DraggableOverlay = ({ file, rect }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -478,7 +487,7 @@ function WebconfFileBrowser(props){
       contextMenu: true,    
       toolbar:true,
       group: "Actions",
-      icon: ChonkyIconName.placeholder  
+      icon: "cut"  
     }
   });
 
