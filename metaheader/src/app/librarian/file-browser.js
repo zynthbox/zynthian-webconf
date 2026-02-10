@@ -460,6 +460,7 @@ function WebconfFileBrowser(props){
   
   const editFiles = defineFileAction({
     id: "edit_files",
+    requiresSelection: true,
     button: {
       name: "Edit",
       contextMenu: true,
@@ -471,6 +472,7 @@ function WebconfFileBrowser(props){
 
   const renameFiles = defineFileAction({
     id: "rename_files",
+    requiresSelection: true,
     button: {
       name: "Rename",
       contextMenu: true,
@@ -481,7 +483,8 @@ function WebconfFileBrowser(props){
   });
 
   const cutFiles = defineFileAction({
-    id: "cut_files",
+    id: "cut_files",    
+    requiresSelection: true,
     button: {
       name: "Cut",
       contextMenu: true,    
@@ -497,13 +500,14 @@ function WebconfFileBrowser(props){
       name:"Paste",
       contextMenu: true,
       toolbar:true,
-      group: "Actions",
+      group: "Actions", 
       icon: ChonkyIconName.paste
     }
   })
 
   const uploadFiles = defineFileAction({
     id:ChonkyActions.UploadFiles.id,
+    requiresSelection: true,
     button:{
       name:"Upload",
       toolbar: true,
@@ -514,6 +518,7 @@ function WebconfFileBrowser(props){
   
   const downloadFiles = defineFileAction({
     id:ChonkyActions.DownloadFiles.id,
+    requiresSelection: true,
     button:{
       name:"Download",
       toolbar: true,
