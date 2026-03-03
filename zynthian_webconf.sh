@@ -6,4 +6,5 @@ source "/zynthian/zynthian-sys/config/zynthian_envars.sh"
 export ZYNTHIAN_LOG_LEVEL=10
 export ZYNTHIAN_WEBCONF_LOG_LEVEL=10
 
+node /zynthian/zynthian-webconf/metaheader/server.js &
 python3 zynthian_webconf.py
