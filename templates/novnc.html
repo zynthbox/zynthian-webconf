@@ -1,0 +1,16 @@
+
+<style>
+#vncframe {
+	width: 1280px;
+	height: 800px;
+}  
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	document.getElementById("vncframe").src = `http://${window.location.hostname}:6080/vnc.html`;
+});
+</script>
+
+<h2>{{ title }}</h2>
+<iframe id="vncframe" title="NoVNC"></iframe>

@@ -64,6 +64,7 @@ from lib.midi_log_handler import MidiLogHandler
 from lib.repository_handler import RepositoryHandler
 from lib.audio_mixer_handler import AudioConfigMessageHandler, AudioMixerHandler
 from lib.zynterm_handler import ZyntermHandler
+from lib.novnc_handler import NoVNCHandler
 
 #------------------------------------------------------------------------------
 
@@ -177,6 +178,7 @@ def make_app():
         (r"/ws$", ZynthianWebSocketHandler),
         (r"/zynterm", ZyntermHandler),
         (r"/zynterm_ws", TermSocket, {'term_manager': term_manager}),
+        (r"/novnc", NoVNCHandler),
         (r"/xstatic/(.*)", tornado_xstatic.XStaticFileHandler, {'allowed_modules': ['termjs']})
         
     ], **settings)
