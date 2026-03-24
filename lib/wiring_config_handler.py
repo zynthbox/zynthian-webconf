@@ -43,6 +43,7 @@ class WiringConfigHandler(ZynthianConfigHandler):
         "AUTO_DETECT",
         "Z2_V4",
         "Z2_V5",
+        "Z2_V5B",
         "DUMMIES"
     ]
 
